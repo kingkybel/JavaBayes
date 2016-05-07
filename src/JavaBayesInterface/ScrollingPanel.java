@@ -41,7 +41,7 @@ public class ScrollingPanel extends Panel
     static final int VIRTUAL_WIDTH = 10000;
     static final int VIRTUAL_HEIGHT = 10000;
     private static final Logger LOG =
-    Logger.getLogger(ScrollingPanel.class.getName());
+                                Logger.getLogger(ScrollingPanel.class.getName());
     Scrollbar horizontal;
     Scrollbar vertical;
 
@@ -79,8 +79,9 @@ public class ScrollingPanel extends Panel
 
     /**
      * Handle the scrollbar events (set variables in the NetworkPanel).
+     *
      * @param evt
-     * @return 
+     * @return
      */
     @Override
     public boolean handleEvent(Event evt)
@@ -89,11 +90,11 @@ public class ScrollingPanel extends Panel
         {
             if (evt.target == horizontal)
             {
-                netPanel.x_scroll = ((Integer) (evt.arg)).intValue();
+                netPanel.x_scroll = ((Integer) (evt.arg));
             }
             else if (evt.target == vertical)
             {
-                netPanel.y_scroll = ((Integer) (evt.arg)).intValue();
+                netPanel.y_scroll = ((Integer) (evt.arg));
             }
             netPanel.repaint();
         }

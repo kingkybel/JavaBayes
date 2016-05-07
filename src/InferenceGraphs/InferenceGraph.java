@@ -29,12 +29,10 @@ import BayesianNetworks.BayesNet;
 import BayesianNetworks.DiscreteVariable;
 import BayesianNetworks.ProbabilityFunction;
 import BayesianNetworks.ProbabilityVariable;
-import InterchangeFormat.IFException;
 import QuasiBayesianInferences.QBExpectation;
 import QuasiBayesianInferences.QBInference;
 import QuasiBayesianNetworks.QuasiBayesNet;
 import java.awt.Point;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -101,7 +99,7 @@ public final class InferenceGraph
      */
     public final static int TOTAL_VARIATION = QuasiBayesNet.TOTAL_VARIATION;
     private static final Logger LOG =
-    Logger.getLogger(InferenceGraph.class.getName());
+                                Logger.getLogger(InferenceGraph.class.getName());
     QuasiBayesNet qbn;
     QBInference qbi;
     QBExpectation qbe;
@@ -111,11 +109,9 @@ public final class InferenceGraph
     /*
      * Default constructor for an InferenceGraph.
      */
-
     /**
      *
      */
-    
     public InferenceGraph()
     {
         qbn = new QuasiBayesNet(defaultBayesNetName, 0, 0);
@@ -124,12 +120,10 @@ public final class InferenceGraph
     /*
      * Simple constructor for an InferenceGraph.
      */
-
     /**
      *
      * @param b_n
      */
-    
     public InferenceGraph(BayesNet b_n)
     {
         qbn = new QuasiBayesNet(b_n);
@@ -139,15 +133,12 @@ public final class InferenceGraph
     /*
      * Constructor for an InferenceGraph.
      */
-
     /**
      *
      * @param filename
-     * @throws IOException
-     * @throws IFException
+     * @throws Exception
      */
-    
-    public InferenceGraph(String filename) throws IOException, IFException
+    public InferenceGraph(String filename) throws Exception
     {
         qbn = new QuasiBayesNet(new java.io.DataInputStream(
         new java.io.FileInputStream(filename)));
@@ -157,15 +148,12 @@ public final class InferenceGraph
     /*
      * Constructor for an InferenceGraph.
      */
-
     /**
      *
      * @param url
-     * @throws IOException
-     * @throws IFException
+     * @throws Exception
      */
-    
-    public InferenceGraph(URL url) throws IOException, IFException
+    public InferenceGraph(URL url) throws Exception
     {
         qbn = new QuasiBayesNet(url);
         convert_bayes_net();
@@ -174,12 +162,10 @@ public final class InferenceGraph
     /*
      * Get the contents of the graph.
      */
-
     /**
      *
      * @return
      */
-    
     public QuasiBayesNet get_bayes_net()
     {
         return (convert_graph());
@@ -328,10 +314,10 @@ public final class InferenceGraph
         return (name);
     }
 
-    /* *************** PUBLIC METHODS ********************* */
     /**
      * Get the name of the network.
-     * @return 
+     *
+     * @return
      */
     public String get_name()
     {
@@ -340,6 +326,7 @@ public final class InferenceGraph
 
     /**
      * Set the name of the network.
+     *
      * @param n
      */
     public void set_name(String n)
@@ -349,7 +336,8 @@ public final class InferenceGraph
 
     /**
      * Get the properties of the network.
-     * @return 
+     *
+     * @return
      */
     public ArrayList get_network_properties()
     {
@@ -358,6 +346,7 @@ public final class InferenceGraph
 
     /**
      * Set the properties of the network.
+     *
      * @param prop
      */
     public void set_network_properties(ArrayList prop)
@@ -367,7 +356,8 @@ public final class InferenceGraph
 
     /**
      * Get the type of global neighborhood modeled by the network.
-     * @return 
+     *
+     * @return
      */
     public int get_global_neighborhood_type()
     {
@@ -376,6 +366,7 @@ public final class InferenceGraph
 
     /**
      * Set the global neighborhood type.
+     *
      * @param type
      */
     public void set_global_neighborhood(int type)
@@ -385,7 +376,8 @@ public final class InferenceGraph
 
     /**
      * Get the parameter for the global neighborhood modeled by the network.
-     * @return 
+     *
+     * @return
      */
     public double get_global_neighborhood_parameter()
     {
@@ -394,6 +386,7 @@ public final class InferenceGraph
 
     /**
      * Set the parameter for the global neighborhood modeled by the network.
+     *
      * @param parameter
      */
     public void set_global_neighborhood_parameter(double parameter)
@@ -403,6 +396,7 @@ public final class InferenceGraph
 
     /**
      * Remove a property from the network.
+     *
      * @param index
      */
     public void remove_network_property(int index)
@@ -412,6 +406,7 @@ public final class InferenceGraph
 
     /**
      * Add a property to the network.
+     *
      * @param prop
      */
     public void add_network_property(String prop)
@@ -421,8 +416,9 @@ public final class InferenceGraph
 
     /**
      * Determine whether or not a name is valid and/or repeated.
+     *
      * @param n
-     * @return 
+     * @return
      */
     public String check_name(String n)
     {
@@ -441,8 +437,9 @@ public final class InferenceGraph
 
     /**
      * Check whether a string is a valid name.
+     *
      * @param value
-     * @return 
+     * @return
      */
     public String validate_value(String value)
     {
@@ -459,6 +456,7 @@ public final class InferenceGraph
 
     /**
      * Print the QuasiBayesNet.
+     *
      * @param out
      */
     public void print_bayes_net(PrintStream out)
@@ -472,9 +470,9 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queried_variable indicates the variable of interest.
-     * @param show_bucket_tree determines whether or not to present a
-     *                         description of the BucketTree.
+     * @param queried_variable    indicates the variable of interest.
+     * @param show_bucket_tree    determines whether or not to present a
+     *                            description of the BucketTree.
      * @param do_compute_clusters
      */
     public void print_marginal(PrintStream pstream, String queried_variable,
@@ -503,9 +501,9 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queried_variable indicates the variable of interest.
-     * @param show_bucket_tree determines whether or not to present a
-     *                         description of the BucketTree.
+     * @param queried_variable    indicates the variable of interest.
+     * @param show_bucket_tree    determines whether or not to present a
+     *                            description of the BucketTree.
      * @param do_compute_clusters
      */
     public void print_expectation(PrintStream pstream, String queried_variable,
@@ -563,6 +561,7 @@ public final class InferenceGraph
     /**
      * Print the metrics for sensitivity analysis of the Bayesian network into
      * the given PrintStream.
+     *
      * @param pstream
      */
     public void print_sensitivity_analysis(PrintStream pstream)
@@ -579,6 +578,7 @@ public final class InferenceGraph
     /**
      * Save the Bayesian network into a PrintStream in the BIF
      * InterchangeFormat.
+     *
      * @param out
      */
     public void save_bif(PrintStream out)
@@ -590,6 +590,7 @@ public final class InferenceGraph
     /**
      * Save the Bayesian network into a PrintStream in the XML
      * InterchangeFormat.
+     *
      * @param out
      */
     public void save_xml(PrintStream out)
@@ -600,6 +601,7 @@ public final class InferenceGraph
 
     /**
      * Save the Bayesian networks in BUGS format into a PrintStream.
+     *
      * @param out
      */
     public void save_bugs(PrintStream out)
@@ -618,6 +620,7 @@ public final class InferenceGraph
 
     /**
      * Print method for an InferenceGraph
+     *
      * @param out
      */
     public void print(PrintStream out)
@@ -628,7 +631,8 @@ public final class InferenceGraph
 
     /**
      * Get the nodes in the network.
-     * @return 
+     *
+     * @return
      */
     public ArrayList get_nodes()
     {
@@ -637,7 +641,8 @@ public final class InferenceGraph
 
     /**
      * Get the nodes in the network as an Iterator object.
-     * @return 
+     *
+     * @return
      */
     public ArrayList elements()
     {
@@ -646,7 +651,8 @@ public final class InferenceGraph
 
     /**
      * Get the number of variables in the network
-     * @return 
+     *
+     * @return
      */
     public int number_nodes()
     {
@@ -655,6 +661,7 @@ public final class InferenceGraph
 
     /**
      * Create a new node in the network.
+     *
      * @param x
      * @param y
      */
@@ -670,9 +677,10 @@ public final class InferenceGraph
 
     /**
      * Create an arc from parent to child.
+     *
      * @param parent
      * @param child
-     * @return 
+     * @return
      */
     public boolean create_arc(InferenceGraphNode parent,
                               InferenceGraphNode child)
@@ -706,6 +714,7 @@ public final class InferenceGraph
 
     /**
      * Delete a node in the network.
+     *
      * @param node
      */
     public void delete_node(InferenceGraphNode node)
@@ -736,6 +745,7 @@ public final class InferenceGraph
 
     /**
      * Delete the arc from parent to child.
+     *
      * @param parent
      * @param child
      */
@@ -759,9 +769,10 @@ public final class InferenceGraph
     /**
      * Determines whether the connection of bottom_node to head_node would cause
      * the network to have a cycle.
+     *
      * @param bottom_node
      * @param head_node
-     * @return 
+     * @return
      */
     public boolean hasCycle(InferenceGraphNode bottom_node,
                             InferenceGraphNode head_node)
@@ -818,6 +829,7 @@ public final class InferenceGraph
      * Change the values of a variable. Note that, if the number of new values
      * is different from the number of current values, this operation resets the
      * probability values of the variable and all its children.
+     *
      * @param node
      * @param values
      */
@@ -848,6 +860,7 @@ public final class InferenceGraph
 
     /**
      * Set a value for the position of the node.
+     *
      * @param node
      * @param position
      */

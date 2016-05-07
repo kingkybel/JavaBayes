@@ -74,8 +74,9 @@ public class InterchangeFormat
     /**
      *
      * @throws IFException
+     * @throws Parsers.BIFv01.ParseException
      */
-    public void CompilationUnit() throws IFException
+    public void CompilationUnit() throws Exception
     {
         StringBuffer error_messages = new StringBuffer("Error messages\n");
         xml_bif03 = null;

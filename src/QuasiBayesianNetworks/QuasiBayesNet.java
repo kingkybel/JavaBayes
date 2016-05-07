@@ -26,9 +26,7 @@ package QuasiBayesianNetworks;
 
 import BayesianNetworks.BayesNet;
 import CredalSets.QBProbabilityFunction;
-import InterchangeFormat.IFException;
 import InterchangeFormat.InterchangeFormat;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
@@ -76,7 +74,7 @@ public class QuasiBayesNet extends BayesNet
      */
     public final static int TOTAL_VARIATION = 5;
     private static final Logger LOG =
-    Logger.getLogger(QuasiBayesNet.class.getName());
+                                Logger.getLogger(QuasiBayesNet.class.getName());
     int global_neighborhood_type; // do not set this here; set by translate()
     // do not set this here; set by translate()
     double global_neighborhood_parameter; // do not set this here; set by translate()
@@ -99,6 +97,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Simple constructor for a Quasi-Bayesian network: just give it the number
      * of variables/functions and the name of the network.
+     *
      * @param n_n
      * @param n_f
      * @param n_v
@@ -113,6 +112,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Simple constructor for a Quasi-Bayesian network: just give it the name of
      * network and properties.
+     *
      * @param n_n
      * @param p
      */
@@ -126,6 +126,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Simple constructor for a Quasi-Bayesian network: just give it a Bayesian
      * Network and it creates a new copy
+     *
      * @param bn
      */
     public QuasiBayesNet(BayesNet bn)
@@ -144,9 +145,9 @@ public class QuasiBayesNet extends BayesNet
      * Constructor for a Quasi-Bayesian network from a string
      *
      * @param s
-     * @throws InterchangeFormat.IFException
+     * @throws Exception
      */
-    public QuasiBayesNet(String s) throws IFException
+    public QuasiBayesNet(String s) throws Exception
     {
         super(s);
     }
@@ -155,33 +156,32 @@ public class QuasiBayesNet extends BayesNet
      * Constructor for a Bayesian network from an input stream
      *
      * @param istream
-     * @throws InterchangeFormat.IFException
+     * @throws Exception
      */
-    public QuasiBayesNet(InputStream istream) throws IFException
+    public QuasiBayesNet(InputStream istream) throws Exception
     {
         super(istream);
     }
 
     /**
      * Constructor for a Bayesian network from a URL
+     *
      * @param context
      * @param spec
-     * @throws InterchangeFormat.IFException
-     * @throws java.io.IOException
+     * @throws Exception
      */
-    public QuasiBayesNet(URL context, String spec) throws IFException,
-                                                          IOException
+    public QuasiBayesNet(URL context, String spec) throws Exception
     {
         super(context, spec);
     }
 
     /**
      * Constructor for a Bayesian network from a URL
+     *
      * @param url
-     * @throws InterchangeFormat.IFException
-     * @throws java.io.IOException
+     * @throws Exception
      */
-    public QuasiBayesNet(URL url) throws IFException, IOException
+    public QuasiBayesNet(URL url) throws Exception
     {
         super(url);
     }
@@ -196,6 +196,7 @@ public class QuasiBayesNet extends BayesNet
      * directly by the parser as it parses an InterchangeFormat stream. Right
      * now the extensions involve: 1) Detecting observed variables 2) Detecting
      * explanation variables
+     *
      * @param ifo
      */
     @Override
@@ -286,7 +287,8 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Indicate whether or not there are local credal sets defined in the
      * network.
-     * @return 
+     *
+     * @return
      */
     public boolean are_local_credal_sets_present()
     {
@@ -302,6 +304,7 @@ public class QuasiBayesNet extends BayesNet
 
     /**
      * Print method for a QuasiBayesNet object.
+     *
      * @param out
      */
     @Override
@@ -372,7 +375,8 @@ public class QuasiBayesNet extends BayesNet
 
     /**
      * Get the type of global neighborhood.
-     * @return 
+     *
+     * @return
      */
     public int get_global_neighborhood_type()
     {
@@ -381,6 +385,7 @@ public class QuasiBayesNet extends BayesNet
 
     /**
      * Set the type of global neighborhood.
+     *
      * @param type
      */
     public void set_global_neighborhood_type(int type)
@@ -390,7 +395,8 @@ public class QuasiBayesNet extends BayesNet
 
     /**
      * Get the parameter for the global neighborhood modeled by the network.
-     * @return 
+     *
+     * @return
      */
     public double get_global_neighborhood_parameter()
     {
@@ -399,6 +405,7 @@ public class QuasiBayesNet extends BayesNet
 
     /**
      * Set the parameter for the global neighborhood modelled by the network.
+     *
      * @param p
      */
     public void set_global_neighborhood_parameter(double p)

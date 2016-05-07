@@ -24,9 +24,7 @@
  */
 package BayesianNetworks;
 
-import InterchangeFormat.IFException;
 import InterchangeFormat.InterchangeFormat;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringBufferInputStream;
@@ -145,9 +143,9 @@ public class BayesNet
      * Construct a BayesNet from a textual description in a string.
      *
      * @param s
-     * @throws InterchangeFormat.IFException
+     * @throws Exception
      */
-    public BayesNet(String s) throws IFException
+    public BayesNet(String s) throws Exception
     {
         this();
         StringBufferInputStream istream = new StringBufferInputStream(s);
@@ -162,9 +160,9 @@ public class BayesNet
      * Construct a BayesNet from a textual description in a stream.
      *
      * @param istream
-     * @throws InterchangeFormat.IFException
+     * @throws Exception
      */
-    public BayesNet(InputStream istream) throws IFException
+    public BayesNet(InputStream istream) throws Exception
     {
         this();
 
@@ -181,10 +179,9 @@ public class BayesNet
      *
      * @param context The URL context as defined in the Java libraries.
      * @param spec    The URL spec as defined in the Java libraries.
-     * @throws InterchangeFormat.IFException
-     * @throws java.io.IOException
+     * @throws Exception
      */
-    public BayesNet(URL context, String spec) throws IFException, IOException
+    public BayesNet(URL context, String spec) throws Exception
     {
         this();
         URL url = new URL(context, spec);
@@ -201,10 +198,9 @@ public class BayesNet
      * Construct a BayesNet from a textual description in an URL.
      *
      * @param url
-     * @throws InterchangeFormat.IFException
-     * @throws java.io.IOException
+     * @throws Exception
      */
-    public BayesNet(URL url) throws IFException, IOException
+    public BayesNet(URL url) throws Exception
     {
         this();
         InputStream istream = url.openStream();
