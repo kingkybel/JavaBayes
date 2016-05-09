@@ -70,6 +70,20 @@
     nbproject/build-impl.xml file.
 
     -->
+    <target name="-pre-compile">
+        <javacc target="src/Parsers/BIFv01/BIFv01.jj"
+                javacchome="/usr/share/java"/>
+
+        <javacc target="src/Parsers/BIFv015/BIFv015.jj"
+                javacchome="/usr/share/java"/>
+
+        <javacc target="src/Parsers/XMLBIFv02/XMLBIFv02.jj"
+                javacchome="/usr/share/java"/>
+
+        <javacc target="src/Parsers/XMLBIFv03/XMLBIFv03.jj"
+                javacchome="/usr/share/java"/>
+    </target>
+
     <target name="-post-clean">
         <delete file="src/Parsers/BIFv01/BIFv01.java" failonerror="false"/>
         <delete file="src/Parsers/BIFv01/BIFv01Constants.java" failonerror="false"/>
@@ -103,20 +117,6 @@
         <delete file="src/Parsers/XMLBIFv03/JavaCharStream.java" failonerror="false"/>
         <delete file="src/Parsers/XMLBIFv03/Token.java" failonerror="false"/>
         <delete file="src/Parsers/XMLBIFv03/TokenMgrError.java" failonerror="false"/>
-    </target>
-
-    <target name="-pre-compile">
-        <javacc target="src/Parsers/BIFv01/BIFv01.jj"
-                javacchome="/usr/share/java"/>
-
-        <javacc target="src/Parsers/BIFv015/BIFv015.jj"
-                javacchome="/usr/share/java"/>
-
-        <javacc target="src/Parsers/XMLBIFv02/XMLBIFv02.jj"
-                javacchome="/usr/share/java"/>
-
-        <javacc target="src/Parsers/XMLBIFv03/XMLBIFv03.jj"
-                javacchome="/usr/share/java"/>
     </target>
 
 </project>
