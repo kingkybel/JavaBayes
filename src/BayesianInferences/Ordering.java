@@ -117,9 +117,9 @@ public class Ordering
         explanationStatus = ds;
     }
 
-    /*
-     * Obtain explanationStatus: unless there are explanations
-     * the status is IGNORE_EXPLANATION.
+    /**
+     * Obtain explanationStatus: unless there are explanations the status is
+     * IGNORE_EXPLANATION.
      */
     private int obtainExplanationStatus(BayesNet bN)
     {
@@ -136,9 +136,8 @@ public class Ordering
         return (explanationStatusFlag);
     }
 
-    /*
-     * Call the appropriate ordering depending on the type of
-     * ordering.
+    /**
+     * Call the appropriate ordering depending on the type of ordering.
      */
     private String[] ordering(String objective)
     {
@@ -190,20 +189,20 @@ public class Ordering
         }
     }
 
-    /*
+    /**
      * Simple ordering for the variables:
-     * 1) Transparent variables are not included; note that
-     *    transparent variables are only present in cases where
-     *    explanation variables are not to be considered.
-     * 2) Explanation variables come last in the order they
-     *    were input
-     * 3) Non-explanation variables come in the order they were
-     *    input. When there are no explanation variables (or
-     *    explanation variables are to be ignored), the objective
-     *    variable comes last. Note that this violates the
-     *    inserted by the user, but the bucket elimination
-     *    algorithm requires the ordering to have this property
-     *    (objective variable last for inference).
+     * <ol>
+     * <li> Transparent variables are not included; note that transparent
+     * variables are only present in cases where explanation variables are not
+     * to be considered.</li>
+     * <li> Explanation variables come last in the order they were input</li>
+     * <li> Non-explanation variables come in the order they were input. </li>
+     * </ol>
+     * When there are no explanation variables (or explanation variables are to
+     * be ignored), the objective variable comes last. Note that this violates
+     * the inserted by the user, but the bucket elimination algorithm requires
+     * the ordering to have this property (objective variable last for
+     * inference).
      */
     private String[] userOrder(ArrayList variablesToOrder,
                                int objectiveIndex)
@@ -293,18 +292,18 @@ public class Ordering
         return (ord);
     }
 
-    /*
+    /**
      * Heuristic ordering for the variables:
-     * 1) Transparent variables are not included
-     * 2) Decision variables come last in the order they
-     *                were input
-     * 3) Non-explanation variables come in the order they were
-     *                input, except objective variable which
-     *                is the last of all non-explanation variables
-     * Produce an ordering for the variables in variablesToOrder,
-     * assuming that all variables are in the BayesNet bn object.
-     * The orderingType indicates which heuristic to use in the
-     * elimination procedure.
+     * <ol>
+     * <li> Transparent variables are not included</li>
+     * <li> Decision variables come last in the order they were input</li>
+     * <li> Non-explanation variables come in the order they were input, except
+     * objective variable which is the last of all non-explanation
+     * variables</li>
+     * </ol>
+     * Produce an ordering for the variables in variablesToOrder, assuming that
+     * all variables are in the BayesNet bn object. The orderingType indicates
+     * which heuristic to use in the elimination procedure.
      */
     private String[] heuristicOrder(ArrayList vo,
                                     int objectiveIndex,
@@ -476,9 +475,9 @@ public class Ordering
         return (returnOrdering);
     }
 
-    /*
-     * Obtain the heuristic value of eliminating a variable,
-     * represented by the list of variables linked to it.
+    /**
+     * Obtain the heuristic value of eliminating a variable, represented by the
+     * list of variables linked to it.
      */
     private long obtainValue(ArrayList v, int orderingType)
     {
@@ -499,9 +498,9 @@ public class Ordering
         return (value);
     }
 
-    /*
-     * Interconnect a group of variables; each variable
-     * connected to all the others.
+    /**
+     * Interconnect a group of variables; each variable connected to all the
+     * others.
      */
     private void interconnect(BayesNet bn, ArrayList vectors[],
                               DiscreteVariable variablesToBeInterconnected[])
@@ -518,7 +517,7 @@ public class Ordering
         }
     }
 
-    /*
+    /**
      * Connect two variables.
      */
     private void interconnect(BayesNet bn, ArrayList vectors[],

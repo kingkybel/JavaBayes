@@ -160,14 +160,12 @@ public class IFProbabilityFunction
     }
 
     /**
-     * ***********************************************************
-     * Method that inverts the tables in the ProbabilityFunction * object;
-     * necessary for formats that put the GIVEN * variables as the lowest
-     * running indexes in the tables. * At this point it assumes that there is
-     * only one FOR * variable in the ProbabilityFunction object.
+     * Method that inverts the tables in the ProbabilityFunction object;
+     * necessary for formats that put the GIVEN variables as the lowest running
+     * indexes in the tables. * At this point it assumes that there is only one
+     * FOR variable in the ProbabilityFunction object.
      *
-     *
-     * @param ifbn ***********************************************************
+     * @param ifbn
      */
     public void invertTables(IFBayesNet ifbn)
     {

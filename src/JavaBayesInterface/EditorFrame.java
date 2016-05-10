@@ -205,43 +205,41 @@ public class EditorFrame extends Frame
         {
             String label = ((Button) (evt.target)).getLabel();
 
-            if (((String) arg).equals(createLabel))
+            switch ((String) arg)
             {
-                scrollPanel.netPanel.setMode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.createMessage);
-                setCursor(Frame.DEFAULT_CURSOR);
-            }
-            else if (((String) arg).equals(moveLabel))
-            {
-                scrollPanel.netPanel.setMode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.moveMessage);
-                setCursor(Frame.MOVE_CURSOR);
-            }
-            else if (((String) arg).equals(deleteLabel))
-            {
-                scrollPanel.netPanel.setMode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.deleteMessage);
-                setCursor(Frame.HAND_CURSOR);
-            }
-            else if (((String) arg).equals(queryLabel))
-            {
-                setQueryMode();
-            }
-            else if (((String) arg).equals(observeLabel))
-            {
-                setObserveMode();
-            }
-            else if (((String) arg).equals(editVariableLabel))
-            {
-                setEditVariableMode();
-            }
-            else if (((String) arg).equals(editFunctionLabel))
-            {
-                setEditFunctionMode();
-            }
-            else if (((String) arg).equals(editNetworkLabel))
-            {
-                setEditNetworkMode();
+                case createLabel:
+                    scrollPanel.netPanel.setMode(label);
+                    JavaBayesHelpMessages.show(
+                            JavaBayesHelpMessages.createMessage);
+                    setCursor(Frame.DEFAULT_CURSOR);
+                    break;
+                case moveLabel:
+                    scrollPanel.netPanel.setMode(label);
+                    JavaBayesHelpMessages.
+                            show(JavaBayesHelpMessages.moveMessage);
+                    setCursor(Frame.MOVE_CURSOR);
+                    break;
+                case deleteLabel:
+                    scrollPanel.netPanel.setMode(label);
+                    JavaBayesHelpMessages.show(
+                            JavaBayesHelpMessages.deleteMessage);
+                    setCursor(Frame.HAND_CURSOR);
+                    break;
+                case queryLabel:
+                    setQueryMode();
+                    break;
+                case observeLabel:
+                    setObserveMode();
+                    break;
+                case editVariableLabel:
+                    setEditVariableMode();
+                    break;
+                case editFunctionLabel:
+                    setEditFunctionMode();
+                    break;
+                case editNetworkLabel:
+                    setEditNetworkMode();
+                    break;
             }
         }
         return true;
@@ -466,10 +464,6 @@ public class EditorFrame extends Frame
             ig.printMarginal(pstream, queriedVariable, true,
                              whatToShowBucketTreeState);
         }
-        else
-        {
-            return;
-        }
     }
 
     /**
@@ -491,10 +485,6 @@ public class EditorFrame extends Frame
         {
             ig.printExpectation(pstream, queriedVariable, true,
                                 whatToShowBucketTreeState);
-        }
-        else
-        {
-            return;
         }
     }
 

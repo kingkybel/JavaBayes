@@ -109,9 +109,6 @@ public final class JavaBayesConsoleFrame extends Frame
     CheckboxMenuItem bestConfiguration;
     CheckboxMenuItem sensitivityAnalysis;
 
-    /*
-     * End of Network Actions.
-     */
     /**
      * Constructor for JavaBayesConsoleFrame.
      *
@@ -524,104 +521,71 @@ public final class JavaBayesConsoleFrame extends Frame
         if (event.target instanceof MenuItem)
         {
             String label = (String) (((MenuItem) event.target).getLabel());
-            if (label.equals(showBucketsTitle))
+            switch (label)
             {
-                BucketTreeAction();
-                return true;
+                case showBucketsTitle:
+                    BucketTreeAction();
+                    return true;
+                case showBayesNetTitle:
+                    BayesianNetworkAction();
+                    return true;
+                case posteriorExpectationTitle:
+                    PosteriorExpectationAction();
+                    return true;
+                case posteriorMarginalTitle:
+                    PosteriorMarginalAction();
+                    return true;
+                case bestConfigurationTitle:
+                    EstimateBestConfigurationAction();
+                    return true;
+                case sensitivityAnalysisTitle:
+                    SensitivityAnalysisAction();
+                    return true;
+                case explanationTitle:
+                    EstimateExplanationVariablesAction();
+                    return true;
+                case bifSaveLabel:
+                    BifFormatAction();
+                    return true;
+                case xmlSaveLabel:
+                    XmlFormatAction();
+                    return true;
+                case bugsSaveLabel:
+                    BugsFormatAction();
+                    return true;
+                case algorithmVariableEliminationTitle:
+                    AlgorithmVariableEliminationAction();
+                    return true;
+                case algorithmBucketTreeTitle:
+                    AlgorithmBucketTreeAction();
+                    return true;
+                case clearMenuitemTitle:
+                    ClearAction();
+                    return true;
+                case dumpConsoleMenuitemTitle:
+                    DumpConsoleToFileAction();
+                    break;
+                case saveMenuitemTitle:
+                    SaveAction();
+                    return true;
+                case saveAsMenuitemTitle:
+                    SaveAsAction();
+                    return true;
+                case openMenuitemTitle:
+                    OpenAction();
+                    return true;
             }
-            else if (label.equals(showBayesNetTitle))
+            switch (label)
             {
-                BayesianNetworkAction();
-                return true;
-            }
-            else if (label.equals(posteriorExpectationTitle))
-            {
-                PosteriorExpectationAction();
-                return true;
-            }
-            else if (label.equals(posteriorMarginalTitle))
-            {
-                PosteriorMarginalAction();
-                return true;
-            }
-            else if (label.equals(bestConfigurationTitle))
-            {
-                EstimateBestConfigurationAction();
-                return true;
-            }
-            else if (label.equals(sensitivityAnalysisTitle))
-            {
-                SensitivityAnalysisAction();
-                return true;
-            }
-            else if (label.equals(explanationTitle))
-            {
-                EstimateExplanationVariablesAction();
-                return true;
-            }
-            else if (label.equals(bifSaveLabel))
-            {
-                BifFormatAction();
-                return true;
-            }
-            else if (label.equals(xmlSaveLabel))
-            {
-                XmlFormatAction();
-                return true;
-            }
-            else if (label.equals(bugsSaveLabel))
-            {
-                BugsFormatAction();
-                return true;
-            }
-            else if (label.equals(algorithmVariableEliminationTitle))
-            {
-                AlgorithmVariableEliminationAction();
-                return true;
-            }
-            else if (label.equals(algorithmBucketTreeTitle))
-            {
-                AlgorithmBucketTreeAction();
-                return true;
-            }
-            else if (label.equals(clearMenuitemTitle))
-            {
-                ClearAction();
-                return true;
-            }
-            else if (label.equals(dumpConsoleMenuitemTitle))
-            {
-                DumpConsoleToFileAction();
-            }
-            else if (label.equals(saveMenuitemTitle))
-            {
-                SaveAction();
-                return true;
-            }
-            else if (label.equals(saveAsMenuitemTitle))
-            {
-                SaveAsAction();
-                return true;
-            }
-            else if (label.equals(openMenuitemTitle))
-            {
-                OpenAction();
-                return true;
-            }
-            if (label.equals(openUrlMenuitemTitle))
-            {
-                OpenURL_Action();
-                return true;
-            }
-            else if (label.equals(quitMenuitemTitle))
-            {
-                QuitAction();
-                return true;
-            }
-            else if (label.equals(aboutTitle))
-            {
-                AboutAction();
-                return true;
+                case openUrlMenuitemTitle:
+                    OpenURL_Action();
+                    return true;
+                case quitMenuitemTitle:
+                    QuitAction();
+                    return true;
+                case aboutTitle:
+                    AboutAction();
+                    return true;
             }
         }
         return super.action(event, arg);
@@ -656,9 +620,9 @@ public final class JavaBayesConsoleFrame extends Frame
         textArea1.appendText(text);
     }
 
-    /*
-     * Create the "radiobutton" behavior for the checkbox menu items.
-     * It returns the checkbox that got on.
+    /**
+     * Create the "radiobutton" behavior for the checkbox menu items. It returns
+     * the checkbox that got on.
      */
     private CheckboxMenuItem updateCheckboxMenu(Menu m, CheckboxMenuItem cur,
                                                 CheckboxMenuItem def)

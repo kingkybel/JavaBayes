@@ -479,9 +479,6 @@ public class DiscreteFunction
         out.println("}");
     }
 
-    /* *************************************************************** */
-    /*  Methods that allow basic manipulation of non-public variables. */
-    /* *************************************************************** */
     /**
      * Return the number of DiscreteVariable objects in the current
      * DiscreteFunction.

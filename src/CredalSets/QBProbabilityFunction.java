@@ -167,9 +167,6 @@ public class QBProbabilityFunction extends ProbabilityFunction
         out.println("}");
     }
 
-    /* ************************************************************* */
-    /* Methods that allow basic manipulation of non-public variables */
-    /* ************************************************************* */
     /**
      * Get the lowerEnvelope array.
      *

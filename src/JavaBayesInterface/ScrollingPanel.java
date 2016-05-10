@@ -66,7 +66,7 @@ public class ScrollingPanel extends Panel
         add("East", vertical);
     }
 
-    /*
+    /**
      * Update the scrollbars.
      */
     void setScrollbars(Dimension d)

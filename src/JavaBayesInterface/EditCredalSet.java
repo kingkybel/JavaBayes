@@ -100,7 +100,7 @@ class EditCredalSet extends EditFunctionPanel
         add("South", csp);
     }
 
-    /*
+    /**
      * Copy the probability values into internal variables.
      */
     private void copyProbabilityValues()

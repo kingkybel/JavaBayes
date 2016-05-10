@@ -213,21 +213,19 @@ public class BayesNet
         istream.close();
     }
 
-    /*
-     * Translate the contents of a
-     * IFBayesNet object into a BayesNet object.
-     *
-     * This method makes modifications to the basic objects
-     * supported by the InterchangeFormat, so that the full
-     * functionality of the BayesianNetworks package can be used.
-     * As the InterchangeFormat evolves, probably some of the
-     * objects created through extensions will be created directly
-     * by the parser as it parses an InterchangeFormat stream.
-     * Right now the extensions involve:
-     * 1) Detecting observed variables.
-     * 2) Detecting explanation variables.
-     */
     /**
+     * Translate the contents of a IFBayesNet object into a BayesNet object.
+     *
+     * This method makes modifications to the basic objects supported by the
+     * InterchangeFormat, so that the full functionality of the BayesianNetworks
+     * package can be used. As the InterchangeFormat evolves, probably some of
+     * the objects created through extensions will be created directly by the
+     * parser as it parses an InterchangeFormat stream. Right now the extensions
+     * involve:
+     * <ol>
+     * <li> Detecting observed variables.<li>
+     * <li> Detecting explanation variables.<li>
+     * </ol>
      *
      * @param ifo
      */
@@ -255,21 +253,15 @@ public class BayesNet
         }
     }
 
-    /*
-     * Make modifications to a BayesNet based on the properties of
-     * the BayesNet.
-     */
     /**
-     *
+     * Make modifications to a BayesNet based on the properties of the BayesNet.
      */
     protected void processProperties()
     {
     }
 
-    /*
-     * Process the properties of a ProbabilityVariable.
-     */
     /**
+     * Process the properties of a ProbabilityVariable.
      *
      * @param index
      */
@@ -278,10 +270,8 @@ public class BayesNet
         probabilityVariables[index].processProperties();
     }
 
-    /*
-     * Process the properties of a ProbabilityFunction.
-     */
     /**
+     * Process the properties of a ProbabilityFunction.
      *
      * @param index
      */

@@ -594,9 +594,6 @@ public class BucketTree
         return (auxPf);
     }
 
-    /* *************************************************************** */
-    /*  Methods that allow basic manipulation of non-public variables  */
-    /* *************************************************************** */
     /**
      * Get the unnormalizedResult for the BucketTree.
      *

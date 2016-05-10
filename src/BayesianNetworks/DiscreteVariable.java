@@ -139,7 +139,7 @@ public class DiscreteVariable
             try
             {
                 daux = Double.valueOf(values[i]);
-                numericValues[i] = daux.doubleValue();
+                numericValues[i] = daux;
             }
             catch (NumberFormatException e)
             {
@@ -178,18 +178,15 @@ public class DiscreteVariable
         {
             out.println("//" + values.length + " values");
             out.print("\ttype discrete[" + values.length + "] { ");
-            for (int i = 0; i < values.length; i++)
+            for (String value : values)
             {
-                out.print(" \"" + values[i] + "\" ");
+                out.print(" \"" + value + "\" ");
             }
             out.println("};");
         }
         out.println("}");
     }
 
-    /* *************************************************************** */
-    /*  Methods that allow basic manipulation of non-public variables  */
-    /* *************************************************************** */
     /**
      * Get the name of the current DiscreteVariable.
      *

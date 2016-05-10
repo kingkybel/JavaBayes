@@ -255,11 +255,11 @@ public final class VertexSet
         int valueIndexes[] = new int[bn.numberVariables()];
 
         // Fill the array of markers.
-        for (int i = 0; i < variableValuePairs.length; i++)
+        for (String[] variableValuePair : variableValuePairs)
         {
-            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            index = bn.indexOfVariable(variableValuePair[0]);
             pv = bn.getProbabilityVariable(index);
-            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
+            valueIndexes[index] = pv.indexOfValue(variableValuePair[1]);
         }
 
         // Now evaluate
@@ -285,11 +285,11 @@ public final class VertexSet
         int valueIndexes[] = new int[bn.numberVariables()];
 
         // Fill the array of markers.
-        for (int i = 0; i < variableValuePairs.length; i++)
+        for (String[] variableValuePair : variableValuePairs)
         {
-            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            index = bn.indexOfVariable(variableValuePair[0]);
             pv = bn.getProbabilityVariable(index);
-            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
+            valueIndexes[index] = pv.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
@@ -371,9 +371,9 @@ public final class VertexSet
         for (int i = 0; i < values.length; i++)
         {
             aux = 0.0;
-            for (int j = 0; j < extremePoints.length; j++)
+            for (double[] extremePoint : extremePoints)
             {
-                aux += extremePoints[j][i];
+                aux += extremePoint[i];
             }
             values[i] = aux / n;
         }

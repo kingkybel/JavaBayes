@@ -79,7 +79,7 @@ class PropertyManager
         }
     }
 
-    /*
+    /**
      * Create a new property.
      */
     void newProperty()
@@ -104,7 +104,7 @@ class PropertyManager
         textField.setText("");
     }
 
-    /*
+    /**
      * Go to the next property.
      */
     void nextProperty()
@@ -138,7 +138,7 @@ class PropertyManager
         }
     }
 
-    /*
+    /**
      * Modify a property when changes were detected.
      */
     void updateProperty()
@@ -160,7 +160,7 @@ class PropertyManager
         areOriginalPropertiesStillValid = false;
     }
 
-    /*
+    /**
      * Modify a property when the dialog exits.
      */
     ArrayList updatePropertyOnExit()

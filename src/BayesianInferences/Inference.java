@@ -208,9 +208,9 @@ public class Inference
         // Add the current BucketTree to the bucketForest.
         bucketForest.add(bucketTree);
         // Put the buckets in correspondence with the variables.
-        for (int i = 0; i < bucketTree.bucketTree.length; i++)
+        for (Bucket bucketTree1 : bucketTree.bucketTree)
         {
-            buck = bucketTree.bucketTree[i];
+            buck = bucketTree1;
             bucketForVariable[buck.variable.getIndex()] = buck;
         }
     }

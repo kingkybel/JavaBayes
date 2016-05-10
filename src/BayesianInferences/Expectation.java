@@ -240,9 +240,8 @@ public class Expectation
         doExpectationFromInference(df);
     }
 
-    /*
-     * Construct the utility function that produces the
-     * requested moment.
+    /**
+     * Construct the utility function that produces the requested moment.
      */
     private DiscreteFunction constructValues(ProbabilityVariable pv,
                                              int momentOrder)
@@ -258,10 +257,8 @@ public class Expectation
         return (df);
     }
 
-    /*
-     * Do the expectations from inference.
-     */
     /**
+     * Do the expectations from inference.
      *
      * @param df
      */
@@ -274,9 +271,6 @@ public class Expectation
         results[0] = res.expectedValue(df);
     }
 
-    /*
-     * Generic, auxiliary methods.
-     */
     /**
      * Print Expectation.
      */
@@ -332,9 +326,6 @@ public class Expectation
         }
     }
 
-    /* ************************************************************* */
-    /* Methods that allow basic manipulation of non-public variables */
-    /* ************************************************************* */
     /**
      * Get the results of Expectation.
      *

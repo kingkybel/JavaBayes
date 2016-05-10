@@ -81,9 +81,9 @@ class EditFunctionDialog extends Dialog
         pack();
     }
 
-    /*
-     * Create the appropriate instance of EditFunctionPanel,
-     * based on the function in the node.
+    /**
+     * Create the appropriate instance of EditFunctionPanel, based on the
+     * function in the node.
      */
     private EditFunctionPanel dispatch(InferenceGraph ig, InferenceGraphNode ign)
     {

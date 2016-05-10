@@ -75,10 +75,8 @@ public class QBExpectation extends Expectation
         inference = new QBInference(bn, doProduceClusters);
     }
 
-    /*
-     * Do the Expectation.
-     */
     /**
+     * Do the Expectation.
      *
      * @param df
      */
@@ -97,9 +95,8 @@ public class QBExpectation extends Expectation
         }
     }
 
-    /*
-     * Perform calculation of expectations
-     * when local neighborhoods are present.
+    /**
+     * Perform calculation of expectations when local neighborhoods are present.
      */
     private void expectationWithLocalNeighborhoods(DiscreteFunction df)
     {
@@ -154,10 +151,9 @@ public class QBExpectation extends Expectation
         results[1] = max;
     }
 
-    /*
-     * Perform calculation of expectations
-     * when local pneighborhoods are absent; handles global
-     * neighborhoods if necessary.
+    /**
+     * Perform calculation of expectations when local pneighborhoods are absent;
+     * handles global neighborhoods if necessary.
      */
     private void expectationWithoutLocalNeighborhoods(DiscreteFunction df)
     {

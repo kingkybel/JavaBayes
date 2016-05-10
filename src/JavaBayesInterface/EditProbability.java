@@ -87,7 +87,7 @@ class EditProbability extends EditFunctionPanel
         add("Center", probabilityTable);
     }
 
-    /*
+    /**
      * Create a Label containing a description of the probability function.
      */
     private Label createProbabilityName()

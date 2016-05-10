@@ -230,7 +230,7 @@ class EditNetworkDialog extends Dialog
         return (super.handleEvent(evt));
     }
 
-    /*
+    /**
      * Fill the values in the dialog area.
      */
     private void fillDialog()
@@ -308,9 +308,8 @@ class EditNetworkDialog extends Dialog
         return (true);
     }
 
-    /*
-     * Update the contents of the network when the
-     * dialog exits.
+    /**
+     * Update the contents of the network when the dialog exits.
      */
     private void updateDialog()
     {

@@ -40,11 +40,8 @@ public class IFProbabilityEntry
     double entries[];
 
     /**
-     * ************************************************************
-     */
-    /* Simple constructor for an entry object                      */
-    /**
-     * ************************************************************
+     * Simple constructor for an entry object
+     *
      * @param v
      * @param e
      */

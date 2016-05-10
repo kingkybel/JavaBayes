@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 /**
  * Class that converts the contents of an InterchangeFormat object to the
- * BayesNet object in the BayesianNetworks - package
+ * BayesNet object in the BayesianNetworks - package.
  */
 public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
 {
@@ -57,14 +57,12 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * **********************************************************
      * Method that does all the work involved in creating a *
      * ProbabilityFunction object out of the definition * found by the parser
      * and the information contained in * the BayesNet object; the
      * ProbabilityFunction object may * in fact be a Quasi-Bayesian model.
      *
-     *
-     * @return **********************************************************
+     * @return
      */
     @Override
     protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
@@ -124,9 +122,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * **********************************************************
-     * Fill the values with the contents of the tables * in the upf object. *
-     * **********************************************************
+     * Fill the values with the contents of the tables * in the upf object.
      */
     double[][] processExtremeTables(IFProbabilityFunction upf,
                                     double values[])
@@ -174,10 +170,8 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * **********************************************************
-     * Insert default values from the contents of the first * specification of
-     * defaults in the upf object. *
-     * **********************************************************
+     * Insert default values from the contents of the first specification of
+     * defaults in the upf object.
      */
     void processDefaults(IFProbabilityFunction upf,
                          double values[], double extremePoints[][], int jump)
@@ -204,9 +198,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * **********************************************************
-     * Insert entries specified in the upf object. *
-     * **********************************************************
+     * Insert entries specified in the upf object.
      */
     void processEntries(BayesNet bn,
                         IFProbabilityFunction upf,
@@ -256,9 +248,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * **********************************************************
-     * Perform final calculations in the values *
-     * **********************************************************
+     * Perform final calculations in the values
      */
     void finishValues(double values[], double extremePoints[][])
     {

@@ -67,7 +67,7 @@ class DSeparation
         return (separation(x, AFFECTING_VARIABLES));
     }
 
-    /*
+    /**
      * Find all d-separation relations.
      */
     private void separationRelations(int x, int flag)
@@ -194,7 +194,7 @@ class DSeparation
 
     }
 
-    /*
+    /**
      * Run the separation algorithm and process its results.
      */
     private ArrayList separation(int x, int flag)
@@ -232,9 +232,9 @@ class DSeparation
         return (dSeparatedVariables);
     }
 
-    /*
-     * Check whether the variable given by the index is in the
-     * list of separators (i.e., it is observed).
+    /**
+     * Check whether the variable given by the index is in the list of
+     * separators (i.e., it is observed).
      */
     private boolean isSeparator(int i, int flag)
     {
@@ -250,9 +250,9 @@ class DSeparation
         }
     }
 
-    /*
-     * Check whether there is a link from variable indexFrom to
-     * variable indexTo.
+    /**
+     * Check whether there is a link from variable indexFrom to variable
+     * indexTo.
      */
     private boolean adj(int indexFrom, int indexTo, int flag)
     {

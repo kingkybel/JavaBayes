@@ -81,7 +81,7 @@ public class JavaBayes extends Applet
         quit();
     }
 
-    /*
+    /**
      * Do all the initializations for a JavaBayes object.
      */
     private void construct(boolean ia)

@@ -68,35 +68,25 @@ public abstract class TwoMonotoneCapacity
     public abstract double getLowerProbabilityFromBase(double p);
 
     /**
-     * ************************************************************
-     */
-    /* Obtain the upper probability of an event given the base     */
-    /* probability for the event.                                  */
-    /**
-     * ************************************************************
+     * Obtain the upper probability of an event given the base
+     *
      * @param p
      * @return
      */
     public abstract double getUpperProbabilityFromBase(double p);
 
     /**
-     * ************************************************************
-     */
-    /* Get a base probability value for an atom.                   */
-    /**
-     * ************************************************************
+     * Get a base probability value for an atom.
+     *
      * @param index
      * @return
      */
     public abstract double getAtomProbability(int index);
 
     /**
-     * ************************************************************
-     */
-    /* Perform calculation of marginal posterior distributions for */
-    /* a total variation global neighborhood                       */
-    /**
-     * ************************************************************
+     * Perform calculation of marginal posterior distributions for a total
+     * variation global neighborhood
+     *
      * @return
      */
     public ProbabilityFunction posteriorMarginal()
@@ -145,11 +135,8 @@ public abstract class TwoMonotoneCapacity
     }
 
     /**
-     * ************************************************************
-     */
-    /* Perform calculation of expected value for density ratio     */
-    /**
-     * ************************************************************
+     * Perform calculation of expected value for density ratio
+     *
      * @param df
      * @return
      */
@@ -178,14 +165,10 @@ public abstract class TwoMonotoneCapacity
     }
 
     /**
-     * ************************************************************
-     */
-    /* Perform calculation of posterior expected value.            */
-    /* Assumes that the probability values are not                 */
-    /* normalized; probability values are p(x, e) where e is       */
-    /* the fixed evidence                                          */
-    /**
-     * ************************************************************
+     * Perform calculation of posterior expected value. Assumes that the
+     * probability values are not normalized; probability values are p(x, e)
+     * where e is the fixed evidence .
+     *
      * @param df
      * @return
      */
@@ -244,12 +227,8 @@ public abstract class TwoMonotoneCapacity
     }
 
     /**
-     * ************************************************************
-     */
-    /* To conform to the MappingDouble interface demanded by the   */
-    /* Bracketing class, the method map() must be present.         */
-    /**
-     * ************************************************************
+     * To conform to the MappingDouble interface demanded by the Bracketing
+     * class, the method map() must be present.
      */
     @Override
     public double map(int mapType, double mapInput)

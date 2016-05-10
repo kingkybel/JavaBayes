@@ -26,6 +26,7 @@
 package QuasiBayesianNetworks;
 
 import BayesianNetworks.BayesNet;
+import BayesianNetworks.ProbabilityFunction;
 import CredalSets.QBProbabilityFunction;
 import InterchangeFormat.InterchangeFormat;
 import java.io.InputStream;
@@ -269,7 +270,7 @@ public class QuasiBayesNet extends BayesNet
             {
                 propertyValue = st.nextToken();
                 globalNeighborhoodParameter =
-                Double.valueOf(propertyValue).doubleValue();
+                Double.valueOf(propertyValue);
             }
         }
 
@@ -288,9 +289,9 @@ public class QuasiBayesNet extends BayesNet
      */
     public boolean areLocalCredalSetsPresent()
     {
-        for (int i = 0; i < probabilityFunctions.length; i++)
+        for (ProbabilityFunction probabilityFunction : probabilityFunctions)
         {
-            if (probabilityFunctions[i] instanceof QBProbabilityFunction)
+            if (probabilityFunction instanceof QBProbabilityFunction)
             {
                 return (true);
             }

@@ -118,9 +118,9 @@ public class ProbabilityFunction extends DiscreteFunction
         }
     }
 
-    /* ************************************************************* */
-    /* Method that processes the properties                          */
-    /* ************************************************************* */
+    /**
+     * Method that processes the properties.
+     */
     void processProperties()
     {
     }
@@ -431,9 +431,6 @@ public class ProbabilityFunction extends DiscreteFunction
         out.println("}");
     }
 
-    /* *************************************************************** */
-    /* Methods that allow basic manipulation of non-public variables   */
-    /* *************************************************************** */
     /**
      * Get the properties of the current ProbabilityFunction.
      *

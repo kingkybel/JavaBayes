@@ -291,7 +291,7 @@ public class NetworkPanel extends Canvas
         return true;
     }
 
-    /*
+    /**
      * Determine whether a node was hit by a mouse click.
      */
     private InferenceGraphNode nodehit(int x, int y)
@@ -310,7 +310,7 @@ public class NetworkPanel extends Canvas
         return (null);
     }
 
-    /*
+    /**
      * Determine whether an arc was hit by a mouse click.
      */
     boolean archit(int x, int y)
@@ -343,10 +343,10 @@ public class NetworkPanel extends Canvas
         }
     }
 
-    /*
-     * Determine whether a point is close to the segment
-     * between two nodes (hnode and pnode); if the point
-     * does not lie over or above the segment, return -1.0
+    /**
+     * Determine whether a point is close to the segment between two nodes
+     * (hnode and pnode); if the point does not lie over or above the segment,
+     * return -1.0
      */
     double squareDistancePointArc(InferenceGraphNode hnode,
                                   InferenceGraphNode pnode, int x3, int y3)
@@ -554,7 +554,7 @@ public class NetworkPanel extends Canvas
         scrollPanel.setScrollbars(size());
     }
 
-    /*
+    /**
      * Auxiliary function that draws an arc.
      */
     private void drawArc(Graphics g, InferenceGraphNode node,
@@ -608,47 +608,42 @@ public class NetworkPanel extends Canvas
         g.fillPolygon(archeadX, archeadY, 4);
     }
 
-    /*
+    /**
      * Set the mode for the NetworkPanel.
      */
     void setMode(String label)
     {
-        if (label.equals(EditorFrame.createLabel))
+        switch (label)
         {
-            mode = CREATE_MODE;
-        }
-        else if (label.equals(EditorFrame.moveLabel))
-        {
-            mode = MOVE_MODE;
-        }
-        else if (label.equals(EditorFrame.deleteLabel))
-        {
-            mode = DELETE_MODE;
-        }
-        else if (label.equals(EditorFrame.queryLabel))
-        {
-            mode = QUERY_MODE;
-        }
-        else if (label.equals(EditorFrame.observeLabel))
-        {
-            mode = OBSERVE_MODE;
-        }
-        else if (label.equals(EditorFrame.editVariableLabel))
-        {
-            mode = EDIT_VARIABLE_MODE;
-        }
-        else if (label.equals(EditorFrame.editFunctionLabel))
-        {
-            mode = EDIT_FUNCTION_MODE;
-        }
-        else
-        {
-            // default mode;
-            mode = CREATE_MODE;
+            case EditorFrame.createLabel:
+                mode = CREATE_MODE;
+                break;
+            case EditorFrame.moveLabel:
+                mode = MOVE_MODE;
+                break;
+            case EditorFrame.deleteLabel:
+                mode = DELETE_MODE;
+                break;
+            case EditorFrame.queryLabel:
+                mode = QUERY_MODE;
+                break;
+            case EditorFrame.observeLabel:
+                mode = OBSERVE_MODE;
+                break;
+            case EditorFrame.editVariableLabel:
+                mode = EDIT_VARIABLE_MODE;
+                break;
+            case EditorFrame.editFunctionLabel:
+                mode = EDIT_FUNCTION_MODE;
+                break;
+            default:
+                // default mode;
+                mode = CREATE_MODE;
+                break;
         }
     }
 
-    /*
+    /**
      * Return the QuasiBayesNet object displayed int the NetworkPanel.
      */
     InferenceGraph getInferenceGraph()
@@ -656,9 +651,8 @@ public class NetworkPanel extends Canvas
         return (ig);
     }
 
-    /*
-     * Store the QuasiBayesNet object to be displayed in
-     * the NetworkPanel.
+    /**
+     * Store the QuasiBayesNet object to be displayed in the NetworkPanel.
      */
     void load(InferenceGraph inferenceGraph)
     {
@@ -675,7 +669,7 @@ public class NetworkPanel extends Canvas
         repaint();
     }
 
-    /*
+    /**
      * Observe a node.
      */
     void observe(InferenceGraphNode node)
@@ -685,7 +679,7 @@ public class NetworkPanel extends Canvas
         d.show();
     }
 
-    /*
+    /**
      * Create a node.
      */
     void createNode(int x, int y)
@@ -694,10 +688,9 @@ public class NetworkPanel extends Canvas
         ig.resetMarginal();
     }
 
-    /*
-     * Create an arc. The bottom and head nodes of the arc
-     * are stored in the variables arcbottomnode and
-     * archeadnode.
+    /**
+     * Create an arc. The bottom and head nodes of the arc are stored in the
+     * variables arcbottomnode and archeadnode.
      */
     void createArc()
     {
@@ -708,7 +701,7 @@ public class NetworkPanel extends Canvas
         }
     }
 
-    /*
+    /**
      * Make a list of all moving nodes.
      */
     void generateMovingNodes()
@@ -734,7 +727,7 @@ public class NetworkPanel extends Canvas
         }
     }
 
-    /*
+    /**
      * Move a node.
      */
     void moveNode(int x, int y)
@@ -764,7 +757,7 @@ public class NetworkPanel extends Canvas
         }
     }
 
-    /*
+    /**
      * Delete a node.
      */
     void deleteNode(InferenceGraphNode node)
@@ -797,7 +790,7 @@ public class NetworkPanel extends Canvas
         ig.resetMarginal();
     }
 
-    /*
+    /**
      * Determine whether a given InferenceGraphNode is inside the group.
      */
     boolean insideGroup(InferenceGraphNode node)
@@ -808,10 +801,9 @@ public class NetworkPanel extends Canvas
                 (node.getPosY() < Math.max(groupStart.y, groupEnd.y)));
     }
 
-    /*
-     * Delete an arc. The bottom and head nodes of the arc
-     * are stored in the variables arcbottomnode and
-     * archeadnode.
+    /**
+     * Delete an arc. The bottom and head nodes of the arc are stored in the
+     * variables arcbottomnode and archeadnode.
      */
     void deleteArc()
     {
@@ -819,8 +811,8 @@ public class NetworkPanel extends Canvas
         ig.resetMarginal();
     }
 
-    /*
-     * Edit the components of a  node.
+    /**
+     * Edit the components of a node.
      */
     void editVariable(InferenceGraphNode node)
     {
@@ -829,7 +821,7 @@ public class NetworkPanel extends Canvas
         d.show();
     }
 
-    /*
+    /**
      * Edit the function in a node.
      */
     void editFunction(InferenceGraphNode node)
@@ -839,7 +831,7 @@ public class NetworkPanel extends Canvas
         d.show();
     }
 
-    /*
+    /**
      * Edit the network.
      */
     void editNetwork()

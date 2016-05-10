@@ -183,7 +183,6 @@ public class ProbabilityVariable extends DiscreteVariable
                 {
                     explanationIndex = 0;
                 }
-                continue;
             }
         }
 
@@ -216,9 +215,9 @@ public class ProbabilityVariable extends DiscreteVariable
 
         if (values != null)
         {
-            for (int i = 0; i < values.length; i++)
+            for (String value : values)
             {
-                out.println("\t<OUTCOME>" + values[i] + "</OUTCOME>");
+                out.println("\t<OUTCOME>" + value + "</OUTCOME>");
             }
         }
 
@@ -267,9 +266,9 @@ public class ProbabilityVariable extends DiscreteVariable
         if (values != null)
         {
             out.println("\t<TYPE>discrete</TYPE>");
-            for (int i = 0; i < values.length; i++)
+            for (String value : values)
             {
-                out.println("\t<VALUE>" + values[i] + "</VALUE>");
+                out.println("\t<VALUE>" + value + "</VALUE>");
             }
         }
 
@@ -318,9 +317,9 @@ public class ProbabilityVariable extends DiscreteVariable
         {
             out.println(" //" + values.length + " values");
             out.print("\ttype discrete[" + values.length + "] { ");
-            for (int i = 0; i < values.length; i++)
+            for (String value : values)
             {
-                out.print(" \"" + values[i] + "\" ");
+                out.print(" \"" + value + "\" ");
             }
             out.println("};");
         }
@@ -348,9 +347,6 @@ public class ProbabilityVariable extends DiscreteVariable
         out.println("}");
     }
 
-    /* *************************************************************** */
-    /* Methods that allow basic manipulation of non-public variables   */
-    /* *************************************************************** */
     /**
      * Get the type of the ProbabilityVariable.
      *
@@ -390,12 +386,12 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public void setObservedValue(String v)
     {
-        int index = indexOfValue(v);
-        if (index == BayesNet.INVALID_INDEX)
+        int foundIndex = indexOfValue(v);
+        if (foundIndex == BayesNet.INVALID_INDEX)
         {
             return;
         }
-        observedIndex = index;
+        observedIndex = foundIndex;
     }
 
     /**

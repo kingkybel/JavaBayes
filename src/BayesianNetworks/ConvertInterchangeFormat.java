@@ -152,13 +152,9 @@ public class ConvertInterchangeFormat
         return (probabilityFunctions);
     }
 
-    /*
-     * Create a
-     * ProbabilityFunction out of the definition
-     * found by the parser and the information contained in
-     * the BayesNet.
-     */
     /**
+     * Create a ProbabilityFunction out of the definition found by the parser
+     * and the information contained in the BayesNet.
      *
      * @param bn
      * @param upf
@@ -211,11 +207,9 @@ public class ConvertInterchangeFormat
                                         values, upf.getProperties()));
     }
 
-    /*
-     * Create the variables in the ProbabilityFunction object
-     * from the variables indicated in the IFProbabilityFunction.
-     */
     /**
+     * Create the variables in the ProbabilityFunction object from the variables
+     * indicated in the IFProbabilityFunction.
      *
      * @param bn
      * @param upf
@@ -240,11 +234,9 @@ public class ConvertInterchangeFormat
         return (variables);
     }
 
-    /*
-     * Fill the values with the contents of the first table in
-     * the tables contained in the upf object.
-     */
     /**
+     * Fill the values with the contents of the first table in the tables
+     * contained in the upf object.
      *
      * @param upf
      * @param values
@@ -261,10 +253,8 @@ public class ConvertInterchangeFormat
         }
     }
 
-    /*
-     * Copy content from a table to another.
-     */
     /**
+     * Copy content from a table to another.
      *
      * @param table
      * @param values
@@ -277,9 +267,9 @@ public class ConvertInterchangeFormat
         }
     }
 
-    /*
-     * Insert default values from the contents of the first
-     * specification of defaults in the IFProbabilityFunction.
+    /**
+     * Insert default values from the contents of the first specification of
+     * defaults in the IFProbabilityFunction.
      */
     void processDefaults(IFProbabilityFunction upf,
                          double values[], int jump)
@@ -305,7 +295,7 @@ public class ConvertInterchangeFormat
         }
     }
 
-    /*
+    /**
      * Insert entries specified in the IFProbabilityFunction.
      */
     void processEntries(BayesNet bn,
@@ -355,8 +345,8 @@ public class ConvertInterchangeFormat
         }
     }
 
-    /*
-     * Perform final calculations in the values
+    /**
+     * Perform final calculations in the values.
      */
     void finishValues(double values[])
     {

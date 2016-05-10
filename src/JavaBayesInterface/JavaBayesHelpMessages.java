@@ -124,8 +124,8 @@ public class JavaBayesHelpMessages
                                 Logger.getLogger(JavaBayesHelpMessages.class.
                                         getName());
 
-    // Constructor
     /**
+     * Constructor
      *
      * @param javaBayes
      */
@@ -134,8 +134,8 @@ public class JavaBayesHelpMessages
         jb = javaBayes;
     }
 
-    // Basic method to display messages
     /**
+     * Basic method to display messages
      *
      * @param message
      */

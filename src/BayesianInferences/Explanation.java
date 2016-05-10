@@ -212,9 +212,6 @@ public class Explanation
         }
     }
 
-    /* ************************************************************* */
-    /* Methods that allow basic manipulation of non-public variables */
-    /* ************************************************************* */
     /**
      * Get the results in the Explanation.
      *

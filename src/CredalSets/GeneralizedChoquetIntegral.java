@@ -70,20 +70,16 @@ public class GeneralizedChoquetIntegral
         double dfPositive[] = new double[positive.size() - 1];
         for (i = 1; i <= dfPositive.length; i++)
         {
-            dfPositive[i - 1] = ((Double) (positive.get(i))).
-            doubleValue() -
-                                ((Double) (positive.get(i - 1))).
-                                doubleValue();
+            dfPositive[i - 1] = ((Double) (positive.get(i))) -
+                                ((Double) (positive.get(i - 1)));
         }
 
         // Create an array of value differences from the negative side
         double dfNegative[] = new double[negative.size() - 1];
         for (i = 1; i <= dfNegative.length; i++)
         {
-            dfNegative[i - 1] = ((Double) (negative.get(i))).
-            doubleValue() -
-                                ((Double) (negative.get(i - 1))).
-                                doubleValue();
+            dfNegative[i - 1] = ((Double) (negative.get(i))) -
+                                ((Double) (negative.get(i - 1)));
         }
 
         // Create arrays of lower and upper probability

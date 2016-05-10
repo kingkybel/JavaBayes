@@ -78,9 +78,9 @@ class ObserveDialog extends Dialog
         valuesList = new List(6, false);
 
         String[] values = node.getValues();
-        for (int i = 0; i < values.length; i++)
+        for (String value : values)
         {
-            valuesList.addItem(values[i]);
+            valuesList.addItem(value);
         }
 
         if (observed)
@@ -102,9 +102,9 @@ class ObserveDialog extends Dialog
         pack();
     }
 
-    /* ************************************************** *
-     * Handle the observation events.                     *
-     * ************************************************** */
+    /**
+     * Handle the observation events.
+     */
     @Override
     public boolean action(Event evt, Object arg)
     {

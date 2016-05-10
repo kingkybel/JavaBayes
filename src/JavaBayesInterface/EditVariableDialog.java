@@ -409,9 +409,8 @@ class EditVariableDialog extends Dialog
         return (vals);
     }
 
-    /*
-     * Update the contents of the network when the
-     * dialog exits.
+    /**
+     * Update the contents of the network when the dialog exits.
      */
     private void updateDialog()
     {

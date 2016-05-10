@@ -161,7 +161,7 @@ public final class FunctionTablePanel extends Panel
         }
     }
 
-    /*
+    /**
      * Build the table panel.
      */
     void buildPanels()
@@ -170,7 +170,7 @@ public final class FunctionTablePanel extends Panel
         buildDistributionPanel();
     }
 
-    /*
+    /**
      * Build parents panel.
      */
     private void buildParentsPanel()
@@ -195,9 +195,9 @@ public final class FunctionTablePanel extends Panel
             parentChoices[i - 2] = new Choice();
             parentChoices[i - 2].setForeground(colorParents);
             // Fill the choice item with the values for the parent.
-            for (int j = 0; j < allVariableValues[i].length; j++)
+            for (String allVariableValue : allVariableValues[i])
             {
-                parentChoices[i - 2].addItem(allVariableValues[i][j]);
+                parentChoices[i - 2].addItem(allVariableValue);
             }
             // Insert the label and choice
             pp.add(parentsLabels[i - 2]);
@@ -214,7 +214,7 @@ public final class FunctionTablePanel extends Panel
         ap.add("South", separatorLabel);
     }
 
-    /*
+    /**
      * Build distribution panel.
      */
     private void buildDistributionPanel()
@@ -311,7 +311,7 @@ public final class FunctionTablePanel extends Panel
         return (super.action(evt, arg));
     }
 
-    /*
+    /**
      * Update the table when the parents change.
      */
     private void updateTableForParents()
@@ -352,7 +352,7 @@ public final class FunctionTablePanel extends Panel
                     try
                     {
                         valueSet =
-                        (new Double(fields[i][j].getText()).doubleValue());
+                        (Double.parseDouble(fields[i][j].getText()));
                         parentIndexes[0] = i;
                         parentIndexes[1] = j;
                         tableValues[getLocationFromIndexes(parentIndexes)] =
@@ -386,7 +386,7 @@ public final class FunctionTablePanel extends Panel
         }
     }
 
-    /*
+    /**
      * Update the table values.
      */
     private void updateTableValues()
@@ -399,7 +399,7 @@ public final class FunctionTablePanel extends Panel
                 try
                 {
                     tableValues[i] =
-                    (new Double(fields[i][0].getText()).doubleValue());
+                    (Double.parseDouble(fields[i][0].getText()));
                 }
                 catch (NumberFormatException e)
                 {
@@ -415,7 +415,7 @@ public final class FunctionTablePanel extends Panel
                     try
                     {
                         tableValues[i * allVariableValues[1].length + j] =
-                        (new Double(fields[i][j].getText()).doubleValue());
+                        (Double.parseDouble(fields[i][j].getText()));
                     }
                     catch (NumberFormatException e)
                     {
@@ -438,7 +438,7 @@ public final class FunctionTablePanel extends Panel
                     try
                     {
                         valueSet =
-                        (new Double(fields[i][j].getText()).doubleValue());
+                        (Double.parseDouble(fields[i][j].getText()));
                         parentIndexes[0] = i;
                         parentIndexes[1] = j;
                         tableValues[getLocationFromIndexes(parentIndexes)] =
@@ -452,7 +452,7 @@ public final class FunctionTablePanel extends Panel
         }
     }
 
-    /*
+    /**
      * Determine the index of a given location.
      */
     private int getLocationFromIndexes(int indexes[])

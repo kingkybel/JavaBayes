@@ -82,16 +82,11 @@ public class QBInference extends Inference
         transformNetwork();
     }
 
-    /*
-     * Code for basic transformation.
-     */
-
-    /*
-     * Create all the values and transparent variables for the
-     * credal sets, but do not include the transparent variables in
-     * the probabilityVariables array.
-     * Local neighborhoods are only used if there are
-     * local credal sets and no global credal set.
+    /**
+     * Code for basic transformation. Create all the values and transparent
+     * variables for the credal sets, but do not include the transparent
+     * variables in the probabilityVariables array. Local neighborhoods are only
+     * used if there are local credal sets and no global credal set.
      */
     private void transformNetwork()
     {
@@ -123,9 +118,8 @@ public class QBInference extends Inference
         transformProbabilityVariablesArray(auxiliaryVariables);
     }
 
-    /*
-     * Create all the values and transparent variables for the
-     * credal sets.
+    /**
+     * Create all the values and transparent variables for the credal sets.
      */
     private ArrayList transformProbabilityFunctionsArray()
     {
@@ -155,10 +149,10 @@ public class QBInference extends Inference
         return (auxiliaryVariables);
     }
 
-    /*
+    /**
      * Copy all the regular and auxiliary variables into a new
-     * probabilityVariables array, making the auxiliary variables
-     * available for calculation of marginals
+     * probabilityVariables array, making the auxiliary variables available for
+     * calculation of marginals
      */
     private void transformProbabilityVariablesArray(ArrayList auxs)
     {
@@ -193,7 +187,7 @@ public class QBInference extends Inference
         bn.setProbabilityVariables(newProbabilityVariables);
     }
 
-    /*
+    /**
      * Calculation of Inference.
      */
     @Override
@@ -215,10 +209,8 @@ public class QBInference extends Inference
         doQuasiBayesianInference();
     }
 
-    /*
-     * Do the Inference.
-     */
     /**
+     * Do the Inference.
      *
      */
     protected void doQuasiBayesianInference()
@@ -234,11 +226,10 @@ public class QBInference extends Inference
         }
     }
 
-    /*
-     * Perform calculation of marginal posterior distributions
-     * when local neighborhoods are present.
-     * Note that the distributions for the queried variable, for
-     * all transparent variables, is stored at results.
+    /**
+     * Perform calculation of marginal posterior distributions when local
+     * neighborhoods are present. Note that the distributions for the queried
+     * variable, for all transparent variables, is stored at results.
      */
     private void inferenceWithLocalNeighborhoods()
     {
@@ -286,10 +277,9 @@ public class QBInference extends Inference
         listOfLocalNeighborhoodResults = normalizedResults;
     }
 
-    /*
-     * Perform calculation of marginal posterior distributions
-     * when local neighborhoods are absent; handles global
-     * neighborhoods if necessary.
+    /**
+     * Perform calculation of marginal posterior distributions when local
+     * neighborhoods are absent; handles global neighborhoods if necessary.
      */
     private void inferenceWithoutLocalNeighborhoods()
     {
