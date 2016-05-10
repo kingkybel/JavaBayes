@@ -62,10 +62,10 @@ class Bucket
     private DiscreteFunction orderedDfs[];
     private boolean isOrderedDfsReady;
 
-
-    /*
-     * Simple constructor for Bucket. Default behavior is
-     * not to build the distributions for clusters of variables.
+    /**
+     * Simple constructor for Bucket. Default behavior is not to build the
+     * distributions for clusters of variables.
+     *
      * @param bs The BucketTree that holds the bucket.
      * @param pv The bucket variable for the Bucket.
      */
@@ -74,13 +74,13 @@ class Bucket
         this(bs, pv, false);
     }
 
-    /*
+    /**
      * Basic constructor for Bucket.
-     * @param bs The BucketTree that holds the bucket.
-     * @param pv The bucket variable for the Bucket.
-     * @param produceClusters Flag that indicates whether
-     *        distributions for clusters of variables are
-     *        to be computed or not.
+     *
+     * @param bs              The BucketTree that holds the bucket.
+     * @param pv              The bucket variable for the Bucket.
+     * @param produceClusters Flag that indicates whether distributions for
+     *                        clusters of variables are to be computed or not.
      */
     Bucket(BucketTree bs, ProbabilityVariable pv, boolean dpc)
     {

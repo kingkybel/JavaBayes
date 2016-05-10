@@ -96,10 +96,12 @@ public class DiscreteFunction
         return (false);
     }
 
-    /*
-     * Method that determines whether a DiscreteFunction
-     * contain some DiscreteVariable in common with the current DiscreteFunction.
-     * @param df DiscreteFunction to be compared with the current DiscreteFunction.
+    /**
+     * Method that determines whether a DiscreteFunction contain some
+     * DiscreteVariable in common with the current DiscreteFunction.
+     *
+     * @param df DiscreteFunction to be compared with the current
+     *           DiscreteFunction.
      */
     boolean sameVariables(DiscreteFunction df)
     {

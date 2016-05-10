@@ -81,11 +81,7 @@ public class QuasiBayesNet extends BayesNet
     // do not set this here; set by translate()
 
     /**
-     * ************************************************************
-     */
-    /* Default constructor for a QuasiBayesian network             */
-    /**
-     * ************************************************************
+     * Default constructor for a QuasiBayesian network.
      */
     public QuasiBayesNet()
     {

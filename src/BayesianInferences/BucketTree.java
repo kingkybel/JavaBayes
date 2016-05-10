@@ -146,13 +146,12 @@ public class BucketTree
         }
     }
 
-    /*
-     * Transform an observed ProbabilityVariable into a ProbabilityFunction
-     * to handle the case where the query involves an observed variable.
+    /**
+     * Transform an observed ProbabilityVariable into a ProbabilityFunction to
+     * handle the case where the query involves an observed variable.
      */
-    private ProbabilityFunction
-            transformToProbabilityFunction(BayesNet bn,
-                                           ProbabilityVariable pv)
+    private ProbabilityFunction transformToProbabilityFunction(BayesNet bn,
+                                                               ProbabilityVariable pv)
     {
         ProbabilityFunction pf = new ProbabilityFunction(bn, 1,
                                                          pv.numberValues(),
@@ -163,10 +162,9 @@ public class BucketTree
         return (pf);
     }
 
-    /*
-     * Eliminates all variables defined as evidence.
-     * The order of the variables that are not eliminated is
-     * the same order in the original function.
+    /**
+     * Eliminates all variables defined as evidence. The order of the variables
+     * that are not eliminated is the same order in the original function.
      */
     private ProbabilityFunction checkEvidence(ProbabilityFunction pf)
     {
@@ -213,11 +211,10 @@ public class BucketTree
         return (newPf);
     }
 
-    /*
-     * Build an array of markers. The marker for a
-     * variable is true only if the variable is present in the
-     * input ProbabilityFunction pf and is not observed.
-     * Even explanatory variables can be observed and taken as
+    /**
+     * Build an array of markers. The marker for a variable is true only if the
+     * variable is present in the input ProbabilityFunction pf and is not
+     * observed. Even explanatory variables can be observed and taken as
      * evidence.
      */
     private int buildEvidenceMarkers(ProbabilityFunction pf,
@@ -254,7 +251,7 @@ public class BucketTree
         return (n);
     }
 
-    /*
+    /**
      * Obtain the values for the evidence plus function.
      */
     private void checkEvidenceLoop(ProbabilityFunction newPf,
@@ -418,10 +415,10 @@ public class BucketTree
         return (true);
     }
 
-    /*
-     * Recover the maximizing variables going back through the
-     * maximizing bucketTree; the variables are returned as an array
-     * of markers (non-explanation variables get INVALID_INDEX).
+    /**
+     * Recover the maximizing variables going back through the maximizing
+     * bucketTree; the variables are returned as an array of markers
+     * (non-explanation variables get INVALID_INDEX).
      */
     private int[] backwardMaximization()
     {
@@ -479,10 +476,9 @@ public class BucketTree
         return (backwardMarkers);
     }
 
-    /*
-     * Put the separator function of a Bucket buck
-     * into the BucketTree beyond the current
-     * activeBucket.
+    /**
+     * Put the separator function of a Bucket buck into the BucketTree beyond
+     * the current activeBucket.
      */
     private void insert(Bucket buck)
     {
@@ -521,7 +517,7 @@ public class BucketTree
         }
     }
 
-    /*
+    /**
      * Put a DiscreteFunction into the BucketTree beyond the current
      * activeBucket.
      */
@@ -530,10 +526,10 @@ public class BucketTree
         insert(df, false);
     }
 
-    /*
+    /**
      * Put a DiscreteFunction into the BucketTree beyond the current
-     * activeBucket. If wasFirstVariableCancelledByEvidence is true,
-     * then mark the bucket accordingly.
+     * activeBucket. If wasFirstVariableCancelledByEvidence is true, then mark
+     * the bucket accordingly.
      */
     private void insert(DiscreteFunction df,
                         boolean wasFirstVariableCancelledByEvidence)

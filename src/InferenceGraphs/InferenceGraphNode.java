@@ -65,7 +65,7 @@ public final class InferenceGraphNode
     private final BayesNet defaultInferenceGraphNodeBayesNet = null;
     private final ArrayList defaultInferenceGraphNodeProperties = null;
 
-    /*
+    /**
      * Default constructor for an InferenceGraphNode.
      */
     InferenceGraphNode(InferenceGraph iG, String name)
@@ -73,12 +73,11 @@ public final class InferenceGraphNode
         this(iG, name, new Point(100, 100));
     }
 
-    /*
-     * Constructor for a InferenceGraphNode object. The created
-     * node is in an incomplete state; the constructor assumes the
-     * node is new and not necessarily attached to the current
-     * network in the InferenceGraph; no parents nor
-     * children are defined for such a node.
+    /**
+     * Constructor for a InferenceGraphNode object. The created node is in an
+     * incomplete state; the constructor assumes the node is new and not
+     * necessarily attached to the current network in the InferenceGraph; no
+     * parents nor children are defined for such a node.
      */
     InferenceGraphNode(InferenceGraph iG, String name, Point position)
     {
@@ -95,9 +94,9 @@ public final class InferenceGraphNode
         pos = position;
     }
 
-    /*
-     * Constructor for a InferenceGraphNode object.
-     * Note that parents and children are not properly set here.
+    /**
+     * Constructor for a InferenceGraphNode object. Note that parents and
+     * children are not properly set here.
      */
     InferenceGraphNode(InferenceGraph iG,
                        ProbabilityVariable pV, ProbabilityFunction pF)
@@ -108,9 +107,9 @@ public final class InferenceGraphNode
         pos = parsePosition(pV);
     }
 
-    /*
-     * Constructor for a InferenceGraphNode object.
-     * Note that parents and children are not properly set here.
+    /**
+     * Constructor for a InferenceGraphNode object. Note that parents and
+     * children are not properly set here.
      */
     InferenceGraphNode(InferenceGraph iG,
                        ProbabilityVariable pV, ProbabilityFunction pF,
@@ -122,9 +121,8 @@ public final class InferenceGraphNode
         pos = position;
     }
 
-    /*
-     * Initialization for the probability function
-     * in the InferenceGraphNode.
+    /**
+     * Initialization for the probability function in the InferenceGraphNode.
      */
     void initDists()
     {
@@ -163,7 +161,7 @@ public final class InferenceGraphNode
                                      defaultInferenceGraphNodeProperties);
     }
 
-    /*
+    /**
      * Update the position property.
      */
     void updatePosition()
@@ -205,9 +203,9 @@ public final class InferenceGraphNode
         pv.addProperty(finalProperty);
     }
 
-    /*
-     * Get the position of a InferenceGraphNode from the
-     * properties in the variable.
+    /**
+     * Get the position of a InferenceGraphNode from the properties in the
+     * variable.
      */
     private Point parsePosition(ProbabilityVariable pV)
     {
@@ -415,7 +413,6 @@ public final class InferenceGraphNode
         }
     }
 
-    /* ******************** Public methods ******************** */
     /**
      * Return the name of the variable in the node.
      *
@@ -755,9 +752,6 @@ public final class InferenceGraphNode
         updatePositionFromProperty(s);
     }
 
-    /*
-     * Update the position of a node given a property.
-     */
     /**
      *
      * @param s

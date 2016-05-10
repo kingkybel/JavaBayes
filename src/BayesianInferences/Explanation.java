@@ -64,9 +64,6 @@ public class Explanation
         bn = bN;
     }
 
-    /*
-     * Methods for calculation of explanations.
-     */
     /**
      * Calculation of an Explanation.
      */
@@ -129,7 +126,7 @@ public class Explanation
         doInferenceFromBucketTree();
     }
 
-    /*
+    /**
      * Do the Explanation.
      */
     void doInferenceFromBucketTree()
@@ -139,9 +136,6 @@ public class Explanation
         results[0] = bucketTree.getNormalizedResult();
     }
 
-    /*
-     * Generic, auxiliary methods.
-     */
     /**
      * Print Explanation.
      */

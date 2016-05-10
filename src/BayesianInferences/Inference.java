@@ -85,11 +85,8 @@ public class Inference
      */
     protected boolean doProduceClusters;
 
-
-    /*
-     * Constructor for an Inference.
-     */
     /**
+     * Constructor for an Inference.
      *
      * @param bN
      * @param dpc
@@ -184,7 +181,7 @@ public class Inference
         inference(new Ordering(bn, order, IGNORE_EXPLANATION));
     }
 
-    /*
+    /**
      * Calculation of marginal posterior distribution.
      */
     private void inference(Ordering or)
@@ -201,9 +198,9 @@ public class Inference
         result = bucketTree.getNormalizedResult();
     }
 
-    /*
-     * Add a BucketTree to the bucketForest and
-     * update the bucketForVariable array.
+    /**
+     * Add a BucketTree to the bucketForest and update the bucketForVariable
+     * array.
      */
     private void addBucketTree()
     {
@@ -218,9 +215,6 @@ public class Inference
         }
     }
 
-    /*
-     * Generic, auxiliary methods.
-     */
     /**
      * Print the Inference.
      */
