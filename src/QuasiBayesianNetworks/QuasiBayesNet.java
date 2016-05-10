@@ -194,12 +194,13 @@ public class QuasiBayesNet extends BayesNet
      * now the extensions involve: 1) Detecting observed variables 2) Detecting
      * explanation variables
      *
-     * @param ifo
+     * @param interchangeFmt
      */
     @Override
-    protected void translate(InterchangeFormat ifo)
+    protected void translate(InterchangeFormat interchangeFmt)
     {
-        QBConvertInterchangeFormat qbcbn = new QBConvertInterchangeFormat(ifo);
+        QBConvertInterchangeFormat qbcbn = new QBConvertInterchangeFormat(
+                                   interchangeFmt);
         name = qbcbn.getName();
         properties = qbcbn.getProperties();
         probabilityVariables = qbcbn.getProbabilityVariables(this);

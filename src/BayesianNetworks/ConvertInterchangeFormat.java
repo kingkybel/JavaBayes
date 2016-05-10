@@ -44,16 +44,16 @@ public class ConvertInterchangeFormat
                                 ConvertInterchangeFormat.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    InterchangeFormat ifo;
+    InterchangeFormat interchangeFmt;
 
     /**
      * Default constructor that loads an InterchangeFormat.
      *
-     * @param interFormat
+     * @param interchangeFmt
      */
-    public ConvertInterchangeFormat(InterchangeFormat interFormat)
+    public ConvertInterchangeFormat(InterchangeFormat interchangeFmt)
     {
-        ifo = interFormat;
+        this.interchangeFmt = interchangeFmt;
     }
 
     /**
@@ -63,7 +63,7 @@ public class ConvertInterchangeFormat
      */
     public String getName()
     {
-        IFBayesNet ifbn = ifo.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getIfbn();
         if (ifbn == null)
         {
             return (null);
@@ -78,7 +78,7 @@ public class ConvertInterchangeFormat
      */
     public ArrayList getProperties()
     {
-        IFBayesNet ifbn = ifo.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getIfbn();
         if (ifbn == null)
         {
             return (null);
@@ -98,7 +98,7 @@ public class ConvertInterchangeFormat
     {
         int i;
         IFProbabilityVariable ipv;
-        IFBayesNet ifbn = ifo.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getIfbn();
         if (ifbn == null)
         {
             return (null);
@@ -136,7 +136,7 @@ public class ConvertInterchangeFormat
     {
         int i;
         IFProbabilityFunction upf;
-        IFBayesNet ifbn = ifo.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getIfbn();
         if (ifbn == null)
         {
             return (null);

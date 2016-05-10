@@ -149,18 +149,19 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in a string.
      *
-     * @param s
+     * @param networkDescription
      * @throws Exception
      */
-    public BayesNet(String s) throws Exception
+    public BayesNet(String networkDescription) throws Exception
     {
         this();
-        StringBufferInputStream istream = new StringBufferInputStream(s);
+        StringBufferInputStream istream = new StringBufferInputStream(
+                                networkDescription);
         // Read the BayesNet from the stream
-        InterchangeFormat ifo = new InterchangeFormat(istream);
-        ifo.CompilationUnit();
+        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+        interchangeFmt.CompilationUnit();
         // Transfer information from the parser
-        translate(ifo);
+        translate(interchangeFmt);
     }
 
     /**
@@ -174,11 +175,11 @@ public class BayesNet
         this();
 
         // Read the BayesNet from the stream
-        InterchangeFormat ifo = new InterchangeFormat(istream);
-        ifo.CompilationUnit();
+        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+        interchangeFmt.CompilationUnit();
 
         // Now transfer information from the parser
-        translate(ifo);
+        translate(interchangeFmt);
     }
 
     /**
@@ -194,10 +195,10 @@ public class BayesNet
         URL url = new URL(context, spec);
         InputStream istream = url.openStream();
         // Read the BayesNet from the stream
-        InterchangeFormat ifo = new InterchangeFormat(istream);
-        ifo.CompilationUnit();
+        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+        interchangeFmt.CompilationUnit();
         // Now transfer information from the parser
-        translate(ifo);
+        translate(interchangeFmt);
         istream.close();
     }
 
@@ -212,10 +213,10 @@ public class BayesNet
         this();
         InputStream istream = url.openStream();
         // Read the BayesNet from the stream
-        InterchangeFormat ifo = new InterchangeFormat(istream);
-        ifo.CompilationUnit();
+        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+        interchangeFmt.CompilationUnit();
         // Now transfer information from the parser
-        translate(ifo);
+        translate(interchangeFmt);
         istream.close();
     }
 
@@ -233,11 +234,12 @@ public class BayesNet
      * <li> Detecting explanation variables.<li>
      * </ol>
      *
-     * @param ifo
+     * @param interchangeFmt
      */
-    protected void translate(InterchangeFormat ifo)
+    protected void translate(InterchangeFormat interchangeFmt)
     {
-        ConvertInterchangeFormat cbn = new ConvertInterchangeFormat(ifo);
+        ConvertInterchangeFormat cbn = new ConvertInterchangeFormat(
+                                 interchangeFmt);
         name = cbn.getName();
         properties = cbn.getProperties();
         probabilityVariables = cbn.getProbabilityVariables(this);
