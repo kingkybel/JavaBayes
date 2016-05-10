@@ -43,43 +43,43 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet b_n, int n_vb, int n_vl, ArrayList prop)
+    FinitelyGeneratedSet(BayesNet bN, int nVb, int nVl, ArrayList prop)
     {
-        super(b_n, n_vb, n_vl, prop);
+        super(bN, nVb, nVl, prop);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet b_n, DiscreteVariable pvs[],
+    FinitelyGeneratedSet(BayesNet bN, DiscreteVariable pvs[],
                          double v[], double lp[], double up[], ArrayList prop)
     {
-        super(b_n, pvs, v, lp, up, prop);
+        super(bN, pvs, v, lp, up, prop);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet b_n, DiscreteVariable pvs[],
+    FinitelyGeneratedSet(BayesNet bN, DiscreteVariable pvs[],
                          double v[], ArrayList prop)
     {
-        this(b_n, pvs, v, (double[]) null, (double[]) null, prop);
+        this(bN, pvs, v, (double[]) null, (double[]) null, prop);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(DiscreteFunction df, double new_values[],
-                         double new_lp[], double new_up[])
+    FinitelyGeneratedSet(DiscreteFunction df, double newValues[],
+                         double newLp[], double newUp[])
     {
-        super(df, new_values, new_lp, new_up);
+        super(df, newValues, newLp, newUp);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(DiscreteFunction df, double new_values[])
+    FinitelyGeneratedSet(DiscreteFunction df, double newValues[])
     {
-        super(df, new_values, (double[]) null, (double[]) null);
+        super(df, newValues, (double[]) null, (double[]) null);
     }
 }

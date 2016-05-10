@@ -40,11 +40,11 @@ public class DiscreteVariable
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param n_vb Name of the variable.
+     * @param nVb Name of the variable.
      */
-    public DiscreteVariable(String n_vb)
+    public DiscreteVariable(String nVb)
     {
-        name = n_vb;
+        name = nVb;
         index = BayesNet.INVALID_INDEX;
         values = null;
     }
@@ -82,7 +82,7 @@ public class DiscreteVariable
      * @param value
      * @return
      */
-    public int index_of_value(String value)
+    public int indexOfValue(String value)
     {
         for (int i = 0; i < values.length; i++)
         {
@@ -102,25 +102,25 @@ public class DiscreteVariable
      *
      * @return
      */
-    public DiscreteFunction get_numeric_values()
+    public DiscreteFunction getNumericValues()
     {
         Double daux;
         DiscreteVariable dvs[] = new ProbabilityVariable[1];
         dvs[0] = this;
-        double numeric_values[] = new double[values.length];
+        double numericValues[] = new double[values.length];
         for (int i = 0; i < values.length; i++)
         {
             try
             {
                 daux = Double.valueOf(values[i]);
-                numeric_values[i] = daux.doubleValue();
+                numericValues[i] = daux.doubleValue();
             }
             catch (NumberFormatException e)
             {
-                numeric_values[i] = (double) i;
+                numericValues[i] = (double) i;
             }
         }
-        return (new DiscreteFunction(dvs, numeric_values));
+        return (new DiscreteFunction(dvs, numericValues));
     }
 
     /**
@@ -169,7 +169,7 @@ public class DiscreteVariable
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
         return (name);
     }
@@ -179,7 +179,7 @@ public class DiscreteVariable
      *
      * @param n
      */
-    public void set_name(String n)
+    public void setName(String n)
     {
         name = n;
     }
@@ -189,7 +189,7 @@ public class DiscreteVariable
      *
      * @return
      */
-    public int get_index()
+    public int getIndex()
     {
         return (index);
     }
@@ -199,7 +199,7 @@ public class DiscreteVariable
      *
      * @return
      */
-    public int number_values()
+    public int numberValues()
     {
         return (values.length);
     }
@@ -209,7 +209,7 @@ public class DiscreteVariable
      *
      * @return
      */
-    public String[] get_values()
+    public String[] getValues()
     {
         return (values);
     }
@@ -219,7 +219,7 @@ public class DiscreteVariable
      *
      * @param vals
      */
-    public void set_values(String vals[])
+    public void setValues(String vals[])
     {
         values = vals;
     }
@@ -230,7 +230,7 @@ public class DiscreteVariable
      * @param i Position of the value in the array of values.
      * @return
      */
-    public String get_value(int i)
+    public String getValue(int i)
     {
         return (values[i]);
     }

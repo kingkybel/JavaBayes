@@ -44,8 +44,8 @@ public class IFProbabilityFunction
     Logger.getLogger(IFProbabilityFunction.class.
             getName());
 
-    String s_variables[];
-    int conditional_index;
+    String sVariables[];
+    int conditionalIndex;
     ArrayList properties;
     ArrayList defaults;
     ArrayList tables;
@@ -55,16 +55,16 @@ public class IFProbabilityFunction
      *
      * @param vs
      */
-    public void set_variables(String vs[])
+    public void setVariables(String vs[])
     {
-        s_variables = vs;
+        sVariables = vs;
     }
 
     /**
      *
      * @param p
      */
-    public void set_properties(ArrayList p)
+    public void setProperties(ArrayList p)
     {
         properties = p;
     }
@@ -73,7 +73,7 @@ public class IFProbabilityFunction
      *
      * @param d
      */
-    public void set_defaults(ArrayList d)
+    public void setDefaults(ArrayList d)
     {
         defaults = d;
     }
@@ -82,7 +82,7 @@ public class IFProbabilityFunction
      *
      * @param t
      */
-    public void set_tables(ArrayList t)
+    public void setTables(ArrayList t)
     {
         tables = t;
     }
@@ -91,7 +91,7 @@ public class IFProbabilityFunction
      *
      * @param e
      */
-    public void set_entries(ArrayList e)
+    public void setEntries(ArrayList e)
     {
         entries = e;
     }
@@ -100,25 +100,25 @@ public class IFProbabilityFunction
      *
      * @param c
      */
-    public void set_conditional_index(int c)
+    public void setConditionalIndex(int c)
     {
-        conditional_index = c;
+        conditionalIndex = c;
     }
 
     /**
      *
      * @return
      */
-    public String[] get_variables()
+    public String[] getVariables()
     {
-        return (s_variables);
+        return (sVariables);
     }
 
     /**
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     } // ArrayList of String
@@ -127,7 +127,7 @@ public class IFProbabilityFunction
      *
      * @return
      */
-    public ArrayList get_defaults()
+    public ArrayList getDefaults()
     {
         return (defaults);
     } // ArrayList of double[]
@@ -136,7 +136,7 @@ public class IFProbabilityFunction
      *
      * @return
      */
-    public ArrayList get_tables()
+    public ArrayList getTables()
     {
         return (tables);
     } // ArrayList of double[]
@@ -145,7 +145,7 @@ public class IFProbabilityFunction
      *
      * @return
      */
-    public ArrayList get_entries()
+    public ArrayList getEntries()
     {
         return (entries);
     } // ArrayList of IFProbabilityFunctionEntry
@@ -154,9 +154,9 @@ public class IFProbabilityFunction
      *
      * @return
      */
-    public int get_conditional_index()
+    public int getConditionalIndex()
     {
-        return (conditional_index);
+        return (conditionalIndex);
     }
 
     /**
@@ -169,65 +169,65 @@ public class IFProbabilityFunction
      *
      * @param ifbn ***********************************************************
      */
-    public void invert_tables(IFBayesNet ifbn)
+    public void invertTables(IFBayesNet ifbn)
     {
         IFProbabilityVariable pv;
-        ArrayList new_tables;
-        String running_name;
-        double t[], new_table[];
+        ArrayList newTables;
+        String runningName;
+        double t[], newTable[];
         int i, j;
-        int size_of_first = 0, size_of_others = 1;
+        int sizeOfFirst = 0, sizeOfOthers = 1;
 
-        if (s_variables.length > 1)
+        if (sVariables.length > 1)
         { // No need to do anything if only one variable.
             // Go through all the tables.
-            new_tables = new ArrayList(); // Initialize a ArrayList for the new tables.
+            newTables = new ArrayList(); // Initialize a ArrayList for the new tables.
             for (Object e : tables)
             {
-                size_of_first = 0;
-                size_of_others = 1;
+                sizeOfFirst = 0;
+                sizeOfOthers = 1;
                 t = (double[]) (e); // Get the table.
                 // Now get the first variable.
                 for (Object ee : ifbn.pvs)
                 {
                     pv = (IFProbabilityVariable) (ee);
-                    running_name = pv.get_name();
-                    if (running_name.equals(s_variables[0]))
+                    runningName = pv.getName();
+                    if (runningName.equals(sVariables[0]))
                     { // Found the first variable.
-                        size_of_first = pv.get_values().length; // Obtain its size.
+                        sizeOfFirst = pv.getValues().length; // Obtain its size.
                         break; // Get out of loop through variables.
                     }
                 }
                 // Get the size of all other variables;
-                for (j = 1; j < s_variables.length; j++)
+                for (j = 1; j < sVariables.length; j++)
                 {
                     for (Object ee : ifbn.pvs)
                     {
                         pv = (IFProbabilityVariable) (ee);
-                        running_name = pv.get_name();
-                        if (running_name.equals(s_variables[j]))
+                        runningName = pv.getName();
+                        if (runningName.equals(sVariables[j]))
                         { // Found the variable.
-                            size_of_others *= pv.get_values().length;
+                            sizeOfOthers *= pv.getValues().length;
                             break; // Get out of loop through variables.
                         }
                     }
                 }
                 // Build a new table.
-                new_table = new double[t.length];
-                for (i = 0; i < size_of_first; i++)
+                newTable = new double[t.length];
+                for (i = 0; i < sizeOfFirst; i++)
                 {
-                    for (j = 0; j < size_of_others;
+                    for (j = 0; j < sizeOfOthers;
                          j++)
                     {
-                        new_table[i * size_of_others + j] =
-                        t[j * size_of_first + i];
+                        newTable[i * sizeOfOthers + j] =
+                        t[j * sizeOfFirst + i];
                     }
                 }
-                // Insert the new table in the ArrayList new_tables.
-                new_tables.add(new_table);
+                // Insert the new table in the ArrayList newTables.
+                newTables.add(newTable);
             }
             // Now attach the new ArrayList.
-            tables = new_tables;
+            tables = newTables;
         }
     }
 }

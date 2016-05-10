@@ -58,7 +58,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
         return (name);
     }
@@ -67,7 +67,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     }
@@ -76,7 +76,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public ArrayList get_pvs()
+    public ArrayList getPvs()
     {
         return (pvs);
     }
@@ -85,7 +85,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public ArrayList get_upfs()
+    public ArrayList getUpfs()
     {
         return (upfs);
     }
@@ -114,11 +114,11 @@ public class IFBayesNet
      * necessary for formats that put the GIVEN variables as the lowest running
      * indexes in the tables.
      */
-    public void invert_probability_tables()
+    public void invertProbabilityTables()
     {
         for (Object e : upfs)
         {
-            ((IFProbabilityFunction) (e)).invert_tables(this);
+            ((IFProbabilityFunction) (e)).invertTables(this);
         }
     }
 }

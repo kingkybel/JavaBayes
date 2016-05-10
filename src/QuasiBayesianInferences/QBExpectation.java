@@ -34,20 +34,20 @@ public class QBExpectation extends Expectation
     /**
      * Constructor for a QBExpectation.
      *
-     * @param b_n
+     * @param bN
      * @param dpc
      */
-    public QBExpectation(BayesNet b_n, boolean dpc)
+    public QBExpectation(BayesNet bN, boolean dpc)
     {
-        super(b_n, dpc);
+        super(bN, dpc);
     }
 
     /**
      * Initialize the Inference object.
      */
-    private void initialize_inference()
+    private void initializeInference()
     {
-        inference = new QBInference(bn, do_produce_clusters);
+        inference = new QBInference(bn, doProduceClusters);
     }
 
     /*
@@ -58,17 +58,17 @@ public class QBExpectation extends Expectation
      * @param df
      */
     @Override
-    protected void do_expectation_from_inference(DiscreteFunction df)
+    protected void doExpectationFromInference(DiscreteFunction df)
     {
-        current_function = df;
+        currentFunction = df;
 
-        if (((QBInference) inference).is_inference_without_local_neighborhoods)
+        if (((QBInference) inference).isInferenceWithoutLocalNeighborhoods)
         {
-            expectation_without_local_neighborhoods(df);
+            expectationWithoutLocalNeighborhoods(df);
         }
         else
         {
-            expectation_with_local_neighborhoods(df);
+            expectationWithLocalNeighborhoods(df);
         }
     }
 
@@ -76,42 +76,42 @@ public class QBExpectation extends Expectation
      * Perform calculation of expectations
      * when local neighborhoods are present.
      */
-    private void expectation_with_local_neighborhoods(DiscreteFunction df)
+    private void expectationWithLocalNeighborhoods(DiscreteFunction df)
     {
         int i, j, jump = 1;
         double v, min, max;
-        ProbabilityFunction normalized_results;
+        ProbabilityFunction normalizedResults;
 
         // Get result normalized with respect to transparent variables
-        normalized_results =
-        ((QBInference) inference).list_of_local_neighborhood_results;
+        normalizedResults =
+        ((QBInference) inference).listOfLocalNeighborhoodResults;
 
         // Get the bounds on expectations
-        for (i = 1; i < normalized_results.number_variables(); i++)
+        for (i = 1; i < normalizedResults.numberVariables(); i++)
         {
-            jump *= normalized_results.get_variable(i).number_values();
+            jump *= normalizedResults.getVariable(i).numberValues();
         }
-        min = df.get_value(0);
-        max = df.get_value(0);
-        for (i = 0; i < df.number_values(); i++)
+        min = df.getValue(0);
+        max = df.getValue(0);
+        for (i = 0; i < df.numberValues(); i++)
         {
-            if (min < df.get_value(i))
+            if (min < df.getValue(i))
             {
-                min = df.get_value(i);
+                min = df.getValue(i);
             }
-            if (max > df.get_value(i))
+            if (max > df.getValue(i))
             {
-                max = df.get_value(i);
+                max = df.getValue(i);
             }
         }
         for (j = 0; j < jump; j++)
         {
             v = 0.0;
-            for (i = 0; i < normalized_results.get_variable(0).number_values();
+            for (i = 0; i < normalizedResults.getVariable(0).numberValues();
                  i++)
             {
-                v += df.get_value(i) * normalized_results.
-                     get_value(j + i * jump);
+                v += df.getValue(i) * normalizedResults.
+                     getValue(j + i * jump);
             }
             if (min > v)
             {
@@ -134,59 +134,59 @@ public class QBExpectation extends Expectation
      * when local pneighborhoods are absent; handles global
      * neighborhoods if necessary.
      */
-    private void expectation_without_local_neighborhoods(DiscreteFunction df)
+    private void expectationWithoutLocalNeighborhoods(DiscreteFunction df)
     {
-        QBInference qb_inference = (QBInference) inference;
-        QuasiBayesNet qbn = ((QuasiBayesNet) (qb_inference.get_bayes_net()));
+        QBInference qbInference = (QBInference) inference;
+        QuasiBayesNet qbn = ((QuasiBayesNet) (qbInference.getBayesNet()));
 
-        switch (qbn.get_global_neighborhood_type())
+        switch (qbn.getGlobalNeighborhoodType())
         {
             case QuasiBayesNet.NO_CREDAL_SET:
-                ProbabilityFunction res = qb_inference.get_result();
+                ProbabilityFunction res = qbInference.getResult();
                 results = new double[1];
-                results[0] = res.expected_value(df);
+                results[0] = res.expectedValue(df);
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
-                ProbabilityFunction cdr_res =
-                                    new ProbabilityFunction(qb_inference.
-                                            get_bucket_tree().
-                                            get_unnormalized_result(), qbn);
+                ProbabilityFunction cdrRes =
+                                    new ProbabilityFunction(qbInference.
+                                            getBucketTree().
+                                            getUnnormalizedResult(), qbn);
                 ConstantDensityRatioSet cdr =
-                                        new ConstantDensityRatioSet(cdr_res,
+                                        new ConstantDensityRatioSet(cdrRes,
                                                                     qbn.
-                                                                    get_global_neighborhood_parameter());
-                results = cdr.posterior_expected_values(df);
+                                                                    getGlobalNeighborhoodParameter());
+                results = cdr.posteriorExpectedValues(df);
                 break;
             case QuasiBayesNet.EPSILON_CONTAMINATED:
-                ProbabilityFunction eps_res =
-                                    new ProbabilityFunction(qb_inference.
-                                            get_bucket_tree().
-                                            get_unnormalized_result(), qbn);
+                ProbabilityFunction epsRes =
+                                    new ProbabilityFunction(qbInference.
+                                            getBucketTree().
+                                            getUnnormalizedResult(), qbn);
                 EpsilonContaminatedSet eps =
-                                       new EpsilonContaminatedSet(eps_res, qbn.
-                                                                  get_global_neighborhood_parameter());
-                results = eps.posterior_expected_values(df);
+                                       new EpsilonContaminatedSet(epsRes, qbn.
+                                                                  getGlobalNeighborhoodParameter());
+                results = eps.posteriorExpectedValues(df);
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
-                ProbabilityFunction cdb_res =
-                                    new ProbabilityFunction(qb_inference.
-                                            get_bucket_tree().
-                                            get_unnormalized_result(), qbn);
+                ProbabilityFunction cdbRes =
+                                    new ProbabilityFunction(qbInference.
+                                            getBucketTree().
+                                            getUnnormalizedResult(), qbn);
                 ConstantDensityBoundedSet cdb =
-                                          new ConstantDensityBoundedSet(cdb_res,
+                                          new ConstantDensityBoundedSet(cdbRes,
                                                                         qbn.
-                                                                        get_global_neighborhood_parameter());
-                results = cdb.posterior_expected_values(df);
+                                                                        getGlobalNeighborhoodParameter());
+                results = cdb.posteriorExpectedValues(df);
                 break;
             case QuasiBayesNet.TOTAL_VARIATION:
-                ProbabilityFunction tv_res =
-                                    new ProbabilityFunction(qb_inference.
-                                            get_bucket_tree().
-                                            get_unnormalized_result(), qbn);
+                ProbabilityFunction tvRes =
+                                    new ProbabilityFunction(qbInference.
+                                            getBucketTree().
+                                            getUnnormalizedResult(), qbn);
                 TotalVariationSet tv =
-                                  new TotalVariationSet(tv_res, qbn.
-                                                        get_global_neighborhood_parameter());
-                results = tv.posterior_expected_values(df);
+                                  new TotalVariationSet(tvRes, qbn.
+                                                        getGlobalNeighborhoodParameter());
+                results = tv.posteriorExpectedValues(df);
                 break;
         }
     }

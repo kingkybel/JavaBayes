@@ -67,9 +67,9 @@ public class XMLBIFv03 extends InterchangeFormat
     /**
      * Invert the probability tables.
      */
-    public void invert_probability_tables()
+    public void invertProbabilityTables()
     {
-         ifbn.invert_probability_tables();
+         ifbn.invertProbabilityTables();
     }
 
     String pcdata() throws ParseException
@@ -390,14 +390,14 @@ IFProbabilityVariable VariableContent(String name) :
     |
     v=VariableOutcome() { values.add(v); } )*
 	{
-            pv.set_name(name);
-            pv.set_properties(properties);
+            pv.setName(name);
+            pv.setProperties(properties);
             svalues = new String[ values.size() ];
             for (e = values.iterator(), i = 0; e.hasNext(); i++)
             {
                 svalues[i] = (String)(e.next());
             }
-            pv.set_values(svalues);
+            pv.setValues(svalues);
             return(pv);
         }
 }
@@ -460,11 +460,11 @@ void ProbabilityContent(IFProbabilityFunction upf) :
         }
   | tab=ProbabilityTable() { tables.add(tab); } ) )*
 	{
-            upf.set_properties(properties);
-            upf.set_defaults(defaults);
-            upf.set_entries(entries);
-            upf.set_tables(tables);
-            upf.set_conditional_index(fors.size());
+            upf.setProperties(properties);
+            upf.setDefaults(defaults);
+            upf.setEntries(entries);
+            upf.setTables(tables);
+            upf.setConditionalIndex(fors.size());
             vs = new String[ fors.size() + givens.size() ];
             for (e = fors.iterator(), i = 0; e.hasNext(); i++)
             {
@@ -474,7 +474,7 @@ void ProbabilityContent(IFProbabilityFunction upf) :
             {
                 vs[j] = (String)(e.next());
             }
-            upf.set_variables(vs);
+            upf.setVariables(vs);
 	}
 }
 

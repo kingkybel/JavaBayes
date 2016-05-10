@@ -44,8 +44,8 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      */
     public static final int TRANSPARENT = 1;
-    static final String observed_property_name = "observed";
-    static final String explanation_property_name = "explanation";
+    static final String observedPropertyName = "observed";
+    static final String explanationPropertyName = "explanation";
     private static final Logger LOG =
     Logger.getLogger(ProbabilityVariable.class.getName());
 
@@ -57,12 +57,12 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      *
      */
-    protected int observed_index = BayesNet.INVALID_INDEX;
+    protected int observedIndex = BayesNet.INVALID_INDEX;
 
     /**
      *
      */
-    protected int explanation_index = BayesNet.INVALID_INDEX;
+    protected int explanationIndex = BayesNet.INVALID_INDEX;
 
     /**
      *
@@ -84,31 +84,31 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
-     * @param b_n
+     * @param bN
      * @param p
-     * @param n_vb
+     * @param nVb
      */
-    public ProbabilityVariable(BayesNet b_n, String n_vb, ArrayList p)
+    public ProbabilityVariable(BayesNet bN, String nVb, ArrayList p)
     {
-        super(n_vb);
+        super(nVb);
         properties = p;
-        bn = b_n;
+        bn = bN;
     }
 
     /**
      * Constructor for ProbabilityVariable.
-     * @param b_n
+     * @param bN
      * @param p
-     * @param n_vb
+     * @param nVb
      * @param vl
      * @param vi
      */
-    public ProbabilityVariable(BayesNet b_n, String n_vb, int vi,
+    public ProbabilityVariable(BayesNet bN, String nVb, int vi,
                                String vl[], ArrayList p)
     {
-        super(n_vb, vi, vl);
+        super(nVb, vi, vl);
         properties = p;
-        bn = b_n;
+        bn = bN;
     }
 
     /**
@@ -119,8 +119,8 @@ public class ProbabilityVariable extends DiscreteVariable
     {
         super(pv);
 
-        observed_index = pv.observed_index;
-        explanation_index = pv.explanation_index;
+        observedIndex = pv.observedIndex;
+        explanationIndex = pv.explanationIndex;
         type = pv.type;
 
         properties = pv.properties;
@@ -129,30 +129,30 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
-     * @param b_n
+     * @param bN
      * @param pv
      */
-    public ProbabilityVariable(BayesNet b_n, ProbabilityVariable pv)
+    public ProbabilityVariable(BayesNet bN, ProbabilityVariable pv)
     {
         super(pv);
 
-        observed_index = pv.observed_index;
-        explanation_index = pv.explanation_index;
+        observedIndex = pv.observedIndex;
+        explanationIndex = pv.explanationIndex;
         type = pv.type;
 
         properties = pv.properties;
-        bn = b_n;
+        bn = bN;
     }
 
     /**
      * Determine: 1) whether a variable is observed 2) whether a variable is a
      * explanation variable
      */
-    void process_properties()
+    void processProperties()
     {
-        int index_of_observed_value, index_of_explanation_value;
-        String pp, property, property_value, keyword;
-        ArrayList properties_to_remove = new ArrayList();
+        int indexOfObservedValue, indexOfExplanationValue;
+        String pp, property, propertyValue, keyword;
+        ArrayList propertiesToRemove = new ArrayList();
 
         // Get all properties one by one
         for (Object e : properties)
@@ -160,30 +160,30 @@ public class ProbabilityVariable extends DiscreteVariable
             pp = (String) (e);
             property = pp.trim();
             // If the property is an "observed" property
-            keyword = observed_property_name;
+            keyword = observedPropertyName;
             if ((property.startsWith(keyword)) || (property.equals(keyword)))
             {
-                properties_to_remove.add(pp);
-                property_value = property.substring(keyword.length()).trim();
-                observed_index = index_of_value(property_value);
+                propertiesToRemove.add(pp);
+                propertyValue = property.substring(keyword.length()).trim();
+                observedIndex = indexOfValue(propertyValue);
                 continue;
             }
             // If the property is a "explanation" property
-            keyword = explanation_property_name;
+            keyword = explanationPropertyName;
             if ((property.startsWith(keyword)) || (property.equals(keyword)))
             {
-                properties_to_remove.add(pp);
-                property_value = property.substring(keyword.length()).trim();
-                explanation_index = index_of_value(property_value);
-                if (explanation_index == BayesNet.INVALID_INDEX)
+                propertiesToRemove.add(pp);
+                propertyValue = property.substring(keyword.length()).trim();
+                explanationIndex = indexOfValue(propertyValue);
+                if (explanationIndex == BayesNet.INVALID_INDEX)
                 {
-                    explanation_index = 0;
+                    explanationIndex = 0;
                 }
                 continue;
             }
         }
 
-        for (Object e : properties_to_remove)
+        for (Object e : propertiesToRemove)
         {
             property = (String) (e);
             properties.remove(property);
@@ -195,7 +195,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * using the XMLBIF v0.3 format.
      * @param out
      */
-    public void save_xml_0_3(PrintStream out)
+    public void saveXml_0_3(PrintStream out)
     {
         String property;
 
@@ -217,16 +217,16 @@ public class ProbabilityVariable extends DiscreteVariable
             }
         }
 
-        if (is_explanation())
+        if (isExplanation())
         {
-            out.println("\t<PROPERTY>" + explanation_property_name + " " +
-                        values[explanation_index] + "</PROPERTY>");
+            out.println("\t<PROPERTY>" + explanationPropertyName + " " +
+                        values[explanationIndex] + "</PROPERTY>");
         }
 
-        if (is_observed())
+        if (isObserved())
         {
-            out.println("\t<PROPERTY>" + observed_property_name + " " +
-                        values[observed_index] + "</PROPERTY>");
+            out.println("\t<PROPERTY>" + observedPropertyName + " " +
+                        values[observedIndex] + "</PROPERTY>");
         }
 
         if ((properties != null) && (properties.size() > 0))
@@ -244,7 +244,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Save the contents of a ProbabilityVariable object into a PrintStream.
      * @param out
      */
-    public void save_xml(PrintStream out)
+    public void saveXml(PrintStream out)
     {
         String property;
 
@@ -267,16 +267,16 @@ public class ProbabilityVariable extends DiscreteVariable
             }
         }
 
-        if (is_explanation())
+        if (isExplanation())
         {
-            out.println("\t<PROPERTY>" + explanation_property_name + " " +
-                        values[explanation_index] + "</PROPERTY>");
+            out.println("\t<PROPERTY>" + explanationPropertyName + " " +
+                        values[explanationIndex] + "</PROPERTY>");
         }
 
-        if (is_observed())
+        if (isObserved())
         {
-            out.println("\t<PROPERTY>" + observed_property_name + " " +
-                        values[observed_index] + "</PROPERTY>");
+            out.println("\t<PROPERTY>" + observedPropertyName + " " +
+                        values[observedIndex] + "</PROPERTY>");
         }
 
         if ((properties != null) && (properties.size() > 0))
@@ -319,16 +319,16 @@ public class ProbabilityVariable extends DiscreteVariable
             out.println("};");
         }
 
-        if (is_explanation())
+        if (isExplanation())
         {
-            out.println("\tproperty \"" + explanation_property_name + " " +
-                        values[explanation_index] + "\" ;");
+            out.println("\tproperty \"" + explanationPropertyName + " " +
+                        values[explanationIndex] + "\" ;");
         }
 
-        if (is_observed())
+        if (isObserved())
         {
-            out.println("\tproperty \"" + observed_property_name + " " +
-                        values[observed_index] + "\" ;");
+            out.println("\tproperty \"" + observedPropertyName + " " +
+                        values[observedIndex] + "\" ;");
         }
 
         if ((properties != null) && (properties.size() > 0))
@@ -349,7 +349,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Get the type of the ProbabilityVariable.
      * @return 
      */
-    public int get_type()
+    public int getType()
     {
         return (type);
     }
@@ -359,9 +359,9 @@ public class ProbabilityVariable extends DiscreteVariable
      * variable or not.
      * @return 
      */
-    public boolean is_explanation()
+    public boolean isExplanation()
     {
-        return (explanation_index != BayesNet.INVALID_INDEX);
+        return (explanationIndex != BayesNet.INVALID_INDEX);
     }
 
     /**
@@ -369,9 +369,9 @@ public class ProbabilityVariable extends DiscreteVariable
      * not.
      * @return 
      */
-    public boolean is_observed()
+    public boolean isObserved()
     {
-        return (observed_index != BayesNet.INVALID_INDEX);
+        return (observedIndex != BayesNet.INVALID_INDEX);
     }
 
     /**
@@ -379,14 +379,14 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param v Observed value.
      */
-    public void set_observed_value(String v)
+    public void setObservedValue(String v)
     {
-        int index = index_of_value(v);
+        int index = indexOfValue(v);
         if (index == BayesNet.INVALID_INDEX)
         {
             return;
         }
-        observed_index = index;
+        observedIndex = index;
     }
 
     /**
@@ -394,16 +394,16 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param i Index of the value that is assigned to the variable.
      */
-    public void set_explanation_value(int i)
+    public void setExplanationValue(int i)
     {
-        explanation_index = i;
+        explanationIndex = i;
     }
 
     /**
      * Add a property to the current ProbabilityVariable.
      * @param prop
      */
-    public void add_property(String prop)
+    public void addProperty(String prop)
     {
         if (properties == null)
         {
@@ -416,7 +416,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Remove a property from the current ProbabilityVariable.
      * @param prop
      */
-    public void remove_property(String prop)
+    public void removeProperty(String prop)
     {
         if (properties == null)
         {
@@ -430,7 +430,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * of the property.
      * @param i
      */
-    public void remove_property(int i)
+    public void removeProperty(int i)
     {
         if (properties == null)
         {
@@ -443,25 +443,25 @@ public class ProbabilityVariable extends DiscreteVariable
      * Get the index of the observed value.
      * @return 
      */
-    public int get_observed_index()
+    public int getObservedIndex()
     {
-        return (observed_index);
+        return (observedIndex);
     }
 
     /**
      * Get the index of the assigned value in the variable.
      * @return 
      */
-    public int get_explanation_index()
+    public int getExplanationIndex()
     {
-        return (explanation_index);
+        return (explanationIndex);
     }
 
     /**
      * Get the properties.
      * @return 
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     }
@@ -470,7 +470,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Set the properties.
      * @param prop
      */
-    public void set_properties(ArrayList prop)
+    public void setProperties(ArrayList prop)
     {
         properties = prop;
     }
@@ -479,7 +479,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Get an Iterator with the properties.
      * @return 
      */
-    public ArrayList get_enumerated_properties()
+    public ArrayList getEnumeratedProperties()
     {
         return (properties);
     }
@@ -488,7 +488,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Set the index of the variable.
      * @param ind
      */
-    public void set_index(int ind)
+    public void setIndex(int ind)
     {
         index = ind;
     }
@@ -497,7 +497,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Set the index of the current ProbabilityVariable as invalid (variable is
      * not observed).
      */
-    public void set_invalid_index()
+    public void setInvalidIndex()
     {
         index = BayesNet.INVALID_INDEX;
     }
@@ -505,16 +505,16 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the ProbabilityVariable as not observed..
      */
-    public void set_invalid_observed_index()
+    public void setInvalidObservedIndex()
     {
-        observed_index = BayesNet.INVALID_INDEX;
+        observedIndex = BayesNet.INVALID_INDEX;
     }
 
     /**
      * Set the type of the current ProbabilityVariable.
      * @param t
      */
-    public void set_type(int t)
+    public void setType(int t)
     {
         type = t;
     }

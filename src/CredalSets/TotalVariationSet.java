@@ -65,7 +65,7 @@ public class TotalVariationSet
      * @return
      */
     @Override
-    public double get_lower_probability_from_base(double p)
+    public double getLowerProbabilityFromBase(double p)
     {
         return (Math.max(p - epsilon, 0.0));
     }
@@ -78,7 +78,7 @@ public class TotalVariationSet
      * @return
      */
     @Override
-    public double get_upper_probability_from_base(double p)
+    public double getUpperProbabilityFromBase(double p)
     {
         return (Math.min(p + epsilon, 1.0));
     }
@@ -90,7 +90,7 @@ public class TotalVariationSet
      * @return
      */
     @Override
-    public double get_atom_probability(int index)
+    public double getAtomProbability(int index)
     {
         return (values[index]);
     }

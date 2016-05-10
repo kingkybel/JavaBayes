@@ -40,11 +40,11 @@ public class SaveBugs
     /**
      * Default constructor for a SaveBUGS object.
      *
-     * @param b_n
+     * @param bN
      */
-    public SaveBugs(BayesNet b_n)
+    public SaveBugs(BayesNet bN)
     {
-        bn = b_n;
+        bn = bN;
     }
 
     /**
@@ -59,21 +59,21 @@ public class SaveBugs
         pstream.println("# Output created " + (new Date()));
         pstream.println("\n");
 
-        save_model(pstream);
+        saveModel(pstream);
 
-        save_variables(pstream);
+        saveVariables(pstream);
 
-        print_data_in(pstream);
+        printDataIn(pstream);
 
-        save_structure(pstream);
+        saveStructure(pstream);
 
-        save_data(pstream);
+        saveData(pstream);
     }
 
     /**
      * Save the name of the network in BUGS format.
      */
-    private void save_model(PrintStream pstream)
+    private void saveModel(PrintStream pstream)
     {
         pstream.println("model " + bn.name + ";");
     }
@@ -81,21 +81,21 @@ public class SaveBugs
     /**
      * Declare all the variables used in the network.
      */
-    private void save_variables(PrintStream pstream)
+    private void saveVariables(PrintStream pstream)
     {
         ProbabilityFunction pf;
         ProbabilityVariable pv;
         int i, j;
 
         pstream.println("var");
-        for (i = (bn.probability_variables.length - 1); i >= 0; i--)
+        for (i = (bn.probabilityVariables.length - 1); i >= 0; i--)
         {
-            pstream.println("\t" + bn.probability_variables[i].name + ",");
+            pstream.println("\t" + bn.probabilityVariables[i].name + ",");
         }
 
-        for (i = (bn.probability_functions.length - 1); i >= 0; i--)
+        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probability_functions[i];
+            pf = bn.probabilityFunctions[i];
             pv = (ProbabilityVariable) (pf.variables[0]);
             pstream.print("\tp." + pv.name + "[" + pf.values.length + "]");
             if (i > 0)
@@ -110,7 +110,7 @@ public class SaveBugs
      * Indicate which file contains the data; note that the data is appended to
      * the given pstream, so this space is left to be filled by the user.
      */
-    private void print_data_in(PrintStream pstream)
+    private void printDataIn(PrintStream pstream)
     {
         pstream.println("data in <user-defined-name-for-data-file>;");
     }
@@ -118,16 +118,16 @@ public class SaveBugs
     /**
      * The parenthood relationships in the network.
      */
-    private void save_structure(PrintStream pstream)
+    private void saveStructure(PrintStream pstream)
     {
         ProbabilityFunction pf;
         ProbabilityVariable pv;
         int i, j;
 
         pstream.println("{");
-        for (i = (bn.probability_functions.length - 1); i >= 0; i--)
+        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probability_functions[i];
+            pf = bn.probabilityFunctions[i];
             pv = (ProbabilityVariable) (pf.variables[0]);
             pstream.print(pv.name + "  ~  dcat(p." + pv.name + "[");
             for (j = 1; j < pf.variables.length; j++)
@@ -145,7 +145,7 @@ public class SaveBugs
      * understood by BUGS. Note that the user has to place this data in a
      * separate file.
      */
-    private void save_data(PrintStream pstream)
+    private void saveData(PrintStream pstream)
     {
         ProbabilityFunction pf;
         ProbabilityVariable pv;
@@ -154,9 +154,9 @@ public class SaveBugs
         double value;
 
         pstream.println("list(");
-        for (i = (bn.probability_functions.length - 1); i >= 0; i--)
+        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probability_functions[i];
+            pf = bn.probabilityFunctions[i];
             pv = (ProbabilityVariable) (pf.variables[0]);
             /**
              * ** Put distribution values in the correct format. ***

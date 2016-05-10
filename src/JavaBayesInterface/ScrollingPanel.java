@@ -90,11 +90,11 @@ public class ScrollingPanel extends Panel
         {
             if (evt.target == horizontal)
             {
-                netPanel.x_scroll = ((Integer) (evt.arg));
+                netPanel.xScroll = ((Integer) (evt.arg));
             }
             else if (evt.target == vertical)
             {
-                netPanel.y_scroll = ((Integer) (evt.arg));
+                netPanel.yScroll = ((Integer) (evt.arg));
             }
             netPanel.repaint();
         }

@@ -60,7 +60,7 @@ public class JavaBayes extends Applet
     /**
      *
      */
-    public boolean is_applet = false;
+    public boolean isApplet = false;
 
     /**
      * Init method for JavaBayes operating as an applet.
@@ -85,15 +85,15 @@ public class JavaBayes extends Applet
      */
     private void construct(boolean ia)
     {
-        is_applet = ia;
+        isApplet = ia;
 
         editorFrame = new EditorFrame(this, "JavaBayes Editor");
         editorFrame.show();
         consoleFrame = new JavaBayesConsoleFrame(this, "JavaBayes Console");
         consoleFrame.show();
         JavaBayesHelpMessages.insert(this);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.about_message);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.start_message);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.aboutMessage);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.startMessage);
     }
 
     /**
@@ -113,9 +113,9 @@ public class JavaBayes extends Applet
      * @param filename
      * @return
      */
-    public boolean open_url(String filename)
+    public boolean openUrl(String filename)
     {
-        return (editorFrame.open_url(filename));
+        return (editorFrame.openUrl(filename));
     }
 
     /**
@@ -124,7 +124,7 @@ public class JavaBayes extends Applet
     public void clear()
     {
         editorFrame.clear();
-        set_current_save_filename(null);
+        setCurrentSaveFilename(null);
     }
 
     /**
@@ -151,88 +151,88 @@ public class JavaBayes extends Applet
     /**
      * Interact with menu options: whether to show BucketTree.
      *
-     * @param what_to_show_bucket_tree
+     * @param whatToShowBucketTree
      */
-    public void what_to_show_bucket_tree_action(boolean what_to_show_bucket_tree)
+    public void whatToShowBucketTreeAction(boolean whatToShowBucketTree)
     {
-        editorFrame.what_to_show_bucket_tree_action(what_to_show_bucket_tree);
+        editorFrame.whatToShowBucketTreeAction(whatToShowBucketTree);
     }
 
     /**
      * Interact with menu options: whether to show bayesian networks.
      *
      *
-     * @param what_to_show_bayesian_network
+     * @param whatToShowBayesianNetwork
      */
-    public void what_to_show_bayesian_network_action(boolean what_to_show_bayesian_network)
+    public void whatToShowBayesianNetworkAction(boolean whatToShowBayesianNetwork)
     {
-        editorFrame.what_to_show_bayesian_network_action(
-                what_to_show_bayesian_network);
+        editorFrame.whatToShowBayesianNetworkAction(
+                whatToShowBayesianNetwork);
     }
 
     /**
      * Inferences produce expectations.
      */
-    public void posterior_expectation_action(
+    public void posteriorExpectationAction(
     )
     {
-        editorFrame.posterior_expectation_action();
+        editorFrame.posteriorExpectationAction();
     }
 
     /**
      * Inferences produce posterior marginals.
      */
-    public void posterior_marginal_action()
+    public void posteriorMarginalAction()
     {
-        editorFrame.posterior_marginal_action();
+        editorFrame.posteriorMarginalAction();
     }
 
     /**
      * Estimate explanation variables.
      */
-    public void estimate_explanation_variables_action()
+    public void estimateExplanationVariablesAction()
     {
-        editorFrame.estimate_explanation_variables_action();
+        editorFrame.estimateExplanationVariablesAction();
     }
 
     /**
      * Produce the estimates for the best configuration.
      */
-    public void estimate_best_configuration_action()
+    public void estimateBestConfigurationAction()
     {
-        editorFrame.estimate_best_configuration_action();
+        editorFrame.estimateBestConfigurationAction();
     }
 
     /**
      * Produce sensitivity analysis.
      */
-    public void sensitivity_analysis_action()
+    public void sensitivityAnalysisAction()
     {
-        editorFrame.sensitivity_analysis_action();
+        editorFrame.sensitivityAnalysisAction();
     }
 
     /**
      * Use bif format for saving.
      */
-    public void bif_format_action()
+    public void bifFormatAction()
     {
-        editorFrame.set_save_format(EditorFrame.BIF_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.BIF_FORMAT);
     }
 
     /**
      * Use xml format for saving.
      */
-    public void xml_format_action()
+    public void xmlFormatAction()
     {
-        editorFrame.set_save_format(EditorFrame.XML_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.XML_FORMAT);
     }
 
     /**
      * Use bugs format for saving.
      */
-    public void bugs_format_action()
+    public void bugsFormatAction()
     {
-        editorFrame.set_save_format(EditorFrame.BUGS_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.BUGS_FORMAT);
     }
 
     /**
@@ -240,7 +240,7 @@ public class JavaBayes extends Applet
      */
     public void quit()
     {
-        if (is_applet)
+        if (isApplet)
         {
             editorFrame.hide();
             editorFrame.dispose();
@@ -268,9 +268,9 @@ public class JavaBayes extends Applet
      *
      * @return
      */
-    public String get_current_save_filename()
+    public String getCurrentSaveFilename()
     {
-        return (editorFrame.get_current_save_filename());
+        return (editorFrame.getCurrentSaveFilename());
     }
 
     /**
@@ -278,25 +278,25 @@ public class JavaBayes extends Applet
      *
      * @param filename
      */
-    public void set_current_save_filename(String filename)
+    public void setCurrentSaveFilename(String filename)
     {
-        editorFrame.set_current_save_filename(filename);
+        editorFrame.setCurrentSaveFilename(filename);
     }
 
     /**
      * Set the inference algorithm as variable elimination.
      */
-    public void set_algorithm_variable_elimination()
+    public void setAlgorithmVariableElimination()
     {
-        editorFrame.set_algorithm(EditorFrame.ALGORITHM_VARIABLE_ELIMINATION);
+        editorFrame.setAlgorithm(EditorFrame.ALGORITHM_VARIABLE_ELIMINATION);
     }
 
     /**
      * Set the inference algorithm as bucket tree.
      */
-    public void set_algorithm_bucket_tree()
+    public void setAlgorithmBucketTree()
     {
-        editorFrame.set_algorithm(EditorFrame.ALGORITHM_BUCKET_TREE);
+        editorFrame.setAlgorithm(EditorFrame.ALGORITHM_BUCKET_TREE);
     }
 
 }

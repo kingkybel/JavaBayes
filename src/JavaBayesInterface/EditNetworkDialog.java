@@ -53,33 +53,33 @@ class EditNetworkDialog extends Dialog
     private final static int BOTTOM_INSET = 0;
 
     // Labels for the various elements of the dialog.
-    private final static String dialog_title = "Edit Network";
-    private final static String name_label = "Name:";
-    private final static String network_properties_label = "Network properties:";
-    private final static String next_property_label = "Next";
-    private final static String new_property_label = "New";
-    private final static String global_label = "Network neighborhood model:";
-    private final static String no_global_label = "No global neighborhood";
-    private final static String epsilon_global_label =
+    private final static String dialogTitle = "Edit Network";
+    private final static String nameLabel = "Name:";
+    private final static String networkPropertiesLabel = "Network properties:";
+    private final static String nextPropertyLabel = "Next";
+    private final static String newPropertyLabel = "New";
+    private final static String globalLabel = "Network neighborhood model:";
+    private final static String noGlobalLabel = "No global neighborhood";
+    private final static String epsilonGlobalLabel =
                                 "Epsilon contaminated neighborhood";
-    private final static String ratio_global_label =
+    private final static String ratioGlobalLabel =
                                 "Constant density ratio neighborhood";
-    private final static String total_global_label =
+    private final static String totalGlobalLabel =
                                 "Total variation neighborhood";
-    private final static String bounded_global_label =
+    private final static String boundedGlobalLabel =
                                 "Constant density bounded neighborhood";
-    private final static String global_parameter_label =
+    private final static String globalParameterLabel =
                                 "Global neighborhood parameter:";
-    private final static String ok_label = "Apply";
-    private final static String dismiss_label = "Dismiss";
+    private final static String okLabel = "Apply";
+    private final static String dismissLabel = "Dismiss";
     private static final Logger LOG =
     Logger.getLogger(EditNetworkDialog.class.getName());
     // The InferenceGraph object that contains the network.
     InferenceGraph ig;
     // Variables that hold the properties in the dialog.
-    PropertyManager property_manager;
+    PropertyManager propertyManager;
     // Variables used to construct the dialog.
-    int displayed_network_property_index;
+    int displayedNetworkPropertyIndex;
     Panel np;
     Panel npp;
     Panel gnp;
@@ -88,78 +88,78 @@ class EditNetworkDialog extends Dialog
     Panel tp;
     Panel okp;
     Label name;
-    Label network_properties;
-    TextField text_name;
-    TextField text_global_parameter;
+    Label networkProperties;
+    TextField textName;
+    TextField textGlobalParameter;
     Label global;
-    Label global_parameter;
+    Label globalParameter;
     CheckboxGroup globals;
-    Checkbox no_global;
-    Checkbox epsilon_global;
-    Checkbox ratio_global;
-    Checkbox total_global;
-    Checkbox bounded_global;
-    Button new_network_property;
-    Button next_network_property;
-    TextField network_properties_text;
-    Button ok_button;
-    Button dismiss_button;
+    Checkbox noGlobal;
+    Checkbox epsilonGlobal;
+    Checkbox ratioGlobal;
+    Checkbox totalGlobal;
+    Checkbox boundedGlobal;
+    Button newNetworkProperty;
+    Button nextNetworkProperty;
+    TextField networkPropertiesText;
+    Button okButton;
+    Button dismissButton;
 
     /**
      * Default constructor for an EditNetworkDialog object.
      */
-    EditNetworkDialog(Frame parent, InferenceGraph i_g)
+    EditNetworkDialog(Frame parent, InferenceGraph iG)
     {
-        super(parent, dialog_title, true);
-        this.ig = i_g;
+        super(parent, dialogTitle, true);
+        this.ig = iG;
 
     	// Compose the whole frame.
         // Panel for the name.
         np = new Panel();
         np.setLayout(new BorderLayout());
-        name = new Label(name_label);
-        text_name = new TextField(30);
+        name = new Label(nameLabel);
+        textName = new TextField(30);
         np.add("West", name);
-        np.add("Center", text_name);
+        np.add("Center", textName);
 
         // Network properties.
         npp = new Panel();
         npp.setLayout(new BorderLayout());
-        network_properties = new Label(network_properties_label);
-        next_network_property = new Button(next_property_label);
-        new_network_property = new Button(new_property_label);
-        network_properties_text = new TextField(40);
+        networkProperties = new Label(networkPropertiesLabel);
+        nextNetworkProperty = new Button(nextPropertyLabel);
+        newNetworkProperty = new Button(newPropertyLabel);
+        networkPropertiesText = new TextField(40);
 
-        npp.add("North", network_properties);
-        npp.add("West", next_network_property);
-        npp.add("Center", network_properties_text);
-        npp.add("East", new_network_property);
+        npp.add("North", networkProperties);
+        npp.add("West", nextNetworkProperty);
+        npp.add("Center", networkPropertiesText);
+        npp.add("East", newNetworkProperty);
 
         // Global neighborhood parameters
         gnp = new Panel();
         gnp.setLayout(new BorderLayout());
-        global = new Label(global_label);
+        global = new Label(globalLabel);
 
         gncp = new Panel();
         gncp.setLayout(new GridLayout(5, 1));
         globals = new CheckboxGroup();
-        no_global = new Checkbox(no_global_label, globals, true);
-        epsilon_global = new Checkbox(epsilon_global_label, globals, false);
-        ratio_global = new Checkbox(ratio_global_label, globals, false);
-        total_global = new Checkbox(total_global_label, globals, false);
-        bounded_global = new Checkbox(bounded_global_label, globals, false);
-        gncp.add(no_global);
-        gncp.add(epsilon_global);
-        gncp.add(ratio_global);
-        gncp.add(total_global);
-        gncp.add(bounded_global);
+        noGlobal = new Checkbox(noGlobalLabel, globals, true);
+        epsilonGlobal = new Checkbox(epsilonGlobalLabel, globals, false);
+        ratioGlobal = new Checkbox(ratioGlobalLabel, globals, false);
+        totalGlobal = new Checkbox(totalGlobalLabel, globals, false);
+        boundedGlobal = new Checkbox(boundedGlobalLabel, globals, false);
+        gncp.add(noGlobal);
+        gncp.add(epsilonGlobal);
+        gncp.add(ratioGlobal);
+        gncp.add(totalGlobal);
+        gncp.add(boundedGlobal);
 
         gnpp = new Panel();
         gnpp.setLayout(new BorderLayout());
-        global_parameter = new Label(global_parameter_label);
-        text_global_parameter = new TextField(10);
-        gnpp.add("West", global_parameter);
-        gnpp.add("Center", text_global_parameter);
+        globalParameter = new Label(globalParameterLabel);
+        textGlobalParameter = new TextField(10);
+        gnpp.add("West", globalParameter);
+        gnpp.add("Center", textGlobalParameter);
 
         gnp.add("North", global);
         gnp.add("Center", gncp);
@@ -175,10 +175,10 @@ class EditNetworkDialog extends Dialog
         // Return buttons
         okp = new Panel();
         okp.setLayout(new FlowLayout(FlowLayout.CENTER));
-        ok_button = new Button(ok_label);
-        dismiss_button = new Button(dismiss_label);
-        okp.add(ok_button);
-        okp.add(dismiss_button);
+        okButton = new Button(okLabel);
+        dismissButton = new Button(dismissLabel);
+        okp.add(okButton);
+        okp.add(dismissButton);
 
         setLayout(new BorderLayout());
         add("North", tp);
@@ -188,7 +188,7 @@ class EditNetworkDialog extends Dialog
         pack();
 
         // Initialize values
-        fill_dialog();
+        fillDialog();
     }
 
     /**
@@ -233,45 +233,45 @@ class EditNetworkDialog extends Dialog
     /*
      * Fill the values in the dialog area.
      */
-    private void fill_dialog()
+    private void fillDialog()
     {
-        String values[], all_values = "";
+        String values[], allValues = "";
         ArrayList prop;
         String property;
         double par;
 
         // Synchronize the network if necessary.
-        ig.get_bayes_net();
+        ig.getBayesNet();
 
         // Fill the name.
-        text_name.setText(ig.get_name());
+        textName.setText(ig.getName());
 
         // Fill and store network properties
-        property_manager = new PropertyManager(ig.get_network_properties(),
-                                               network_properties_text);
+        propertyManager = new PropertyManager(ig.getNetworkProperties(),
+                                               networkPropertiesText);
 
         // Set global neighborhood
-        switch (ig.get_global_neighborhood_type())
+        switch (ig.getGlobalNeighborhoodType())
         {
             case InferenceGraph.NO_CREDAL_SET:
-                globals.setCurrent(no_global);
+                globals.setCurrent(noGlobal);
                 break;
             case InferenceGraph.CONSTANT_DENSITY_RATIO:
-                globals.setCurrent(ratio_global);
+                globals.setCurrent(ratioGlobal);
                 break;
             case InferenceGraph.EPSILON_CONTAMINATED:
-                globals.setCurrent(epsilon_global);
+                globals.setCurrent(epsilonGlobal);
                 break;
             case InferenceGraph.CONSTANT_DENSITY_BOUNDED:
-                globals.setCurrent(bounded_global);
+                globals.setCurrent(boundedGlobal);
                 break;
             case InferenceGraph.TOTAL_VARIATION:
-                globals.setCurrent(total_global);
+                globals.setCurrent(totalGlobal);
                 break;
         }
 
-        par = ig.get_global_neighborhood_parameter();
-        text_global_parameter.setText(String.valueOf(par));
+        par = ig.getGlobalNeighborhoodParameter();
+        textGlobalParameter.setText(String.valueOf(par));
     }
 
     /**
@@ -280,25 +280,25 @@ class EditNetworkDialog extends Dialog
     @Override
     public boolean action(Event evt, Object arg)
     {
-        if (evt.target == dismiss_button)
+        if (evt.target == dismissButton)
         {
             dispose();
         }
-        else if (evt.target == ok_button)
+        else if (evt.target == okButton)
         {
-            update_dialog();
+            updateDialog();
         }
-        else if (evt.target == new_network_property)
+        else if (evt.target == newNetworkProperty)
         {
-            property_manager.new_property();
+            propertyManager.newProperty();
         }
-        else if (evt.target == next_network_property)
+        else if (evt.target == nextNetworkProperty)
         {
-            property_manager.next_property();
+            propertyManager.nextProperty();
         }
-        else if (evt.target == network_properties_text)
+        else if (evt.target == networkPropertiesText)
         {
-            property_manager.update_property();
+            propertyManager.updateProperty();
         }
         else
         {
@@ -312,58 +312,58 @@ class EditNetworkDialog extends Dialog
      * Update the contents of the network when the
      * dialog exits.
      */
-    private void update_dialog()
+    private void updateDialog()
     {
         // Update the name of the network.
-        String new_network_name = text_name.getText();
-        if (!(new_network_name.equals(ig.get_name())))
+        String newNetworkName = textName.getText();
+        if (!(newNetworkName.equals(ig.getName())))
         {
-            new_network_name = ig.check_name(new_network_name);
-            if (new_network_name != null)
+            newNetworkName = ig.checkName(newNetworkName);
+            if (newNetworkName != null)
             {
-                ig.set_name(new_network_name);
+                ig.setName(newNetworkName);
             }
         }
 
         // Update the properties (if necessary).
-        ArrayList prop = property_manager.update_property_on_exit();
+        ArrayList prop = propertyManager.updatePropertyOnExit();
         if (prop != null)
         {
-            ig.set_network_properties(prop);
+            ig.setNetworkProperties(prop);
         }
 
         // Update the global neighborhood parameters.
-        Checkbox selected_global_neighborhood = globals.getCurrent();
-        if (selected_global_neighborhood == no_global)
+        Checkbox selectedGlobalNeighborhood = globals.getCurrent();
+        if (selectedGlobalNeighborhood == noGlobal)
         {
-            ig.set_global_neighborhood(InferenceGraph.NO_CREDAL_SET);
+            ig.setGlobalNeighborhood(InferenceGraph.NO_CREDAL_SET);
         }
-        else if (selected_global_neighborhood == epsilon_global)
+        else if (selectedGlobalNeighborhood == epsilonGlobal)
         {
-            ig.set_global_neighborhood(InferenceGraph.EPSILON_CONTAMINATED);
+            ig.setGlobalNeighborhood(InferenceGraph.EPSILON_CONTAMINATED);
         }
-        else if (selected_global_neighborhood == ratio_global)
+        else if (selectedGlobalNeighborhood == ratioGlobal)
         {
-            ig.set_global_neighborhood(InferenceGraph.CONSTANT_DENSITY_RATIO);
+            ig.setGlobalNeighborhood(InferenceGraph.CONSTANT_DENSITY_RATIO);
         }
-        else if (selected_global_neighborhood == bounded_global)
+        else if (selectedGlobalNeighborhood == boundedGlobal)
         {
-            ig.set_global_neighborhood(InferenceGraph.CONSTANT_DENSITY_BOUNDED);
+            ig.setGlobalNeighborhood(InferenceGraph.CONSTANT_DENSITY_BOUNDED);
         }
-        else if (selected_global_neighborhood == total_global)
+        else if (selectedGlobalNeighborhood == totalGlobal)
         {
-            ig.set_global_neighborhood(InferenceGraph.TOTAL_VARIATION);
+            ig.setGlobalNeighborhood(InferenceGraph.TOTAL_VARIATION);
         }
 
         try
         {
             double par =
-                   (new Double(text_global_parameter.getText()).doubleValue());
+                   (new Double(textGlobalParameter.getText()).doubleValue());
             if (par <= 0.0)
             {
                 par = 0.0;
             }
-            ig.set_global_neighborhood_parameter(par);
+            ig.setGlobalNeighborhoodParameter(par);
         }
         catch (NumberFormatException e)
         {

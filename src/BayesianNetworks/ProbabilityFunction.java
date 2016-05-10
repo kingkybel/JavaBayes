@@ -57,43 +57,43 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param prop
-     * @param n_vb
-     * @param n_vl
+     * @param nVb
+     * @param nVl
      */
-    public ProbabilityFunction(BayesNet b_n, int n_vb, int n_vl, ArrayList prop)
+    public ProbabilityFunction(BayesNet bN, int nVb, int nVl, ArrayList prop)
     {
-        super(n_vb, n_vl);
+        super(nVb, nVl);
         properties = prop;
-        bn = b_n;
+        bn = bN;
     }
 
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param prop
      * @param pvs
      * @param v
      */
-    public ProbabilityFunction(BayesNet b_n, DiscreteVariable pvs[],
+    public ProbabilityFunction(BayesNet bN, DiscreteVariable pvs[],
                                double v[], ArrayList prop)
     {
         super(pvs, v);
         properties = prop;
-        bn = b_n;
+        bn = bN;
     }
 
     /**
      * Constructor for ProbabilityFunction.
      *
      * @param df
-     * @param new_values
+     * @param newValues
      */
-    public ProbabilityFunction(DiscreteFunction df, double[] new_values)
+    public ProbabilityFunction(DiscreteFunction df, double[] newValues)
     {
-        super(df.variables, new_values);
+        super(df.variables, newValues);
         if (df instanceof ProbabilityFunction)
         {
             bn = ((ProbabilityFunction) df).bn;
@@ -105,12 +105,12 @@ public class ProbabilityFunction extends DiscreteFunction
      * Constructor for ProbabilityFunction.
      *
      * @param df
-     * @param b_n
+     * @param bN
      */
-    public ProbabilityFunction(DiscreteFunction df, BayesNet b_n)
+    public ProbabilityFunction(DiscreteFunction df, BayesNet bN)
     {
         super(df.variables, df.values);
-        bn = b_n;
+        bn = bN;
         if (df instanceof ProbabilityFunction)
         {
             properties = ((ProbabilityFunction) df).properties;
@@ -120,35 +120,35 @@ public class ProbabilityFunction extends DiscreteFunction
     /* ************************************************************* */
     /* Method that processes the properties                          */
     /* ************************************************************* */
-    void process_properties()
+    void processProperties()
     {
     }
 
     /**
      * Set a single value of the probability function.
      *
-     * @param variable_value_pairs
+     * @param variableValuePairs
      * @param val
      */
-    public void set_value(String variable_value_pairs[][], double val)
+    public void setValue(String variableValuePairs[][], double val)
     {
         int index;
         ProbabilityVariable pv;
 
         // Initialize with zeros an array of markers.
-        int value_indexes[] = new int[bn.probability_variables.length];
+        int valueIndexes[] = new int[bn.probabilityVariables.length];
 
         // Fill the array of markers.
-        for (int i = 0; i < variable_value_pairs.length; i++)
+        for (int i = 0; i < variableValuePairs.length; i++)
         {
-            index = bn.index_of_variable(variable_value_pairs[i][0]);
-            pv = bn.probability_variables[index];
-            value_indexes[index] = pv.index_of_value(variable_value_pairs[i][1]);
+            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            pv = bn.probabilityVariables[index];
+            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
         }
 
         // Get the position of the value in the array of values
-        int pos = get_position_from_indexes(bn.probability_variables,
-                                            value_indexes);
+        int pos = getPositionFromIndexes(bn.probabilityVariables,
+                                            valueIndexes);
         // Set the value.
         values[pos] = val;
     }
@@ -157,27 +157,27 @@ public class ProbabilityFunction extends DiscreteFunction
      * Evaluate a function given a list of pairs (Variable Value) which
      * specifies a value of the function.
      *
-     * @param variable_value_pairs
+     * @param variableValuePairs
      * @return
      */
-    public double evaluate(String variable_value_pairs[][])
+    public double evaluate(String variableValuePairs[][])
     {
         int index;
         ProbabilityVariable pv;
 
         // Initialize with zeros an array of markers.
-        int value_indexes[] = new int[bn.probability_variables.length];
+        int valueIndexes[] = new int[bn.probabilityVariables.length];
 
         // Fill the array of markers.
-        for (int i = 0; i < variable_value_pairs.length; i++)
+        for (int i = 0; i < variableValuePairs.length; i++)
         {
-            index = bn.index_of_variable(variable_value_pairs[i][0]);
-            pv = bn.probability_variables[index];
-            value_indexes[index] = pv.index_of_value(variable_value_pairs[i][1]);
+            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            pv = bn.probabilityVariables[index];
+            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
         }
 
         // Now evaluate
-        return (evaluate(value_indexes));
+        return (evaluate(valueIndexes));
     }
 
     /**
@@ -185,25 +185,25 @@ public class ProbabilityFunction extends DiscreteFunction
      * through the markers. The markers indicate which variables are present in
      * the function to be evaluated.
      *
-     * @param value_indexes
+     * @param valueIndexes
      * @return
      */
-    public double evaluate(int value_indexes[])
+    public double evaluate(int valueIndexes[])
     {
-        return (super.evaluate(bn.probability_variables, value_indexes));
+        return (super.evaluate(bn.probabilityVariables, valueIndexes));
     }
 
     /**
      * Get position in a function from a (possibly partial) instantiation of
      * variables through the indexes.
      *
-     * @param variable_indexes
+     * @param variableIndexes
      * @return
      */
-    public int get_position_from_indexes(int variable_indexes[])
+    public int getPositionFromIndexes(int variableIndexes[])
     {
-        return (super.get_position_from_indexes(bn.probability_variables,
-                                                variable_indexes));
+        return (super.getPositionFromIndexes(bn.probabilityVariables,
+                                                variableIndexes));
     }
 
     /**
@@ -215,7 +215,7 @@ public class ProbabilityFunction extends DiscreteFunction
      * @param df
      * @return
      */
-    public double expected_value(DiscreteFunction df)
+    public double expectedValue(DiscreteFunction df)
     {
         double ev = 0.0;
         for (int i = 0; i < df.values.length; i++)
@@ -235,7 +235,7 @@ public class ProbabilityFunction extends DiscreteFunction
      * @param df
      * @return
      */
-    public double posterior_expected_value(DiscreteFunction df)
+    public double posteriorExpectedValue(DiscreteFunction df)
     {
         double ev = 0.0;
         double p = 0.0;
@@ -274,9 +274,9 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param out
      */
-    public void save_xml_0_3(PrintStream out)
+    public void saveXml_0_3(PrintStream out)
     {
-        int i, j, size_of_first = 0, size_of_others = 1;
+        int i, j, sizeOfFirst = 0, sizeOfOthers = 1;
         String property;
 
         out.println("<DEFINITION>");
@@ -293,17 +293,17 @@ public class ProbabilityFunction extends DiscreteFunction
 
             if (variables.length > 1)
             { // Necessary to invert variables.
-                size_of_first = variables[0].number_values();
+                sizeOfFirst = variables[0].numberValues();
                 for (j = 1; j < variables.length; j++)
                 {
-                    size_of_others *= variables[j].number_values();
+                    sizeOfOthers *= variables[j].numberValues();
                 }
-                for (i = 0; i < size_of_others; i++)
+                for (i = 0; i < sizeOfOthers; i++)
                 {
-                    for (j = 0; j < size_of_first;
+                    for (j = 0; j < sizeOfFirst;
                          j++)
                     {
-                        out.print(values[j * size_of_others + i] + " ");
+                        out.print(values[j * sizeOfOthers + i] + " ");
                     }
                 }
             }
@@ -334,7 +334,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param out
      */
-    public void save_xml(PrintStream out)
+    public void saveXml(PrintStream out)
     {
         int j;
         String property;
@@ -438,7 +438,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     }
@@ -448,7 +448,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param prop
      */
-    public void set_properties(ArrayList prop)
+    public void setProperties(ArrayList prop)
     {
         properties = prop;
     }
@@ -459,7 +459,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @return
      */
-    public ArrayList get_enumerated_properties()
+    public ArrayList getEnumeratedProperties()
     {
         return (properties);
     }
@@ -469,7 +469,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param prop
      */
-    public void add_property(String prop)
+    public void addProperty(String prop)
     {
         if (properties == null)
         {
@@ -483,7 +483,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param prop
      */
-    public void remove_property(String prop)
+    public void removeProperty(String prop)
     {
         if (properties == null)
         {
@@ -497,7 +497,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param i Position of the property.
      */
-    public void remove_property(int i)
+    public void removeProperty(int i)
     {
         if (properties == null)
         {

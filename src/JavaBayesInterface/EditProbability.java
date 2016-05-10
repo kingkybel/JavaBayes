@@ -37,71 +37,71 @@ class EditProbability extends EditFunctionPanel
     Logger.
             getLogger(EditProbability.class.getName());
 
-    EditFunctionDialog parent_dialog;
+    EditFunctionDialog parentDialog;
 
     // The graph and node that contain the probability function.
     InferenceGraph ig;
     InferenceGraphNode node;
 
     // Variables that hold the relevant information from the node.
-    String all_variable_names[];
-    String all_variable_values[][];
-    double probability_values[];
+    String allVariableNames[];
+    String allVariableValues[][];
+    double probabilityValues[];
 
-    FunctionTablePanel probability_table;
+    FunctionTablePanel probabilityTable;
 
     /**
      * Default constructor for an EditProbability.
      */
-    EditProbability(EditFunctionDialog parent_dialog,
-                    InferenceGraph i_g, InferenceGraphNode i_g_n)
+    EditProbability(EditFunctionDialog parentDialog,
+                    InferenceGraph iG, InferenceGraphNode iGN)
     {
-        this.parent_dialog = parent_dialog;
-        this.ig = i_g;
-        this.node = i_g_n;
+        this.parentDialog = parentDialog;
+        this.ig = iG;
+        this.node = iGN;
 
         // Copy the probability values in the node.
-        double original_probability_values[] = node.get_function_values();
-        probability_values = new double[original_probability_values.length];
-        System.arraycopy(original_probability_values, 0, probability_values, 0,
-                         probability_values.length);
+        double originalProbabilityValues[] = node.getFunctionValues();
+        probabilityValues = new double[originalProbabilityValues.length];
+        System.arraycopy(originalProbabilityValues, 0, probabilityValues, 0,
+                         probabilityValues.length);
 
         // Get the variable names.
-        all_variable_names = node.get_all_names();
+        allVariableNames = node.getAllNames();
 
         // Get the variable values.
-        all_variable_values = node.get_all_values();
+        allVariableValues = node.getAllValues();
 
         // Construct the name of the probability function.
-        Label probability_name = create_probability_name();
+        Label probabilityName = createProbabilityName();
 
         // Construct the table of probability values.
-        probability_table = new FunctionTablePanel(all_variable_names,
-                                                   all_variable_values,
-                                                   probability_values);
+        probabilityTable = new FunctionTablePanel(allVariableNames,
+                                                   allVariableValues,
+                                                   probabilityValues);
 
         // Set the final layout
         setLayout(new BorderLayout());
-        add("North", probability_name);
-        add("Center", probability_table);
+        add("North", probabilityName);
+        add("Center", probabilityTable);
     }
 
     /*
      * Create a Label containing a description of the probability function.
      */
-    private Label create_probability_name()
+    private Label createProbabilityName()
     {
         StringBuilder name = new StringBuilder("p(");
-        name.append(node.get_name());
+        name.append(node.getName());
         if (node.hasParent())
         {
             name.append(" |");
-            ArrayList parents = node.get_parents();
+            ArrayList parents = node.getParents();
             for (Object e : parents)
             {
                 name.append(" ").
                         append(((InferenceGraphNode) (e)).
-                                get_name()).
+                                getName()).
                         append(",");
             }
             name.setCharAt(name.length() - 1, ')');
@@ -118,35 +118,35 @@ class EditProbability extends EditFunctionPanel
     {
         double EPSILON = 1e-6;
         // Get the values from the table.
-        probability_values = probability_table.get_table();
+        probabilityValues = probabilityTable.getTable();
         // Check whether things add up to one.
-        int number_values = node.get_number_values();
-        int number_conditioning_values =
-            probability_values.length / number_values;
-        double verification_counters[] =
-                 new double[number_conditioning_values];
-        for (int i = 0; i < probability_values.length; i++)
+        int numberValues = node.getNumberValues();
+        int numberConditioningValues =
+            probabilityValues.length / numberValues;
+        double verificationCounters[] =
+                 new double[numberConditioningValues];
+        for (int i = 0; i < probabilityValues.length; i++)
         {
-            verification_counters[i % number_conditioning_values] +=
-            probability_values[i];
+            verificationCounters[i % numberConditioningValues] +=
+            probabilityValues[i];
         }
-        for (int j = 0; j < verification_counters.length; j++)
+        for (int j = 0; j < verificationCounters.length; j++)
         {
-            if (Math.abs(verification_counters[j] - 1.0) >= EPSILON)
+            if (Math.abs(verificationCounters[j] - 1.0) >= EPSILON)
             {
                 EditorFrame ef;
-                if (parent_dialog.parent instanceof EditorFrame)
+                if (parentDialog.parent instanceof EditorFrame)
                 {
-                    ef = (EditorFrame) (parent_dialog.parent);
+                    ef = (EditorFrame) (parentDialog.parent);
                     ef.jb.appendText("Some of the probability values " +
                                      "you have edited add up to " +
-                                     verification_counters[j] +
+                                     verificationCounters[j] +
                                      ". Please check it.\n\n");
                 }
             }
         }
         // Set the values.
-        node.set_function_values(probability_values);
+        node.setFunctionValues(probabilityValues);
     }
 
     @Override

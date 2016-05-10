@@ -44,25 +44,25 @@ class Bracketing
      */
     double
             perform(MappingDouble function,
-                    double x1, double x2, double x_accuracy)
+                    double x1, double x2, double xAccuracy)
     {
-        return (perform(function, 0, x1, x2, x_accuracy));
+        return (perform(function, 0, x1, x2, xAccuracy));
     }
 
     /**
      * Perform bisection.
      */
     double
-            perform(MappingDouble function, int function_type,
-                    double x1, double x2, double x_accuracy)
+            perform(MappingDouble function, int functionType,
+                    double x1, double x2, double xAccuracy)
     {
         int j;
         double f1, f2;
-        double dx, x_middle, current_solution_point;
+        double dx, xMiddle, currentSolutionPoint;
 
         // Initialize variables with the function values at endpoints
-        f1 = function.map(function_type, x1);
-        f2 = function.map(function_type, x2);
+        f1 = function.map(functionType, x1);
+        f2 = function.map(functionType, x2);
 
         // Check whether endpoints are solution
         if (f1 == 0.0)
@@ -88,34 +88,34 @@ class Bracketing
         if (f1 < 0.0)
         {
             dx = x2 - x1;
-            current_solution_point = x1;
+            currentSolutionPoint = x1;
         }
         else
         {
             dx = x1 - x2;
-            current_solution_point = x2;
+            currentSolutionPoint = x2;
         }
 
         // Bisection loop
         for (j = 1; j <= MAXIMUM_ITERATIONS; j++)
         {
             dx *= 0.5;
-            x_middle = current_solution_point + dx;
-            f2 = function.map(function_type, x_middle);
+            xMiddle = currentSolutionPoint + dx;
+            f2 = function.map(functionType, xMiddle);
             if (f2 <= 0.0)
             {
-                current_solution_point = x_middle;
+                currentSolutionPoint = xMiddle;
             }
             // Check whether stop conditions are met
             if (f2 == 0.0)
             {
                 status = EXACT_ROOT_FOUND;
-                return (current_solution_point);
+                return (currentSolutionPoint);
             }
-            if (Math.abs(dx) < x_accuracy)
+            if (Math.abs(dx) < xAccuracy)
             {
                 status = APPROXIMATE_ROOT_FOUND;
-                return (current_solution_point);
+                return (currentSolutionPoint);
             }
         }
 

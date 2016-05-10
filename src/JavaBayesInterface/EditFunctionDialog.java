@@ -23,17 +23,17 @@ class EditFunctionDialog extends Dialog
     private final static int BOTTOM_INSET = 0;
 
     // Labels for the various elements of the dialog.
-    private final static String ok_label = "Apply";
-    private final static String dialog_title = "Edit Function";
-    private final static String dismiss_label = "Dismiss";
+    private final static String okLabel = "Apply";
+    private final static String dialogTitle = "Edit Function";
+    private final static String dismissLabel = "Dismiss";
     private static final Logger LOG =
     Logger.getLogger(EditFunctionDialog.class.getName());
     // Variables used to construct the dialog.
     Frame parent;
     EditFunctionPanel efp;
     Panel buttons;
-    Button ok_button;
-    Button dismiss_button;
+    Button okButton;
+    Button dismissButton;
 
     /**
      * Default constructor for an EditFunctionDialog.
@@ -41,16 +41,16 @@ class EditFunctionDialog extends Dialog
     EditFunctionDialog(Frame parent, InferenceGraph ig,
                        InferenceGraphNode ign)
     {
-        super(parent, dialog_title, true);
+        super(parent, dialogTitle, true);
         this.parent = parent;
         setLayout(new BorderLayout());
         efp = dispatch(ig, ign);
         buttons = new Panel();
         buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
-        ok_button = new Button(ok_label);
-        dismiss_button = new Button(dismiss_label);
-        buttons.add(ok_button);
-        buttons.add(dismiss_button);
+        okButton = new Button(okLabel);
+        dismissButton = new Button(dismissLabel);
+        buttons.add(okButton);
+        buttons.add(dismissButton);
         add("Center", efp);
         add("South", buttons);
         pack();
@@ -62,7 +62,7 @@ class EditFunctionDialog extends Dialog
      */
     private EditFunctionPanel dispatch(InferenceGraph ig, InferenceGraphNode ign)
     {
-        if (ign.is_credal_set())
+        if (ign.isCredalSet())
         {
             return (new EditCredalSet(ig, ign));
         }
@@ -118,13 +118,13 @@ class EditFunctionDialog extends Dialog
     public boolean action(Event evt, Object arg)
     {
         // Check whether to dismiss
-        if (evt.target == dismiss_button)
+        if (evt.target == dismissButton)
         {
             efp.dismiss();
             dispose();
             return (true);
         }
-        else if (evt.target == ok_button)
+        else if (evt.target == okButton)
         {
             efp.accept();
             return (true);

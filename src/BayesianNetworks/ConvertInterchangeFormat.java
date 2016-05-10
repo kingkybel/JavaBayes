@@ -53,11 +53,11 @@ public class ConvertInterchangeFormat
     /**
      * Default constructor that loads an InterchangeFormat.
      *
-     * @param inter_format
+     * @param interFormat
      */
-    public ConvertInterchangeFormat(InterchangeFormat inter_format)
+    public ConvertInterchangeFormat(InterchangeFormat interFormat)
     {
-        ifo = inter_format;
+        ifo = interFormat;
     }
 
     /**
@@ -65,14 +65,14 @@ public class ConvertInterchangeFormat
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
-        IFBayesNet ifbn = ifo.get_ifbn();
+        IFBayesNet ifbn = ifo.getIfbn();
         if (ifbn == null)
         {
             return (null);
         }
-        return (ifbn.get_name());
+        return (ifbn.getName());
     }
 
     /**
@@ -80,14 +80,14 @@ public class ConvertInterchangeFormat
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
-        IFBayesNet ifbn = ifo.get_ifbn();
+        IFBayesNet ifbn = ifo.getIfbn();
         if (ifbn == null)
         {
             return (null);
         }
-        return (ifbn.get_properties());
+        return (ifbn.getProperties());
     }
 
     /**
@@ -97,31 +97,31 @@ public class ConvertInterchangeFormat
      * @param bn The BayesNet that will receive the ProbabilityVariable objects.
      * @return
      */
-    public ProbabilityVariable[] get_probability_variables(BayesNet bn)
+    public ProbabilityVariable[] getProbabilityVariables(BayesNet bn)
     {
         int i;
         IFProbabilityVariable ipv;
-        IFBayesNet ifbn = ifo.get_ifbn();
+        IFBayesNet ifbn = ifo.getIfbn();
         if (ifbn == null)
         {
             return (null);
         }
-        ArrayList pvs = ifbn.get_pvs();
+        ArrayList pvs = ifbn.getPvs();
 
-        ProbabilityVariable probability_variables[] =
+        ProbabilityVariable probabilityVariables[] =
                               new ProbabilityVariable[pvs.size()];
 
         i = 0;
         for (Object e : pvs)
         {
             ipv = (IFProbabilityVariable) (e);
-            probability_variables[i] =
-            new ProbabilityVariable(bn, ipv.get_name(), i,
-                                    ipv.get_values(), ipv.get_properties());
+            probabilityVariables[i] =
+            new ProbabilityVariable(bn, ipv.getName(), i,
+                                    ipv.getValues(), ipv.getProperties());
             i++;
         }
 
-        return (probability_variables);
+        return (probabilityVariables);
     }
 
     /**
@@ -131,29 +131,29 @@ public class ConvertInterchangeFormat
      * @param bn The BayesNet that will receive the ProbabilityVariable objects.
      * @return
      */
-    public ProbabilityFunction[] get_probability_functions(BayesNet bn)
+    public ProbabilityFunction[] getProbabilityFunctions(BayesNet bn)
     {
         int i;
         IFProbabilityFunction upf;
-        IFBayesNet ifbn = ifo.get_ifbn();
+        IFBayesNet ifbn = ifo.getIfbn();
         if (ifbn == null)
         {
             return (null);
         }
-        ArrayList upfs = ifbn.get_upfs();
+        ArrayList upfs = ifbn.getUpfs();
 
-        ProbabilityFunction probability_functions[] =
+        ProbabilityFunction probabilityFunctions[] =
                               new ProbabilityFunction[upfs.size()];
 
         i = 0;
         for (Object e : upfs)
         {
             upf = (IFProbabilityFunction) (e);
-            probability_functions[i] = get_probability_function(bn, upf);
+            probabilityFunctions[i] = getProbabilityFunction(bn, upf);
             i++;
         }
 
-        return (probability_functions);
+        return (probabilityFunctions);
     }
 
     /*
@@ -168,15 +168,15 @@ public class ConvertInterchangeFormat
      * @param upf
      * @return
      */
-    protected ProbabilityFunction get_probability_function(BayesNet bn,
+    protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
                                                            IFProbabilityFunction upf)
     {
-        int i, jump, number_of_values;
+        int i, jump, numberOfValues;
         double values[];
         ProbabilityVariable pv, variables[];
 
         // Check and insert the probability variable indexes
-        variables = create_variables(bn, upf);
+        variables = createVariables(bn, upf);
 
         // Calculate the jump, i.e., the number of numeric values
         // in the conditional distribution table for each value
@@ -189,30 +189,30 @@ public class ConvertInterchangeFormat
         }
 
         // Calculate the number of values in the distribution
-        number_of_values = jump * variables[0].values.length;
+        numberOfValues = jump * variables[0].values.length;
 
         // Allocate values and initialize
-        values = new double[number_of_values];
+        values = new double[numberOfValues];
         for (i = 0; i < values.length; i++)
         {
             values[i] = -1.0;
         }
 
         // Process tables
-        process_tables(upf, values);
+        processTables(upf, values);
 
         // Process defaults
-        process_defaults(upf, values, jump);
+        processDefaults(upf, values, jump);
 
         // Process entries
-        process_entries(bn, upf, variables, values, jump);
+        processEntries(bn, upf, variables, values, jump);
 
         // Finish calculating the values
-        finish_values(values);
+        finishValues(values);
 
         // Return the ProbabilityFunction
         return (new ProbabilityFunction(bn, variables,
-                                        values, upf.get_properties()));
+                                        values, upf.getProperties()));
     }
 
     /*
@@ -225,20 +225,20 @@ public class ConvertInterchangeFormat
      * @param upf
      * @return
      */
-    protected ProbabilityVariable[] create_variables(BayesNet bn,
+    protected ProbabilityVariable[] createVariables(BayesNet bn,
                                                      IFProbabilityFunction upf)
     {
         int index;
-        String ss_variables[] = upf.get_variables();
+        String ssVariables[] = upf.getVariables();
 
         ProbabilityVariable variables[] =
-                              new ProbabilityVariable[ss_variables.length];
-        for (int i = 0; i < ss_variables.length; i++)
+                              new ProbabilityVariable[ssVariables.length];
+        for (int i = 0; i < ssVariables.length; i++)
         {
-            index = bn.index_of_variable(ss_variables[i]);
+            index = bn.indexOfVariable(ssVariables[i]);
             if (index != BayesNet.INVALID_INDEX)
             {
-                variables[i] = bn.probability_variables[index];
+                variables[i] = bn.probabilityVariables[index];
             }
         }
         return (variables);
@@ -253,15 +253,15 @@ public class ConvertInterchangeFormat
      * @param upf
      * @param values
      */
-    protected void process_tables(IFProbabilityFunction upf,
+    protected void processTables(IFProbabilityFunction upf,
                                   double values[])
     {
         // Put the table values
-        ArrayList ttables = upf.get_tables();
+        ArrayList ttables = upf.getTables();
         if (ttables.size() > 0)
         {
             double ttable[] = (double[]) (ttables.get(0));
-            copy_table_to_values(ttable, values);
+            copyTableToValues(ttable, values);
         }
     }
 
@@ -273,7 +273,7 @@ public class ConvertInterchangeFormat
      * @param table
      * @param values
      */
-    protected void copy_table_to_values(double table[], double values[])
+    protected void copyTableToValues(double table[], double values[])
     {
         for (int i = 0; (i < table.length) && (i < values.length); i++)
         {
@@ -285,13 +285,13 @@ public class ConvertInterchangeFormat
      * Insert default values from the contents of the first
      * specification of defaults in the IFProbabilityFunction.
      */
-    void process_defaults(IFProbabilityFunction upf,
+    void processDefaults(IFProbabilityFunction upf,
                           double values[], int jump)
     {
         int i, j, k;
 
         // Process the default values
-        ArrayList ddefaultss = upf.get_defaults();
+        ArrayList ddefaultss = upf.getDefaults();
         if (ddefaultss.size() > 0)
         {
             double ddefaults[] = (double[]) (ddefaultss.get(0));
@@ -312,40 +312,40 @@ public class ConvertInterchangeFormat
     /*
      * Insert entries specified in the IFProbabilityFunction.
      */
-    void process_entries(BayesNet bn,
+    void processEntries(BayesNet bn,
                          IFProbabilityFunction upf,
                          ProbabilityVariable variables[], double values[],
                          int jump)
     {
         int i, j, k, pos, step;
-        int entry_value_indexes[];
-        double eentry_entries[];
-        String eentry_values[];
+        int entryValueIndexes[];
+        double eentryEntries[];
+        String eentryValues[];
         ProbabilityVariable pv;
         IFProbabilityEntry entry;
 
         // Process the entries
-        ArrayList eentries = upf.get_entries();
+        ArrayList eentries = upf.getEntries();
         if ((eentries != null) && (eentries.size() > 0))
         {
             for (Object e : eentries)
             {
                 entry =
                 (IFProbabilityEntry) (e);
-                eentry_values = entry.get_values();
-                eentry_entries = entry.get_entries();
-                entry_value_indexes = new int[eentry_values.length];
-                for (i = 0; i < entry_value_indexes.length; i++)
+                eentryValues = entry.getValues();
+                eentryEntries = entry.getEntries();
+                entryValueIndexes = new int[eentryValues.length];
+                for (i = 0; i < entryValueIndexes.length; i++)
                 {
                     pv = variables[i + 1];
-                    entry_value_indexes[i] =
-                    pv.index_of_value(eentry_values[i]);
+                    entryValueIndexes[i] =
+                    pv.indexOfValue(eentryValues[i]);
                 }
                 pos = 0;
                 step = 1;
-                for (k = (entry_value_indexes.length); k > 0; k--)
+                for (k = (entryValueIndexes.length); k > 0; k--)
                 {
-                    pos += entry_value_indexes[k - 1] * step;
+                    pos += entryValueIndexes[k - 1] * step;
                     step *=
                     variables[k].values.length;
                 }
@@ -353,7 +353,7 @@ public class ConvertInterchangeFormat
                 for (i = 0; i < pv.values.length; i++)
                 {
                     k = i * jump + pos;
-                    values[k] = eentry_entries[i];
+                    values[k] = eentryEntries[i];
                 }
             }
         }
@@ -362,7 +362,7 @@ public class ConvertInterchangeFormat
     /*
      * Perform final calculations in the values
      */
-    void finish_values(double values[])
+    void finishValues(double values[])
     {
         // Put zeroes in the values that were not defined
         for (int i = 0; i < values.length; i++)

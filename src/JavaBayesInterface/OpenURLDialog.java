@@ -56,10 +56,10 @@ public class OpenURLDialog extends Dialog
     /**
      *
      * @param parent
-     * @param java_bayes
+     * @param javaBayes
      * @param modal
      */
-    public OpenURLDialog(Frame parent, JavaBayes java_bayes, boolean modal)
+    public OpenURLDialog(Frame parent, JavaBayes javaBayes, boolean modal)
     {
         super(parent, true);
 
@@ -84,30 +84,30 @@ public class OpenURLDialog extends Dialog
         //}}
 
         // Insert the JavaBayes object
-        jb = java_bayes;
+        jb = javaBayes;
     }
 
     /**
      *
      * @param parent
-     * @param java_bayes
+     * @param javaBayes
      * @param title
      * @param modal
      */
-    public OpenURLDialog(Frame parent, JavaBayes java_bayes,
+    public OpenURLDialog(Frame parent, JavaBayes javaBayes,
                                        String title, boolean modal)
     {
-        this(parent, java_bayes, modal);
+        this(parent, javaBayes, modal);
         setTitle(title);
     }
 
-    void OkButton_Clicked(Event event)
+    void OkButtonClicked(Event event)
     {
-        jb.open_url(textURL.getText());
+        jb.openUrl(textURL.getText());
         dispose();
     }
 
-    void CancelButton_Clicked(Event event)
+    void CancelButtonClicked(Event event)
     {
         dispose();
     }
@@ -129,11 +129,11 @@ public class OpenURLDialog extends Dialog
     {
         if (event.target == cancelButton && event.id == Event.ACTION_EVENT)
         {
-            CancelButton_Clicked(event);
+            CancelButtonClicked(event);
         }
         if (event.target == okButton && event.id == Event.ACTION_EVENT)
         {
-            OkButton_Clicked(event);
+            OkButtonClicked(event);
         }
         return super.handleEvent(event);
     }

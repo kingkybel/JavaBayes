@@ -39,17 +39,17 @@ public class Inference
     /**
      *
      */
-    protected BucketTree bucket_tree;
+    protected BucketTree bucketTree;
 
     /**
      *
      */
-    protected Bucket bucket_for_variable[];
+    protected Bucket bucketForVariable[];
 
     /**
      *
      */
-    protected ArrayList bucket_forest;
+    protected ArrayList bucketForest;
 
     /**
      *
@@ -59,7 +59,7 @@ public class Inference
     /**
      *
      */
-    protected boolean do_produce_clusters;
+    protected boolean doProduceClusters;
 
 
     /*
@@ -68,16 +68,16 @@ public class Inference
 
     /**
      *
-     * @param b_n
+     * @param bN
      * @param dpc
      */
     
-    public Inference(BayesNet b_n, boolean dpc)
+    public Inference(BayesNet bN, boolean dpc)
     {
-        bn = b_n;
-        bucket_for_variable = new Bucket[b_n.number_variables()];
-        bucket_forest = new ArrayList();
-        do_produce_clusters = dpc;
+        bn = bN;
+        bucketForVariable = new Bucket[bN.numberVariables()];
+        bucketForest = new ArrayList();
+        doProduceClusters = dpc;
     }
 
     /**
@@ -90,54 +90,54 @@ public class Inference
 
     /**
      * Calculation of marginal posterior distribution for an arbitrary BayesNet.
-     * @param queried_variable_name
+     * @param queriedVariableName
      */
-    protected void inference(String queried_variable_name)
+    protected void inference(String queriedVariableName)
     {
-        if (do_produce_clusters)
+        if (doProduceClusters)
         { // If clusters are generated:
-            int index_queried = bn.index_of_variable(queried_variable_name);
-            if (index_queried != BayesNet.INVALID_INDEX)
-            { // If the queried_variable_name is valid:
-                Bucket buck = bucket_for_variable[index_queried];
+            int indexQueried = bn.indexOfVariable(queriedVariableName);
+            if (indexQueried != BayesNet.INVALID_INDEX)
+            { // If the queriedVariableName is valid:
+                Bucket buck = bucketForVariable[indexQueried];
                 // If the variable has no Bucket or a Bucket without valid cluster:
                 if ((buck == null) || (buck.cluster == null))
                 {
-                    inference(new Ordering(bn, queried_variable_name,
+                    inference(new Ordering(bn, queriedVariableName,
                                            IGNORE_EXPLANATION,
                                            Ordering.MINIMUM_WEIGHT));
                 }
                 else
                 { // If variable already has a Bucket:
                     // Get the BucketTree.
-                    bucket_tree = buck.bucket_tree;
-                    // Note that the method bucket_tree.distribute() below must return true:
-                    //     - the bucket_tree is constructed with IGNORE_EXPLANATION.
-                    //     - this block only runs if do_produce_clusters is true.
-                    if (buck.bucket_status != Bucket.DISTRIBUTED)
+                    bucketTree = buck.bucketTree;
+                    // Note that the method bucketTree.distribute() below must return true:
+                    //     - the bucketTree is constructed with IGNORE_EXPLANATION.
+                    //     - this block only runs if doProduceClusters is true.
+                    if (buck.bucketStatus != Bucket.DISTRIBUTED)
                     {
                         if (buck ==
-                            bucket_tree.bucket_tree[bucket_tree.bucket_tree.length -
+                            bucketTree.bucketTree[bucketTree.bucketTree.length -
                                                     1])
                         {
-                            bucket_tree.reduce(); // If Bucket is the last bucket, then just reduce;
+                            bucketTree.reduce(); // If Bucket is the last bucket, then just reduce;
                         }
                         else
                         {
                             // if not, then distribute.
-                            bucket_tree.distribute();
+                            bucketTree.distribute();
                         }
                     }
                     // Now process the cluster in the Bucket.
                     System.out.println("ARRIVED HERE!");
-                    buck.reduce_cluster();
+                    buck.reduceCluster();
                     // And then get the result
                     System.out.println("AND HERE TOO!");
-                    result = bucket_tree.get_normalized_result();
+                    result = bucketTree.getNormalizedResult();
                 }
             }
             else
-            { // If the queried_variable_name is invalid:
+            { // If the queriedVariableName is invalid:
                 inference(new Ordering(bn, (String) null,
                                        IGNORE_EXPLANATION,
                                        Ordering.MINIMUM_WEIGHT));
@@ -145,7 +145,7 @@ public class Inference
         }
         else
         { // If no cluster is generated:
-            inference(new Ordering(bn, queried_variable_name,
+            inference(new Ordering(bn, queriedVariableName,
                                    IGNORE_EXPLANATION, Ordering.MINIMUM_WEIGHT));
         }
     }
@@ -166,31 +166,31 @@ public class Inference
     private void inference(Ordering or)
     {
         // Create the Ordering and the BucketTree.
-        bucket_tree = new BucketTree(or, do_produce_clusters);
-        // Add the new BucketTree to the bucket_forest and update bucket_for_variable.
-        if (do_produce_clusters)
+        bucketTree = new BucketTree(or, doProduceClusters);
+        // Add the new BucketTree to the bucketForest and update bucketForVariable.
+        if (doProduceClusters)
         {
-            add_bucket_tree();
+            addBucketTree();
         }
         // Generate the result by reducing the BucketTree.
-        bucket_tree.reduce();
-        result = bucket_tree.get_normalized_result();
+        bucketTree.reduce();
+        result = bucketTree.getNormalizedResult();
     }
 
     /*
-     * Add a BucketTree to the bucket_forest and
-     * update the bucket_for_variable array.
+     * Add a BucketTree to the bucketForest and
+     * update the bucketForVariable array.
      */
-    private void add_bucket_tree()
+    private void addBucketTree()
     {
         Bucket buck;
-        // Add the current BucketTree to the bucket_forest.
-        bucket_forest.add(bucket_tree);
+        // Add the current BucketTree to the bucketForest.
+        bucketForest.add(bucketTree);
         // Put the buckets in correspondence with the variables.
-        for (int i = 0; i < bucket_tree.bucket_tree.length; i++)
+        for (int i = 0; i < bucketTree.bucketTree.length; i++)
         {
-            buck = bucket_tree.bucket_tree[i];
-            bucket_for_variable[buck.variable.get_index()] = buck;
+            buck = bucketTree.bucketTree[i];
+            bucketForVariable[buck.variable.getIndex()] = buck;
         }
     }
 
@@ -216,19 +216,19 @@ public class Inference
 
     /**
      * Print the Inference.
-     * @param should_print_bucket_tree
+     * @param shouldPrintBucketTree
      */
-    public void print(boolean should_print_bucket_tree)
+    public void print(boolean shouldPrintBucketTree)
     {
-        print(System.out, should_print_bucket_tree);
+        print(System.out, shouldPrintBucketTree);
     }
 
     /**
      * Print the Inference.
      * @param out
-     * @param should_print_bucket_tree
+     * @param shouldPrintBucketTree
      */
-    public void print(PrintStream out, boolean should_print_bucket_tree)
+    public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
         int i, bp[];
         ProbabilityVariable pv;
@@ -242,9 +242,9 @@ public class Inference
         // Print it all.
         out.print("Posterior distribution:");
 
-        if (should_print_bucket_tree == true)
+        if (shouldPrintBucketTree == true)
         {
-            bucket_tree.print(out);
+            bucketTree.print(out);
         }
         out.println();
 
@@ -258,16 +258,16 @@ public class Inference
      * Get the BucketTree.
      * @return 
      */
-    public BucketTree get_bucket_tree()
+    public BucketTree getBucketTree()
     {
-        return (bucket_tree);
+        return (bucketTree);
     }
 
     /**
      * Get the BayesNet.
      * @return 
      */
-    public BayesNet get_bayes_net()
+    public BayesNet getBayesNet()
     {
         return (bn);
     }
@@ -276,7 +276,7 @@ public class Inference
      * Get the current result of the Inference.
      * @return 
      */
-    public ProbabilityFunction get_result()
+    public ProbabilityFunction getResult()
     {
         return (result);
     }
@@ -287,6 +287,6 @@ public class Inference
      */
     public boolean areClustersProduced()
     {
-        return (do_produce_clusters);
+        return (doProduceClusters);
     }
 }

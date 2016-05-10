@@ -41,7 +41,7 @@ import java.util.logging.Logger;
 public class QuasiBayesNet extends BayesNet
 {
 
-    final static String[] global_neighborhood_keywords =
+    final static String[] globalNeighborhoodKeywords =
     {
         "none", "credal-set",
         "constant-density-ratio", "epsilon-contaminated",
@@ -75,9 +75,9 @@ public class QuasiBayesNet extends BayesNet
     public final static int TOTAL_VARIATION = 5;
     private static final Logger LOG =
                                 Logger.getLogger(QuasiBayesNet.class.getName());
-    int global_neighborhood_type; // do not set this here; set by translate()
+    int globalNeighborhoodType; // do not set this here; set by translate()
     // do not set this here; set by translate()
-    double global_neighborhood_parameter; // do not set this here; set by translate()
+    double globalNeighborhoodParameter; // do not set this here; set by translate()
     // do not set this here; set by translate()
 
     /**
@@ -90,37 +90,37 @@ public class QuasiBayesNet extends BayesNet
     public QuasiBayesNet()
     {
         super();
-        global_neighborhood_type = NO_CREDAL_SET;
-        global_neighborhood_parameter = 0.0;
+        globalNeighborhoodType = NO_CREDAL_SET;
+        globalNeighborhoodParameter = 0.0;
     }
 
     /**
      * Simple constructor for a Quasi-Bayesian network: just give it the number
      * of variables/functions and the name of the network.
      *
-     * @param n_n
-     * @param n_f
-     * @param n_v
+     * @param nN
+     * @param nF
+     * @param nV
      */
-    public QuasiBayesNet(String n_n, int n_v, int n_f)
+    public QuasiBayesNet(String nN, int nV, int nF)
     {
-        super(n_n, n_v, n_f);
-        global_neighborhood_type = NO_CREDAL_SET;
-        global_neighborhood_parameter = 0.0;
+        super(nN, nV, nF);
+        globalNeighborhoodType = NO_CREDAL_SET;
+        globalNeighborhoodParameter = 0.0;
     }
 
     /**
      * Simple constructor for a Quasi-Bayesian network: just give it the name of
      * network and properties.
      *
-     * @param n_n
+     * @param nN
      * @param p
      */
-    public QuasiBayesNet(String n_n, ArrayList p)
+    public QuasiBayesNet(String nN, ArrayList p)
     {
-        super(n_n, p);
-        global_neighborhood_type = NO_CREDAL_SET;
-        global_neighborhood_parameter = 0.0;
+        super(nN, p);
+        globalNeighborhoodType = NO_CREDAL_SET;
+        globalNeighborhoodParameter = 0.0;
     }
 
     /**
@@ -134,10 +134,10 @@ public class QuasiBayesNet extends BayesNet
         super(bn);
         if (bn instanceof QuasiBayesNet)
         {
-            global_neighborhood_type =
-            ((QuasiBayesNet) bn).global_neighborhood_type;
-            global_neighborhood_parameter =
-            ((QuasiBayesNet) bn).global_neighborhood_parameter;
+            globalNeighborhoodType =
+            ((QuasiBayesNet) bn).globalNeighborhoodType;
+            globalNeighborhoodParameter =
+            ((QuasiBayesNet) bn).globalNeighborhoodParameter;
         }
     }
 
@@ -203,24 +203,24 @@ public class QuasiBayesNet extends BayesNet
     protected void translate(InterchangeFormat ifo)
     {
         QBConvertInterchangeFormat qbcbn = new QBConvertInterchangeFormat(ifo);
-        name = qbcbn.get_name();
-        properties = qbcbn.get_properties();
-        probability_variables = qbcbn.get_probability_variables(this);
-        probability_functions = qbcbn.get_probability_functions(this);
+        name = qbcbn.getName();
+        properties = qbcbn.getProperties();
+        probabilityVariables = qbcbn.getProbabilityVariables(this);
+        probabilityFunctions = qbcbn.getProbabilityFunctions(this);
 
         // Process QuasiBayesNet properties
-        process_properties();
+        processProperties();
 
         // Process ProbabilityVariable properties
-        for (int i = 0; i < probability_variables.length; i++)
+        for (int i = 0; i < probabilityVariables.length; i++)
         {
-            process_probability_variable_properties(i);
+            processProbabilityVariableProperties(i);
         }
 
         // Process ProbabilityFunction properties: create QB functions if necessary
-        for (int i = 0; i < probability_functions.length; i++)
+        for (int i = 0; i < probabilityFunctions.length; i++)
         {
-            process_probability_function_properties(i);
+            processProbabilityFunctionProperties(i);
         }
     }
 
@@ -229,13 +229,13 @@ public class QuasiBayesNet extends BayesNet
      * properties (works by overriding method in BayesNet)
      */
     @Override
-    protected void process_properties()
+    protected void processProperties()
     {
-        boolean is_property_value_available;
-        String property, property_value, keyword, token;
+        boolean isPropertyValueAvailable;
+        String property, propertyValue, keyword, token;
         StringTokenizer st;
         String delimiters = " \n\t\r\f";
-        ArrayList properties_to_remove = new ArrayList();
+        ArrayList propertiesToRemove = new ArrayList();
 
         // Go through the properties
         for (Object e : properties)
@@ -245,39 +245,39 @@ public class QuasiBayesNet extends BayesNet
 
             // Extension: global neighborhoods
             token = st.nextToken();
-            keyword = global_neighborhood_keywords[CREDAL_SET];
+            keyword = globalNeighborhoodKeywords[CREDAL_SET];
             if (!token.equals(keyword))
             {
                 continue;
             }
 
             // The credal-set property is removed
-            properties_to_remove.add(property);
+            propertiesToRemove.add(property);
 
             // Cycle through keywords for global neighborhood type
             token = st.nextToken();
-            is_property_value_available = false;
+            isPropertyValueAvailable = false;
             for (int i = 2; i < 6; i++)
             {
-                keyword = global_neighborhood_keywords[i];
+                keyword = globalNeighborhoodKeywords[i];
                 if (token.equals(keyword))
                 {
-                    global_neighborhood_type = i;
-                    is_property_value_available = true;
+                    globalNeighborhoodType = i;
+                    isPropertyValueAvailable = true;
                     break;
                 }
             }
 
             // Get the property if necessary
-            if (is_property_value_available)
+            if (isPropertyValueAvailable)
             {
-                property_value = st.nextToken();
-                global_neighborhood_parameter =
-                Double.valueOf(property_value).doubleValue();
+                propertyValue = st.nextToken();
+                globalNeighborhoodParameter =
+                Double.valueOf(propertyValue).doubleValue();
             }
         }
 
-        for (Object e : properties_to_remove)
+        for (Object e : propertiesToRemove)
         {
             property = (String) (e);
             properties.remove(property);
@@ -290,11 +290,11 @@ public class QuasiBayesNet extends BayesNet
      *
      * @return
      */
-    public boolean are_local_credal_sets_present()
+    public boolean areLocalCredalSetsPresent()
     {
-        for (int i = 0; i < probability_functions.length; i++)
+        for (int i = 0; i < probabilityFunctions.length; i++)
         {
-            if (probability_functions[i] instanceof QBProbabilityFunction)
+            if (probabilityFunctions[i] instanceof QBProbabilityFunction)
             {
                 return (true);
             }
@@ -318,25 +318,25 @@ public class QuasiBayesNet extends BayesNet
         {
             out.print("network \"" + name + "\" {");
         }
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            out.print(" //" + probability_variables.length + " variables");
+            out.print(" //" + probabilityVariables.length + " variables");
         }
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            out.print(" and " + probability_functions.length +
+            out.print(" and " + probabilityFunctions.length +
                       " probability distributions");
         }
 
         out.println();
 
-        if (global_neighborhood_type != NO_CREDAL_SET)
+        if (globalNeighborhoodType != NO_CREDAL_SET)
         {
             out.println("\tproperty \"" +
-                        global_neighborhood_keywords[CREDAL_SET] + " " +
-                        global_neighborhood_keywords[global_neighborhood_type] +
+                        globalNeighborhoodKeywords[CREDAL_SET] + " " +
+                        globalNeighborhoodKeywords[globalNeighborhoodType] +
                         " " +
-                        global_neighborhood_parameter + "\" ;");
+                        globalNeighborhoodParameter + "\" ;");
         }
 
         if ((properties != null) && (properties.size() > 0))
@@ -349,25 +349,25 @@ public class QuasiBayesNet extends BayesNet
         }
         out.println("}");
 
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            for (i = 0; i < probability_variables.length;
+            for (i = 0; i < probabilityVariables.length;
                  i++)
             {
-                if (probability_variables[i] != null)
+                if (probabilityVariables[i] != null)
                 {
-                    probability_variables[i].print(out);
+                    probabilityVariables[i].print(out);
                 }
             }
         }
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            for (i = 0; i < probability_functions.length;
+            for (i = 0; i < probabilityFunctions.length;
                  i++)
             {
-                if (probability_functions[i] != null)
+                if (probabilityFunctions[i] != null)
                 {
-                    probability_functions[i].print(out);
+                    probabilityFunctions[i].print(out);
                 }
             }
         }
@@ -378,9 +378,9 @@ public class QuasiBayesNet extends BayesNet
      *
      * @return
      */
-    public int get_global_neighborhood_type()
+    public int getGlobalNeighborhoodType()
     {
-        return (global_neighborhood_type);
+        return (globalNeighborhoodType);
     }
 
     /**
@@ -388,9 +388,9 @@ public class QuasiBayesNet extends BayesNet
      *
      * @param type
      */
-    public void set_global_neighborhood_type(int type)
+    public void setGlobalNeighborhoodType(int type)
     {
-        global_neighborhood_type = type;
+        globalNeighborhoodType = type;
     }
 
     /**
@@ -398,9 +398,9 @@ public class QuasiBayesNet extends BayesNet
      *
      * @return
      */
-    public double get_global_neighborhood_parameter()
+    public double getGlobalNeighborhoodParameter()
     {
-        return (global_neighborhood_parameter);
+        return (globalNeighborhoodParameter);
     }
 
     /**
@@ -408,9 +408,9 @@ public class QuasiBayesNet extends BayesNet
      *
      * @param p
      */
-    public void set_global_neighborhood_parameter(double p)
+    public void setGlobalNeighborhoodParameter(double p)
     {
-        global_neighborhood_parameter = p;
+        globalNeighborhoodParameter = p;
     }
 
 }

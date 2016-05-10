@@ -24,11 +24,11 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
 
     /**
      *
-     * @param inter_format
+     * @param interFormat
      */
-    public QBConvertInterchangeFormat(InterchangeFormat inter_format)
+    public QBConvertInterchangeFormat(InterchangeFormat interFormat)
     {
-        super(inter_format);
+        super(interFormat);
     }
 
     /**
@@ -42,16 +42,16 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * @return **********************************************************
      */
     @Override
-    protected ProbabilityFunction get_probability_function(BayesNet bn,
+    protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
                                                            IFProbabilityFunction upf)
     {
-        int i, jump, number_of_values;
+        int i, jump, numberOfValues;
         double values[];
-        double extreme_points[][] = null;
+        double extremePoints[][] = null;
         ProbabilityVariable pv, variables[];
 
         // Check and insert the probability variable indexes
-        variables = create_variables(bn, upf);
+        variables = createVariables(bn, upf);
 
         // Calculate the jump, i.e., the number of values
         // in the conditional distribution table for each value
@@ -60,41 +60,41 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         for (i = 1; i < variables.length; i++)
         {
             pv = variables[i];
-            jump *= pv.number_values();
+            jump *= pv.numberValues();
         }
 
         // Calculate the number of values in the distribution
-        number_of_values = jump * variables[0].number_values();
+        numberOfValues = jump * variables[0].numberValues();
 
         // Allocate values and initialize
-        values = new double[number_of_values];
+        values = new double[numberOfValues];
         for (i = 0; i < values.length; i++)
         {
             values[i] = -1.0;
         }
 
         // Process tables
-        extreme_points = process_extreme_tables(upf, values);
+        extremePoints = processExtremeTables(upf, values);
 
         // Process defaults
-        process_defaults(upf, values, extreme_points, jump);
+        processDefaults(upf, values, extremePoints, jump);
 
         // Process entries
-        process_entries(bn, upf, variables, values, extreme_points, jump);
+        processEntries(bn, upf, variables, values, extremePoints, jump);
 
         // Finish calculating the values
-        finish_values(values, extreme_points);
+        finishValues(values, extremePoints);
 
         // Insert the data
-        if (extreme_points == null)
+        if (extremePoints == null)
         {
             return (new ProbabilityFunction(bn, variables, values, upf.
-                                            get_properties()));
+                                            getProperties()));
         }
         else
         {
-            return (new VertexSet(bn, variables, extreme_points,
-                                  upf.get_properties()));
+            return (new VertexSet(bn, variables, extremePoints,
+                                  upf.getProperties()));
         }
     }
 
@@ -103,14 +103,14 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Fill the values with the contents of the tables * in the upf object. *
      * **********************************************************
      */
-    double[][] process_extreme_tables(IFProbabilityFunction upf,
+    double[][] processExtremeTables(IFProbabilityFunction upf,
                                       double values[])
     {
         int i, j;
-        double table[], extreme_points[][];
+        double table[], extremePoints[][];
 
         // Put the table values
-        ArrayList tables = upf.get_tables();
+        ArrayList tables = upf.getTables();
         int n = tables.size();
 
         // If there are no available tables
@@ -119,33 +119,33 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
             return (null);
         }
 
-        // If there is a single table, no extreme_points are created
+        // If there is a single table, no extremePoints are created
         // and it just acts as a standard Bayesian model
         if (n == 1)
         {
             table = (double[]) (tables.get(0));
-            copy_table_to_values(table, values);
+            copyTableToValues(table, values);
             return (null);
         }
 
-        // Else, if there are several extreme_points in the credal set
-        extreme_points = new double[n][];
-        for (i = 0; i < extreme_points.length; i++)
+        // Else, if there are several extremePoints in the credal set
+        extremePoints = new double[n][];
+        for (i = 0; i < extremePoints.length; i++)
         {
-            extreme_points[i] = new double[values.length];
-            for (j = 0; j < extreme_points[i].length; j++)
+            extremePoints[i] = new double[values.length];
+            for (j = 0; j < extremePoints[i].length; j++)
             {
-                extreme_points[i][j] = -1.0;
+                extremePoints[i][j] = -1.0;
             }
         }
         i = 0;
         for (Object e : tables)
         {
             table = (double[]) (e);
-            copy_table_to_values(table, extreme_points[i]);
+            copyTableToValues(table, extremePoints[i]);
             i++;
         }
-        return (extreme_points);
+        return (extremePoints);
     }
 
     /**
@@ -154,13 +154,13 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * defaults in the upf object. *
      * **********************************************************
      */
-    void process_defaults(IFProbabilityFunction upf,
-                          double values[], double extreme_points[][], int jump)
+    void processDefaults(IFProbabilityFunction upf,
+                          double values[], double extremePoints[][], int jump)
     {
         int i, j, k;
 
         // Process the default values
-        ArrayList ddefaultss = upf.get_defaults();
+        ArrayList ddefaultss = upf.getDefaults();
         if (ddefaultss.size() > 0)
         {
             double ddefaults[] = (double[]) (ddefaultss.get(0));
@@ -183,48 +183,48 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Insert entries specified in the upf object. *
      * **********************************************************
      */
-    void process_entries(BayesNet bn,
+    void processEntries(BayesNet bn,
                          IFProbabilityFunction upf,
                          ProbabilityVariable variables[],
-                         double values[], double extreme_points[][], int jump)
+                         double values[], double extremePoints[][], int jump)
     {
         int i, j, k, pos, step;
-        int entry_value_indexes[];
-        double eentry_entries[];
-        String eentry_values[];
+        int entryValueIndexes[];
+        double eentryEntries[];
+        String eentryValues[];
         ProbabilityVariable pv;
         IFProbabilityEntry entry;
 
         // Process the entries
-        ArrayList eentries = upf.get_entries();
+        ArrayList eentries = upf.getEntries();
         if ((eentries != null) && (eentries.size() > 0))
         {
             for (Object e : eentries)
             {
                 entry =
                 (IFProbabilityEntry) (e);
-                eentry_values = entry.get_values();
-                eentry_entries = entry.get_entries();
-                entry_value_indexes = new int[eentry_values.length];
-                for (i = 0; i < entry_value_indexes.length; i++)
+                eentryValues = entry.getValues();
+                eentryEntries = entry.getEntries();
+                entryValueIndexes = new int[eentryValues.length];
+                for (i = 0; i < entryValueIndexes.length; i++)
                 {
                     pv = variables[i + 1];
-                    entry_value_indexes[i] =
-                    pv.index_of_value(eentry_values[i]);
+                    entryValueIndexes[i] =
+                    pv.indexOfValue(eentryValues[i]);
                 }
                 pos = 0;
                 step = 1;
-                for (k = (entry_value_indexes.length); k > 0; k--)
+                for (k = (entryValueIndexes.length); k > 0; k--)
                 {
-                    pos += entry_value_indexes[k - 1] * step;
+                    pos += entryValueIndexes[k - 1] * step;
                     step *=
-                    variables[k].number_values();
+                    variables[k].numberValues();
                 }
                 pv = variables[0];
-                for (i = 0; i < pv.number_values(); i++)
+                for (i = 0; i < pv.numberValues(); i++)
                 {
                     k = i * jump + pos;
-                    values[k] = eentry_entries[i];
+                    values[k] = eentryEntries[i];
                 }
             }
         }
@@ -235,21 +235,21 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Perform final calculations in the values *
      * **********************************************************
      */
-    void finish_values(double values[], double extreme_points[][])
+    void finishValues(double values[], double extremePoints[][])
     {
         int i, j;
 
         // First case: more than one distribution specifies a credal set
-        if (extreme_points != null)
+        if (extremePoints != null)
         {
             // Fill with zeros where needed for all distributions
-            for (j = 0; j < extreme_points.length; j++)
+            for (j = 0; j < extremePoints.length; j++)
             {
-                for (i = 0; i < extreme_points[j].length; i++)
+                for (i = 0; i < extremePoints[j].length; i++)
                 {
-                    if (extreme_points[j][i] == -1.0)
+                    if (extremePoints[j][i] == -1.0)
                     {
-                        extreme_points[j][i] = 0.0;
+                        extremePoints[j][i] = 0.0;
                     }
                 }
             }

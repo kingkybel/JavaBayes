@@ -122,12 +122,12 @@ public final class InferenceGraph
      */
     /**
      *
-     * @param b_n
+     * @param bN
      */
-    public InferenceGraph(BayesNet b_n)
+    public InferenceGraph(BayesNet bN)
     {
-        qbn = new QuasiBayesNet(b_n);
-        convert_bayes_net();
+        qbn = new QuasiBayesNet(bN);
+        convertBayesNet();
     }
 
     /*
@@ -142,7 +142,7 @@ public final class InferenceGraph
     {
         qbn = new QuasiBayesNet(new java.io.DataInputStream(
         new java.io.FileInputStream(filename)));
-        convert_bayes_net();
+        convertBayesNet();
     }
 
     /*
@@ -156,7 +156,7 @@ public final class InferenceGraph
     public InferenceGraph(URL url) throws Exception
     {
         qbn = new QuasiBayesNet(url);
-        convert_bayes_net();
+        convertBayesNet();
     }
 
     /*
@@ -166,28 +166,28 @@ public final class InferenceGraph
      *
      * @return
      */
-    public QuasiBayesNet get_bayes_net()
+    public QuasiBayesNet getBayesNet()
     {
-        return (convert_graph());
+        return (convertGraph());
     }
 
     /*
      * Convert a QuasiBayesNet object to the InferenceGraph
      * structure; returns true if the conversion is successful.
      */
-    boolean convert_bayes_net()
+    boolean convertBayesNet()
     {
         ProbabilityVariable pv = null;
         ProbabilityFunction pf = null;
 
-        for (int i = 0; i < qbn.number_variables(); i++)
+        for (int i = 0; i < qbn.numberVariables(); i++)
         {
-            pv = qbn.get_probability_variable(i);
+            pv = qbn.getProbabilityVariable(i);
             pf = null;
-            for (int j = 0; j < qbn.number_probability_functions(); j++)
+            for (int j = 0; j < qbn.numberProbabilityFunctions(); j++)
             {
-                pf = qbn.get_probability_function(j);
-                if (pf.get_variable(0) == pv)
+                pf = qbn.getProbabilityFunction(j);
+                if (pf.getVariable(0) == pv)
                 {
                     break;
                 }
@@ -200,7 +200,7 @@ public final class InferenceGraph
 
             nodes.add(new InferenceGraphNode(this, pv, pf));
         }
-        generate_parents_and_children();
+        generateParentsAndChildren();
 
         return (true);
     }
@@ -208,29 +208,29 @@ public final class InferenceGraph
     /*
      * Generate the parents and children for the nodes.
      */
-    private void generate_parents_and_children()
+    private void generateParentsAndChildren()
     {
         int i, j;
         DiscreteVariable variables[];
         ProbabilityFunction pf;
-        InferenceGraphNode base_node, node;
+        InferenceGraphNode baseNode, node;
 
         for (Object e : nodes)
         {
-            base_node = (InferenceGraphNode) (e);
+            baseNode = (InferenceGraphNode) (e);
 
-            pf = base_node.pf;
-            variables = pf.get_variables();
+            pf = baseNode.pf;
+            variables = pf.getVariables();
 
             for (i = 1; i < variables.length; i++)
             {
-                node = get_node(variables[i]);
+                node = getNode(variables[i]);
                 if (node == null)
                 {
                     continue;
                 }
-                base_node.parents.add(node);
-                node.children.add(base_node);
+                baseNode.parents.add(node);
+                node.children.add(baseNode);
             }
         }
     }
@@ -238,7 +238,7 @@ public final class InferenceGraph
     /*
      * Get the node corresponding to a given variable.
      */
-    private InferenceGraphNode get_node(DiscreteVariable dv)
+    private InferenceGraphNode getNode(DiscreteVariable dv)
     {
         InferenceGraphNode node;
         for (Object e : nodes)
@@ -255,7 +255,7 @@ public final class InferenceGraph
     /*
      * Convert the InferenceGraph structure to a QuasiBayesNet object.
      */
-    QuasiBayesNet convert_graph()
+    QuasiBayesNet convertGraph()
     {
         int i;
         InferenceGraphNode node;
@@ -265,8 +265,8 @@ public final class InferenceGraph
         ProbabilityFunction pfs[] = new ProbabilityFunction[nodes.size()];
 
         // Insert the empty arrays
-        qbn.set_probability_variables(pvs);
-        qbn.set_probability_functions(pfs);
+        qbn.setProbabilityVariables(pvs);
+        qbn.setProbabilityFunctions(pfs);
 
         // Collect all variables and functions in the nodes
         // into the new QuasiBayesNet
@@ -274,9 +274,9 @@ public final class InferenceGraph
         for (Object e : nodes)
         {
             node = (InferenceGraphNode) (e);
-            node.update_position();
-            qbn.set_probability_variable(i, node.pv);
-            qbn.set_probability_function(i, node.pf);
+            node.updatePosition();
+            qbn.setProbabilityVariable(i, node.pv);
+            qbn.setProbabilityFunction(i, node.pf);
             i++;
         }
 
@@ -286,7 +286,7 @@ public final class InferenceGraph
     /*
      * Generate a valid name for a new variable.
      */
-    private String generate_name(int i)
+    private String generateName(int i)
     {
         InferenceGraphNode no;
 
@@ -306,9 +306,9 @@ public final class InferenceGraph
         for (Object e : nodes)
         {
             no = (InferenceGraphNode) (e);
-            if (no.get_name().equals(name))
+            if (no.getName().equals(name))
             {
-                return (generate_name(i + 1));
+                return (generateName(i + 1));
             }
         }
         return (name);
@@ -319,9 +319,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
-        return (qbn.get_name());
+        return (qbn.getName());
     }
 
     /**
@@ -329,9 +329,9 @@ public final class InferenceGraph
      *
      * @param n
      */
-    public void set_name(String n)
+    public void setName(String n)
     {
-        qbn.set_name(n);
+        qbn.setName(n);
     }
 
     /**
@@ -339,9 +339,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public ArrayList get_network_properties()
+    public ArrayList getNetworkProperties()
     {
-        return (qbn.get_properties());
+        return (qbn.getProperties());
     }
 
     /**
@@ -349,9 +349,9 @@ public final class InferenceGraph
      *
      * @param prop
      */
-    public void set_network_properties(ArrayList prop)
+    public void setNetworkProperties(ArrayList prop)
     {
-        qbn.set_properties(prop);
+        qbn.setProperties(prop);
     }
 
     /**
@@ -359,9 +359,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public int get_global_neighborhood_type()
+    public int getGlobalNeighborhoodType()
     {
-        return (qbn.get_global_neighborhood_type());
+        return (qbn.getGlobalNeighborhoodType());
     }
 
     /**
@@ -369,9 +369,9 @@ public final class InferenceGraph
      *
      * @param type
      */
-    public void set_global_neighborhood(int type)
+    public void setGlobalNeighborhood(int type)
     {
-        qbn.set_global_neighborhood_type(type);
+        qbn.setGlobalNeighborhoodType(type);
     }
 
     /**
@@ -379,9 +379,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public double get_global_neighborhood_parameter()
+    public double getGlobalNeighborhoodParameter()
     {
-        return (qbn.get_global_neighborhood_parameter());
+        return (qbn.getGlobalNeighborhoodParameter());
     }
 
     /**
@@ -389,9 +389,9 @@ public final class InferenceGraph
      *
      * @param parameter
      */
-    public void set_global_neighborhood_parameter(double parameter)
+    public void setGlobalNeighborhoodParameter(double parameter)
     {
-        qbn.set_global_neighborhood_parameter(parameter);
+        qbn.setGlobalNeighborhoodParameter(parameter);
     }
 
     /**
@@ -399,9 +399,9 @@ public final class InferenceGraph
      *
      * @param index
      */
-    public void remove_network_property(int index)
+    public void removeNetworkProperty(int index)
     {
-        qbn.remove_property(index);
+        qbn.removeProperty(index);
     }
 
     /**
@@ -409,9 +409,9 @@ public final class InferenceGraph
      *
      * @param prop
      */
-    public void add_network_property(String prop)
+    public void addNetworkProperty(String prop)
     {
-        qbn.add_property(prop);
+        qbn.addProperty(prop);
     }
 
     /**
@@ -420,14 +420,14 @@ public final class InferenceGraph
      * @param n
      * @return
      */
-    public String check_name(String n)
+    public String checkName(String n)
     {
         InferenceGraphNode no;
-        String nn = validate_value(n);
+        String nn = validateValue(n);
         for (Object e : nodes)
         {
             no = (InferenceGraphNode) (e);
-            if (no.get_name().equals(nn))
+            if (no.getName().equals(nn))
             {
                 return (null);
             }
@@ -441,7 +441,7 @@ public final class InferenceGraph
      * @param value
      * @return
      */
-    public String validate_value(String value)
+    public String validateValue(String value)
     {
         StringBuilder str = new StringBuilder(value);
         for (int i = 0; i < str.length(); i++)
@@ -459,10 +459,10 @@ public final class InferenceGraph
      *
      * @param out
      */
-    public void print_bayes_net(PrintStream out)
+    public void printBayesNet(PrintStream out)
     {
-        QuasiBayesNet qb_n = get_bayes_net();
-        qb_n.print(out);
+        QuasiBayesNet qbN = getBayesNet();
+        qbN.print(out);
     }
 
     /**
@@ -470,28 +470,28 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queried_variable    indicates the variable of interest.
-     * @param show_bucket_tree    determines whether or not to present a
+     * @param queriedVariable    indicates the variable of interest.
+     * @param showBucketTree    determines whether or not to present a
      *                            description of the BucketTree.
-     * @param do_compute_clusters
+     * @param doComputeClusters
      */
-    public void print_marginal(PrintStream pstream, String queried_variable,
-                               boolean do_compute_clusters,
-                               boolean show_bucket_tree)
+    public void printMarginal(PrintStream pstream, String queriedVariable,
+                               boolean doComputeClusters,
+                               boolean showBucketTree)
     {
-        if ((do_compute_clusters == false) || (qbi == null) ||
+        if ((doComputeClusters == false) || (qbi == null) ||
             (qbi.areClustersProduced() == false))
         {
-            qbi = new QBInference(get_bayes_net(), do_compute_clusters);
+            qbi = new QBInference(getBayesNet(), doComputeClusters);
         }
-        qbi.inference(queried_variable);
-        qbi.print(pstream, show_bucket_tree);
+        qbi.inference(queriedVariable);
+        qbi.print(pstream, showBucketTree);
     }
 
     /**
      * Reset the QBInference.
      */
-    public void reset_marginal()
+    public void resetMarginal()
     {
         qbi = null;
     }
@@ -501,28 +501,28 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queried_variable    indicates the variable of interest.
-     * @param show_bucket_tree    determines whether or not to present a
+     * @param queriedVariable    indicates the variable of interest.
+     * @param showBucketTree    determines whether or not to present a
      *                            description of the BucketTree.
-     * @param do_compute_clusters
+     * @param doComputeClusters
      */
-    public void print_expectation(PrintStream pstream, String queried_variable,
-                                  boolean do_compute_clusters,
-                                  boolean show_bucket_tree)
+    public void printExpectation(PrintStream pstream, String queriedVariable,
+                                  boolean doComputeClusters,
+                                  boolean showBucketTree)
     {
-        if ((do_compute_clusters == false) || (qbe == null) ||
+        if ((doComputeClusters == false) || (qbe == null) ||
             (qbi.areClustersProduced() == false))
         {
-            qbe = new QBExpectation(get_bayes_net(), do_compute_clusters);
+            qbe = new QBExpectation(getBayesNet(), doComputeClusters);
         }
-        qbe.expectation(queried_variable);
-        qbe.print(pstream, show_bucket_tree);
+        qbe.expectation(queriedVariable);
+        qbe.print(pstream, showBucketTree);
     }
 
     /**
      * Reset the QBExpectation.
      */
-    public void reset_expectation()
+    public void resetExpectation()
     {
         qbe = null;
     }
@@ -532,14 +532,14 @@ public final class InferenceGraph
      * given PrintStream.
      *
      * @param pstream
-     * @param show_bucket_tree determines whether or not to present a
+     * @param showBucketTree determines whether or not to present a
      *                         description of the BucketTree.
      */
-    public void print_explanation(PrintStream pstream, boolean show_bucket_tree)
+    public void printExplanation(PrintStream pstream, boolean showBucketTree)
     {
-        Explanation ex = new Explanation(get_bayes_net());
+        Explanation ex = new Explanation(getBayesNet());
         ex.explanation();
-        ex.print(pstream, show_bucket_tree);
+        ex.print(pstream, showBucketTree);
     }
 
     /**
@@ -547,15 +547,15 @@ public final class InferenceGraph
      * the given PrintStream.
      *
      * @param pstream
-     * @param show_bucket_tree determines whether or not to present a
+     * @param showBucketTree determines whether or not to present a
      *                         description of the BucketTree.
      */
-    public void print_full_explanation(PrintStream pstream,
-                                       boolean show_bucket_tree)
+    public void printFullExplanation(PrintStream pstream,
+                                       boolean showBucketTree)
     {
-        Explanation fex = new Explanation(get_bayes_net());
-        fex.full_explanation();
-        fex.print(pstream, show_bucket_tree);
+        Explanation fex = new Explanation(getBayesNet());
+        fex.fullExplanation();
+        fex.print(pstream, showBucketTree);
     }
 
     /**
@@ -564,10 +564,10 @@ public final class InferenceGraph
      *
      * @param pstream
      */
-    public void print_sensitivity_analysis(PrintStream pstream)
+    public void printSensitivityAnalysis(PrintStream pstream)
     {
-        // SensitivityAnalysis sa = new SensitivityAnalysis( get_bayes_net() );
-        // sa.compute(queried_variable);
+        // SensitivityAnalysis sa = new SensitivityAnalysis( getBayesNet() );
+        // sa.compute(queriedVariable);
         // sa.print(pstream);
         /**
          * * FOR NOW: **
@@ -581,10 +581,10 @@ public final class InferenceGraph
      *
      * @param out
      */
-    public void save_bif(PrintStream out)
+    public void saveBif(PrintStream out)
     {
-        QuasiBayesNet qb_n = get_bayes_net();
-        qb_n.save_bif(out);
+        QuasiBayesNet qbN = getBayesNet();
+        qbN.saveBif(out);
     }
 
     /**
@@ -593,10 +593,10 @@ public final class InferenceGraph
      *
      * @param out
      */
-    public void save_xml(PrintStream out)
+    public void saveXml(PrintStream out)
     {
-        QuasiBayesNet qb_n = get_bayes_net();
-        qb_n.save_xml(out);
+        QuasiBayesNet qbN = getBayesNet();
+        qbN.saveXml(out);
     }
 
     /**
@@ -604,10 +604,10 @@ public final class InferenceGraph
      *
      * @param out
      */
-    public void save_bugs(PrintStream out)
+    public void saveBugs(PrintStream out)
     {
-        QuasiBayesNet qb_n = get_bayes_net();
-        qb_n.save_bugs(out);
+        QuasiBayesNet qbN = getBayesNet();
+        qbN.saveBugs(out);
     }
 
     /**
@@ -625,8 +625,8 @@ public final class InferenceGraph
      */
     public void print(PrintStream out)
     {
-        QuasiBayesNet qb_n = get_bayes_net();
-        qb_n.print(out);
+        QuasiBayesNet qbN = getBayesNet();
+        qbN.print(out);
     }
 
     /**
@@ -634,7 +634,7 @@ public final class InferenceGraph
      *
      * @return
      */
-    public ArrayList get_nodes()
+    public ArrayList getNodes()
     {
         return (nodes);
     }
@@ -654,7 +654,7 @@ public final class InferenceGraph
      *
      * @return
      */
-    public int number_nodes()
+    public int numberNodes()
     {
         return (nodes.size());
     }
@@ -665,14 +665,14 @@ public final class InferenceGraph
      * @param x
      * @param y
      */
-    public void create_node(int x, int y)
+    public void createNode(int x, int y)
     {
         Point p = new Point(x, y);
-        String n = generate_name(nodes.size());
+        String n = generateName(nodes.size());
         nodes.add(new InferenceGraphNode(this, n, p));
 
         // Synchronize the QuasiBayesNet object and the graph.
-        convert_graph();
+        convertGraph();
     }
 
     /**
@@ -682,7 +682,7 @@ public final class InferenceGraph
      * @param child
      * @return
      */
-    public boolean create_arc(InferenceGraphNode parent,
+    public boolean createArc(InferenceGraphNode parent,
                               InferenceGraphNode child)
     {
         // Check whether the given parent is already a parent of the
@@ -703,10 +703,10 @@ public final class InferenceGraph
         // The parent is not further affected by the arc.
         // The child must have its ProbabilityFunction
         // object updated.
-        child.init_dists();
+        child.initDists();
 
         // Synchronize the QuasiBayesNet object and the graph.
-        convert_graph();
+        convertGraph();
 
         // Return true.
         return (true);
@@ -717,7 +717,7 @@ public final class InferenceGraph
      *
      * @param node
      */
-    public void delete_node(InferenceGraphNode node)
+    public void deleteNode(InferenceGraphNode node)
     {
         InferenceGraphNode parent, child;
 
@@ -726,7 +726,7 @@ public final class InferenceGraph
         {
             child = (InferenceGraphNode) (e);
             child.parents.remove(node);
-            child.init_dists();
+            child.initDists();
         }
 
         // Second remove parent into the parents of child
@@ -740,7 +740,7 @@ public final class InferenceGraph
         nodes.remove(node);
 
         // Synchronize the QuasiBayesNet object and the graph.
-        convert_graph();
+        convertGraph();
     }
 
     /**
@@ -749,7 +749,7 @@ public final class InferenceGraph
      * @param parent
      * @param child
      */
-    public void delete_arc(InferenceGraphNode parent,
+    public void deleteArc(InferenceGraphNode parent,
                            InferenceGraphNode child)
     {
         // First remove child into the children of parent
@@ -760,65 +760,65 @@ public final class InferenceGraph
         // The parent is not further affected by the arc.
         // The child must have its ProbabilityFunction
         // object updated.
-        child.init_dists();
+        child.initDists();
 
         // Synchronize the QuasiBayesNet object and the graph.
-        convert_graph();
+        convertGraph();
     }
 
     /**
-     * Determines whether the connection of bottom_node to head_node would cause
+     * Determines whether the connection of bottomNode to headNode would cause
      * the network to have a cycle.
      *
-     * @param bottom_node
-     * @param head_node
+     * @param bottomNode
+     * @param headNode
      * @return
      */
-    public boolean hasCycle(InferenceGraphNode bottom_node,
-                            InferenceGraphNode head_node)
+    public boolean hasCycle(InferenceGraphNode bottomNode,
+                            InferenceGraphNode headNode)
     {
         ArrayList children;
-        InferenceGraphNode next_node, child_node;
+        InferenceGraphNode nextNode, childNode;
 
         // Array with enough space to have all nodes
-        InferenceGraphNode listed_nodes[] =
+        InferenceGraphNode listedNodes[] =
                              new InferenceGraphNode[nodes.size()];
 
         // Hashtable for efficient lookup of already listed nodes
-        Hashtable hashed_nodes = new Hashtable();
+        Hashtable hashedNodes = new Hashtable();
 
-        // Index of last node in listed_nodes
-        int last_listed_node_index = 0;
+        // Index of last node in listedNodes
+        int lastListedNodeIndex = 0;
 
-        // Initialize: head_node is marked and inserted
-        int current_listed_node_index = 0;
-        listed_nodes[0] = head_node;
-        hashed_nodes.put(head_node.pv.get_name(), head_node);
+        // Initialize: headNode is marked and inserted
+        int currentListedNodeIndex = 0;
+        listedNodes[0] = headNode;
+        hashedNodes.put(headNode.pv.getName(), headNode);
 
         // Now expand for children until no more children, or
-        // when a child is equal to bottom_node
-        while (current_listed_node_index <= last_listed_node_index)
+        // when a child is equal to bottomNode
+        while (currentListedNodeIndex <= lastListedNodeIndex)
         {
             // Select the next node to be expanded
-            next_node = listed_nodes[current_listed_node_index];
+            nextNode = listedNodes[currentListedNodeIndex];
             // Update the index that indicates nodes to be expanded
-            current_listed_node_index++;
+            currentListedNodeIndex++;
 
             // Get all children of the node being expanded
-            children = next_node.children;
+            children = nextNode.children;
             // Expand the node: put all its children into list
             for (Object e : children)
             {
-                child_node = (InferenceGraphNode) (e);
-                if (child_node == bottom_node)
+                childNode = (InferenceGraphNode) (e);
+                if (childNode == bottomNode)
                 { // Cycle is detected
                     return (true);
                 }
-                if (!hashed_nodes.containsKey(child_node.pv.get_name()))
+                if (!hashedNodes.containsKey(childNode.pv.getName()))
                 {
-                    hashed_nodes.put(child_node.pv.get_name(), child_node);
-                    last_listed_node_index++;
-                    listed_nodes[last_listed_node_index] = child_node;
+                    hashedNodes.put(childNode.pv.getName(), childNode);
+                    lastListedNodeIndex++;
+                    listedNodes[lastListedNodeIndex] = childNode;
                 }
             }
         }
@@ -833,29 +833,29 @@ public final class InferenceGraph
      * @param node
      * @param values
      */
-    public void change_values(InferenceGraphNode node, String values[])
+    public void changeValues(InferenceGraphNode node, String values[])
     {
         InferenceGraphNode cnode;
         ArrayList children;
 
-        if (node.pv.number_values() == values.length)
+        if (node.pv.numberValues() == values.length)
         {
-            node.pv.set_values(values);
+            node.pv.setValues(values);
             return;
         }
 
-        node.pv.set_values(values);
-        node.init_dists();
+        node.pv.setValues(values);
+        node.initDists();
 
-        children = node.get_children();
+        children = node.getChildren();
         for (Object e : children)
         {
             cnode = (InferenceGraphNode) (e);
-            cnode.init_dists();
+            cnode.initDists();
         }
 
         // Synchronize the QuasiBayesNet object and the graph.
-        convert_graph();
+        convertGraph();
     }
 
     /**
@@ -864,9 +864,9 @@ public final class InferenceGraph
      * @param node
      * @param position
      */
-    public void set_pos(InferenceGraphNode node, Point position)
+    public void setPos(InferenceGraphNode node, Point position)
     {
         node.pos = position;
-        convert_graph();
+        convertGraph();
     }
 }

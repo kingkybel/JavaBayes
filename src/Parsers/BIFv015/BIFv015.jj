@@ -253,9 +253,9 @@ IFProbabilityVariable VariableContent(String name) :
         }
     | values=VariableDiscrete()  )*  "}"
 	{
-            pv.set_name(name);
-            pv.set_properties(properties);
-            pv.set_values(values);
+            pv.setName(name);
+            pv.setProperties(properties);
+            pv.setValues(values);
             return(pv);
         }
 }
@@ -368,12 +368,12 @@ void ProbabilityVariablesList(IFProbabilityFunction upf) :
             {
 		vs[i] = (String)(e.next());
             }
-            upf.set_variables(vs);
+            upf.setVariables(vs);
             if (cond == -1)
             {
                 cond = 1;
             }
-            upf.set_conditional_index(cond);
+            upf.setConditionalIndex(cond);
         }
 }
 
@@ -438,10 +438,10 @@ void ProbabilityContent(IFProbabilityFunction upf) :
         }
       )* "}"
 	{
-            upf.set_properties(properties);
-            upf.set_defaults(defs);
-            upf.set_entries(entries);
-            upf.set_tables(tabs);
+            upf.setProperties(properties);
+            upf.setDefaults(defs);
+            upf.setEntries(entries);
+            upf.setTables(tabs);
         }
 }
 

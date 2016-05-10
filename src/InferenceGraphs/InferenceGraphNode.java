@@ -43,9 +43,9 @@ public final class InferenceGraphNode
     /*
      * Default constructor for an InferenceGraphNode.
      */
-    InferenceGraphNode(InferenceGraph i_g, String name)
+    InferenceGraphNode(InferenceGraph iG, String name)
     {
-        this(i_g, name, new Point(100, 100));
+        this(iG, name, new Point(100, 100));
     }
 
     /*
@@ -55,9 +55,9 @@ public final class InferenceGraphNode
      * network in the InferenceGraph; no parents nor
      * children are defined for such a node.
      */
-    InferenceGraphNode(InferenceGraph i_g, String name, Point position)
+    InferenceGraphNode(InferenceGraph iG, String name, Point position)
     {
-        ig = i_g;
+        ig = iG;
 
         // Initialize the variable
         pv = new ProbabilityVariable(defaultInferenceGraphNodeBayesNet,
@@ -65,7 +65,7 @@ public final class InferenceGraphNode
                                      defaultInferenceGraphNodeValues,
                                      defaultInferenceGraphNodeProperties);
         // Initialize the probability function
-        init_dists();
+        initDists();
         // Initialize the position of the node
         pos = position;
     }
@@ -74,26 +74,26 @@ public final class InferenceGraphNode
      * Constructor for a InferenceGraphNode object.
      * Note that parents and children are not properly set here.
      */
-    InferenceGraphNode(InferenceGraph i_g,
-                       ProbabilityVariable p_v, ProbabilityFunction p_f)
+    InferenceGraphNode(InferenceGraph iG,
+                       ProbabilityVariable pV, ProbabilityFunction pF)
     {
-        ig = i_g;
-        pv = p_v;
-        pf = p_f;
-        pos = parse_position(p_v);
+        ig = iG;
+        pv = pV;
+        pf = pF;
+        pos = parsePosition(pV);
     }
 
     /*
      * Constructor for a InferenceGraphNode object.
      * Note that parents and children are not properly set here.
      */
-    InferenceGraphNode(InferenceGraph i_g,
-                       ProbabilityVariable p_v, ProbabilityFunction p_f,
+    InferenceGraphNode(InferenceGraph iG,
+                       ProbabilityVariable pV, ProbabilityFunction pF,
                        Point position)
     {
-        ig = i_g;
-        pv = p_v;
-        pf = p_f;
+        ig = iG;
+        pv = pV;
+        pf = pF;
         pos = position;
     }
 
@@ -101,34 +101,34 @@ public final class InferenceGraphNode
      * Initialization for the probability function
      * in the InferenceGraphNode.
      */
-    void init_dists()
+    void initDists()
     {
-        int i, total_values;
-        double new_value;
+        int i, totalValues;
+        double newValue;
         InferenceGraphNode pnode;
 
-        // Create the probability_variables
+        // Create the probabilityVariables
         ProbabilityVariable pvs[] =
                               new ProbabilityVariable[parents.size() + 1];
         pvs[0] = pv;
 
-        total_values = pv.number_values();
-        new_value = 1.0 / ((double) (total_values));
+        totalValues = pv.numberValues();
+        newValue = 1.0 / ((double) (totalValues));
 
         i = 1;
         for (Object e : parents)
         {
             pnode = (InferenceGraphNode) (e);
             pvs[i] = pnode.pv;
-            total_values *= pnode.pv.number_values();
+            totalValues *= pnode.pv.numberValues();
             i++;
         }
 
         // Compute the default (uniformly distributed) values
-        double dists[] = new double[total_values];
+        double dists[] = new double[totalValues];
         for (i = 0; i < dists.length; i++)
         {
-            dists[i] = new_value;
+            dists[i] = newValue;
         }
 
         // Construct the ProbabilityFunction
@@ -141,11 +141,11 @@ public final class InferenceGraphNode
     /*
      * Update the position property.
      */
-    void update_position()
+    void updatePosition()
     {
-        ArrayList properties = pv.get_properties();
-        ArrayList properties_to_remove = new ArrayList();
-        String final_property = null;
+        ArrayList properties = pv.getProperties();
+        ArrayList propertiesToRemove = new ArrayList();
+        String finalProperty = null;
         String s, ss;
 
         if ((properties != null) && (properties.size() > 0))
@@ -162,32 +162,32 @@ public final class InferenceGraphNode
                 }
 
                 //Schedule the current position property for removal
-                properties_to_remove.add(ss);
+                propertiesToRemove.add(ss);
             }
 
             // Remove the old position properties
-            for (Object e : properties_to_remove)
+            for (Object e : propertiesToRemove)
             {
                 ss = (String) (e);
-                pv.remove_property(ss);
+                pv.removeProperty(ss);
             }
         }
 
         // Build the new position property
-        final_property = "position = (" +
+        finalProperty = "position = (" +
                          pos.x + ", " + pos.y + ")";
         // Insert the new position
-        pv.add_property(final_property);
+        pv.addProperty(finalProperty);
     }
 
     /*
      * Get the position of a InferenceGraphNode from the
      * properties in the variable.
      */
-    private Point parse_position(ProbabilityVariable p_v)
+    private Point parsePosition(ProbabilityVariable pV)
     {
-        ArrayList properties = p_v.get_properties();
-        Point final_position = null;
+        ArrayList properties = pV.getProperties();
+        Point finalPosition = null;
         String s, ss;
 
         // get position values from the list of properties
@@ -229,7 +229,7 @@ public final class InferenceGraphNode
                     else
                     {
                         y = (int) st.nval;
-                        final_position = new Point(x, y);
+                        finalPosition = new Point(x, y);
                     }
                 }
                 break;
@@ -237,14 +237,14 @@ public final class InferenceGraphNode
         }
         catch (IOException e)
         {
-            final_position = new Point(100, 100);
+            finalPosition = new Point(100, 100);
         }
-        if (final_position == null)
+        if (finalPosition == null)
         {
-            final_position = new Point(100, 100);
+            finalPosition = new Point(100, 100);
         }
 
-        return (final_position);
+        return (finalPosition);
     }
 
     /**
@@ -252,21 +252,21 @@ public final class InferenceGraphNode
      * of pairs (Variable Value). The list specifies which element of the
      * function is referred to.
      *
-     * @param variable_value_pairs
-     * @param index_extreme_point
+     * @param variableValuePairs
+     * @param indexExtremePoint
      * @return
      */
-    public double get_function_value(String variable_value_pairs[][],
-                                     int index_extreme_point)
+    public double getFunctionValue(String variableValuePairs[][],
+                                     int indexExtremePoint)
     {
         if (pf instanceof VertexSet)
         {
-            return (((VertexSet) pf).evaluate(variable_value_pairs,
-                                              index_extreme_point));
+            return (((VertexSet) pf).evaluate(variableValuePairs,
+                                              indexExtremePoint));
         }
         else
         {
-            return (pf.evaluate(variable_value_pairs));
+            return (pf.evaluate(variableValuePairs));
         }
     }
 
@@ -275,16 +275,16 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public double[] get_function_values()
+    public double[] getFunctionValues()
     {
         if (pf instanceof VertexSet)
         {
-            double[][] ep = ((VertexSet) pf).get_extreme_points();
+            double[][] ep = ((VertexSet) pf).getExtremePoints();
             return (ep[0]);
         }
         else
         {
-            return (pf.get_values());
+            return (pf.getValues());
         }
     }
 
@@ -295,16 +295,16 @@ public final class InferenceGraphNode
      * @param index
      * @return
      */
-    public double[] get_function_values(int index)
+    public double[] getFunctionValues(int index)
     {
         if (pf instanceof VertexSet)
         {
-            double[][] ep = ((VertexSet) pf).get_extreme_points();
+            double[][] ep = ((VertexSet) pf).getExtremePoints();
             return (ep[index]);
         }
         else
         {
-            return (pf.get_values());
+            return (pf.getValues());
         }
     }
 
@@ -314,15 +314,15 @@ public final class InferenceGraphNode
      *
      * @param fv
      */
-    public void set_function_values(double[] fv)
+    public void setFunctionValues(double[] fv)
     {
         if (pf instanceof VertexSet)
         {
-            ((VertexSet) pf).set_extreme_point(0, fv);
+            ((VertexSet) pf).setExtremePoint(0, fv);
         }
         else
         {
-            pf.set_values(fv);
+            pf.setValues(fv);
         }
     }
 
@@ -332,17 +332,17 @@ public final class InferenceGraphNode
      * @param iep
      * @param fv
      */
-    public void set_function_values(int iep, double[] fv)
+    public void setFunctionValues(int iep, double[] fv)
     {
         if (pf instanceof VertexSet)
         {
-            ((VertexSet) pf).set_extreme_point(iep, fv);
+            ((VertexSet) pf).setExtremePoint(iep, fv);
         }
         else
         {
             if (iep == 0)
             {
-                pf.set_values(fv);
+                pf.setValues(fv);
             }
         }
     }
@@ -351,42 +351,42 @@ public final class InferenceGraphNode
      * Get a single value of the probability function in the node given the
      * index of the value and the index of the extreme point.
      */
-//    public double get_function_value(int index, int index_extreme_point) {
+//    public double getFunctionValue(int index, int indexExtremePoint) {
 //        if (pf instanceof VertexQBProbabilityFunction)
-//            return( ((VertexQBProbabilityFunction)pf).get_value(index, index_extreme_point) );
+//            return( ((VertexQBProbabilityFunction)pf).getValue(index, indexExtremePoint) );
 //        else
-//            return(pf.get_value(index));
+//            return(pf.getValue(index));
 //    }
     /**
      * Get a single value of the probability function in the node given the
      * index of the value.
      */
-//    public double get_function_value(int index) {
+//    public double getFunctionValue(int index) {
 //        if (pf instanceof VertexQBProbabilityFunction)
-//            return( ((VertexQBProbabilityFunction)pf).get_value(index, 0) );
+//            return( ((VertexQBProbabilityFunction)pf).getValue(index, 0) );
 //        else
-//            return(pf.get_value(index));
+//            return(pf.getValue(index));
 //    }
     /**
      * Set a single value of the probability function in the node given a list
      * of pairs (Variable Value). The list specifies which element of the
      * function is referred to.
      *
-     * @param variable_value_pairs
-     * @param index_extreme_point
+     * @param variableValuePairs
+     * @param indexExtremePoint
      * @param val
      */
-    public void set_function_value(String variable_value_pairs[][], double val,
-                                   int index_extreme_point)
+    public void setFunctionValue(String variableValuePairs[][], double val,
+                                   int indexExtremePoint)
     {
         if (pf instanceof VertexSet)
         {
-            ((VertexSet) pf).set_value(variable_value_pairs, val,
-                                       index_extreme_point);
+            ((VertexSet) pf).setValue(variableValuePairs, val,
+                                       indexExtremePoint);
         }
         else
         {
-            pf.set_value(variable_value_pairs, val);
+            pf.setValue(variableValuePairs, val);
         }
     }
 
@@ -396,9 +396,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
-        return (pv.get_name());
+        return (pv.getName());
     }
 
     /**
@@ -406,9 +406,9 @@ public final class InferenceGraphNode
      *
      * @param n
      */
-    public void set_name(String n)
+    public void setName(String n)
     {
-        pv.set_name(n);
+        pv.setName(n);
     }
 
     /**
@@ -416,12 +416,12 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public String[] get_all_names()
+    public String[] getAllNames()
     {
-        String[] ns = new String[pf.number_variables()];
+        String[] ns = new String[pf.numberVariables()];
         for (int i = 0; i < ns.length; i++)
         {
-            ns[i] = pf.get_variable(i).get_name();
+            ns[i] = pf.getVariable(i).getName();
         }
         return (ns);
     }
@@ -431,9 +431,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public String[] get_values()
+    public String[] getValues()
     {
-        return (pv.get_values());
+        return (pv.getValues());
     }
 
     /**
@@ -441,21 +441,21 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public String[][] get_all_values()
+    public String[][] getAllValues()
     {
         int i, j;
-        String all_values[][] = new String[pf.number_variables()][];
+        String allValues[][] = new String[pf.numberVariables()][];
         DiscreteVariable dv;
-        for (i = 0; i < pf.number_variables(); i++)
+        for (i = 0; i < pf.numberVariables(); i++)
         {
-            dv = pf.get_variable(i);
-            all_values[i] = new String[dv.number_values()];
-            for (j = 0; j < all_values[i].length; j++)
+            dv = pf.getVariable(i);
+            allValues[i] = new String[dv.numberValues()];
+            for (j = 0; j < allValues[i].length; j++)
             {
-                all_values[i][j] = dv.get_value(j);
+                allValues[i][j] = dv.getValue(j);
             }
         }
-        return (all_values);
+        return (allValues);
     }
 
     /**
@@ -463,9 +463,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int get_number_values()
+    public int getNumberValues()
     {
-        return (pv.number_values());
+        return (pv.numberValues());
     }
 
     /**
@@ -475,7 +475,7 @@ public final class InferenceGraphNode
      */
     public boolean hasParent()
     {
-        return (pf.number_variables() > 1);
+        return (pf.numberVariables() > 1);
     }
 
     /**
@@ -483,7 +483,7 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList get_parents()
+    public ArrayList getParents()
     {
         return (parents);
     }
@@ -493,7 +493,7 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList get_children()
+    public ArrayList getChildren()
     {
         return (children);
     }
@@ -503,9 +503,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public boolean is_observed()
+    public boolean isObserved()
     {
-        return (pv.is_observed());
+        return (pv.isObserved());
     }
 
     /**
@@ -513,9 +513,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public boolean is_explanation()
+    public boolean isExplanation()
     {
-        return (pv.is_explanation());
+        return (pv.isExplanation());
     }
 
     /**
@@ -523,9 +523,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int get_observed_value()
+    public int getObservedValue()
     {
-        return (pv.get_observed_index());
+        return (pv.getObservedIndex());
     }
 
     /**
@@ -533,7 +533,7 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int get_pos_x()
+    public int getPosX()
     {
         return (pos.x);
     }
@@ -543,7 +543,7 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int get_pos_y()
+    public int getPosY()
     {
         return (pos.y);
     }
@@ -553,9 +553,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList get_variable_properties()
+    public ArrayList getVariableProperties()
     {
-        return (pv.get_properties());
+        return (pv.getProperties());
     }
 
     /**
@@ -563,9 +563,9 @@ public final class InferenceGraphNode
      *
      * @param prop
      */
-    public void set_variable_properties(ArrayList prop)
+    public void setVariableProperties(ArrayList prop)
     {
-        pv.set_properties(prop);
+        pv.setProperties(prop);
     }
 
     /**
@@ -573,9 +573,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList get_function_properties()
+    public ArrayList getFunctionProperties()
     {
-        return (pf.get_properties());
+        return (pf.getProperties());
     }
 
     /**
@@ -583,9 +583,9 @@ public final class InferenceGraphNode
      *
      * @param prop
      */
-    public void set_function_properties(ArrayList prop)
+    public void setFunctionProperties(ArrayList prop)
     {
-        pf.set_properties(prop);
+        pf.setProperties(prop);
     }
 
     /**
@@ -594,7 +594,7 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public boolean is_credal_set()
+    public boolean isCredalSet()
     {
         if (pf instanceof QBProbabilityFunction)
         {
@@ -611,11 +611,11 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int number_extreme_distributions()
+    public int numberExtremeDistributions()
     {
         if (pf instanceof VertexSet)
         {
-            return (((VertexSet) pf).get_extreme_points().length);
+            return (((VertexSet) pf).getExtremePoints().length);
         }
         else
         {
@@ -626,15 +626,15 @@ public final class InferenceGraphNode
     /**
      * Make sure the node represents a single distribution.
      */
-    public void set_no_local_credal_set()
+    public void setNoLocalCredalSet()
     {
         if (pf instanceof QBProbabilityFunction)
         {
             if (pf instanceof VertexSet)
             {
-                ((VertexSet) pf).compose_values();
+                ((VertexSet) pf).composeValues();
             }
-            pf = new ProbabilityFunction(pf, pf.get_values());
+            pf = new ProbabilityFunction(pf, pf.getValues());
         }
     }
 
@@ -642,21 +642,21 @@ public final class InferenceGraphNode
      * Make sure the node represents a VertexSet a given number of extreme
      * distributions.
      *
-     * @param number_extreme_points
+     * @param numberExtremePoints
      */
-    public void set_local_credal_set(int number_extreme_points)
+    public void setLocalCredalSet(int numberExtremePoints)
     {
         if (!(pf instanceof VertexSet))
         {
             pf = new VertexSet(pf);
         }
-        ((VertexSet) pf).set_local_credal_set(number_extreme_points);
+        ((VertexSet) pf).setLocalCredalSet(numberExtremePoints);
     }
 
     /**
      * Make sure the node represents a VertexSet.
      */
-    public void set_local_credal_set()
+    public void setLocalCredalSet()
     {
         if (!(pf instanceof VertexSet))
         {
@@ -669,17 +669,17 @@ public final class InferenceGraphNode
      *
      * @param value
      */
-    public void set_observation_value(String value)
+    public void setObservationValue(String value)
     {
-        pv.set_observed_value(value);
+        pv.setObservedValue(value);
     }
 
     /**
      * Clear the observation for the node.
      */
-    public void clear_observation()
+    public void clearObservation()
     {
-        pv.set_invalid_observed_index();
+        pv.setInvalidObservedIndex();
     }
 
     /**
@@ -687,15 +687,15 @@ public final class InferenceGraphNode
      *
      * @param flag
      */
-    public void set_explanation(boolean flag)
+    public void setExplanation(boolean flag)
     {
         if (flag == true)
         {
-            pv.set_explanation_value(0);
+            pv.setExplanationValue(0);
         }
         else
         {
-            pv.set_explanation_value(BayesNet.INVALID_INDEX);
+            pv.setExplanationValue(BayesNet.INVALID_INDEX);
         }
     }
 
@@ -704,9 +704,9 @@ public final class InferenceGraphNode
      *
      * @param index
      */
-    public void remove_variable_property(int index)
+    public void removeVariableProperty(int index)
     {
-        pv.remove_property(index);
+        pv.removeProperty(index);
     }
 
     /**
@@ -714,9 +714,9 @@ public final class InferenceGraphNode
      *
      * @param index
      */
-    public void remove_function_property(int index)
+    public void removeFunctionProperty(int index)
     {
-        pf.remove_property(index);
+        pf.removeProperty(index);
     }
 
     /**
@@ -724,10 +724,10 @@ public final class InferenceGraphNode
      *
      * @param s
      */
-    public void add_variable_property(String s)
+    public void addVariableProperty(String s)
     {
-        pv.add_property(s);
-        update_position_from_property(s);
+        pv.addProperty(s);
+        updatePositionFromProperty(s);
     }
 
     /*
@@ -737,12 +737,12 @@ public final class InferenceGraphNode
      *
      * @param s
      */
-    public void update_position_from_property(String s)
+    public void updatePositionFromProperty(String s)
     {
         // If property is position:
         if (s.startsWith("position"))
         {
-            Point final_position = null;
+            Point finalPosition = null;
             // Parse the position property
             try
             {
@@ -765,20 +765,20 @@ public final class InferenceGraphNode
                     else
                     {
                         y = (int) st.nval;
-                        final_position = new Point(x, y);
+                        finalPosition = new Point(x, y);
                     }
                 }
             }
             catch (IOException e)
             {
-                final_position = new Point(100, 100);
+                finalPosition = new Point(100, 100);
             }
-            if (final_position == null)
+            if (finalPosition == null)
             {
-                final_position = new Point(100, 100);
+                finalPosition = new Point(100, 100);
             }
             // Update the position property.
-            pos = final_position;
+            pos = finalPosition;
         }
     }
 
@@ -787,9 +787,9 @@ public final class InferenceGraphNode
      *
      * @param prop
      */
-    public void add_function_property(String prop)
+    public void addFunctionProperty(String prop)
     {
-        pf.add_property(prop);
+        pf.addProperty(prop);
     }
 
 }

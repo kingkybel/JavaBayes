@@ -51,7 +51,7 @@ public class EpsilonContaminatedSet
      */
     public EpsilonContaminatedSet(ProbabilityFunction pf, double eps)
     {
-        super(pf, pf.get_values());
+        super(pf, pf.getValues());
         epsilon = eps;
         if ((epsilon < 0.0) || (epsilon > 1.0))
         {
@@ -67,22 +67,22 @@ public class EpsilonContaminatedSet
      *
      * @return
      */
-    public ProbabilityFunction posterior_marginal()
+    public ProbabilityFunction posteriorMarginal()
     {
-        double one_minus_epsilon = 1.0 - epsilon;
+        double oneMinusEpsilon = 1.0 - epsilon;
 
-        double lower_values[] = new double[values.length];
-        double upper_values[] = new double[values.length];
+        double lowerValues[] = new double[values.length];
+        double upperValues[] = new double[values.length];
 
       // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] = values[i];
-                upper_values[i] = values[i];
+                lowerValues[i] = values[i];
+                upperValues[i] = values[i];
             }
         } // Else, apply the marginalization property.
         else
@@ -95,19 +95,19 @@ public class EpsilonContaminatedSet
 
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] = (one_minus_epsilon * values[i]) /
-                                  ((one_minus_epsilon * summation) + epsilon);
+                lowerValues[i] = (oneMinusEpsilon * values[i]) /
+                                  ((oneMinusEpsilon * summation) + epsilon);
             }
 
             for (int i = 0; i < values.length; i++)
             {
-                upper_values[i] = ((one_minus_epsilon * values[i]) + epsilon) /
-                                  ((one_minus_epsilon * summation) + epsilon);
+                upperValues[i] = ((oneMinusEpsilon * values[i]) + epsilon) /
+                                  ((oneMinusEpsilon * summation) + epsilon);
             }
         }
 
         return (new QBProbabilityFunction(bn, variables, values,
-                                          lower_values, upper_values, properties));
+                                          lowerValues, upperValues, properties));
     }
 
     /**
@@ -116,46 +116,46 @@ public class EpsilonContaminatedSet
      * @param df
      * @return
      */
-    public double[] expected_values(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction df)
     {
-        double one_minus_epsilon = 1.0 - epsilon;
+        double oneMinusEpsilon = 1.0 - epsilon;
         double results[] = new double[2];
 
     // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.get_value(((ProbabilityVariable) variables[0]).
-                    get_observed_index());
+            df.getValue(((ProbabilityVariable) variables[0]).
+                    getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else
         {
             // Obtain the summations
-            double u_total = 0.0;
-            for (int i = 0; i < number_values(); i++)
+            double uTotal = 0.0;
+            for (int i = 0; i < numberValues(); i++)
             {
-                u_total += df.get_value(i) * values[i];
+                uTotal += df.getValue(i) * values[i];
             }
             // Obtain the maximum and minimum of functions
-            double max_df_value = df.get_value(0);
-            double min_df_value = df.get_value(0);
-            for (int i = 1; i < df.number_values(); i++)
+            double maxDfValue = df.getValue(0);
+            double minDfValue = df.getValue(0);
+            for (int i = 1; i < df.numberValues(); i++)
             {
-                if (max_df_value < df.get_value(i))
+                if (maxDfValue < df.getValue(i))
                 {
-                    max_df_value = df.get_value(i);
+                    maxDfValue = df.getValue(i);
                 }
-                if (min_df_value > df.get_value(i))
+                if (minDfValue > df.getValue(i))
                 {
-                    min_df_value = df.get_value(i);
+                    minDfValue = df.getValue(i);
                 }
             }
             // Calculate the values
-            results[0] = one_minus_epsilon * u_total + epsilon * max_df_value;
-            results[1] = one_minus_epsilon * u_total + epsilon * min_df_value;
+            results[0] = oneMinusEpsilon * uTotal + epsilon * maxDfValue;
+            results[1] = oneMinusEpsilon * uTotal + epsilon * minDfValue;
         }
 
         return (results);
@@ -169,52 +169,52 @@ public class EpsilonContaminatedSet
      * @param df
      * @return
      */
-    public double[] posterior_expected_values(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction df)
     {
-        double one_minus_epsilon = 1.0 - epsilon;
+        double oneMinusEpsilon = 1.0 - epsilon;
         double results[] = new double[2];
 
     // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.get_value(((ProbabilityVariable) variables[0]).
-                    get_observed_index());
+            df.getValue(((ProbabilityVariable) variables[0]).
+                    getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else
         {
             // Obtain the summations
-            double p_total = 0.0;
-            double u_total = 0.0;
+            double pTotal = 0.0;
+            double uTotal = 0.0;
             for (int i = 0; i < values.length; i++)
             {
-                p_total += values[i];
-                u_total += df.get_value(i) * values[i];
+                pTotal += values[i];
+                uTotal += df.getValue(i) * values[i];
             }
             // Obtain the maximum and minimum of functions
-            double max_df_value = df.get_value(0);
-            double min_df_value = df.get_value(0);
-            for (int i = 1; i < df.number_values(); i++)
+            double maxDfValue = df.getValue(0);
+            double minDfValue = df.getValue(0);
+            for (int i = 1; i < df.numberValues(); i++)
             {
-                if (max_df_value < df.get_value(i))
+                if (maxDfValue < df.getValue(i))
                 {
-                    max_df_value = df.get_value(i);
+                    maxDfValue = df.getValue(i);
                 }
-                if (min_df_value > df.get_value(i))
+                if (minDfValue > df.getValue(i))
                 {
-                    min_df_value = df.get_value(i);
+                    minDfValue = df.getValue(i);
                 }
             }
             // Calculate the values
             results[0] =
-            (one_minus_epsilon * u_total + epsilon * min_df_value) /
-            (one_minus_epsilon * p_total + epsilon);
+            (oneMinusEpsilon * uTotal + epsilon * minDfValue) /
+            (oneMinusEpsilon * pTotal + epsilon);
             results[1] =
-            (one_minus_epsilon * u_total + epsilon * max_df_value) /
-            (one_minus_epsilon * p_total + epsilon);
+            (oneMinusEpsilon * uTotal + epsilon * maxDfValue) /
+            (oneMinusEpsilon * pTotal + epsilon);
         }
 
         return (results);

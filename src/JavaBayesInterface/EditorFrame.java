@@ -126,24 +126,24 @@ public class EditorFrame extends Frame
      */
     public ScrollingPanel scrollPanel;
     // Options (controlled by menus in JavaBayesConsoleFrame)
-    int mode_menu_choice = InferenceGraph.MARGINAL_POSTERIOR;
-    boolean what_to_show_bayesian_network_state = false;
-    boolean what_to_show_bucket_tree_state = false;
-    int save_format = BIF_FORMAT;
-    private String current_save_filename;
-    private int algorithm_type = ALGORITHM_VARIABLE_ELIMINATION;
+    int modeMenuChoice = InferenceGraph.MARGINAL_POSTERIOR;
+    boolean whatToShowBayesianNetworkState = false;
+    boolean whatToShowBucketTreeState = false;
+    int saveFormat = BIF_FORMAT;
+    private String currentSaveFilename;
+    private int algorithmType = ALGORITHM_VARIABLE_ELIMINATION;
 
     /**
      * Default constructor for an EditorFrame.
      *
-     * @param java_bayes
+     * @param javaBayes
      * @param title
      */
-    public EditorFrame(JavaBayes java_bayes, String title)
+    public EditorFrame(JavaBayes javaBayes, String title)
     {
         super(title);
 
-        jb = java_bayes;
+        jb = javaBayes;
 
         scrollPanel = new ScrollingPanel(this);
 
@@ -210,41 +210,41 @@ public class EditorFrame extends Frame
 
             if (((String) arg).equals(createLabel))
             {
-                scrollPanel.netPanel.set_mode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.create_message);
+                scrollPanel.netPanel.setMode(label);
+                JavaBayesHelpMessages.show(JavaBayesHelpMessages.createMessage);
                 setCursor(Frame.DEFAULT_CURSOR);
             }
             else if (((String) arg).equals(moveLabel))
             {
-                scrollPanel.netPanel.set_mode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.move_message);
+                scrollPanel.netPanel.setMode(label);
+                JavaBayesHelpMessages.show(JavaBayesHelpMessages.moveMessage);
                 setCursor(Frame.MOVE_CURSOR);
             }
             else if (((String) arg).equals(deleteLabel))
             {
-                scrollPanel.netPanel.set_mode(label);
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.delete_message);
+                scrollPanel.netPanel.setMode(label);
+                JavaBayesHelpMessages.show(JavaBayesHelpMessages.deleteMessage);
                 setCursor(Frame.HAND_CURSOR);
             }
             else if (((String) arg).equals(queryLabel))
             {
-                set_query_mode();
+                setQueryMode();
             }
             else if (((String) arg).equals(observeLabel))
             {
-                set_observe_mode();
+                setObserveMode();
             }
             else if (((String) arg).equals(editVariableLabel))
             {
-                set_edit_variable_mode();
+                setEditVariableMode();
             }
             else if (((String) arg).equals(editFunctionLabel))
             {
-                set_edit_function_mode();
+                setEditFunctionMode();
             }
             else if (((String) arg).equals(editNetworkLabel))
             {
-                set_edit_network_mode();
+                setEditNetworkMode();
             }
         }
         return true;
@@ -262,7 +262,7 @@ public class EditorFrame extends Frame
 
         try
         {
-            if (jb.is_applet)
+            if (jb.isApplet)
             {
                 return (false);
             }
@@ -279,7 +279,7 @@ public class EditorFrame extends Frame
         }
 
         // Put the network into the graphical interface
-        set_inference_graph(ig);
+        setInferenceGraph(ig);
 
         return (true);
     }
@@ -290,7 +290,7 @@ public class EditorFrame extends Frame
      * @param filename
      * @return
      */
-    public boolean open_url(String filename)
+    public boolean openUrl(String filename)
     {
         InferenceGraph ig;
 
@@ -306,7 +306,7 @@ public class EditorFrame extends Frame
         }
 
         // Put the network into the graphical interface
-        set_inference_graph(ig);
+        setInferenceGraph(ig);
 
         return (true);
     }
@@ -318,7 +318,7 @@ public class EditorFrame extends Frame
      */
     public boolean save()
     {
-        return (save(current_save_filename));
+        return (save(currentSaveFilename));
     }
 
     /**
@@ -329,7 +329,7 @@ public class EditorFrame extends Frame
      */
     public boolean save(String filename)
     {
-        InferenceGraph ig = get_inference_graph();
+        InferenceGraph ig = getInferenceGraph();
 
         if (filename == null)
         {
@@ -347,16 +347,16 @@ public class EditorFrame extends Frame
         {
             FileOutputStream fileout = new FileOutputStream(filename);
             PrintStream out = new PrintStream(fileout);
-            switch (save_format)
+            switch (saveFormat)
             {
                 case BIF_FORMAT:
-                    ig.save_bif(out);
+                    ig.saveBif(out);
                     break;
                 case XML_FORMAT:
-                    ig.save_xml(out);
+                    ig.saveXml(out);
                     break;
                 case BUGS_FORMAT:
-                    ig.save_bugs(out);
+                    ig.saveBugs(out);
                     break;
             }
             out.close();
@@ -382,9 +382,9 @@ public class EditorFrame extends Frame
      * Process a query.
      *
      * @param ig
-     * @param queried_variable
+     * @param queriedVariable
      */
-    public void process_query(InferenceGraph ig, String queried_variable)
+    public void processQuery(InferenceGraph ig, String queriedVariable)
     {
         // Check whether inference is possible
         if (ig == null)
@@ -398,28 +398,28 @@ public class EditorFrame extends Frame
         PrintStream pstream = new PrintStream(bstream);
 
         // Print the Bayes net.
-        if (what_to_show_bayesian_network_state)
+        if (whatToShowBayesianNetworkState)
         {
-            print_bayes_net(pstream, ig);
+            printBayesNet(pstream, ig);
         }
 
         // Perform inference
-        switch (mode_menu_choice)
+        switch (modeMenuChoice)
         {
             case InferenceGraph.MARGINAL_POSTERIOR:
-                print_marginal(pstream, ig, queried_variable);
+                printMarginal(pstream, ig, queriedVariable);
                 break;
             case InferenceGraph.EXPECTATION:
-                print_expectation(pstream, ig, queried_variable);
+                printExpectation(pstream, ig, queriedVariable);
                 break;
             case InferenceGraph.EXPLANATION:
-                print_explanation(pstream, ig);
+                printExplanation(pstream, ig);
                 break;
             case InferenceGraph.FULL_EXPLANATION:
-                print_full_explanation(pstream, ig);
+                printFullExplanation(pstream, ig);
                 break;
             case InferenceGraph.SENSITIVITY_ANALYSIS:
-                print_sensitivity_analysis(pstream, ig);
+                printSensitivityAnalysis(pstream, ig);
                 break;
         }
 
@@ -443,9 +443,9 @@ public class EditorFrame extends Frame
      * @param pstream
      * @param ig
      */
-    protected void print_bayes_net(PrintStream pstream, InferenceGraph ig)
+    protected void printBayesNet(PrintStream pstream, InferenceGraph ig)
     {
-        ig.print_bayes_net(pstream);
+        ig.printBayesNet(pstream);
     }
 
     /**
@@ -453,21 +453,21 @@ public class EditorFrame extends Frame
      * InferenceGraph.
      *
      * @param pstream
-     * @param queried_variable
+     * @param queriedVariable
      * @param ig
      */
-    protected void print_marginal(PrintStream pstream, InferenceGraph ig,
-                                  String queried_variable)
+    protected void printMarginal(PrintStream pstream, InferenceGraph ig,
+                                  String queriedVariable)
     {
-        if (algorithm_type == ALGORITHM_VARIABLE_ELIMINATION)
+        if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
-            ig.print_marginal(pstream, queried_variable, false,
-                              what_to_show_bucket_tree_state);
+            ig.printMarginal(pstream, queriedVariable, false,
+                              whatToShowBucketTreeState);
         }
-        else if (algorithm_type == ALGORITHM_BUCKET_TREE)
+        else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
-            ig.print_marginal(pstream, queried_variable, true,
-                              what_to_show_bucket_tree_state);
+            ig.printMarginal(pstream, queriedVariable, true,
+                              whatToShowBucketTreeState);
         }
         else
         {
@@ -479,21 +479,21 @@ public class EditorFrame extends Frame
      * Compute and print a posterior expectation for the InferenceGraph.
      *
      * @param pstream
-     * @param queried_variable
+     * @param queriedVariable
      * @param ig
      */
-    protected void print_expectation(PrintStream pstream, InferenceGraph ig,
-                                     String queried_variable)
+    protected void printExpectation(PrintStream pstream, InferenceGraph ig,
+                                     String queriedVariable)
     {
-        if (algorithm_type == ALGORITHM_VARIABLE_ELIMINATION)
+        if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
-            ig.print_expectation(pstream, queried_variable, false,
-                                 what_to_show_bucket_tree_state);
+            ig.printExpectation(pstream, queriedVariable, false,
+                                 whatToShowBucketTreeState);
         }
-        else if (algorithm_type == ALGORITHM_BUCKET_TREE)
+        else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
-            ig.print_expectation(pstream, queried_variable, true,
-                                 what_to_show_bucket_tree_state);
+            ig.printExpectation(pstream, queriedVariable, true,
+                                 whatToShowBucketTreeState);
         }
         else
         {
@@ -507,9 +507,9 @@ public class EditorFrame extends Frame
      * @param pstream
      * @param ig
      */
-    protected void print_explanation(PrintStream pstream, InferenceGraph ig)
+    protected void printExplanation(PrintStream pstream, InferenceGraph ig)
     {
-        ig.print_explanation(pstream, what_to_show_bucket_tree_state);
+        ig.printExplanation(pstream, whatToShowBucketTreeState);
     }
 
     /**
@@ -518,9 +518,9 @@ public class EditorFrame extends Frame
      * @param pstream
      * @param ig
      */
-    protected void print_full_explanation(PrintStream pstream, InferenceGraph ig)
+    protected void printFullExplanation(PrintStream pstream, InferenceGraph ig)
     {
-        ig.print_full_explanation(pstream, what_to_show_bucket_tree_state);
+        ig.printFullExplanation(pstream, whatToShowBucketTreeState);
     }
 
     /**
@@ -530,10 +530,10 @@ public class EditorFrame extends Frame
      * @param pstream
      * @param ig
      */
-    protected void print_sensitivity_analysis(PrintStream pstream,
+    protected void printSensitivityAnalysis(PrintStream pstream,
                                               InferenceGraph ig)
     {
-        ig.print_sensitivity_analysis(pstream);
+        ig.printSensitivityAnalysis(pstream);
     }
 
     /**
@@ -541,9 +541,9 @@ public class EditorFrame extends Frame
      *
      * @return
      */
-    public InferenceGraph get_inference_graph()
+    public InferenceGraph getInferenceGraph()
     {
-        return (scrollPanel.netPanel.get_inference_graph());
+        return (scrollPanel.netPanel.getInferenceGraph());
     }
 
     /**
@@ -551,7 +551,7 @@ public class EditorFrame extends Frame
      *
      * @param ig
      */
-    public void set_inference_graph(InferenceGraph ig)
+    public void setInferenceGraph(InferenceGraph ig)
     {
         scrollPanel.netPanel.load(ig);
     }
@@ -559,49 +559,49 @@ public class EditorFrame extends Frame
     /**
      * Interact with menu options: observe variables.
      */
-    public void set_observe_mode()
+    public void setObserveMode()
     {
         setCursor(Frame.CROSSHAIR_CURSOR);
-        scrollPanel.netPanel.set_mode(observeLabel);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.observe_message);
+        scrollPanel.netPanel.setMode(observeLabel);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.observeMessage);
     }
 
     /**
      * Interact with menu options: edit variable.
      */
-    public void set_edit_variable_mode()
+    public void setEditVariableMode()
     {
         setCursor(Frame.TEXT_CURSOR);
-        scrollPanel.netPanel.set_mode(editVariableLabel);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.edit_message);
+        scrollPanel.netPanel.setMode(editVariableLabel);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.editMessage);
     }
 
     /**
      * Interact with menu options: edit function.
      */
-    public void set_edit_function_mode()
+    public void setEditFunctionMode()
     {
         setCursor(Frame.TEXT_CURSOR);
-        scrollPanel.netPanel.set_mode(editFunctionLabel);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.edit_message);
+        scrollPanel.netPanel.setMode(editFunctionLabel);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.editMessage);
     }
 
     /**
      * Interact with menu options: edit network.
      */
-    public void set_edit_network_mode()
+    public void setEditNetworkMode()
     {
-        scrollPanel.netPanel.edit_network();
+        scrollPanel.netPanel.editNetwork();
     }
 
     /**
      * Interact with menu options: queries are processed.
      */
-    public void set_query_mode()
+    public void setQueryMode()
     {
         setCursor(Frame.DEFAULT_CURSOR);
-        scrollPanel.netPanel.set_mode(queryLabel);
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.query_message);
+        scrollPanel.netPanel.setMode(queryLabel);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.queryMessage);
     }
 
     /**
@@ -609,9 +609,9 @@ public class EditorFrame extends Frame
      *
      * @return
      */
-    public int get_mode()
+    public int getMode()
     {
-        return (mode_menu_choice);
+        return (modeMenuChoice);
     }
 
     /**
@@ -619,9 +619,9 @@ public class EditorFrame extends Frame
      *
      * @return
      */
-    public String get_current_save_filename()
+    public String getCurrentSaveFilename()
     {
-        return (current_save_filename);
+        return (currentSaveFilename);
     }
 
     /**
@@ -629,76 +629,76 @@ public class EditorFrame extends Frame
      *
      * @param csf
      */
-    public void set_current_save_filename(String csf)
+    public void setCurrentSaveFilename(String csf)
     {
-        current_save_filename = csf;
+        currentSaveFilename = csf;
     }
 
     /**
      * Interact with menu options: whether to show BucketTree.
      *
-     * @param what_to_show_bucket_tree
+     * @param whatToShowBucketTree
      */
-    public void what_to_show_bucket_tree_action(boolean what_to_show_bucket_tree)
+    public void whatToShowBucketTreeAction(boolean whatToShowBucketTree)
     {
-        what_to_show_bucket_tree_state = what_to_show_bucket_tree;
+        whatToShowBucketTreeState = whatToShowBucketTree;
     }
 
     /**
      * Interact with menu options: whether to show bayesian networks.
      *
      *
-     * @param what_to_show_bayesian_network
+     * @param whatToShowBayesianNetwork
      */
-    public void what_to_show_bayesian_network_action(
-            boolean what_to_show_bayesian_network)
+    public void whatToShowBayesianNetworkAction(
+            boolean whatToShowBayesianNetwork)
     {
-        what_to_show_bayesian_network_state =
-        what_to_show_bayesian_network;
+        whatToShowBayesianNetworkState =
+        whatToShowBayesianNetwork;
     }
 
     /**
      * Inferences produce expectations.
      */
-    public void posterior_expectation_action()
+    public void posteriorExpectationAction()
     {
-        mode_menu_choice = InferenceGraph.EXPECTATION;
+        modeMenuChoice = InferenceGraph.EXPECTATION;
         scrollPanel.netPanel.repaint();
     }
 
     /**
      * Inferences produce posterior marginals.
      */
-    public void posterior_marginal_action()
+    public void posteriorMarginalAction()
     {
-        mode_menu_choice = InferenceGraph.MARGINAL_POSTERIOR;
+        modeMenuChoice = InferenceGraph.MARGINAL_POSTERIOR;
         scrollPanel.netPanel.repaint();
     }
 
     /**
      * Estimate explanation variables.
      */
-    public void estimate_explanation_variables_action()
+    public void estimateExplanationVariablesAction()
     {
-        mode_menu_choice = InferenceGraph.EXPLANATION;
+        modeMenuChoice = InferenceGraph.EXPLANATION;
         scrollPanel.netPanel.repaint();
     }
 
     /**
      * Produce the estimates for the best configuration.
      */
-    public void estimate_best_configuration_action()
+    public void estimateBestConfigurationAction()
     {
-        mode_menu_choice = InferenceGraph.FULL_EXPLANATION;
+        modeMenuChoice = InferenceGraph.FULL_EXPLANATION;
         scrollPanel.netPanel.repaint();
     }
 
     /**
      * Produce the metrics for sensitivity analysis.
      */
-    public void sensitivity_analysis_action()
+    public void sensitivityAnalysisAction()
     {
-        mode_menu_choice = InferenceGraph.SENSITIVITY_ANALYSIS;
+        modeMenuChoice = InferenceGraph.SENSITIVITY_ANALYSIS;
         scrollPanel.netPanel.repaint();
     }
 
@@ -707,9 +707,9 @@ public class EditorFrame extends Frame
      *
      * @param sf
      */
-    public void set_save_format(int sf)
+    public void setSaveFormat(int sf)
     {
-        save_format = sf;
+        saveFormat = sf;
     }
 
     /**
@@ -717,8 +717,8 @@ public class EditorFrame extends Frame
      *
      * @param type
      */
-    public void set_algorithm(int type)
+    public void setAlgorithm(int type)
     {
-        algorithm_type = type;
+        algorithmType = type;
     }
 }

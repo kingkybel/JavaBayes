@@ -33,9 +33,9 @@ public interface MappingDouble
 
     /**
      *
-     * @param map_type
-     * @param map_input
+     * @param mapType
+     * @param mapInput
      * @return
      */
-    public double map(int map_type, double map_input);
+    public double map(int mapType, double mapInput);
 }

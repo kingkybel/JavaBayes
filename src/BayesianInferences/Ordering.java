@@ -31,80 +31,80 @@ public class Ordering
     private static final Logger LOG = Logger.getLogger(Ordering.class.getName());
     BayesNet bn;
     String order[];
-    int explanation_status = Inference.IGNORE_EXPLANATION;
-    int ordering_type = MINIMUM_WEIGHT;
+    int explanationStatus = Inference.IGNORE_EXPLANATION;
+    int orderingType = MINIMUM_WEIGHT;
 
     /**
      * Basic constructor for Ordering.
-     * @param b_n
+     * @param bN
      * @param ot
      * @param objective
      */
-    public Ordering(BayesNet b_n, String objective, int ot)
+    public Ordering(BayesNet bN, String objective, int ot)
     {
-        bn = b_n;
-        explanation_status = obtain_explanation_status(b_n);
-        ordering_type = ot;
+        bn = bN;
+        explanationStatus = obtainExplanationStatus(bN);
+        orderingType = ot;
         order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
-     * @param b_n
+     * @param bN
      * @param or
      */
-    public Ordering(BayesNet b_n, String or[])
+    public Ordering(BayesNet bN, String or[])
     {
-        bn = b_n;
+        bn = bN;
         order = or;
-        explanation_status = obtain_explanation_status(b_n);
+        explanationStatus = obtainExplanationStatus(bN);
     }
 
     /**
      * Basic constructor for Ordering.
-     * @param b_n
+     * @param bN
      * @param ot
      * @param objective
      * @param ds
      */
-    public Ordering(BayesNet b_n, String objective, int ds, int ot)
+    public Ordering(BayesNet bN, String objective, int ds, int ot)
     {
-        bn = b_n;
-        explanation_status = ds;
-        ordering_type = ot;
+        bn = bN;
+        explanationStatus = ds;
+        orderingType = ot;
         order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
-     * @param b_n
+     * @param bN
      * @param ds
      * @param or
      */
-    public Ordering(BayesNet b_n, String or[], int ds)
+    public Ordering(BayesNet bN, String or[], int ds)
     {
-        bn = b_n;
+        bn = bN;
         order = or;
-        explanation_status = ds;
+        explanationStatus = ds;
     }
 
     /*
-     * Obtain explanation_status: unless there are explanations
+     * Obtain explanationStatus: unless there are explanations
      * the status is IGNORE_EXPLANATION.
      */
-    private int obtain_explanation_status(BayesNet b_n)
+    private int obtainExplanationStatus(BayesNet bN)
     {
-        int explanation_status_flag = Inference.IGNORE_EXPLANATION;
-        for (int i = 0; i < b_n.number_variables(); i++)
+        int explanationStatusFlag = Inference.IGNORE_EXPLANATION;
+        for (int i = 0; i < bN.numberVariables(); i++)
         {
-            if ((!(b_n.get_probability_variable(i).is_observed())) &&
-                (b_n.get_probability_variable(i).is_explanation()))
+            if ((!(bN.getProbabilityVariable(i).isObserved())) &&
+                (bN.getProbabilityVariable(i).isExplanation()))
             {
-                explanation_status_flag = Inference.EXPLANATION;
+                explanationStatusFlag = Inference.EXPLANATION;
                 break;
             }
         }
-        return (explanation_status_flag);
+        return (explanationStatusFlag);
     }
 
     /*
@@ -114,50 +114,50 @@ public class Ordering
     private String[] ordering(String objective)
     {
         int i;
-        ArrayList variables_to_order = new ArrayList();
+        ArrayList variablesToOrder = new ArrayList();
 
-        int objective_index = bn.index_of_variable(objective);
-        if (objective_index == BayesNet.INVALID_INDEX)
+        int objectiveIndex = bn.indexOfVariable(objective);
+        if (objectiveIndex == BayesNet.INVALID_INDEX)
         {
-            objective_index = 0;
+            objectiveIndex = 0;
         }
 
-        if (bn.get_probability_variable(objective_index).is_observed())
+        if (bn.getProbabilityVariable(objectiveIndex).isObserved())
         {
-            String one_order[] =
+            String oneOrder[] =
             {
-                bn.get_probability_variable(objective_index).get_name()
+                bn.getProbabilityVariable(objectiveIndex).getName()
             };
-            return (one_order);
+            return (oneOrder);
         }
 
-        if (ordering_type == USER_ORDER)
+        if (orderingType == USER_ORDER)
         {
             // For user order, just collect all variables.
-            for (i = 0; i < bn.number_variables(); i++)
+            for (i = 0; i < bn.numberVariables(); i++)
             {
-                variables_to_order.add(bn.get_probability_variable(i));
+                variablesToOrder.add(bn.getProbabilityVariable(i));
             }
-            return (user_order(variables_to_order, objective_index));
+            return (userOrder(variablesToOrder, objectiveIndex));
         }
         else
         {
             // For explanations, just collect all variables.
-            if (explanation_status != Inference.IGNORE_EXPLANATION)
+            if (explanationStatus != Inference.IGNORE_EXPLANATION)
             {
-                for (i = 0; i < bn.number_variables(); i++)
+                for (i = 0; i < bn.numberVariables(); i++)
                 {
-                    variables_to_order.
-                            add(bn.get_probability_variable(i));
+                    variablesToOrder.
+                            add(bn.getProbabilityVariable(i));
                 }
             }
             else
             { // For inference, get only the affecting variables.
                 DSeparation dsep = new DSeparation(bn);
-                variables_to_order = dsep.all_affecting(objective_index);
+                variablesToOrder = dsep.allAffecting(objectiveIndex);
             }
-            return (heuristic_order(variables_to_order, objective_index,
-                                    ordering_type));
+            return (heuristicOrder(variablesToOrder, objectiveIndex,
+                                    orderingType));
         }
     }
 
@@ -176,85 +176,85 @@ public class Ordering
      *    algorithm requires the ordering to have this property
      *    (objective variable last for inference).
      */
-    private String[] user_order(ArrayList variables_to_order,
-                                int objective_index)
+    private String[] userOrder(ArrayList variablesToOrder,
+                                int objectiveIndex)
     {
         int i, j;
-        boolean is_variable_explanation_flag = false;
+        boolean isVariableExplanationFlag = false;
         ProbabilityVariable pv;
-        ArrayList non_explanation_variables = new ArrayList();
-        ArrayList explanation_variables = new ArrayList();
+        ArrayList nonExplanationVariables = new ArrayList();
+        ArrayList explanationVariables = new ArrayList();
         String ord[];
 
         // Collect variables into related vectors
-        for (Object e : variables_to_order)
+        for (Object e : variablesToOrder)
         {
             pv = (ProbabilityVariable) (e);
             // Skip transparent variables
-            if (pv.get_type() == ProbabilityVariable.TRANSPARENT)
+            if (pv.getType() == ProbabilityVariable.TRANSPARENT)
             {
                 continue;
             }
             // Check the status of the variable as a explanatory variable
-            switch (explanation_status)
+            switch (explanationStatus)
             {
                 case Inference.IGNORE_EXPLANATION:
-                    is_variable_explanation_flag = false;
+                    isVariableExplanationFlag = false;
                     break;
                 case Inference.EXPLANATION:
-                    is_variable_explanation_flag = pv.is_explanation();
+                    isVariableExplanationFlag = pv.isExplanation();
                     break;
                 case Inference.FULL_EXPLANATION:
-                    is_variable_explanation_flag = true;
+                    isVariableExplanationFlag = true;
                     break;
             }
 
             // Observed variables are not explanation variables
             // (evidence has precedence over explanations).
-            if (pv.is_observed())
+            if (pv.isObserved())
             {
-                is_variable_explanation_flag = false;
+                isVariableExplanationFlag = false;
             }
 
             // Put the variable in the correct vector
-            if (is_variable_explanation_flag)
+            if (isVariableExplanationFlag)
             {
-                explanation_variables.add(pv.get_name());
+                explanationVariables.add(pv.getName());
             }
             else
             {
-                non_explanation_variables.add(pv.get_name());
+                nonExplanationVariables.add(pv.getName());
             }
         }
 
-        ord = new String[non_explanation_variables.size() +
-                         explanation_variables.size()];
+        ord = new String[nonExplanationVariables.size() +
+                         explanationVariables.size()];
 
-        if (explanation_variables.isEmpty())
+        if (explanationVariables.isEmpty())
         {
             i = 0;
-            for (Object e : non_explanation_variables)
+            for (Object e : nonExplanationVariables)
             {
                 ord[i] = (String) (e);
-                if (ord[i].equals(bn.get_probability_variable(objective_index).
-                        get_name()))
+                if (ord[i].equals(bn.getProbabilityVariable(objectiveIndex).
+                        getName()))
                 {
                     i--;
                 }
                 i++;
             }
-            ord[i] = bn.get_probability_variable(objective_index).get_name();
+            ord[i] = bn.getProbabilityVariable(objectiveIndex).getName();
         }
         else
         {
             i = 0;
-            for (Object e : non_explanation_variables)
+            for (Object e : nonExplanationVariables)
             {
                 ord[i] = (String) (e);
                 i++;
             }
             j = i;
-            for (Object e : explanation_variables)
+            for (Object e : explanationVariables)
             {
                 ord[j] = (String) (e);
             }
@@ -272,63 +272,63 @@ public class Ordering
      * 3) Non-explanation variables come in the order they were
      *                input, except objective variable which
      *                is the last of all non-explanation variables
-     * Produce an ordering for the variables in variables_to_order,
+     * Produce an ordering for the variables in variablesToOrder,
      * assuming that all variables are in the BayesNet bn object.
-     * The ordering_type indicates which heuristic to use in the
+     * The orderingType indicates which heuristic to use in the
      * elimination procedure.
      */
-    private String[] heuristic_order(ArrayList vo,
-                                     int objective_index,
-                                     int ordering_type)
+    private String[] heuristicOrder(ArrayList vo,
+                                     int objectiveIndex,
+                                     int orderingType)
     {
         int i, j;
         int PHASE_ONE = 1;
         int PHASE_TWO = 2;
         int phase;
-        long value, min_value;
-        int min_index;
-        int number_variables_in_phase;
-        int number_variables_in_phase_two = 0;
+        long value, minValue;
+        int minIndex;
+        int numberVariablesInPhase;
+        int numberVariablesInPhaseTwo = 0;
 
         ProbabilityVariable pv;
         ProbabilityVariable neighbors[];
         ProbabilityFunction pf;
 
         // The vector with the filtered variables to order.
-        ArrayList variables_to_order = new ArrayList();
+        ArrayList variablesToOrder = new ArrayList();
 
         // The vector that will contain the final ordering.
-        ArrayList elimination_ordering = new ArrayList();
+        ArrayList eliminationOrdering = new ArrayList();
 
         // Phase markers: indicates in which phase of the
         // algorithm a variable will be eliminated.
-        int phase_markers[] = new int[bn.number_variables()];
-        for (i = 0; i < phase_markers.length; i++)
+        int phaseMarkers[] = new int[bn.numberVariables()];
+        for (i = 0; i < phaseMarkers.length; i++)
         {
-            phase_markers[i] = PHASE_ONE;
+            phaseMarkers[i] = PHASE_ONE;
         }
 
         // Filter the incoming variables
         for (Object e : vo)
         {
             pv = (ProbabilityVariable) (e);
-            if (pv.is_observed())
+            if (pv.isObserved())
             { // Put observed variables at the beginning
-                elimination_ordering.add(pv);
+                eliminationOrdering.add(pv);
             }
             else
             { // Skip transparent variables
-                if (pv.get_type() != ProbabilityVariable.TRANSPARENT)
+                if (pv.getType() != ProbabilityVariable.TRANSPARENT)
                 {
                     // Order all other variables
-                    variables_to_order.add(pv);
+                    variablesToOrder.add(pv);
                     // Check the status of the variable as an explanatory variable
-                    if ((explanation_status == Inference.FULL_EXPLANATION) ||
-                        ((explanation_status == Inference.EXPLANATION) &&
-                         (pv.is_explanation())))
+                    if ((explanationStatus == Inference.FULL_EXPLANATION) ||
+                        ((explanationStatus == Inference.EXPLANATION) &&
+                         (pv.isExplanation())))
                     {
-                        phase_markers[pv.get_index()] = PHASE_TWO;
-                        number_variables_in_phase_two++;
+                        phaseMarkers[pv.getIndex()] = PHASE_TWO;
+                        numberVariablesInPhaseTwo++;
                     }
                 }
             }
@@ -336,20 +336,20 @@ public class Ordering
 
         // Define whether the objective variable will be
         // processed in the second phase.
-        if (number_variables_in_phase_two == 0)
+        if (numberVariablesInPhaseTwo == 0)
         {
-            phase_markers[objective_index] = PHASE_TWO;
-            number_variables_in_phase_two = 1;
+            phaseMarkers[objectiveIndex] = PHASE_TWO;
+            numberVariablesInPhaseTwo = 1;
         }
 
         // Each variable is associated to a vector (the vector contains
         // all variables that are linked to the variable).
-        ArrayList vectors[] = new ArrayList[bn.number_variables()];
+        ArrayList vectors[] = new ArrayList[bn.numberVariables()];
         // Initialize the vectors only for the variables that are to be ordered.
-        for (Object e : variables_to_order)
+        for (Object e : variablesToOrder)
         {
             pv = (ProbabilityVariable) (e);
-            vectors[pv.get_index()] = new ArrayList();
+            vectors[pv.getIndex()] = new ArrayList();
         }
 
         // Moralize the network: build an undirected graph where each variable
@@ -359,16 +359,16 @@ public class Ordering
         // all variables to its parents and "moralizes" the graph simultaneously;
         // since all variables are analyzed, every variable ends up connected
         // to its children.
-        for (Object e : variables_to_order)
+        for (Object e : variablesToOrder)
         {
             pv = (ProbabilityVariable) (e);
-            pf = bn.get_function(pv);
-            vectors[pv.get_index()].add(pv);
-            interconnect(bn, vectors, pf.get_variables());
+            pf = bn.getFunction(pv);
+            vectors[pv.getIndex()].add(pv);
+            interconnect(bn, vectors, pf.getVariables());
         }
 
         // Decide which phase to start;
-        if (number_variables_in_phase_two == variables_to_order.size())
+        if (numberVariablesInPhaseTwo == variablesToOrder.size())
         {
             phase = PHASE_TWO;
         }
@@ -381,36 +381,36 @@ public class Ordering
         // the heuristic of interest, until all variables are eliminated.
         // As a variable is eliminated, it is removed from all other
         // links and all its neighbors are interconnected.
-        for (i = 0; i < variables_to_order.size(); i++)
+        for (i = 0; i < variablesToOrder.size(); i++)
         {
             // Get the variable with minimum heuristic value.
-            min_value = -1;
-            min_index = -1;
+            minValue = -1;
+            minIndex = -1;
 
-            number_variables_in_phase = 0;
+            numberVariablesInPhase = 0;
             for (j = 0; j < vectors.length; j++)
             { // Go through all the variables
                 // Only proceed if variable is to be ordered in this phase.
-                if ((vectors[j] != null) && (phase_markers[j] == phase))
+                if ((vectors[j] != null) && (phaseMarkers[j] == phase))
                 {
-                    number_variables_in_phase++;
-                    value = obtain_value(vectors[j], ordering_type); // Get the value for the heuristic.
-                    if ((value < min_value) || (min_index == -1))
+                    numberVariablesInPhase++;
+                    value = obtainValue(vectors[j], orderingType); // Get the value for the heuristic.
+                    if ((value < minValue) || (minIndex == -1))
                     { // Minimize the heuristic.
-                        min_index = j;
-                        min_value = value;
+                        minIndex = j;
+                        minValue = value;
                     }
                 }
             }
-            if ((phase == PHASE_ONE) && (number_variables_in_phase == 1))
+            if ((phase == PHASE_ONE) && (numberVariablesInPhase == 1))
             {
                 phase = PHASE_TWO;
             }
 
             // Add the variable with minimum value for the heuristic
             // to the ordering.
-            pv = bn.get_probability_variable(min_index);
-            elimination_ordering.add(pv);
+            pv = bn.getProbabilityVariable(minIndex);
+            eliminationOrdering.add(pv);
 
             // Now remove the variable:
             //   Remove it from every other list of variables
@@ -422,9 +422,9 @@ public class Ordering
                 }
             }
             //   Interconnect all its neighbors
-            neighbors = new ProbabilityVariable[vectors[min_index].size()];
+            neighbors = new ProbabilityVariable[vectors[minIndex].size()];
             j = 0;
-            for (Object e : vectors[min_index])
+            for (Object e : vectors[minIndex])
             {
                 pv = (ProbabilityVariable) (e);
                 neighbors[j] = pv;
@@ -432,37 +432,37 @@ public class Ordering
             }
             interconnect(bn, vectors, neighbors);
             //   Erase its list of neighbors.
-            vectors[min_index] = null;
+            vectors[minIndex] = null;
         }
 
         // Return the ordering
-        String return_ordering[] = new String[elimination_ordering.size()];
+        String returnOrdering[] = new String[eliminationOrdering.size()];
         i = 0;
-        for (Object e : elimination_ordering)
+        for (Object e : eliminationOrdering)
         {
             pv = (ProbabilityVariable) (e);
-            return_ordering[i] = pv.get_name();
+            returnOrdering[i] = pv.getName();
             i++;
         }
-        return (return_ordering);
+        return (returnOrdering);
     }
 
     /*
      * Obtain the heuristic value of eliminating a variable,
      * represented by the list of variables linked to it.
      */
-    private long obtain_value(ArrayList v, int ordering_type)
+    private long obtainValue(ArrayList v, int orderingType)
     {
         ProbabilityVariable pv;
         long value = 0;
 
-        if (ordering_type == Ordering.MINIMUM_WEIGHT)
+        if (orderingType == Ordering.MINIMUM_WEIGHT)
         {
             long weight = 1;
             for (Object e : v)
             {
                 pv = (ProbabilityVariable) (e);
-                weight *= pv.number_values();
+                weight *= pv.numberValues();
             }
             value = weight;
         }
@@ -475,16 +475,16 @@ public class Ordering
      * connected to all the others.
      */
     private void interconnect(BayesNet bn, ArrayList vectors[],
-                              DiscreteVariable variables_to_be_interconnected[])
+                              DiscreteVariable variablesToBeInterconnected[])
     {
         int i, j;
-        for (i = 0; i < (variables_to_be_interconnected.length - 1); i++)
+        for (i = 0; i < (variablesToBeInterconnected.length - 1); i++)
         {
-            for (j = (i + 1); j < variables_to_be_interconnected.length; j++)
+            for (j = (i + 1); j < variablesToBeInterconnected.length; j++)
             {
                 interconnect(bn, vectors,
-                             variables_to_be_interconnected[i],
-                             variables_to_be_interconnected[j]);
+                             variablesToBeInterconnected[i],
+                             variablesToBeInterconnected[j]);
             }
         }
     }
@@ -495,8 +495,8 @@ public class Ordering
     private void interconnect(BayesNet bn, ArrayList vectors[],
                               DiscreteVariable pvi, DiscreteVariable pvj)
     {
-        ArrayList iv = vectors[pvi.get_index()];
-        ArrayList jv = vectors[pvj.get_index()];
+        ArrayList iv = vectors[pvi.getIndex()];
+        ArrayList jv = vectors[pvj.getIndex()];
 
         // Avoid problems if parent is observed or transparent.
         if ((iv == null) || (jv == null))

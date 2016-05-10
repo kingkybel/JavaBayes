@@ -41,8 +41,8 @@ public class InterchangeFormat
                                 Logger.getLogger(InterchangeFormat.class.
                                         getName());
     InputStream istream;
-    Parsers.XMLBIFv03.XMLBIFv03 xml_bif03;
-    Parsers.XMLBIFv02.XMLBIFv02 xml_bif02;
+    Parsers.XMLBIFv03.XMLBIFv03 xmlBif03;
+    Parsers.XMLBIFv02.XMLBIFv02 xmlBif02;
     Parsers.BIFv015.BIFv015 bif015;
     Parsers.BIFv01.BIFv01 bif01;
 
@@ -59,14 +59,14 @@ public class InterchangeFormat
      */
     public InterchangeFormat(InputStream is)
     {
-        set_stream(is);
+        setStream(is);
     }
 
     /**
      *
      * @param is
      */
-    public final void set_stream(InputStream is)
+    public final void setStream(InputStream is)
     {
         istream = new BufferedInputStream(is);
     }
@@ -78,9 +78,9 @@ public class InterchangeFormat
      */
     public void CompilationUnit() throws Exception
     {
-        StringBuffer error_messages = new StringBuffer("Error messages\n");
-        xml_bif03 = null;
-        xml_bif02 = null;
+        StringBuffer errorMessages = new StringBuffer("Error messages\n");
+        xmlBif03 = null;
+        xmlBif02 = null;
         bif015 = null;
         bif01 = null;
 
@@ -90,45 +90,45 @@ public class InterchangeFormat
         }
         else
         {
-            error_messages.append("\nNo support for reset operation.");
+            errorMessages.append("\nNo support for reset operation.");
         }
 
-        xml_bif03 = new Parsers.XMLBIFv03.XMLBIFv03(istream);
+        xmlBif03 = new Parsers.XMLBIFv03.XMLBIFv03(istream);
         try
         {
-            xml_bif03.CompilationUnit();
-            xml_bif03.invert_probability_tables();
+            xmlBif03.CompilationUnit();
+            xmlBif03.invertProbabilityTables();
         }
         catch (Throwable e4)
         { // Catch anything!
-            error_messages.append(e4);
+            errorMessages.append(e4);
             try
             {
                 istream.reset();
             }
             catch (Exception e)
             {
-                error_messages.append("\n\nReset not allowed!");
+                errorMessages.append("\n\nReset not allowed!");
             }
-            error_messages.append("Input stream reset!\n");
+            errorMessages.append("Input stream reset!\n");
             // Note that the following lines are within an enclosing catch block.
-            xml_bif02 = new Parsers.XMLBIFv02.XMLBIFv02(istream);
+            xmlBif02 = new Parsers.XMLBIFv02.XMLBIFv02(istream);
             try
             {
-                xml_bif02.CompilationUnit();
+                xmlBif02.CompilationUnit();
             }
             catch (Throwable e3)
             { // Catch anything!
-                error_messages.append(e3);
+                errorMessages.append(e3);
                 try
                 {
                     istream.reset();
                 }
                 catch (Exception e)
                 {
-                    error_messages.append("\n\nReset not allowed!");
+                    errorMessages.append("\n\nReset not allowed!");
                 }
-                error_messages.append("Input stream reset!\n");
+                errorMessages.append("Input stream reset!\n");
                 // Note that the following lines are within an enclosing catch block.
                 bif015 = new Parsers.BIFv015.BIFv015(istream);
                 try
@@ -137,16 +137,16 @@ public class InterchangeFormat
                 }
                 catch (Throwable e2)
                 { // Catch anything!
-                    error_messages.append(e2);
+                    errorMessages.append(e2);
                     try
                     {
                         istream.reset();
                     }
                     catch (Exception e)
                     {
-                        error_messages.append("\n\nReset not allowed!");
+                        errorMessages.append("\n\nReset not allowed!");
                     }
-                    error_messages.append("Input stream reset!\n");
+                    errorMessages.append("Input stream reset!\n");
                     // Note that the following lines are within an enclosing catch block.
                     bif01 = new Parsers.BIFv01.BIFv01(istream);
                     try
@@ -155,25 +155,25 @@ public class InterchangeFormat
                     }
                     catch (Throwable e1)
                     { // Catch anything!
-                        error_messages.append(e1);
-                        throw new IFException(new String(error_messages));
+                        errorMessages.append(e1);
+                        throw new IFException(new String(errorMessages));
                     } // End bif01
                 } // End bif015
-            } // End xml_bif02
-        } // End xml_bif03
+            } // End xmlBif02
+        } // End xmlBif03
     }
 
     /**
      *
      * @return
      */
-    public IFBayesNet get_ifbn()
+    public IFBayesNet getIfbn()
     {
         IFBayesNet ifbn = null;
 
-        if (xml_bif03 != null)
+        if (xmlBif03 != null)
         {
-            ifbn = xml_bif03.get_ifbn();
+            ifbn = xmlBif03.getIfbn();
         }
         if (ifbn != null)
         {
@@ -182,9 +182,9 @@ public class InterchangeFormat
         else
         {
             // Note that the following lines are inside an else.
-            if (xml_bif02 != null)
+            if (xmlBif02 != null)
             {
-                ifbn = xml_bif02.get_ifbn();
+                ifbn = xmlBif02.getIfbn();
             }
             if (ifbn != null)
             {
@@ -195,7 +195,7 @@ public class InterchangeFormat
                 // Note that the following lines are inside an else.
                 if (bif015 != null)
                 {
-                    ifbn = bif015.get_ifbn();
+                    ifbn = bif015.getIfbn();
                 }
                 if (ifbn != null)
                 {
@@ -206,7 +206,7 @@ public class InterchangeFormat
                     // Note that the following lines are inside an else.
                     if (bif01 != null)
                     {
-                        ifbn = bif01.get_ifbn();
+                        ifbn = bif01.getIfbn();
                     }
                     if (ifbn != null)
                     {
@@ -214,7 +214,7 @@ public class InterchangeFormat
                     }
                 } // End of bif01
             } // End of bif015
-        } // End of xml_bif02
+        } // End of xmlBif02
         return (ifbn);
     }
 }

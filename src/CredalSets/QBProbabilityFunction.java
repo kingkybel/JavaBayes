@@ -17,8 +17,8 @@ public class QBProbabilityFunction extends ProbabilityFunction
     Logger.getLogger(QBProbabilityFunction.class.
             getName());
 
-    double lower_envelope[];
-    double upper_envelope[];
+    double lowerEnvelope[];
+    double upperEnvelope[];
 
     /**
      * Default constructor for a QBProbabilityFunction.
@@ -30,52 +30,52 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param prop
-     * @param n_vb
-     * @param n_vl
+     * @param nVb
+     * @param nVl
      */
-    public QBProbabilityFunction(BayesNet b_n, int n_vb, int n_vl,
+    public QBProbabilityFunction(BayesNet bN, int nVb, int nVl,
                                  ArrayList prop)
     {
-        super(b_n, n_vb, n_vl, prop);
-        lower_envelope = new double[n_vl];
-        upper_envelope = new double[n_vl];
+        super(bN, nVb, nVl, prop);
+        lowerEnvelope = new double[nVl];
+        upperEnvelope = new double[nVl];
     }
 
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param prop
      * @param dvs
      * @param up
      * @param v
      * @param lp
      */
-    public QBProbabilityFunction(BayesNet b_n, DiscreteVariable dvs[],
+    public QBProbabilityFunction(BayesNet bN, DiscreteVariable dvs[],
                                  double v[], double lp[], double up[],
                                  ArrayList prop)
     {
-        super(b_n, dvs, v, prop);
-        lower_envelope = lp;
-        upper_envelope = up;
+        super(bN, dvs, v, prop);
+        lowerEnvelope = lp;
+        upperEnvelope = up;
     }
 
     /**
      * Constructor for QBProbabilityFunction.
      *
      * @param df
-     * @param new_up
-     * @param new_values
-     * @param new_lp
+     * @param newUp
+     * @param newValues
+     * @param newLp
      */
-    public QBProbabilityFunction(DiscreteFunction df, double new_values[],
-                                 double new_lp[], double new_up[])
+    public QBProbabilityFunction(DiscreteFunction df, double newValues[],
+                                 double newLp[], double newUp[])
     {
-        super(df, new_values);
-        lower_envelope = new_lp;
-        upper_envelope = new_up;
+        super(df, newValues);
+        lowerEnvelope = newLp;
+        upperEnvelope = newUp;
     }
 
     /**
@@ -103,28 +103,28 @@ public class QBProbabilityFunction extends ProbabilityFunction
             out.print(" envelope ( ");
             for (j = 0; j < variables.length; j++)
             {
-                out.print(" \"" + variables[j].get_name() + "\" ");
+                out.print(" \"" + variables[j].getName() + "\" ");
             }
             out.print(") {");
-            if (lower_envelope != null)
+            if (lowerEnvelope != null)
             {
                 out.println(" //" + variables.length +
-                            " variable(s) and " + lower_envelope.length +
+                            " variable(s) and " + lowerEnvelope.length +
                             " values");
                 out.print("\ttable lower-envelope ");
-                for (j = 0; j < lower_envelope.length; j++)
+                for (j = 0; j < lowerEnvelope.length; j++)
                 {
-                    out.print(lower_envelope[j] + " ");
+                    out.print(lowerEnvelope[j] + " ");
                 }
                 out.print(";");
             }
             out.println();
-            if (upper_envelope != null)
+            if (upperEnvelope != null)
             {
                 out.print("\ttable upper-envelope ");
-                for (j = 0; j < upper_envelope.length; j++)
+                for (j = 0; j < upperEnvelope.length; j++)
                 {
-                    out.print(upper_envelope[j] + " ");
+                    out.print(upperEnvelope[j] + " ");
                 }
                 out.print(";");
             }
@@ -145,22 +145,22 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /* Methods that allow basic manipulation of non-public variables */
     /* ************************************************************* */
     /**
-     * Get the lower_envelope array.
+     * Get the lowerEnvelope array.
      *
      * @return
      */
-    public double[] get_lower_envelope()
+    public double[] getLowerEnvelope()
     {
-        return (lower_envelope);
+        return (lowerEnvelope);
     }
 
     /**
-     * Get the upper_envelope array.
+     * Get the upperEnvelope array.
      *
      * @return
      */
-    public double[] get_upper_envelope()
+    public double[] getUpperEnvelope()
     {
-        return (upper_envelope);
+        return (upperEnvelope);
     }
 }

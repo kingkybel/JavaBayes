@@ -50,15 +50,15 @@ public class ClearDialog extends Dialog
     /**
      *
      * @param parent
-     * @param java_bayes
+     * @param javaBayes
      * @param title
      * @param modal
      */
-    public ClearDialog(Frame parent, JavaBayes java_bayes,
+    public ClearDialog(Frame parent, JavaBayes javaBayes,
                                      String title, boolean modal)
     {
         super(parent, title, true);
-        jb = java_bayes;
+        jb = javaBayes;
 
         //{{INIT_CONTROLS
         setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));

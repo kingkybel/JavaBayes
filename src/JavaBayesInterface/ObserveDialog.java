@@ -57,18 +57,18 @@ class ObserveDialog extends Dialog
     /* ************************************************* *
      * Default constructor for an ObserveDialog object.  *
      * ************************************************* */
-    ObserveDialog(NetworkPanel network_panel, Frame parent,
-                  InferenceGraph i_g, InferenceGraphNode node)
+    ObserveDialog(NetworkPanel networkPanel, Frame parent,
+                  InferenceGraph iG, InferenceGraphNode node)
     {
         super(parent, "Set Observe Value", true);
-        this.ig = i_g;
+        this.ig = iG;
         this.node = node;
-        this.npan = network_panel;
+        this.npan = networkPanel;
 
         Panel cbp = new Panel();
         cbp.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        observed = node.is_observed();
+        observed = node.isObserved();
         observedBox = new Checkbox("Observed", null, observed);
         cbp.add(observedBox);
 
@@ -76,7 +76,7 @@ class ObserveDialog extends Dialog
         listp.setLayout(new GridLayout(1, 1));
         valuesList = new List(6, false);
 
-        String[] values = node.get_values();
+        String[] values = node.getValues();
         for (int i = 0; i < values.length; i++)
         {
             valuesList.addItem(values[i]);
@@ -84,7 +84,7 @@ class ObserveDialog extends Dialog
 
         if (observed)
         {
-            valuesList.select(node.get_observed_value());
+            valuesList.select(node.getObservedValue());
         }
 
         listp.add(valuesList);
@@ -137,16 +137,16 @@ class ObserveDialog extends Dialog
             selValue = valuesList.getSelectedItem();
             if (observed && selValue == null)
             {
-                JavaBayesHelpMessages.show(JavaBayesHelpMessages.observe_error);
+                JavaBayesHelpMessages.show(JavaBayesHelpMessages.observeError);
                 return true; // do not close this dialog box
             }
             if (observed)
             {
-                node.set_observation_value(selValue);
+                node.setObservationValue(selValue);
             }
             else
             {
-                node.clear_observation();
+                node.clearObservation();
             }
             npan.repaint();
             dispose();

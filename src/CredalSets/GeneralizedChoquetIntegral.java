@@ -51,34 +51,34 @@ public class GeneralizedChoquetIntegral
                                       DiscreteFunction df)
     {
         int i;
-        double positive_side, negative_side;
+        double positiveSide, negativeSide;
 
         // Allocate the results
         results = new double[2];
 
         // Order the non-negative values of df in increasing order
         // Zero is the first element of the vector
-        ArrayList positive = sort_positive(df);
+        ArrayList positive = sortPositive(df);
 
         // Order the non-positive values of df in decreasing order
         // Zero is the first element of the vector
-        ArrayList negative = sort_negative(df);
+        ArrayList negative = sortNegative(df);
 
         // Create an array of value differences from the positive side
-        double df_positive[] = new double[positive.size() - 1];
-        for (i = 1; i <= df_positive.length; i++)
+        double dfPositive[] = new double[positive.size() - 1];
+        for (i = 1; i <= dfPositive.length; i++)
         {
-            df_positive[i - 1] = ((Double) (positive.get(i))).
+            dfPositive[i - 1] = ((Double) (positive.get(i))).
             doubleValue() -
                                  ((Double) (positive.get(i - 1))).
                                  doubleValue();
         }
 
         // Create an array of value differences from the negative side
-        double df_negative[] = new double[negative.size() - 1];
-        for (i = 1; i <= df_negative.length; i++)
+        double dfNegative[] = new double[negative.size() - 1];
+        for (i = 1; i <= dfNegative.length; i++)
         {
-            df_negative[i - 1] = ((Double) (negative.get(i))).
+            dfNegative[i - 1] = ((Double) (negative.get(i))).
             doubleValue() -
                                  ((Double) (negative.get(i - 1))).
                                  doubleValue();
@@ -86,48 +86,48 @@ public class GeneralizedChoquetIntegral
 
         // Create arrays of lower and upper probability
         // values for the positive side
-        double lp_positive[] = new double[df_positive.length];
-        double up_positive[] = new double[df_positive.length];
-        bound_positive(tmc, df, positive, lp_positive, up_positive);
+        double lpPositive[] = new double[dfPositive.length];
+        double upPositive[] = new double[dfPositive.length];
+        boundPositive(tmc, df, positive, lpPositive, upPositive);
 
         // Create arrays of lower and upper probability
         // values for the positive side
-        double lp_negative[] = new double[df_negative.length];
-        double up_negative[] = new double[df_negative.length];
-        bound_negative(tmc, df, negative, lp_negative, up_negative);
+        double lpNegative[] = new double[dfNegative.length];
+        double upNegative[] = new double[dfNegative.length];
+        boundNegative(tmc, df, negative, lpNegative, upNegative);
 
         // First obtain the lower Walley integral
-        positive_side = 0.0;
-        negative_side = 0.0;
-        for (i = 0; i < df_positive.length; i++)
+        positiveSide = 0.0;
+        negativeSide = 0.0;
+        for (i = 0; i < dfPositive.length; i++)
         {
-            positive_side += df_positive[i] * lp_positive[i];
+            positiveSide += dfPositive[i] * lpPositive[i];
         }
-        for (i = 0; i < df_negative.length; i++)
+        for (i = 0; i < dfNegative.length; i++)
         {
-            negative_side += df_negative[i] * up_negative[i];
+            negativeSide += dfNegative[i] * upNegative[i];
         }
-        results[0] = positive_side + negative_side;
+        results[0] = positiveSide + negativeSide;
 
         // Now obtain the upper Walley integral
-        positive_side = 0.0;
-        negative_side = 0.0;
-        for (i = 0; i < df_positive.length; i++)
+        positiveSide = 0.0;
+        negativeSide = 0.0;
+        for (i = 0; i < dfPositive.length; i++)
         {
-            positive_side += df_positive[i] * up_positive[i];
+            positiveSide += dfPositive[i] * upPositive[i];
         }
-        for (i = 0; i < df_negative.length; i++)
+        for (i = 0; i < dfNegative.length; i++)
         {
-            negative_side += df_negative[i] * lp_negative[i];
+            negativeSide += dfNegative[i] * lpNegative[i];
         }
-        results[1] = positive_side + negative_side;
+        results[1] = positiveSide + negativeSide;
     }
 
     /**
      * Collect the positive values in df and sort them in increasing order
      * (first value is assumed zero).
      */
-    private ArrayList sort_positive(DiscreteFunction df)
+    private ArrayList sortPositive(DiscreteFunction df)
     {
         ArrayList sorted = new ArrayList();
 
@@ -135,10 +135,10 @@ public class GeneralizedChoquetIntegral
         sorted.add(0.0);
 
         // Go through df values
-        for (int i = 0; i < df.number_values(); i++)
+        for (int i = 0; i < df.numberValues(); i++)
         {
             // Process only positive values
-            if (df.get_value(i) <= 0.0)
+            if (df.getValue(i) <= 0.0)
             {
                 continue;
             }
@@ -146,14 +146,14 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (df.get_value(i) < ((Double) sorted.get(j)))
+                if (df.getValue(i) < ((Double) sorted.get(j)))
                 {
-                    sorted.add(df.get_value(i));
+                    sorted.add(df.getValue(i));
                 }
             }
 
             // Insert value last in vector if it is not inserted at this point
-            sorted.add(df.get_value(i));
+            sorted.add(df.getValue(i));
         }
         return (sorted);
     }
@@ -162,7 +162,7 @@ public class GeneralizedChoquetIntegral
      * Collect the negative values in df and sort them in decreasing order
      * (first value is assumed zero).
      */
-    private ArrayList sort_negative(DiscreteFunction df)
+    private ArrayList sortNegative(DiscreteFunction df)
     {
         ArrayList sorted = new ArrayList();
 
@@ -170,10 +170,10 @@ public class GeneralizedChoquetIntegral
         sorted.add(0.0);
 
         // Go through df values
-        for (int i = 0; i < df.number_values(); i++)
+        for (int i = 0; i < df.numberValues(); i++)
         {
             // Process only negative values
-            if (df.get_value(i) >= 0.0)
+            if (df.getValue(i) >= 0.0)
             {
                 continue;
             }
@@ -181,82 +181,82 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (df.get_value(i) > ((Double) sorted.get(j)))
+                if (df.getValue(i) > ((Double) sorted.get(j)))
                 {
-                    sorted.add(df.get_value(i));
+                    sorted.add(df.getValue(i));
                 }
             }
 
             // Insert value last in vector if it is not inserted at this point
-            sorted.add(df.get_value(i));
+            sorted.add(df.getValue(i));
         }
         return (sorted);
     }
 
     /**
      * Obtain the lower and upper probability for the event { df(x) >
-     * sorted_value[i] }
+     * sortedValue[i] }
      */
-    private void bound_positive(TwoMonotoneCapacity tmc,
-                                DiscreteFunction df, ArrayList sorted_values,
+    private void boundPositive(TwoMonotoneCapacity tmc,
+                                DiscreteFunction df, ArrayList sortedValues,
                                 double lps[], double ups[])
     {
         int i, j;
         double lp;
-        double sorted_value;
+        double sortedValue;
 
         i = 0;
-        for (Object e : sorted_values)
+        for (Object e : sortedValues)
         {
             lp = 0.0; // Initialize
-            sorted_value = ((Double) e);
+            sortedValue = ((Double) e);
             // Collect the base probability for
-            // all atoms such that df(x_j > sorted_values[i])
-            for (j = 0; j < df.number_values(); j++)
+            // all atoms such that df(xJ > sortedValues[i])
+            for (j = 0; j < df.numberValues(); j++)
             {
-                if (df.get_value(j) > sorted_value)
+                if (df.getValue(j) > sortedValue)
                 {
                     // Add base probability of this atom
-                    lp += tmc.get_atom_probability(j);
+                    lp += tmc.getAtomProbability(j);
                 }
             }
             // Calculate the lower and upper probabilities
-            lps[i] = tmc.get_lower_probability_from_base(lp);
-            ups[i] = tmc.get_upper_probability_from_base(lp);
+            lps[i] = tmc.getLowerProbabilityFromBase(lp);
+            ups[i] = tmc.getUpperProbabilityFromBase(lp);
             i++;
         }
     }
 
     /**
      * Obtain the lower and upper probability for the event { df(x) <
-     * sorted_value[i] }
+     * sortedValue[i] }
      */
-    private void bound_negative(TwoMonotoneCapacity tmc,
-                                DiscreteFunction df, ArrayList sorted_values,
+    private void boundNegative(TwoMonotoneCapacity tmc,
+                                DiscreteFunction df, ArrayList sortedValues,
                                 double lps[], double ups[])
     {
         int i, j;
         double lp;
-        double sorted_value;
+        double sortedValue;
 
         i = 0;
-        for (Object e : sorted_values)
+        for (Object e : sortedValues)
         {
             lp = 0.0; // Initialize
-            sorted_value = ((Double) e);
+            sortedValue = ((Double) e);
             // Collect the base probability for
-            // all atoms such that df(x_j > sorted_values[i])
-            for (j = 0; j < df.number_values(); j++)
+            // all atoms such that df(xJ > sortedValues[i])
+            for (j = 0; j < df.numberValues(); j++)
             {
-                if (df.get_value(j) < sorted_value)
+                if (df.getValue(j) < sortedValue)
                 {
                     // Add base probability of this atom
-                    lp += tmc.get_atom_probability(j);
+                    lp += tmc.getAtomProbability(j);
                 }
             }
             // Calculate the lower and upper probabilities
-            lps[i] = tmc.get_lower_probability_from_base(lp);
-            ups[i] = tmc.get_upper_probability_from_base(lp);
+            lps[i] = tmc.getLowerProbabilityFromBase(lp);
+            ups[i] = tmc.getUpperProbabilityFromBase(lp);
             i++;
         }
     }

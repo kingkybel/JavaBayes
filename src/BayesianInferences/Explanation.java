@@ -32,17 +32,17 @@ public class Explanation
     Logger.getLogger(Explanation.class.getName());
 
     BayesNet bn;
-    BucketTree bucket_tree;
+    BucketTree bucketTree;
     ProbabilityFunction results[];
 
     /**
      * Constructor for an Explanation.
      *
-     * @param b_n
+     * @param bN
      */
-    public Explanation(BayesNet b_n)
+    public Explanation(BayesNet bN)
     {
-        bn = b_n;
+        bn = bN;
     }
 
     /*
@@ -59,22 +59,22 @@ public class Explanation
     /**
      * Calculation of a full Explanation.
      */
-    public void full_explanation()
+    public void fullExplanation()
     {
         explanation(Inference.FULL_EXPLANATION);
     }
 
     /**
-     * Calculation of an Explanation accordingly to the flag explanation_status.
+     * Calculation of an Explanation accordingly to the flag explanationStatus.
      *
-     * @param explanation_status
+     * @param explanationStatus
      */
-    public void explanation(int explanation_status)
+    public void explanation(int explanationStatus)
     {
-        bucket_tree = new BucketTree(new Ordering(bn, (String) null,
-                                                  explanation_status,
+        bucketTree = new BucketTree(new Ordering(bn, (String) null,
+                                                  explanationStatus,
                                                   Ordering.MINIMUM_WEIGHT));
-        do_inference_from_bucket_tree();
+        doInferenceFromBucketTree();
     }
 
     /**
@@ -92,32 +92,32 @@ public class Explanation
      *
      * @param order
      */
-    public void full_explanation(String order[])
+    public void fullExplanation(String order[])
     {
         explanation(order, Inference.FULL_EXPLANATION);
     }
 
     /**
-     * Calculation of an Explanation accordingly to the flag explanation_status.
+     * Calculation of an Explanation accordingly to the flag explanationStatus.
      *
      * @param order
-     * @param explanation_status
+     * @param explanationStatus
      */
-    public void explanation(String order[], int explanation_status)
+    public void explanation(String order[], int explanationStatus)
     {
-        bucket_tree =
-        new BucketTree(new Ordering(bn, order, explanation_status));
-        do_inference_from_bucket_tree();
+        bucketTree =
+        new BucketTree(new Ordering(bn, order, explanationStatus));
+        doInferenceFromBucketTree();
     }
 
     /*
      * Do the Explanation.
      */
-    void do_inference_from_bucket_tree()
+    void doInferenceFromBucketTree()
     {
         results = new ProbabilityFunction[1];
-        bucket_tree.reduce();
-        results[0] = bucket_tree.get_normalized_result();
+        bucketTree.reduce();
+        results[0] = bucketTree.getNormalizedResult();
     }
 
     /*
@@ -144,20 +144,20 @@ public class Explanation
     /**
      * Print Explanation.
      *
-     * @param should_print_bucket_tree
+     * @param shouldPrintBucketTree
      */
-    public void print(boolean should_print_bucket_tree)
+    public void print(boolean shouldPrintBucketTree)
     {
-        print(System.out, should_print_bucket_tree);
+        print(System.out, shouldPrintBucketTree);
     }
 
     /**
      * Print Explanation.
      *
      * @param out
-     * @param should_print_bucket_tree
+     * @param shouldPrintBucketTree
      */
-    public void print(PrintStream out, boolean should_print_bucket_tree)
+    public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
         int i, bp[];
         ProbabilityVariable pv;
@@ -171,12 +171,12 @@ public class Explanation
         // Print it all.
         out.println("Explanation:");
 
-        if (should_print_bucket_tree == true)
+        if (shouldPrintBucketTree == true)
         {
-            bucket_tree.print(out);
+            bucketTree.print(out);
         }
 
-        if (bucket_tree.backward_pointers == null)
+        if (bucketTree.backwardPointers == null)
         {
             out.println("No explanatory variable; posterior distribution:");
             for (i = 0; i < results.length; i++)
@@ -186,14 +186,14 @@ public class Explanation
         }
         else
         {
-            bp = bucket_tree.backward_pointers;
+            bp = bucketTree.backwardPointers;
             for (i = 0; i < bp.length; i++)
             {
                 if (bp[i] != BayesNet.INVALID_INDEX)
                 {
-                    pv = bn.get_probability_variable(i);
-                    out.println("Variable " + pv.get_name() + ": " +
-                                pv.get_value(bp[i]));
+                    pv = bn.getProbabilityVariable(i);
+                    out.println("Variable " + pv.getName() + ": " +
+                                pv.getValue(bp[i]));
                 }
             }
         }
@@ -207,7 +207,7 @@ public class Explanation
      *
      * @return
      */
-    public ProbabilityFunction[] get_results()
+    public ProbabilityFunction[] getResults()
     {
         return (results);
     }

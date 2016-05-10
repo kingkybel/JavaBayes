@@ -43,51 +43,51 @@ public final class VertexSet
     Logger.getLogger(VertexSet.class.getName());
 
     // Variable that indicates which extreme point is active
-    ProbabilityVariable auxiliary_variable;
+    ProbabilityVariable auxiliaryVariable;
 
     // The set of extreme points; the first coordinate indexes
     // a set of double[] arrays (each array contains the values
     // for an extreme point).
-    double extreme_points[][];
+    double extremePoints[][];
 
     /**
      * Default constructor for a VertexQBProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param prop
      * @param pvs
      * @param ep
      */
-    public VertexSet(BayesNet b_n, ProbabilityVariable pvs[],
+    public VertexSet(BayesNet bN, ProbabilityVariable pvs[],
                      double ep[][], ArrayList prop)
     {
         // Call the super constructor with ep[0].
-        super(b_n, pvs, ep[0], prop);
+        super(bN, pvs, ep[0], prop);
 
         // Now replace ep[0] with a new array to avoid wrong
         // cross-references among arrays.
         double[] vals = new double[ep[0].length];
         values = vals;
 
-        // Update the extreme_points and the values.
-        extreme_points = ep;
-        compose_values();
+        // Update the extremePoints and the values.
+        extremePoints = ep;
+        composeValues();
     }
 
     /**
      * Constructor for a VertexQBProbabilityFunction.
      *
-     * @param b_n
+     * @param bN
      * @param ep
      * @param pvs
      * @param prop
      * @param v
      */
-    public VertexSet(BayesNet b_n, ProbabilityVariable pvs[],
+    public VertexSet(BayesNet bN, ProbabilityVariable pvs[],
                      double v[], ArrayList prop, double ep[][])
     {
-        super(b_n, pvs, v, (double[]) null, (double[]) null, prop);
-        extreme_points = ep;
+        super(bN, pvs, v, (double[]) null, (double[]) null, prop);
+        extremePoints = ep;
     }
 
     /**
@@ -97,15 +97,15 @@ public final class VertexSet
      */
     public VertexSet(ProbabilityFunction pf)
     {
-        super(pf, pf.get_values());
+        super(pf, pf.getValues());
         if (pf instanceof VertexSet)
         {
-            extreme_points = ((VertexSet) pf).extreme_points;
+            extremePoints = ((VertexSet) pf).extremePoints;
         }
         else
         {
-            extreme_points = new double[1][];
-            extreme_points[0] = pf.get_values();
+            extremePoints = new double[1][];
+            extremePoints[0] = pf.getValues();
         }
     }
 
@@ -114,122 +114,122 @@ public final class VertexSet
      * object and new values.
      *
      * @param pf
-     * @param new_values
+     * @param newValues
      */
-    public VertexSet(ProbabilityFunction pf, double new_values[])
+    public VertexSet(ProbabilityFunction pf, double newValues[])
     {
-        super(pf, new_values);
+        super(pf, newValues);
         if (pf instanceof VertexSet)
         {
-            extreme_points = ((VertexSet) pf).extreme_points;
-            auxiliary_variable = ((VertexSet) pf).auxiliary_variable;
+            extremePoints = ((VertexSet) pf).extremePoints;
+            auxiliaryVariable = ((VertexSet) pf).auxiliaryVariable;
         }
         else
         {
-            extreme_points = new double[1][];
-            extreme_points[0] = pf.get_values();
+            extremePoints = new double[1][];
+            extremePoints[0] = pf.getValues();
         }
     }
 
     /**
      * Put together all the values for the possible vertices of credal set and
      * create an auxiliary variable to indicate which vertex to consider There
-     * are three things to do: 1) Create an auxiliary_variable with correct
+     * are three things to do: 1) Create an auxiliaryVariable with correct
      * values. 2) Combine the values into a new array. 3) Insert the
-     * auxiliary_variable into the variables array.
+     * auxiliaryVariable into the variables array.
      *
-     * @param transformed_bn
+     * @param transformedBn
      * @return
      */
-    public VertexSet prepare_auxiliary_variable(BayesNet transformed_bn)
+    public VertexSet prepareAuxiliaryVariable(BayesNet transformedBn)
     {
         int i;
-        double new_values[];
+        double newValues[];
 
-        // Assume that values and auxiliary_variable are correct if
-        // auxiliary_variable is non null (cannot happen in current version)
-        if (auxiliary_variable != null)
+        // Assume that values and auxiliaryVariable are correct if
+        // auxiliaryVariable is non null (cannot happen in current version)
+        if (auxiliaryVariable != null)
         {
             return (this);
         }
 
         // Create the auxiliary variable for this credal set
-        ProbabilityVariable auxv = create_auxiliary_variable(transformed_bn);
+        ProbabilityVariable auxv = createAuxiliaryVariable(transformedBn);
 
-        // Create the new values for the credal set with auxiliary_variable
-        new_values = create_new_values(transformed_bn);
+        // Create the new values for the credal set with auxiliaryVariable
+        newValues = createNewValues(transformedBn);
 
-        // Now insert the auxiliary_variable in the variables array
-        DiscreteVariable new_variables[] =
+        // Now insert the auxiliaryVariable in the variables array
+        DiscreteVariable newVariables[] =
                            new DiscreteVariable[variables.length + 1];
         for (i = 0; i < variables.length; i++)
         {
-            new_variables[i] = variables[i];
+            newVariables[i] = variables[i];
         }
-        new_variables[i] = auxv;
+        newVariables[i] = auxv;
 
-        // Use the new_values array to create a new
-        // VertexQBProbabilityFunction that incorporates the auxiliary_variable
-        VertexSet new_qbpf = new VertexSet(this, new_values);
-        new_qbpf.bn = transformed_bn;
-        new_qbpf.auxiliary_variable = auxv;
-        new_qbpf.variables = new_variables;
+        // Use the newValues array to create a new
+        // VertexQBProbabilityFunction that incorporates the auxiliaryVariable
+        VertexSet newQbpf = new VertexSet(this, newValues);
+        newQbpf.bn = transformedBn;
+        newQbpf.auxiliaryVariable = auxv;
+        newQbpf.variables = newVariables;
 
-        return (new_qbpf);
+        return (newQbpf);
     }
 
     /**
      * Create a new array of values that combines extreme points.
      */
-    private double[] create_new_values(BayesNet transformed_bn)
+    private double[] createNewValues(BayesNet transformedBn)
     {
         int i, j;
-        // Combine vertices and the auxiliary_variable and create new values
-        double new_values[] =
-                 new double[extreme_points.length * values.length];
+        // Combine vertices and the auxiliaryVariable and create new values
+        double newValues[] =
+                 new double[extremePoints.length * values.length];
         for (i = 0; i < values.length; i++)
         {
-            for (j = 0; j < extreme_points.length; j++)
+            for (j = 0; j < extremePoints.length; j++)
             {
-                new_values[j + i * extreme_points.length] =
-                extreme_points[j][i];
+                newValues[j + i * extremePoints.length] =
+                extremePoints[j][i];
             }
         }
-        return (new_values);
+        return (newValues);
     }
 
     /**
      * Create an auxiliar variable to indicate the vertices.
      */
     private ProbabilityVariable
-            create_auxiliary_variable(BayesNet transformed_bn)
+            createAuxiliaryVariable(BayesNet transformedBn)
     {
         int i, j;
 
         // Compose the name of the auxiliary variable
-        StringBuffer buffer_auxiliary_variable_name =
+        StringBuffer bufferAuxiliaryVariableName =
                      new StringBuffer("<Transparent:");
-        buffer_auxiliary_variable_name.append(variables[0].get_name());
-        buffer_auxiliary_variable_name.append(">");
-        String auxiliary_variable_name =
-               new String(buffer_auxiliary_variable_name);
+        bufferAuxiliaryVariableName.append(variables[0].getName());
+        bufferAuxiliaryVariableName.append(">");
+        String auxiliaryVariableName =
+               new String(bufferAuxiliaryVariableName);
 
         // Compose the values of the auxiliary variable
-        String auxiliary_variable_values[] = new String[extreme_points.length];
-        for (i = 0; i < auxiliary_variable_values.length; i++)
+        String auxiliaryVariableValues[] = new String[extremePoints.length];
+        for (i = 0; i < auxiliaryVariableValues.length; i++)
         {
-            auxiliary_variable_values[i] = String.valueOf(i);
+            auxiliaryVariableValues[i] = String.valueOf(i);
         }
 
         // Create the auxiliary variable
         ProbabilityVariable auxv =
-                            new ProbabilityVariable(transformed_bn,
-                                                    auxiliary_variable_name,
+                            new ProbabilityVariable(transformedBn,
+                                                    auxiliaryVariableName,
                                                     BayesNet.INVALID_INDEX,
-                                                    auxiliary_variable_values,
+                                                    auxiliaryVariableValues,
                                                     ((ArrayList) null));
         // Mark the auxiliary variable as auxiliary
-        auxv.set_type(ProbabilityVariable.TRANSPARENT);
+        auxv.setType(ProbabilityVariable.TRANSPARENT);
 
         // Return the created auxiliary variable
         return (auxv);
@@ -240,63 +240,63 @@ public final class VertexSet
      * specifies a value of the function, and the index of the extreme
      * distribution to consider.
      *
-     * @param variable_value_pairs
-     * @param index_extreme_point
+     * @param variableValuePairs
+     * @param indexExtremePoint
      * @return
      */
-    public double evaluate(String variable_value_pairs[][],
-                           int index_extreme_point)
+    public double evaluate(String variableValuePairs[][],
+                           int indexExtremePoint)
     {
         int index;
         ProbabilityVariable pv;
 
         // Initialize with zeros an array of markers.
-        int value_indexes[] = new int[bn.number_variables()];
+        int valueIndexes[] = new int[bn.numberVariables()];
 
         // Fill the array of markers.
-        for (int i = 0; i < variable_value_pairs.length; i++)
+        for (int i = 0; i < variableValuePairs.length; i++)
         {
-            index = bn.index_of_variable(variable_value_pairs[i][0]);
-            pv = bn.get_probability_variable(index);
-            value_indexes[index] = pv.index_of_value(variable_value_pairs[i][1]);
+            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            pv = bn.getProbabilityVariable(index);
+            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
         }
 
         // Now evaluate
-        int position = get_position_from_indexes(bn.get_probability_variables(),
-                                                 value_indexes);
-        return (extreme_points[index_extreme_point][position]);
+        int position = getPositionFromIndexes(bn.getProbabilityVariables(),
+                                                 valueIndexes);
+        return (extremePoints[indexExtremePoint][position]);
     }
 
     /**
      * Set a single value of the probability function.
      *
-     * @param variable_value_pairs
-     * @param index_extreme_point
+     * @param variableValuePairs
+     * @param indexExtremePoint
      * @param val
      */
-    public void set_value(String variable_value_pairs[][], double val,
-                          int index_extreme_point)
+    public void setValue(String variableValuePairs[][], double val,
+                          int indexExtremePoint)
     {
         int index;
         ProbabilityVariable pv;
 
         // Initialize with zeros an array of markers.
-        int value_indexes[] = new int[bn.number_variables()];
+        int valueIndexes[] = new int[bn.numberVariables()];
 
         // Fill the array of markers.
-        for (int i = 0; i < variable_value_pairs.length; i++)
+        for (int i = 0; i < variableValuePairs.length; i++)
         {
-            index = bn.index_of_variable(variable_value_pairs[i][0]);
-            pv = bn.get_probability_variable(index);
-            value_indexes[index] = pv.index_of_value(variable_value_pairs[i][1]);
+            index = bn.indexOfVariable(variableValuePairs[i][0]);
+            pv = bn.getProbabilityVariable(index);
+            valueIndexes[index] = pv.indexOfValue(variableValuePairs[i][1]);
         }
 
         // Get the position of the value in the array of values
-        int pos = get_position_from_indexes(bn.get_probability_variables(),
-                                            value_indexes);
+        int pos = getPositionFromIndexes(bn.getProbabilityVariables(),
+                                            valueIndexes);
         // Set the value.
-        extreme_points[index_extreme_point][pos] = val;
-        compose_values();
+        extremePoints[indexExtremePoint][pos] = val;
+        composeValues();
     }
 
     /**
@@ -315,19 +315,19 @@ public final class VertexSet
             out.print("probability ( ");
             for (j = 0; j < variables.length; j++)
             {
-                out.print(" \"" + variables[j].get_name() + "\" ");
+                out.print(" \"" + variables[j].getName() + "\" ");
             }
             out.print(") {");
             out.println(" //" + variables.length +
                         " variable(s) and " + values.length + " values");
-            if (extreme_points != null)
+            if (extremePoints != null)
             {
-                for (i = 0; i < extreme_points.length; i++)
+                for (i = 0; i < extremePoints.length; i++)
                 {
                     out.print("\ttable ");
-                    for (j = 0; j < extreme_points[i].length; j++)
+                    for (j = 0; j < extremePoints[i].length; j++)
                     {
-                        out.print(extreme_points[i][j] + " ");
+                        out.print(extremePoints[i][j] + " ");
                     }
                     out.println(";");
                 }
@@ -356,23 +356,23 @@ public final class VertexSet
      * Produce the centroid of all extreme distributions and insert it into the
      * values of the distribution.
      */
-    public void compose_values()
+    public void composeValues()
     {
         double aux, n;
 
-        if (extreme_points == null)
+        if (extremePoints == null)
         {
             return;
         }
 
-        n = (double) (extreme_points.length);
+        n = (double) (extremePoints.length);
 
         for (int i = 0; i < values.length; i++)
         {
             aux = 0.0;
-            for (int j = 0; j < extreme_points.length; j++)
+            for (int j = 0; j < extremePoints.length; j++)
             {
-                aux += extreme_points[j][i];
+                aux += extremePoints[j][i];
             }
             values[i] = aux / n;
         }
@@ -381,69 +381,69 @@ public final class VertexSet
     /**
      * Set the number of extreme distributions in the credal set.
      *
-     * @param number_extreme_points
+     * @param numberExtremePoints
      */
-    public void set_local_credal_set(int number_extreme_points)
+    public void setLocalCredalSet(int numberExtremePoints)
     {
         int i, j, k;
-        int number_current_extreme_points;
-        double new_extreme_points[][];
+        int numberCurrentExtremePoints;
+        double newExtremePoints[][];
 
         // Update the values in case some extreme distributions
         // have changed.
-        compose_values();
+        composeValues();
 
-        if (extreme_points == null)
+        if (extremePoints == null)
         {
-            number_current_extreme_points = 0;
+            numberCurrentExtremePoints = 0;
         }
         else
         {
-            number_current_extreme_points = extreme_points.length;
+            numberCurrentExtremePoints = extremePoints.length;
 
             // If the new size is equal to current size, return.
-            if (number_extreme_points == number_current_extreme_points)
+            if (numberExtremePoints == numberCurrentExtremePoints)
             {
                 return;
             }
         }
 
         // Allocate the new extreme distributions.
-        new_extreme_points = new double[number_extreme_points][values.length];
+        newExtremePoints = new double[numberExtremePoints][values.length];
 
         // If the new size is larger than the current size.
-        if (number_extreme_points > number_current_extreme_points)
+        if (numberExtremePoints > numberCurrentExtremePoints)
         {
             // First copy what is already there.
-            for (i = 0; i < number_current_extreme_points; i++)
+            for (i = 0; i < numberCurrentExtremePoints; i++)
             {
-                for (j = 0; j < extreme_points[i].length; j++)
+                for (j = 0; j < extremePoints[i].length; j++)
                 {
-                    new_extreme_points[i][j] = extreme_points[i][j];
+                    newExtremePoints[i][j] = extremePoints[i][j];
                 }
             }
             // Then fill with copies of values.
-            for (k = i; k < new_extreme_points.length; k++)
+            for (k = i; k < newExtremePoints.length; k++)
             {
                 for (j = 0; j < values.length; j++)
                 {
-                    new_extreme_points[k][j] = values[j];
+                    newExtremePoints[k][j] = values[j];
                 }
             }
         }
         else
         {
             // If the new size is smaller than the current size.
-            for (i = 0; i < new_extreme_points.length; i++)
+            for (i = 0; i < newExtremePoints.length; i++)
             {
                 for (j = 0; j < values.length; j++)
                 {
-                    new_extreme_points[i][j] = extreme_points[i][j];
+                    newExtremePoints[i][j] = extremePoints[i][j];
                 }
             }
         }
 
-        extreme_points = new_extreme_points;
+        extremePoints = newExtremePoints;
     }
 
     /**
@@ -452,9 +452,9 @@ public final class VertexSet
      * @param index
      * @param ep
      */
-    public void set_extreme_point(int index, double ep[])
+    public void setExtremePoint(int index, double ep[])
     {
-        extreme_points[index] = ep;
+        extremePoints[index] = ep;
     }
 
     /**
@@ -462,17 +462,17 @@ public final class VertexSet
      *
      * @return
      */
-    public ProbabilityVariable get_auxiliary_variable()
+    public ProbabilityVariable getAuxiliaryVariable()
     {
-        return (auxiliary_variable);
+        return (auxiliaryVariable);
     }
 
     /**
      *
      * @return
      */
-    public double[][] get_extreme_points()
+    public double[][] getExtremePoints()
     {
-        return (extreme_points);
+        return (extremePoints);
     }
 }

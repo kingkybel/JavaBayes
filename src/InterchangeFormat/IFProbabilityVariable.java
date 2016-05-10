@@ -47,7 +47,7 @@ public class IFProbabilityVariable
      *
      * @param n
      */
-    public void set_name(String n)
+    public void setName(String n)
     {
         name = n;
     }
@@ -56,7 +56,7 @@ public class IFProbabilityVariable
      *
      * @param p
      */
-    public void set_properties(ArrayList p)
+    public void setProperties(ArrayList p)
     {
         properties = p;
     }
@@ -65,7 +65,7 @@ public class IFProbabilityVariable
      *
      * @param vs
      */
-    public void set_values(String vs[])
+    public void setValues(String vs[])
     {
         values = vs;
     }
@@ -74,7 +74,7 @@ public class IFProbabilityVariable
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
         return (name);
     }
@@ -83,7 +83,7 @@ public class IFProbabilityVariable
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     }
@@ -92,7 +92,7 @@ public class IFProbabilityVariable
      *
      * @return
      */
-    public String[] get_values()
+    public String[] getValues()
     {
         return (values);
     }

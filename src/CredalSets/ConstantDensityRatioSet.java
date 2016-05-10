@@ -22,7 +22,7 @@ public class ConstantDensityRatioSet
     Logger.getLogger(ConstantDensityRatioSet.class.getName());
     private double k;
     // Auxiliary variable that holds a discrete function for bracketing.
-    private DiscreteFunction temporary_discrete_function;
+    private DiscreteFunction temporaryDiscreteFunction;
 
     /**
      * Constructor for an ConstantDensityRatioSet ProbabilityFunction object and
@@ -32,7 +32,7 @@ public class ConstantDensityRatioSet
      */
     public ConstantDensityRatioSet(ProbabilityFunction pf, double kk)
     {
-        super(pf, pf.get_values());
+        super(pf, pf.getValues());
         k = kk;
         if (k <= 0.0)
         {
@@ -52,20 +52,20 @@ public class ConstantDensityRatioSet
      * ratio global neighborhood.
      * @return 
      */
-    public ProbabilityFunction posterior_marginal()
+    public ProbabilityFunction posteriorMarginal()
     {
-        double lower_values[] = new double[values.length];
-        double upper_values[] = new double[values.length];
+        double lowerValues[] = new double[values.length];
+        double upperValues[] = new double[values.length];
 
      // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] = values[i];
-                upper_values[i] = values[i];
+                lowerValues[i] = values[i];
+                upperValues[i] = values[i];
             }
         } // Else, apply the marginalization property.
         else
@@ -77,20 +77,20 @@ public class ConstantDensityRatioSet
             }
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] =
+                lowerValues[i] =
                 (values[i] / k) /
                 ((values[i] / k) + k * (total - values[i]));
             }
             for (int i = 0; i < values.length; i++)
             {
-                upper_values[i] =
+                upperValues[i] =
                 (k * values[i]) /
                 (k * values[i] + (total - values[i]) / k);
             }
         }
 
         return (new QBProbabilityFunction(bn, variables, values,
-                                          lower_values, upper_values, properties));
+                                          lowerValues, upperValues, properties));
     }
 
     /**
@@ -98,7 +98,7 @@ public class ConstantDensityRatioSet
      * @param df
      * @return 
      */
-    public double[] expected_values(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction df)
     {
         Bracketing bracket = new Bracketing();
         double results[] = new double[2];
@@ -106,47 +106,47 @@ public class ConstantDensityRatioSet
      // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.get_value(((ProbabilityVariable) variables[0]).
-                    get_observed_index());
+            df.getValue(((ProbabilityVariable) variables[0]).
+                    getObservedIndex());
             results[1] = results[0];
             return (results);
         }
      // Else, apply the marginalization property.
 
         // Obtain the maximum and minimum of functions
-        double max_df_value = df.get_value(0);
-        double min_df_value = df.get_value(0);
-        for (int i = 1; i < df.number_values(); i++)
+        double maxDfValue = df.getValue(0);
+        double minDfValue = df.getValue(0);
+        for (int i = 1; i < df.numberValues(); i++)
         {
-            if (max_df_value < df.get_value(i))
+            if (maxDfValue < df.getValue(i))
             {
-                max_df_value = df.get_value(i);
+                maxDfValue = df.getValue(i);
             }
-            if (min_df_value > df.get_value(i))
+            if (minDfValue > df.getValue(i))
             {
-                min_df_value = df.get_value(i);
+                minDfValue = df.getValue(i);
             }
         }
 
-        // Prepare the temporary_discrete_function variable for bracketing
-        temporary_discrete_function = df;
+        // Prepare the temporaryDiscreteFunction variable for bracketing
+        temporaryDiscreteFunction = df;
 
         // Bracket the lower expectation
-        double lower_expectation =
+        double lowerExpectation =
                bracket.perform(this, LOWER_EXPECTATION_BRACKET,
-                               min_df_value, max_df_value, ACCURACY);
+                               minDfValue, maxDfValue, ACCURACY);
 
         // Bracket the upper expectation
-        double upper_expectation =
+        double upperExpectation =
                bracket.perform(this, UPPER_EXPECTATION_BRACKET,
-                               min_df_value, max_df_value, ACCURACY);
+                               minDfValue, maxDfValue, ACCURACY);
 
         // Calculate the values
-        results[0] = lower_expectation;
-        results[1] = upper_expectation;
+        results[0] = lowerExpectation;
+        results[1] = upperExpectation;
 
         return (results);
     }
@@ -158,9 +158,9 @@ public class ConstantDensityRatioSet
      * @param df
      * @return 
      */
-    public double[] posterior_expected_values(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction df)
     {
-        return (expected_values(df));
+        return (expectedValues(df));
     }
 
     /**
@@ -168,35 +168,35 @@ public class ConstantDensityRatioSet
      * method map() must be present.
      */
     @Override
-    public double map(int map_type, double map_input)
+    public double map(int mapType, double mapInput)
     {
         int i;
         double aux;
-        double map_output_upper = 0.0;
-        double map_output_lower = 0.0;
-        double map_output = 0.0;
-        DiscreteFunction tdf = temporary_discrete_function;
+        double mapOutputUpper = 0.0;
+        double mapOutputLower = 0.0;
+        double mapOutput = 0.0;
+        DiscreteFunction tdf = temporaryDiscreteFunction;
 
-        switch (map_type)
+        switch (mapType)
         {
             case LOWER_EXPECTATION_BRACKET:
                 for (i = 0; i < values.length; i++)
                 {
-                    aux = tdf.get_value(i) - map_input;
-                    map_output_upper += (k * values[i]) * (-Math.max(-aux, 0.0));
-                    map_output_lower += (values[i] / k) * (Math.max(aux, 0.0));
+                    aux = tdf.getValue(i) - mapInput;
+                    mapOutputUpper += (k * values[i]) * (-Math.max(-aux, 0.0));
+                    mapOutputLower += (values[i] / k) * (Math.max(aux, 0.0));
                 }
                 break;
             case UPPER_EXPECTATION_BRACKET:
                 for (i = 0; i < values.length; i++)
                 {
-                    aux = tdf.get_value(i) - map_input;
-                    map_output_upper += (k * values[i]) * (Math.max(aux, 0.0));
-                    map_output_lower += (values[i] / k) * (-Math.max(-aux, 0.0));
+                    aux = tdf.getValue(i) - mapInput;
+                    mapOutputUpper += (k * values[i]) * (Math.max(aux, 0.0));
+                    mapOutputLower += (values[i] / k) * (-Math.max(-aux, 0.0));
                 }
                 break;
         }
-        map_output = map_output_upper + map_output_lower;
-        return (map_output);
+        mapOutput = mapOutputUpper + mapOutputLower;
+        return (mapOutput);
     }
 }

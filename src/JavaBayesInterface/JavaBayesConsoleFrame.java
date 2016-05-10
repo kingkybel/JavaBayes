@@ -47,7 +47,7 @@ public final class JavaBayesConsoleFrame extends Frame
 {
 
 
-    static final String applet_invalid_operation =
+    static final String appletInvalidOperation =
                         "This operation is not allowed in an applet!";
     // Labels
     static final String fileLabel = "File";
@@ -56,30 +56,30 @@ public final class JavaBayesConsoleFrame extends Frame
     static final String bifSaveLabel = "BIF format";
     static final String xmlSaveLabel = "XML format";
     final static String bugsSaveLabel = "BUGS format";
-    final static String open_dialog_title = "Open";
-    final static String save_dialog_title = "Save";
-    final static String open_menuitem_title = "Open...";
-    final static String open_url_menuitem_title = "Open URL...";
-    final static String save_menuitem_title = "Save";
-    final static String save_as_menuitem_title = "Save as...";
-    final static String clear_menuitem_title = "Clear";
-    final static String dump_console_menuitem_title = "Dump console...";
-    final static String quit_menuitem_title = "Quit";
-    final static String show_bayes_net_title = "Bayesian network";
-    final static String show_buckets_title = "Bucket tree";
-    final static String algorithm_variable_elimination_title =
+    final static String openDialogTitle = "Open";
+    final static String saveDialogTitle = "Save";
+    final static String openMenuitemTitle = "Open...";
+    final static String openUrlMenuitemTitle = "Open URL...";
+    final static String saveMenuitemTitle = "Save";
+    final static String saveAsMenuitemTitle = "Save as...";
+    final static String clearMenuitemTitle = "Clear";
+    final static String dumpConsoleMenuitemTitle = "Dump console...";
+    final static String quitMenuitemTitle = "Quit";
+    final static String showBayesNetTitle = "Bayesian network";
+    final static String showBucketsTitle = "Bucket tree";
+    final static String algorithmVariableEliminationTitle =
                         "Variable elimination";
-    final static String algorithm_bucket_tree_title = "Junction tree";
-    final static String what_to_show_title = "What to show";
-    final static String algorithm_title = "Algorithm";
-    final static String inference_mode_title = "Inference mode";
-    final static String posterior_marginal_title = "Posterior marginal";
-    final static String posterior_expectation_title = "Posterior expectation";
-    final static String explanation_title = "Estimate explanatory variables";
-    final static String best_configuration_title = "Find complete explanation";
-    final static String sensitivity_analysis_title = "Sensitivity analysis";
-    final static String help_title = "Help";
-    final static String about_title = "About";
+    final static String algorithmBucketTreeTitle = "Junction tree";
+    final static String whatToShowTitle = "What to show";
+    final static String algorithmTitle = "Algorithm";
+    final static String inferenceModeTitle = "Inference mode";
+    final static String posteriorMarginalTitle = "Posterior marginal";
+    final static String posteriorExpectationTitle = "Posterior expectation";
+    final static String explanationTitle = "Estimate explanatory variables";
+    final static String bestConfigurationTitle = "Find complete explanation";
+    final static String sensitivityAnalysisTitle = "Sensitivity analysis";
+    final static String helpTitle = "Help";
+    final static String aboutTitle = "About";
     private static final Logger LOG =
     Logger.getLogger(JavaBayesConsoleFrame.class.
             getName());
@@ -97,18 +97,18 @@ public final class JavaBayesConsoleFrame extends Frame
     Menu menu5;
     Menu menu6;
     Menu menu7;
-    CheckboxMenuItem show_buckets;
-    CheckboxMenuItem show_bayes_net;
-    CheckboxMenuItem algorithm_variable_elimination;
-    CheckboxMenuItem algorithm_bucket_tree;
-    CheckboxMenuItem bif_format;
-    CheckboxMenuItem bugs_format;
-    CheckboxMenuItem xml_format;
-    CheckboxMenuItem posterior_marginal;
-    CheckboxMenuItem posterior_expectation;
+    CheckboxMenuItem showBuckets;
+    CheckboxMenuItem showBayesNet;
+    CheckboxMenuItem algorithmVariableElimination;
+    CheckboxMenuItem algorithmBucketTree;
+    CheckboxMenuItem bifFormat;
+    CheckboxMenuItem bugsFormat;
+    CheckboxMenuItem xmlFormat;
+    CheckboxMenuItem posteriorMarginal;
+    CheckboxMenuItem posteriorExpectation;
     CheckboxMenuItem explanation;
-    CheckboxMenuItem best_configuration;
-    CheckboxMenuItem sensitivity_analysis;
+    CheckboxMenuItem bestConfiguration;
+    CheckboxMenuItem sensitivityAnalysis;
 
     /*
     * End of Network Actions.
@@ -116,18 +116,18 @@ public final class JavaBayesConsoleFrame extends Frame
     /**
      * Constructor for JavaBayesConsoleFrame.
      *
-     * @param java_bayes
+     * @param javaBayes
      * @param title
      */
-    public JavaBayesConsoleFrame(JavaBayes java_bayes, String title)
+    public JavaBayesConsoleFrame(JavaBayes javaBayes, String title)
     {
-        jb = java_bayes;
+        jb = javaBayes;
         setTitle(title);
 
         // Initialize controls.
-        OpenFileDialog = new java.awt.FileDialog(this, open_dialog_title,
+        OpenFileDialog = new java.awt.FileDialog(this, openDialogTitle,
                 FileDialog.LOAD);
-        SaveFileDialog = new java.awt.FileDialog(this, save_dialog_title,
+        SaveFileDialog = new java.awt.FileDialog(this, saveDialogTitle,
                 FileDialog.SAVE);
         textArea1 = new java.awt.TextArea();
         add("Center", textArea1);
@@ -136,51 +136,51 @@ public final class JavaBayesConsoleFrame extends Frame
         mainMenuBar = new java.awt.MenuBar();
         
         menu1 = new java.awt.Menu(fileLabel);
-        menu1.add(open_menuitem_title);
-        menu1.add(open_url_menuitem_title);
-        menu1.add(save_menuitem_title);
-        menu1.add(save_as_menuitem_title);
-        menu1.add(clear_menuitem_title);
-        menu1.add(dump_console_menuitem_title);
+        menu1.add(openMenuitemTitle);
+        menu1.add(openUrlMenuitemTitle);
+        menu1.add(saveMenuitemTitle);
+        menu1.add(saveAsMenuitemTitle);
+        menu1.add(clearMenuitemTitle);
+        menu1.add(dumpConsoleMenuitemTitle);
         menu1.addSeparator();
-        menu1.add(quit_menuitem_title);
+        menu1.add(quitMenuitemTitle);
         mainMenuBar.add(menu1);
         
         menu4 = new Menu(optionsLabel);
         
-        menu6 = new Menu(what_to_show_title);
-        menu6.add(show_bayes_net = new CheckboxMenuItem(show_bayes_net_title));
-        menu6.add(show_buckets = new CheckboxMenuItem(show_buckets_title));
+        menu6 = new Menu(whatToShowTitle);
+        menu6.add(showBayesNet = new CheckboxMenuItem(showBayesNetTitle));
+        menu6.add(showBuckets = new CheckboxMenuItem(showBucketsTitle));
         menu4.add(menu6);
         
-        menu7 = new Menu(algorithm_title);
-        menu7.add(algorithm_variable_elimination = new CheckboxMenuItem(
-                algorithm_variable_elimination_title));
-        menu7.add(algorithm_bucket_tree = new CheckboxMenuItem(
-                algorithm_bucket_tree_title));
+        menu7 = new Menu(algorithmTitle);
+        menu7.add(algorithmVariableElimination = new CheckboxMenuItem(
+                algorithmVariableEliminationTitle));
+        menu7.add(algorithmBucketTree = new CheckboxMenuItem(
+                algorithmBucketTreeTitle));
         menu4.add(menu7);
         
-        menu2 = new Menu(inference_mode_title);
-        menu2.add(posterior_marginal = new CheckboxMenuItem(
-                posterior_marginal_title));
-        menu2.add(posterior_expectation = new CheckboxMenuItem(
-                posterior_expectation_title));
-        menu2.add(explanation = new CheckboxMenuItem(explanation_title));
-        menu2.add(best_configuration = new CheckboxMenuItem(
-                best_configuration_title));
-        // menu2.add( sensitivity_analysis = new CheckboxMenuItem(sensitivity_analysis_title));
+        menu2 = new Menu(inferenceModeTitle);
+        menu2.add(posteriorMarginal = new CheckboxMenuItem(
+                posteriorMarginalTitle));
+        menu2.add(posteriorExpectation = new CheckboxMenuItem(
+                posteriorExpectationTitle));
+        menu2.add(explanation = new CheckboxMenuItem(explanationTitle));
+        menu2.add(bestConfiguration = new CheckboxMenuItem(
+                bestConfigurationTitle));
+        // menu2.add( sensitivityAnalysis = new CheckboxMenuItem(sensitivityAnalysisTitle));
         menu4.add(menu2);
         
         menu5 = new Menu(saveLabel);
-        menu5.add(bif_format = new CheckboxMenuItem(bifSaveLabel));
-        menu5.add(xml_format = new CheckboxMenuItem(xmlSaveLabel));
-        menu5.add(bugs_format = new CheckboxMenuItem(bugsSaveLabel));
+        menu5.add(bifFormat = new CheckboxMenuItem(bifSaveLabel));
+        menu5.add(xmlFormat = new CheckboxMenuItem(xmlSaveLabel));
+        menu5.add(bugsFormat = new CheckboxMenuItem(bugsSaveLabel));
         menu4.add(menu5);
         
         mainMenuBar.add(menu4);
         
-        menu3 = new java.awt.Menu(help_title);
-        menu3.add(about_title);
+        menu3 = new java.awt.Menu(helpTitle);
+        menu3.add(aboutTitle);
         // The following try block was contributed
         // by Jason Townsend, Nov 12 2000.
         try
@@ -194,16 +194,16 @@ public final class JavaBayesConsoleFrame extends Frame
         setMenuBar(mainMenuBar);
         
         // Initialize the inference menu
-        posterior_marginal.setState(true); // Simulate a true state.
-        PosteriorMarginal_Action();
+        posteriorMarginal.setState(true); // Simulate a true state.
+        PosteriorMarginalAction();
         
         // Initialize the save format menu
-        bif_format.setState(true); // Simulate a true state.
-        BifFormat_Action();
+        bifFormat.setState(true); // Simulate a true state.
+        BifFormatAction();
         
         // Initialize the algorithm menu
-        algorithm_variable_elimination.setState(true); // Simulate a true state.
-        AlgorithmVariableElimination_Action();
+        algorithmVariableElimination.setState(true); // Simulate a true state.
+        AlgorithmVariableEliminationAction();
         
         // Resize the frame.
         Toolkit t = Toolkit.getDefaultToolkit();
@@ -224,169 +224,169 @@ public final class JavaBayesConsoleFrame extends Frame
         this(jb, ((String) null));
     }
     
-    void BucketTree_Action()
+    void BucketTreeAction()
     {
-        jb.what_to_show_bucket_tree_action(show_buckets.getState());
+        jb.whatToShowBucketTreeAction(showBuckets.getState());
     }
 
-    void BayesianNetwork_Action()
+    void BayesianNetworkAction()
     {
-        jb.what_to_show_bayesian_network_action(show_bayes_net.getState());
+        jb.whatToShowBayesianNetworkAction(showBayesNet.getState());
     }
 
-    void PosteriorExpectation_Action()
+    void PosteriorExpectationAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu2, posterior_expectation,
-                                                     posterior_marginal);
-        if (active_item == posterior_expectation)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu2, posteriorExpectation,
+                                                     posteriorMarginal);
+        if (activeItem == posteriorExpectation)
         {
-            jb.posterior_expectation_action();
+            jb.posteriorExpectationAction();
         }
         else
         {
-            jb.posterior_marginal_action();
+            jb.posteriorMarginalAction();
         }
     }
 
-    void PosteriorMarginal_Action()
+    void PosteriorMarginalAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu2, posterior_marginal,
-                                                     posterior_expectation);
-        if (active_item == posterior_expectation)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu2, posteriorMarginal,
+                                                     posteriorExpectation);
+        if (activeItem == posteriorExpectation)
         {
-            jb.posterior_expectation_action();
+            jb.posteriorExpectationAction();
         }
         else
         {
-            jb.posterior_marginal_action();
+            jb.posteriorMarginalAction();
         }
     }
 
-    void EstimateBestConfiguration_Action()
+    void EstimateBestConfigurationAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu2, best_configuration,
-                                                     posterior_marginal);
-        if (active_item == posterior_marginal)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu2, bestConfiguration,
+                                                     posteriorMarginal);
+        if (activeItem == posteriorMarginal)
         {
-            jb.posterior_marginal_action();
+            jb.posteriorMarginalAction();
         }
         else
         {
-            jb.estimate_best_configuration_action();
+            jb.estimateBestConfigurationAction();
         }
     }
 
-    void SensitivityAnalysis_Action()
+    void SensitivityAnalysisAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu2, sensitivity_analysis,
-                                                     posterior_marginal);
-        if (active_item == posterior_marginal)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu2, sensitivityAnalysis,
+                                                     posteriorMarginal);
+        if (activeItem == posteriorMarginal)
         {
-            jb.posterior_marginal_action();
+            jb.posteriorMarginalAction();
         }
         else
         {
-            jb.sensitivity_analysis_action();
+            jb.sensitivityAnalysisAction();
         }
     }
 
-    void EstimateExplanationVariables_Action()
+    void EstimateExplanationVariablesAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu2, explanation,
-                                                     posterior_marginal);
-        if (active_item == posterior_marginal)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu2, explanation,
+                                                     posteriorMarginal);
+        if (activeItem == posteriorMarginal)
         {
-            jb.posterior_marginal_action();
+            jb.posteriorMarginalAction();
         }
         else
         {
-            jb.estimate_explanation_variables_action();
+            jb.estimateExplanationVariablesAction();
         }
     }
 
-    void BifFormat_Action()
+    void BifFormatAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu5, bif_format, xml_format);
-        if (active_item == bif_format)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu5, bifFormat, xmlFormat);
+        if (activeItem == bifFormat)
         {
-            jb.bif_format_action();
+            jb.bifFormatAction();
         }
         else
         {
-            jb.xml_format_action();
+            jb.xmlFormatAction();
         }
     }
 
-    void XmlFormat_Action()
+    void XmlFormatAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu5, xml_format, bif_format);
-        if (active_item == xml_format)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu5, xmlFormat, bifFormat);
+        if (activeItem == xmlFormat)
         {
-            jb.xml_format_action();
+            jb.xmlFormatAction();
         }
         else
         {
-            jb.bif_format_action();
+            jb.bifFormatAction();
         }
     }
 
-    void BugsFormat_Action()
+    void BugsFormatAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu5, bugs_format, bif_format);
-        if (active_item == bugs_format)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu5, bugsFormat, bifFormat);
+        if (activeItem == bugsFormat)
         {
-            jb.bugs_format_action();
+            jb.bugsFormatAction();
         }
         else
         {
-            jb.bif_format_action();
+            jb.bifFormatAction();
         }
     }
 
-    void AlgorithmVariableElimination_Action()
+    void AlgorithmVariableEliminationAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu7,
-                                              algorithm_variable_elimination,
-                                              algorithm_bucket_tree);
-        if (active_item == algorithm_variable_elimination)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu7,
+                                              algorithmVariableElimination,
+                                              algorithmBucketTree);
+        if (activeItem == algorithmVariableElimination)
         {
-            jb.set_algorithm_variable_elimination();
+            jb.setAlgorithmVariableElimination();
         }
         else
         {
-            jb.set_algorithm_bucket_tree();
+            jb.setAlgorithmBucketTree();
         }
     }
 
-    void AlgorithmBucketTree_Action()
+    void AlgorithmBucketTreeAction()
     {
-        CheckboxMenuItem active_item =
-        update_checkbox_menu(menu7, algorithm_bucket_tree,
-                                    algorithm_variable_elimination);
-        if (active_item == algorithm_bucket_tree)
+        CheckboxMenuItem activeItem =
+        updateCheckboxMenu(menu7, algorithmBucketTree,
+                                    algorithmVariableElimination);
+        if (activeItem == algorithmBucketTree)
         {
-            jb.set_algorithm_bucket_tree();
+            jb.setAlgorithmBucketTree();
         }
         else
         {
-            jb.set_algorithm_variable_elimination();
+            jb.setAlgorithmVariableElimination();
         }
     }
 
-    void DumpConsoleToFile_Action()
+    void DumpConsoleToFileAction()
     {
-        if (jb.is_applet)
+        if (jb.isApplet)
         {
-            textArea1.setText(applet_invalid_operation);
+            textArea1.setText(appletInvalidOperation);
             return;
         }
         SaveFileDialog.show();
@@ -414,21 +414,21 @@ public final class JavaBayesConsoleFrame extends Frame
         appendText("\tConsole dumped.\n\n");
     }
 
-    void Clear_Action()
+    void ClearAction()
     {
         (new ClearDialog(this, jb, "Clear the Bayesian network?", true)).show();
     }
 
-    void Save_Action()
+    void SaveAction()
     {
-        if (jb.is_applet)
+        if (jb.isApplet)
         {
-            appendText(applet_invalid_operation);
+            appendText(appletInvalidOperation);
             return;
         }
-        if (jb.get_current_save_filename() == null)
+        if (jb.getCurrentSaveFilename() == null)
         {
-            SaveAs_Action();
+            SaveAsAction();
         }
         else
         {
@@ -437,11 +437,11 @@ public final class JavaBayesConsoleFrame extends Frame
         }
     }
 
-    void SaveAs_Action()
+    void SaveAsAction()
     {
-        if (jb.is_applet)
+        if (jb.isApplet)
         {
-            appendText(applet_invalid_operation);
+            appendText(appletInvalidOperation);
             return;
         }
         SaveFileDialog.show();
@@ -459,14 +459,14 @@ public final class JavaBayesConsoleFrame extends Frame
         {
             appendText("\tFile not saved correctly.\n\n");
         }
-        jb.set_current_save_filename(filename);
+        jb.setCurrentSaveFilename(filename);
     }
 
-    void Open_Action()
+    void OpenAction()
     {
-        if (jb.is_applet)
+        if (jb.isApplet)
         {
-            textArea1.append(applet_invalid_operation);
+            textArea1.append(appletInvalidOperation);
             return;
         }
         OpenFileDialog.show();
@@ -486,19 +486,19 @@ public final class JavaBayesConsoleFrame extends Frame
         }
     }
 
-    void Open_URL_Action()
+    void OpenURL_Action()
     {
         (new OpenURLDialog(this, jb, "Insert URL of network", true)).show();
     }
 
-    void Quit_Action()
+    void QuitAction()
     {
         (new QuitDialog(this, jb, "Quit JavaBayes?", false)).show();
     }
 
-    void About_Action()
+    void AboutAction()
     {
-        JavaBayesHelpMessages.show(JavaBayesHelpMessages.about_message);
+        JavaBayesHelpMessages.show(JavaBayesHelpMessages.aboutMessage);
     }
 
     /**
@@ -525,103 +525,103 @@ public final class JavaBayesConsoleFrame extends Frame
         if (event.target instanceof MenuItem)
         {
             String label = (String) (((MenuItem) event.target).getLabel());
-            if (label.equals(show_buckets_title))
+            if (label.equals(showBucketsTitle))
             {
-                BucketTree_Action();
+                BucketTreeAction();
                 return true;
             }
-            else if (label.equals(show_bayes_net_title))
+            else if (label.equals(showBayesNetTitle))
             {
-                BayesianNetwork_Action();
+                BayesianNetworkAction();
                 return true;
             }
-            else if (label.equals(posterior_expectation_title))
+            else if (label.equals(posteriorExpectationTitle))
             {
-                PosteriorExpectation_Action();
+                PosteriorExpectationAction();
                 return true;
             }
-            else if (label.equals(posterior_marginal_title))
+            else if (label.equals(posteriorMarginalTitle))
             {
-                PosteriorMarginal_Action();
+                PosteriorMarginalAction();
                 return true;
             }
-            else if (label.equals(best_configuration_title))
+            else if (label.equals(bestConfigurationTitle))
             {
-                EstimateBestConfiguration_Action();
+                EstimateBestConfigurationAction();
                 return true;
             }
-            else if (label.equals(sensitivity_analysis_title))
+            else if (label.equals(sensitivityAnalysisTitle))
             {
-                SensitivityAnalysis_Action();
+                SensitivityAnalysisAction();
                 return true;
             }
-            else if (label.equals(explanation_title))
+            else if (label.equals(explanationTitle))
             {
-                EstimateExplanationVariables_Action();
+                EstimateExplanationVariablesAction();
                 return true;
             }
             else if (label.equals(bifSaveLabel))
             {
-                BifFormat_Action();
+                BifFormatAction();
                 return true;
             }
             else if (label.equals(xmlSaveLabel))
             {
-                XmlFormat_Action();
+                XmlFormatAction();
                 return true;
             }
             else if (label.equals(bugsSaveLabel))
             {
-                BugsFormat_Action();
+                BugsFormatAction();
                 return true;
             }
-            else if (label.equals(algorithm_variable_elimination_title))
+            else if (label.equals(algorithmVariableEliminationTitle))
             {
-                AlgorithmVariableElimination_Action();
+                AlgorithmVariableEliminationAction();
                 return true;
             }
-            else if (label.equals(algorithm_bucket_tree_title))
+            else if (label.equals(algorithmBucketTreeTitle))
             {
-                AlgorithmBucketTree_Action();
+                AlgorithmBucketTreeAction();
                 return true;
             }
-            else if (label.equals(clear_menuitem_title))
+            else if (label.equals(clearMenuitemTitle))
             {
-                Clear_Action();
+                ClearAction();
                 return true;
             }
-            else if (label.equals(dump_console_menuitem_title))
+            else if (label.equals(dumpConsoleMenuitemTitle))
             {
-                DumpConsoleToFile_Action();
+                DumpConsoleToFileAction();
             }
-            else if (label.equals(save_menuitem_title))
+            else if (label.equals(saveMenuitemTitle))
             {
-                Save_Action();
+                SaveAction();
                 return true;
             }
-            else if (label.equals(save_as_menuitem_title))
+            else if (label.equals(saveAsMenuitemTitle))
             {
-                SaveAs_Action();
+                SaveAsAction();
                 return true;
             }
-            else if (label.equals(open_menuitem_title))
+            else if (label.equals(openMenuitemTitle))
             {
-                Open_Action();
+                OpenAction();
                 return true;
             }
-            if (label.equals(open_url_menuitem_title))
+            if (label.equals(openUrlMenuitemTitle))
             {
-                Open_URL_Action();
+                OpenURL_Action();
                 return true;
             }
-            else if (label.equals(quit_menuitem_title))
+            else if (label.equals(quitMenuitemTitle))
             {
-                Quit_Action();
+                QuitAction();
                 return true;
             }
-            else if (label.equals(about_title))
+            else if (label.equals(aboutTitle))
             {
-                About_Action();
+                AboutAction();
                 return true;
             }
         }
@@ -661,7 +661,7 @@ public final class JavaBayesConsoleFrame extends Frame
      * Create the "radiobutton" behavior for the checkbox menu items.
      * It returns the checkbox that got on.
      */
-    private CheckboxMenuItem update_checkbox_menu(Menu m, CheckboxMenuItem cur,
+    private CheckboxMenuItem updateCheckboxMenu(Menu m, CheckboxMenuItem cur,
                                                   CheckboxMenuItem def)
     {
         boolean s = cur.getState();

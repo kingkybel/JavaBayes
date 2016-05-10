@@ -57,7 +57,7 @@ public class IFProbabilityEntry
      *
      * @return
      */
-    public String[] get_values()
+    public String[] getValues()
     {
         return (values);
     }
@@ -66,7 +66,7 @@ public class IFProbabilityEntry
      *
      * @return
      */
-    public double[] get_entries()
+    public double[] getEntries()
     {
         return (entries);
     }

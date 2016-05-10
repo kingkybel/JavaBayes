@@ -49,15 +49,15 @@ public class QuitDialog extends Dialog
     /**
      *
      * @param parent
-     * @param java_bayes
+     * @param javaBayes
      * @param title
      * @param modal
      */
-    public QuitDialog(Frame parent, JavaBayes java_bayes, String title,
+    public QuitDialog(Frame parent, JavaBayes javaBayes, String title,
                                                           boolean modal)
     {
         super(parent, title, true);
-        jb = java_bayes;
+        jb = javaBayes;
 
         //{{INIT_CONTROLS
         setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -74,13 +74,13 @@ public class QuitDialog extends Dialog
         //}}
     }
 
-    void yesButton_Clicked(Event event)
+    void yesButtonClicked(Event event)
     {
         dispose();
         jb.quit();
     }
 
-    void noButton_Clicked(Event event)
+    void noButtonClicked(Event event)
     {
         dispose();
     }
@@ -102,11 +102,11 @@ public class QuitDialog extends Dialog
     {
         if (event.target == noButton && event.id == Event.ACTION_EVENT)
         {
-            noButton_Clicked(event);
+            noButtonClicked(event);
         }
         if (event.target == yesButton && event.id == Event.ACTION_EVENT)
         {
-            yesButton_Clicked(event);
+            yesButtonClicked(event);
         }
         return super.handleEvent(event);
     }

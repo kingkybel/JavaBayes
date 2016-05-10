@@ -55,24 +55,24 @@ class EditVariableDialog extends Dialog
     private final static int BOTTOM_INSET = 0;
 
     // Labels for the various elements of the dialog.
-    private final static String name_label = "Name:";
-    private final static String new_value_label = "Values:";
-    private final static String type_label = "Types:";
-    private final static String chance_type_label = "Chance node";
-    private final static String explanation_type_label = "Explanatory node";
-    private final static String no_local_credal_set_label =
+    private final static String nameLabel = "Name:";
+    private final static String newValueLabel = "Values:";
+    private final static String typeLabel = "Types:";
+    private final static String chanceTypeLabel = "Chance node";
+    private final static String explanationTypeLabel = "Explanatory node";
+    private final static String noLocalCredalSetLabel =
                                 "Single distribution";
-    private final static String local_credal_set_label =
+    private final static String localCredalSetLabel =
                                 "Credal set with extreme points";
-    private final static String variable_properties_label =
+    private final static String variablePropertiesLabel =
                                 "Variable properties:";
-    private final static String function_properties_label =
+    private final static String functionPropertiesLabel =
                                 "Function properties:";
-    private final static String next_property_label = "Next";
-    private final static String new_property_label = "New";
-    private final static String edit_function_label = "Edit function";
-    private final static String ok_label = "Apply";
-    private final static String dismiss_label = "Dismiss";
+    private final static String nextPropertyLabel = "Next";
+    private final static String newPropertyLabel = "New";
+    private final static String editFunctionLabel = "Edit function";
+    private final static String okLabel = "Apply";
+    private final static String dismissLabel = "Dismiss";
     private static final Logger LOG =
     Logger.getLogger(EditVariableDialog.class.getName());
     // Network panel, used to repaint screen and access dialogs.
@@ -82,11 +82,11 @@ class EditVariableDialog extends Dialog
     InferenceGraph ig;
     InferenceGraphNode node;
     // Variables that hold the contents of the dialog.
-    int number_extreme_points;
-    PropertyManager variable_property_manager;
-    PropertyManager function_property_manager;
-    int displayed_variable_property_index;
-    int displayed_function_property_index;
+    int numberExtremePoints;
+    PropertyManager variablePropertyManager;
+    PropertyManager functionPropertyManager;
+    int displayedVariablePropertyIndex;
+    int displayedFunctionPropertyIndex;
     Panel np;
     Panel nvp;
     Panel tp;
@@ -102,39 +102,39 @@ class EditVariableDialog extends Dialog
     Panel qbp;
     Panel qbpp;
     Label name;
-    Label new_value;
+    Label newValue;
     Label type;
-    Label variable_properties;
-    Label function_properties;
-    Label local_parameter;
-    TextField text_name;
-    TextField text_new_value;
-    TextField text_local_parameter;
+    Label variableProperties;
+    Label functionProperties;
+    Label localParameter;
+    TextField textName;
+    TextField textNewValue;
+    TextField textLocalParameter;
     CheckboxGroup types;
-    CheckboxGroup function_types;
-    Checkbox chance_type;
-    Checkbox explanation_type;
-    Checkbox no_local_credal_set_type;
-    Checkbox local_credal_set_type;
-    Button new_variable_property;
-    Button next_variable_property;
-    Button new_function_property;
-    Button next_function_property;
-    TextField variable_properties_text;
-    TextField function_properties_text;
-    Button dist_button;
-    Button ok_button;
-    Button dismiss_button;
+    CheckboxGroup functionTypes;
+    Checkbox chanceType;
+    Checkbox explanationType;
+    Checkbox noLocalCredalSetType;
+    Checkbox localCredalSetType;
+    Button newVariableProperty;
+    Button nextVariableProperty;
+    Button newFunctionProperty;
+    Button nextFunctionProperty;
+    TextField variablePropertiesText;
+    TextField functionPropertiesText;
+    Button distButton;
+    Button okButton;
+    Button dismissButton;
 
     /**
      * Default constructor for an EditVariableDialog object.
      */
-    EditVariableDialog(NetworkPanel network_panel, Frame parent,
-                       InferenceGraph i_g, InferenceGraphNode node)
+    EditVariableDialog(NetworkPanel networkPanel, Frame parent,
+                       InferenceGraph iG, InferenceGraphNode node)
     {
-        super(parent, "Edit: " + node.get_name(), true);
-        this.npan = network_panel;
-        this.ig = i_g;
+        super(parent, "Edit: " + node.getName(), true);
+        this.npan = networkPanel;
+        this.ig = iG;
         this.node = node;
 
         // Compose the frame
@@ -142,42 +142,42 @@ class EditVariableDialog extends Dialog
         // Panel for the name
         np = new Panel();
         np.setLayout(new BorderLayout());
-        name = new Label(name_label);
-        text_name = new TextField(30);
+        name = new Label(nameLabel);
+        textName = new TextField(30);
         np.add("West", name);
-        np.add("Center", text_name);
+        np.add("Center", textName);
 
         // Panel for the values
         nvp = new Panel();
         nvp.setLayout(new BorderLayout());
-        new_value = new Label(new_value_label);
-        text_new_value = new TextField(60);
-        nvp.add("West", new_value);
-        nvp.add("Center", text_new_value);
+        newValue = new Label(newValueLabel);
+        textNewValue = new TextField(60);
+        nvp.add("West", newValue);
+        nvp.add("Center", textNewValue);
 
         // Panel for the type
         tp = new Panel();
         tp.setLayout(new BorderLayout());
-        type = new Label(type_label);
+        type = new Label(typeLabel);
 
         ttp = new Panel();
         ttp.setLayout(new GridLayout(2, 1));
         types = new CheckboxGroup();
-        chance_type = new Checkbox(chance_type_label, types, true);
-        explanation_type = new Checkbox(explanation_type_label, types, false);
-        ttp.add(chance_type);
-        ttp.add(explanation_type);
+        chanceType = new Checkbox(chanceTypeLabel, types, true);
+        explanationType = new Checkbox(explanationTypeLabel, types, false);
+        ttp.add(chanceType);
+        ttp.add(explanationType);
 
         qbp = new Panel();
         qbp.setLayout(new GridLayout(2, 1));
-        function_types = new CheckboxGroup();
-        no_local_credal_set_type = new Checkbox(no_local_credal_set_label,
-                                                function_types, true);
-        local_credal_set_type = new Checkbox(local_credal_set_label,
-                                             function_types, false);
+        functionTypes = new CheckboxGroup();
+        noLocalCredalSetType = new Checkbox(noLocalCredalSetLabel,
+                                                functionTypes, true);
+        localCredalSetType = new Checkbox(localCredalSetLabel,
+                                             functionTypes, false);
 
-        qbp.add(no_local_credal_set_type);
-        qbp.add(local_credal_set_type);
+        qbp.add(noLocalCredalSetType);
+        qbp.add(localCredalSetType);
 
         tp.add("North", type);
         tp.add("West", ttp);
@@ -197,26 +197,26 @@ class EditVariableDialog extends Dialog
         // Variable properties
         vpp = new Panel();
         vpp.setLayout(new BorderLayout());
-        variable_properties = new Label(variable_properties_label);
-        next_variable_property = new Button(next_property_label);
-        new_variable_property = new Button(new_property_label);
-        variable_properties_text = new TextField(40);
-        vpp.add("North", variable_properties);
-        vpp.add("West", next_variable_property);
-        vpp.add("Center", variable_properties_text);
-        vpp.add("East", new_variable_property);
+        variableProperties = new Label(variablePropertiesLabel);
+        nextVariableProperty = new Button(nextPropertyLabel);
+        newVariableProperty = new Button(newPropertyLabel);
+        variablePropertiesText = new TextField(40);
+        vpp.add("North", variableProperties);
+        vpp.add("West", nextVariableProperty);
+        vpp.add("Center", variablePropertiesText);
+        vpp.add("East", newVariableProperty);
 
         // Function properties
         fpp = new Panel();
         fpp.setLayout(new BorderLayout());
-        function_properties = new Label(function_properties_label);
-        next_function_property = new Button(next_property_label);
-        new_function_property = new Button(new_property_label);
-        function_properties_text = new TextField(40);
-        fpp.add("North", function_properties);
-        fpp.add("West", next_function_property);
-        fpp.add("Center", function_properties_text);
-        fpp.add("East", new_function_property);
+        functionProperties = new Label(functionPropertiesLabel);
+        nextFunctionProperty = new Button(nextPropertyLabel);
+        newFunctionProperty = new Button(newPropertyLabel);
+        functionPropertiesText = new TextField(40);
+        fpp.add("North", functionProperties);
+        fpp.add("West", nextFunctionProperty);
+        fpp.add("Center", functionPropertiesText);
+        fpp.add("East", newFunctionProperty);
 
         // Finish panel for properties
         pp.add("North", vpp);
@@ -225,12 +225,12 @@ class EditVariableDialog extends Dialog
         // Return buttons
         okp = new Panel();
         okp.setLayout(new FlowLayout(FlowLayout.CENTER));
-        dist_button = new Button(edit_function_label);
-        okp.add(dist_button);
-        ok_button = new Button(ok_label);
-        dismiss_button = new Button(dismiss_label);
-        okp.add(ok_button);
-        okp.add(dismiss_button);
+        distButton = new Button(editFunctionLabel);
+        okp.add(distButton);
+        okButton = new Button(okLabel);
+        dismissButton = new Button(dismissLabel);
+        okp.add(okButton);
+        okp.add(dismissButton);
         setLayout(new BorderLayout());
         add("North", cbp);
         add("Center", pp);
@@ -240,7 +240,7 @@ class EditVariableDialog extends Dialog
         pack();
 
         // Initialize values
-        fill_dialog();
+        fillDialog();
     }
 
     /**
@@ -285,57 +285,57 @@ class EditVariableDialog extends Dialog
     /**
      * Fill the values in the dialog area.
      */
-    private void fill_dialog()
+    private void fillDialog()
     {
-        String values[], all_values = "";
+        String values[], allValues = "";
         ArrayList prop;
         String property;
 
         // Synchronize the network if necessary.
-        ig.get_bayes_net();
+        ig.getBayesNet();
 
         // Fill name
-        text_name.setText(node.get_name());
+        textName.setText(node.getName());
 
         // Fill values
-        values = node.get_values();
+        values = node.getValues();
         for (int i = 0; i < values.length; i++)
         {
-            all_values += values[i];
+            allValues += values[i];
             if (i != (values.length - 1))
             {
-                all_values += ", ";
+                allValues += ", ";
             }
         }
-        text_new_value.setText(all_values);
+        textNewValue.setText(allValues);
 
         // Set type: explanatory or chance.
-        if (node.is_explanation())
+        if (node.isExplanation())
         {
-            types.setCurrent(explanation_type);
+            types.setCurrent(explanationType);
         }
         else
         {
-            types.setCurrent(chance_type);
+            types.setCurrent(chanceType);
         }
 
         // Set type: standard or credal.
-        if (node.is_credal_set())
+        if (node.isCredalSet())
         {
-            function_types.setCurrent(local_credal_set_type);
+            functionTypes.setCurrent(localCredalSetType);
         }
         else
         {
-            function_types.setCurrent(no_local_credal_set_type);
+            functionTypes.setCurrent(noLocalCredalSetType);
         }
 
         // Fill and store properties
-        variable_property_manager =
-        new PropertyManager(node.get_variable_properties(),
-                            variable_properties_text);
-        function_property_manager =
-        new PropertyManager(node.get_function_properties(),
-                            function_properties_text);
+        variablePropertyManager =
+        new PropertyManager(node.getVariableProperties(),
+                            variablePropertiesText);
+        functionPropertyManager =
+        new PropertyManager(node.getFunctionProperties(),
+                            functionPropertiesText);
     }
 
     /**
@@ -345,43 +345,43 @@ class EditVariableDialog extends Dialog
     public boolean action(Event evt, Object arg)
     {
         ArrayList prop;
-        String values[], property, checked_name;
+        String values[], property, checkedName;
 
-        if (evt.target == dismiss_button)
+        if (evt.target == dismissButton)
         {
             dispose();
         }
-        else if (evt.target == ok_button)
+        else if (evt.target == okButton)
         {
-            update_dialog();
+            updateDialog();
         }
-        else if (evt.target == new_variable_property)
+        else if (evt.target == newVariableProperty)
         {
-            variable_property_manager.new_property();
+            variablePropertyManager.newProperty();
         }
-        else if (evt.target == next_variable_property)
+        else if (evt.target == nextVariableProperty)
         {
-            variable_property_manager.next_property();
+            variablePropertyManager.nextProperty();
         }
-        else if (evt.target == new_function_property)
+        else if (evt.target == newFunctionProperty)
         {
-            function_property_manager.new_property();
+            functionPropertyManager.newProperty();
         }
-        else if (evt.target == next_function_property)
+        else if (evt.target == nextFunctionProperty)
         {
-            function_property_manager.next_property();
+            functionPropertyManager.nextProperty();
         }
-        else if (evt.target == variable_properties_text)
+        else if (evt.target == variablePropertiesText)
         {
-            variable_property_manager.update_property();
+            variablePropertyManager.updateProperty();
         }
-        else if (evt.target == function_properties_text)
+        else if (evt.target == functionPropertiesText)
         {
-            function_property_manager.update_property();
+            functionPropertyManager.updateProperty();
         }
-        else if (evt.target == dist_button)
+        else if (evt.target == distButton)
         {
-            npan.edit_function(node);
+            npan.editFunction(node);
         }
         else
         {
@@ -394,16 +394,16 @@ class EditVariableDialog extends Dialog
     /**
      * Parse the values stated in the values TextField.
      */
-    private String[] parse_values(String all_values)
+    private String[] parseValues(String allValues)
     {
         String token = null, delimiters = " ,\n\t\r";
-        StringTokenizer st = new StringTokenizer(all_values, delimiters);
+        StringTokenizer st = new StringTokenizer(allValues, delimiters);
         String vals[] = new String[st.countTokens()];
         int i = 0;
 
         while (st.hasMoreTokens())
         {
-            vals[i] = ig.validate_value(st.nextToken());
+            vals[i] = ig.validateValue(st.nextToken());
             i++;
         }
         return (vals);
@@ -413,54 +413,54 @@ class EditVariableDialog extends Dialog
      * Update the contents of the network when the
      * dialog exits.
      */
-    private void update_dialog()
+    private void updateDialog()
     {
         // Update the name of the variable.
-        String checked_name = ig.check_name(text_name.getText());
-        if (checked_name != null)
+        String checkedName = ig.checkName(textName.getText());
+        if (checkedName != null)
         {
-            node.set_name(checked_name);
+            node.setName(checkedName);
         }
         // Update the values of the variable.
-        String[] values = parse_values(text_new_value.getText());
+        String[] values = parseValues(textNewValue.getText());
         if (values != null)
         {
-            ig.change_values(node, values);
+            ig.changeValues(node, values);
         }
         // Update the explanatory/chance type.
-        if (types.getSelectedCheckbox() == chance_type)
+        if (types.getSelectedCheckbox() == chanceType)
         {
-            node.set_explanation(false);
+            node.setExplanation(false);
         }
         else
         {
-            node.set_explanation(true);
+            node.setExplanation(true);
         }
         npan.repaint();
         // Update the standard/credal type.
-        if (function_types.getSelectedCheckbox() == no_local_credal_set_type)
+        if (functionTypes.getSelectedCheckbox() == noLocalCredalSetType)
         {
-            node.set_no_local_credal_set();
+            node.setNoLocalCredalSet();
         }
         else
         {
-            node.set_local_credal_set();
+            node.setLocalCredalSet();
         }
         // Update the variable properties (if necessary).
-        ArrayList vprop = variable_property_manager.update_property_on_exit();
+        ArrayList vprop = variablePropertyManager.updatePropertyOnExit();
         if (vprop != null)
         {
-            node.set_variable_properties(vprop);
+            node.setVariableProperties(vprop);
             for (Object e : vprop)
             {
-                node.update_position_from_property((String) (e));
+                node.updatePositionFromProperty((String) (e));
             }
         }
         // Update the function properties (if necessary).
-        ArrayList fprop = function_property_manager.update_property_on_exit();
+        ArrayList fprop = functionPropertyManager.updatePropertyOnExit();
         if (fprop != null)
         {
-            node.set_function_properties(fprop);
+            node.setFunctionProperties(fprop);
         }
     }
 }

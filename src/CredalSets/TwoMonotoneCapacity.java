@@ -25,7 +25,7 @@ public abstract class TwoMonotoneCapacity
 
     private final static double ACCURACY = 10E-8;
     // Auxiliary variable that holds a discrete function for bracketing
-    private DiscreteFunction temporary_discrete_function;
+    private DiscreteFunction temporaryDiscreteFunction;
 
     /**
      * Constructor for an TwoMonotoneCapacity ProbabilityFunction object and
@@ -34,7 +34,7 @@ public abstract class TwoMonotoneCapacity
      */
     public TwoMonotoneCapacity(ProbabilityFunction pf)
     {
-        super(pf, pf.get_values());
+        super(pf, pf.getValues());
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class TwoMonotoneCapacity
      * @param p
      * @return 
      */
-    public abstract double get_lower_probability_from_base(double p);
+    public abstract double getLowerProbabilityFromBase(double p);
 
     /**
      * ************************************************************
@@ -55,7 +55,7 @@ public abstract class TwoMonotoneCapacity
      * @param p
      * @return 
      */
-    public abstract double get_upper_probability_from_base(double p);
+    public abstract double getUpperProbabilityFromBase(double p);
 
     /**
      * ************************************************************
@@ -66,7 +66,7 @@ public abstract class TwoMonotoneCapacity
      * @param index
      * @return 
      */
-    public abstract double get_atom_probability(int index);
+    public abstract double getAtomProbability(int index);
 
     /**
      * ************************************************************
@@ -77,21 +77,21 @@ public abstract class TwoMonotoneCapacity
      * ************************************************************
      * @return 
      */
-    public ProbabilityFunction posterior_marginal()
+    public ProbabilityFunction posteriorMarginal()
     {
-        double lower_values[] = new double[values.length];
-        double upper_values[] = new double[values.length];
+        double lowerValues[] = new double[values.length];
+        double upperValues[] = new double[values.length];
         DiscreteFunction df = new DiscreteFunction(1, values.length);
 
      // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] = values[i];
-                upper_values[i] = values[i];
+                lowerValues[i] = values[i];
+                upperValues[i] = values[i];
             }
         } // Else, apply the marginalization property.
         else
@@ -104,22 +104,22 @@ public abstract class TwoMonotoneCapacity
 
             for (int i = 0; i < values.length; i++)
             {
-                lower_values[i] =
-                (get_lower_probability_from_base(values[i]) /
-                 (get_lower_probability_from_base(values[i]) +
-                  get_upper_probability_from_base(total - values[i])));
+                lowerValues[i] =
+                (getLowerProbabilityFromBase(values[i]) /
+                 (getLowerProbabilityFromBase(values[i]) +
+                  getUpperProbabilityFromBase(total - values[i])));
             }
             for (int i = 0; i < values.length; i++)
             {
-                upper_values[i] =
-                (get_upper_probability_from_base(values[i]) /
-                 (get_upper_probability_from_base(values[i]) +
-                  get_lower_probability_from_base(total - values[i])));
+                upperValues[i] =
+                (getUpperProbabilityFromBase(values[i]) /
+                 (getUpperProbabilityFromBase(values[i]) +
+                  getLowerProbabilityFromBase(total - values[i])));
             }
         }
 
         return (new QBProbabilityFunction(this, (double[]) null,
-                                          lower_values, upper_values));
+                                          lowerValues, upperValues));
     }
 
     /**
@@ -131,18 +131,18 @@ public abstract class TwoMonotoneCapacity
      * @param df
      * @return 
      */
-    public double[] expected_values(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction df)
     {
         double results[] = new double[2];
 
      // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.get_value(((ProbabilityVariable) variables[0]).
-                    get_observed_index());
+            df.getValue(((ProbabilityVariable) variables[0]).
+                    getObservedIndex());
             results[1] = results[0];
             return (results);
         }
@@ -167,7 +167,7 @@ public abstract class TwoMonotoneCapacity
      * @param df
      * @return 
      */
-    public double[] posterior_expected_values(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction df)
     {
         Bracketing bracket = new Bracketing();
         double results[] = new double[2];
@@ -175,11 +175,11 @@ public abstract class TwoMonotoneCapacity
     // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).is_observed() == true))
+            (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.get_value(((ProbabilityVariable) variables[0]).
-                    get_observed_index());
+            df.getValue(((ProbabilityVariable) variables[0]).
+                    getObservedIndex());
             results[1] = results[0];
             return (results);
         }
@@ -187,36 +187,36 @@ public abstract class TwoMonotoneCapacity
     // Else, apply the marginalization property and the
         // fact that total variation neighborhoods are 2-monotone.
         // Obtain the maximum and minimum of functions
-        double max_df_value = df.get_value(0);
-        double min_df_value = df.get_value(0);
-        for (int i = 1; i < df.number_values(); i++)
+        double maxDfValue = df.getValue(0);
+        double minDfValue = df.getValue(0);
+        for (int i = 1; i < df.numberValues(); i++)
         {
-            if (max_df_value < df.get_value(i))
+            if (maxDfValue < df.getValue(i))
             {
-                max_df_value = df.get_value(i);
+                maxDfValue = df.getValue(i);
             }
-            if (min_df_value > df.get_value(i))
+            if (minDfValue > df.getValue(i))
             {
-                min_df_value = df.get_value(i);
+                minDfValue = df.getValue(i);
             }
         }
 
-        // Prepare the temporary_discrete_function variable for bracketing
-        temporary_discrete_function = df;
+        // Prepare the temporaryDiscreteFunction variable for bracketing
+        temporaryDiscreteFunction = df;
 
         // Bracket the lower expectation
-        double lower_expectation =
+        double lowerExpectation =
                bracket.perform(this, LOWER_EXPECTATION_BRACKET,
-                               min_df_value, max_df_value, ACCURACY);
+                               minDfValue, maxDfValue, ACCURACY);
 
         // Bracket the upper expectation
-        double upper_expectation =
+        double upperExpectation =
                bracket.perform(this, UPPER_EXPECTATION_BRACKET,
-                               min_df_value, max_df_value, ACCURACY);
+                               minDfValue, maxDfValue, ACCURACY);
 
         // Calculate the values
-        results[0] = lower_expectation;
-        results[1] = upper_expectation;
+        results[0] = lowerExpectation;
+        results[1] = upperExpectation;
 
         return (results);
     }
@@ -230,25 +230,25 @@ public abstract class TwoMonotoneCapacity
      * ************************************************************
      */
     @Override
-    public double map(int map_type, double map_input)
+    public double map(int mapType, double mapInput)
     {
-        // Get temporary_discrete_function
-        DiscreteFunction tdf = temporary_discrete_function;
+        // Get temporaryDiscreteFunction
+        DiscreteFunction tdf = temporaryDiscreteFunction;
 
         // Create new discrete function
-        double new_values[] = new double[tdf.number_values()];
-        for (int i = 0; i < new_values.length; i++)
+        double newValues[] = new double[tdf.numberValues()];
+        for (int i = 0; i < newValues.length; i++)
         {
-            new_values[i] = tdf.get_value(i) - map_input;
+            newValues[i] = tdf.getValue(i) - mapInput;
         }
-        DiscreteFunction mtdf = new DiscreteFunction(tdf.get_variables(),
-                                                     new_values);
+        DiscreteFunction mtdf = new DiscreteFunction(tdf.getVariables(),
+                                                     newValues);
 
         // Obtain Walley's formula for lower and upper expectations
         GeneralizedChoquetIntegral gci = new GeneralizedChoquetIntegral(this,
                                                                         mtdf);
 
-        if (map_type == LOWER_EXPECTATION_BRACKET)
+        if (mapType == LOWER_EXPECTATION_BRACKET)
         {
             return (gci.results[0]); // LOWER_EXPECTATION_BRACKET
         }

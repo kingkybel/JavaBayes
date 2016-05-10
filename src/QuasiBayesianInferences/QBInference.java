@@ -41,22 +41,22 @@ public class QBInference extends Inference
     private static final Logger LOG =
     Logger.getLogger(QBInference.class.getName());
 
-    BayesNet original_bn;
-    ProbabilityFunction list_of_local_neighborhood_results;
+    BayesNet originalBn;
+    ProbabilityFunction listOfLocalNeighborhoodResults;
 
-    boolean is_inference_without_local_neighborhoods;
+    boolean isInferenceWithoutLocalNeighborhoods;
 
     /**
      * Constructor for a QBInference.
      *
-     * @param b_n
+     * @param bN
      * @param dpc
      */
-    public QBInference(BayesNet b_n, boolean dpc)
+    public QBInference(BayesNet bN, boolean dpc)
     {
-        super(b_n, dpc);
-        original_bn = b_n;
-        transform_network();
+        super(bN, dpc);
+        originalBn = bN;
+        transformNetwork();
     }
 
     /*
@@ -66,118 +66,118 @@ public class QBInference extends Inference
     /*
      * Create all the values and transparent variables for the
      * credal sets, but do not include the transparent variables in
-     * the probability_variables array.
+     * the probabilityVariables array.
      * Local neighborhoods are only used if there are
      * local credal sets and no global credal set.
      */
-    private void transform_network()
+    private void transformNetwork()
     {
         // Decide whether transformation is necessary
         if (bn instanceof QuasiBayesNet)
         {
-            is_inference_without_local_neighborhoods =
-            (((QuasiBayesNet) bn).get_global_neighborhood_type() !=
+            isInferenceWithoutLocalNeighborhoods =
+            (((QuasiBayesNet) bn).getGlobalNeighborhoodType() !=
              QuasiBayesNet.NO_CREDAL_SET) ||
-            (!(((QuasiBayesNet) bn).are_local_credal_sets_present()));
+            (!(((QuasiBayesNet) bn).areLocalCredalSetsPresent()));
         }
         else
         {
-            is_inference_without_local_neighborhoods = true;
+            isInferenceWithoutLocalNeighborhoods = true;
         }
 
-        // Generate the transformed_bn.
+        // Generate the transformedBn.
         bn = new QuasiBayesNet(bn);
 
         // If no transformation, then return.
-        if (is_inference_without_local_neighborhoods)
+        if (isInferenceWithoutLocalNeighborhoods)
         {
             return;
         }
 
-        // Else, copy all relevant content from bn to transformed_bn
-        bn.set_name("Transformed-Network");
-        ArrayList auxiliary_variables = transform_probability_functions_array();
-        transform_probability_variables_array(auxiliary_variables);
+        // Else, copy all relevant content from bn to transformedBn
+        bn.setName("Transformed-Network");
+        ArrayList auxiliaryVariables = transformProbabilityFunctionsArray();
+        transformProbabilityVariablesArray(auxiliaryVariables);
     }
 
     /*
      * Create all the values and transparent variables for the
      * credal sets.
      */
-    private ArrayList transform_probability_functions_array()
+    private ArrayList transformProbabilityFunctionsArray()
     {
-        VertexSet qbpf, new_qbpf;
-        ProbabilityFunction pf, new_probability_function;
-        ArrayList auxiliary_variables = new ArrayList();
+        VertexSet qbpf, newQbpf;
+        ProbabilityFunction pf, newProbabilityFunction;
+        ArrayList auxiliaryVariables = new ArrayList();
 
         // Process every ProbabilityFunction
-        for (int i = 0; i < bn.number_probability_functions(); i++)
+        for (int i = 0; i < bn.numberProbabilityFunctions(); i++)
         {
-            pf = bn.get_probability_function(i);
+            pf = bn.getProbabilityFunction(i);
             if (pf instanceof VertexSet)
             {
                 qbpf = (VertexSet) pf;
-                new_qbpf = qbpf.prepare_auxiliary_variable(bn);
-                auxiliary_variables.add(new_qbpf.get_auxiliary_variable());
-                bn.set_probability_function(i, new_qbpf);
+                newQbpf = qbpf.prepareAuxiliaryVariable(bn);
+                auxiliaryVariables.add(newQbpf.getAuxiliaryVariable());
+                bn.setProbabilityFunction(i, newQbpf);
             }
             else
             {
-                new_probability_function =
-                new ProbabilityFunction(bn, pf.get_variables(),
-                                        pf.get_values(), (ArrayList) null);
-                bn.set_probability_function(i, new_probability_function);
+                newProbabilityFunction =
+                new ProbabilityFunction(bn, pf.getVariables(),
+                                        pf.getValues(), (ArrayList) null);
+                bn.setProbabilityFunction(i, newProbabilityFunction);
             }
         }
-        return (auxiliary_variables);
+        return (auxiliaryVariables);
     }
 
     /*
      * Copy all the regular and auxiliary variables into a new
-     * probability_variables array, making the auxiliary variables
+     * probabilityVariables array, making the auxiliary variables
      * available for calculation of marginals
      */
-    private void transform_probability_variables_array(ArrayList auxs)
+    private void transformProbabilityVariablesArray(ArrayList auxs)
     {
-        ProbabilityVariable new_probability_variable;
-        ProbabilityVariable new_probability_variables[];
-        int i, j, new_array_size;
+        ProbabilityVariable newProbabilityVariable;
+        ProbabilityVariable newProbabilityVariables[];
+        int i, j, newArraySize;
 
-        // Create the new probability_variables array
-        new_array_size = bn.number_variables() + auxs.size();
-        new_probability_variables = new ProbabilityVariable[new_array_size];
+        // Create the new probabilityVariables array
+        newArraySize = bn.numberVariables() + auxs.size();
+        newProbabilityVariables = new ProbabilityVariable[newArraySize];
         // Insert regular variables into new array
-        for (i = 0; i < bn.number_variables(); i++)
+        for (i = 0; i < bn.numberVariables(); i++)
         {
-            new_probability_variable =
-            new ProbabilityVariable(bn, bn.get_probability_variable(i));
-            new_probability_variables[i] = new_probability_variable;
+            newProbabilityVariable =
+            new ProbabilityVariable(bn, bn.getProbabilityVariable(i));
+            newProbabilityVariables[i] = newProbabilityVariable;
         }
         j = i;
         // Insert auxiliary variables into new array
         for (Iterator e = auxs.iterator();
-             j < new_probability_variables.length;
+             j < newProbabilityVariables.length;
              j++)
         {
             // Insert auxiliary variable
-            new_probability_variables[j] =
+            newProbabilityVariables[j] =
             (ProbabilityVariable) (e.next());
             // Update the index of auxiliary variable
-            new_probability_variables[j].set_index(j);
+            newProbabilityVariables[j].setIndex(j);
         }
 
-        // Replace probability_variables
-        bn.set_probability_variables(new_probability_variables);
+        // Replace probabilityVariables
+        bn.setProbabilityVariables(newProbabilityVariables);
     }
 
     /*
      * Calculation of Inference.
      */
     @Override
-    public void inference(String queried_variable_name)
+    public void inference(String queriedVariableName)
     {
-        super.inference(queried_variable_name);
-        do_quasi_bayesian_inference();
+        super.inference(queriedVariableName);
+        doQuasiBayesianInference();
     }
 
     /**
@@ -189,7 +189,7 @@ public class QBInference extends Inference
     public void inference(String order[])
     {
         inference(order);
-        do_quasi_bayesian_inference();
+        doQuasiBayesianInference();
     }
 
     /*
@@ -198,16 +198,16 @@ public class QBInference extends Inference
     /**
      *
      */
-    protected void do_quasi_bayesian_inference()
+    protected void doQuasiBayesianInference()
     {
         // Process result
-        if (is_inference_without_local_neighborhoods)
+        if (isInferenceWithoutLocalNeighborhoods)
         {
-            inference_without_local_neighborhoods();
+            inferenceWithoutLocalNeighborhoods();
         }
         else
         {
-            inference_with_local_neighborhoods();
+            inferenceWithLocalNeighborhoods();
         }
     }
 
@@ -217,35 +217,35 @@ public class QBInference extends Inference
      * Note that the distributions for the queried variable, for
      * all transparent variables, is stored at results.
      */
-    private void inference_with_local_neighborhoods()
+    private void inferenceWithLocalNeighborhoods()
     {
         int i, j, jump = 1;
         double v, min[], max[];
-        DiscreteFunction unnormalized_results;
-        ProbabilityFunction normalized_results;
+        DiscreteFunction unnormalizedResults;
+        ProbabilityFunction normalizedResults;
 
         // Normalize with respect to transparent variables
-        unnormalized_results = bucket_tree.get_unnormalized_result();
-        normalized_results =
-        new ProbabilityFunction(bn, unnormalized_results.get_variables(),
-                                unnormalized_results.get_values(),
+        unnormalizedResults = bucketTree.getUnnormalizedResult();
+        normalizedResults =
+        new ProbabilityFunction(bn, unnormalizedResults.getVariables(),
+                                unnormalizedResults.getValues(),
                                 (ArrayList) null);
-        normalized_results.normalize_first();
+        normalizedResults.normalizeFirst();
 
         // Get the bounds on probability
-        for (i = 1; i < normalized_results.number_variables(); i++)
+        for (i = 1; i < normalizedResults.numberVariables(); i++)
         {
-            jump *= normalized_results.get_variable(i).number_values();
+            jump *= normalizedResults.getVariable(i).numberValues();
         }
-        min = new double[normalized_results.get_variable(0).number_values()];
-        max = new double[normalized_results.get_variable(0).number_values()];
-        for (i = 0; i < normalized_results.get_variable(0).number_values(); i++)
+        min = new double[normalizedResults.getVariable(0).numberValues()];
+        max = new double[normalizedResults.getVariable(0).numberValues()];
+        for (i = 0; i < normalizedResults.getVariable(0).numberValues(); i++)
         {
             min[i] = 1.0;
             max[i] = 0.0;
             for (j = 0; j < jump; j++)
             {
-                v = normalized_results.get_value(j + i * jump);
+                v = normalizedResults.getValue(j + i * jump);
                 if (v < min[i])
                 {
                     min[i] = v;
@@ -258,9 +258,9 @@ public class QBInference extends Inference
 
         }
         // Construct results
-        result = new QBProbabilityFunction(normalized_results,
+        result = new QBProbabilityFunction(normalizedResults,
                                            (double[]) null, min, max);
-        list_of_local_neighborhood_results = normalized_results;
+        listOfLocalNeighborhoodResults = normalizedResults;
     }
 
     /*
@@ -268,51 +268,51 @@ public class QBInference extends Inference
      * when local neighborhoods are absent; handles global
      * neighborhoods if necessary.
      */
-    private void inference_without_local_neighborhoods()
+    private void inferenceWithoutLocalNeighborhoods()
     {
-        DiscreteFunction unnormalized = bucket_tree.get_unnormalized_result();
+        DiscreteFunction unnormalized = bucketTree.getUnnormalizedResult();
 
-        switch (((QuasiBayesNet) bn).get_global_neighborhood_type())
+        switch (((QuasiBayesNet) bn).getGlobalNeighborhoodType())
         {
             case QuasiBayesNet.NO_CREDAL_SET:
                 result = new ProbabilityFunction(unnormalized, bn);
                 result.normalize();
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
-                ProbabilityFunction cdr_res =
+                ProbabilityFunction cdrRes =
                                     new ProbabilityFunction(unnormalized, bn);
                 ConstantDensityRatioSet cdr =
-                                        new ConstantDensityRatioSet(cdr_res,
+                                        new ConstantDensityRatioSet(cdrRes,
                                                                     ((QuasiBayesNet) bn).
-                                                                    get_global_neighborhood_parameter());
-                result = cdr.posterior_marginal();
+                                                                    getGlobalNeighborhoodParameter());
+                result = cdr.posteriorMarginal();
                 break;
             case QuasiBayesNet.EPSILON_CONTAMINATED:
-                ProbabilityFunction eps_res =
+                ProbabilityFunction epsRes =
                                     new ProbabilityFunction(unnormalized, bn);
                 EpsilonContaminatedSet eps =
-                                       new EpsilonContaminatedSet(eps_res,
+                                       new EpsilonContaminatedSet(epsRes,
                                                                   ((QuasiBayesNet) bn).
-                                                                  get_global_neighborhood_parameter());
-                result = eps.posterior_marginal();
+                                                                  getGlobalNeighborhoodParameter());
+                result = eps.posteriorMarginal();
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
-                ProbabilityFunction cdb_res =
+                ProbabilityFunction cdbRes =
                                     new ProbabilityFunction(unnormalized, bn);
                 ConstantDensityBoundedSet cdb =
-                                          new ConstantDensityBoundedSet(cdb_res,
+                                          new ConstantDensityBoundedSet(cdbRes,
                                                                         ((QuasiBayesNet) bn).
-                                                                        get_global_neighborhood_parameter());
-                result = cdb.posterior_marginal();
+                                                                        getGlobalNeighborhoodParameter());
+                result = cdb.posteriorMarginal();
                 break;
             case QuasiBayesNet.TOTAL_VARIATION:
-                ProbabilityFunction tv_res =
+                ProbabilityFunction tvRes =
                                     new ProbabilityFunction(unnormalized, bn);
                 TotalVariationSet tv =
-                                  new TotalVariationSet(tv_res,
+                                  new TotalVariationSet(tvRes,
                                                         ((QuasiBayesNet) bn).
-                                                        get_global_neighborhood_parameter());
-                result = tv.posterior_marginal();
+                                                        getGlobalNeighborhoodParameter());
+                result = tv.posteriorMarginal();
                 break;
         }
     }

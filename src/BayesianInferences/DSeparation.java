@@ -44,15 +44,15 @@ class DSeparation
     /**
      * Constructor for DSeparation object.
      */
-    DSeparation(BayesNet b_n)
+    DSeparation(BayesNet bN)
     {
-        bn = b_n;
+        bn = bN;
     }
 
     /**
      * Return a list of all variables that are d-connected to a given variable.
      */
-    public ArrayList all_connected(int x)
+    public ArrayList allConnected(int x)
     {
         return (separation(x, CONNECTED_VARIABLES));
     }
@@ -61,7 +61,7 @@ class DSeparation
      * Returns a list of all variables whose distributions can affect the
      * marginal posterior of a given variable.
      */
-    public ArrayList all_affecting(int x)
+    public ArrayList allAffecting(int x)
     {
         return (separation(x, AFFECTING_VARIABLES));
     }
@@ -69,9 +69,9 @@ class DSeparation
     /*
      * Find all d-separation relations.
      */
-    private void separation_relations(int x, int flag)
+    private void separationRelations(int x, int flag)
     {
-        int nvertices = bn.number_probability_functions();
+        int nvertices = bn.numberProbabilityFunctions();
         if (flag == AFFECTING_VARIABLES)
         {
             nvertices += nvertices;
@@ -121,7 +121,7 @@ class DSeparation
                 {
                     if (adj(i, v, flag))
                     {
-                        if ((!below[i]) && (!is_separator(i, flag)))
+                        if ((!below[i]) && (!isSeparator(i, flag)))
                         {
                             below[i] = true;
                             int Vbelow[] =
@@ -151,13 +151,13 @@ class DSeparation
             }  // subscript < 0
             else
             {
-                if (is_separator(v, flag))
+                if (isSeparator(v, flag))
                 {  // v known
                     for (i = 0; i < nvertices; i++)
                     {
                         if (adj(i, v, flag))
                         {
-                            if ((!is_separator(i, flag)) && !below[i])
+                            if ((!isSeparator(i, flag)) && !below[i])
                             {
                                 below[i] = true;
                                 int Tbelow[] =
@@ -199,11 +199,11 @@ class DSeparation
     private ArrayList separation(int x, int flag)
     {
         int i;
-        int nvertices = bn.number_probability_functions();
-        ArrayList d_separated_variables = new ArrayList();
+        int nvertices = bn.numberProbabilityFunctions();
+        ArrayList dSeparatedVariables = new ArrayList();
 
         // Run algorithm
-        separation_relations(x, flag);
+        separationRelations(x, flag);
 
         // Process results
         if (flag == CONNECTED_VARIABLES)
@@ -212,7 +212,7 @@ class DSeparation
             {
                 if (below[i] || above[i])
                 {
-                    d_separated_variables.add(bn.get_probability_variable(i));
+                    dSeparatedVariables.add(bn.getProbabilityVariable(i));
                 }
             }
         }
@@ -222,26 +222,26 @@ class DSeparation
             {
                 if (below[i] || above[i])
                 {
-                    d_separated_variables.add(
-                            bn.get_probability_variable(i - nvertices));
+                    dSeparatedVariables.add(
+                            bn.getProbabilityVariable(i - nvertices));
                 }
             }
         }
 
-        return (d_separated_variables);
+        return (dSeparatedVariables);
     }
 
     /*
      * Check whether the variable given by the index is in the
      * list of separators (i.e., it is observed).
      */
-    private boolean is_separator(int i, int flag)
+    private boolean isSeparator(int i, int flag)
     {
         if ((flag == CONNECTED_VARIABLES) ||
             ((flag == AFFECTING_VARIABLES) &&
-             (i < bn.number_probability_functions())))
+             (i < bn.numberProbabilityFunctions())))
         {
-            return (bn.get_probability_variable(i).is_observed());
+            return (bn.getProbabilityVariable(i).isObserved());
         }
         else
         {
@@ -250,24 +250,24 @@ class DSeparation
     }
 
     /*
-     * Check whether there is a link from variable index_from to
-     * variable index_to.
+     * Check whether there is a link from variable indexFrom to
+     * variable indexTo.
      */
-    private boolean adj(int index_from, int index_to, int flag)
+    private boolean adj(int indexFrom, int indexTo, int flag)
     {
         ProbabilityFunction pf = null;
 
         if ((flag == CONNECTED_VARIABLES) ||
             ((flag == AFFECTING_VARIABLES) &&
-             (index_to < bn.number_probability_functions()) &&
-             (index_from < bn.number_probability_functions())))
+             (indexTo < bn.numberProbabilityFunctions()) &&
+             (indexFrom < bn.numberProbabilityFunctions())))
         {
 
-            for (int i = 0; i < bn.number_probability_functions(); i++)
+            for (int i = 0; i < bn.numberProbabilityFunctions(); i++)
             {
-                if (bn.get_probability_function(i).get_index(0) == index_to)
+                if (bn.getProbabilityFunction(i).getIndex(0) == indexTo)
                 {
-                    pf = bn.get_probability_function(i);
+                    pf = bn.getProbabilityFunction(i);
                     break;
                 }
             }
@@ -276,9 +276,9 @@ class DSeparation
                 return (false);
             }
 
-            for (int i = 1; i < pf.number_variables(); i++)
+            for (int i = 1; i < pf.numberVariables(); i++)
             {
-                if (pf.get_index(i) == index_from)
+                if (pf.getIndex(i) == indexFrom)
                 {
                     return (true);
                 }
@@ -287,7 +287,7 @@ class DSeparation
         }
         else
         {
-            if ((index_from - index_to) == bn.number_probability_functions())
+            if ((indexFrom - indexTo) == bn.numberProbabilityFunctions())
             {
                 return (true);
             }

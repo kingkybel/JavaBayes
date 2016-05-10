@@ -19,18 +19,18 @@ public class BucketTree
     static final int SUM_OUT = 1;
     private static final Logger LOG =
     Logger.getLogger(BucketTree.class.getName());
-    Bucket bucket_tree[]; // Array of Bucket objects.
+    Bucket bucketTree[]; // Array of Bucket objects.
     BayesNet bn; // BayesNet that contains the variables.
 
-    int backward_pointers[]; // Array that stores the index of variables for minimization.
+    int backwardPointers[]; // Array that stores the index of variables for minimization.
 
-    DiscreteFunction unnormalized_result;
+    DiscreteFunction unnormalizedResult;
 
     Ordering ordering;
-    int explanation_status;
-    boolean do_produce_clusters;
+    int explanationStatus;
+    boolean doProduceClusters;
 
-    private int active_bucket;
+    private int activeBucket;
 
     /**
      * Simple constructor for BucketTree.
@@ -52,66 +52,66 @@ public class BucketTree
         int i, j, markers[];
         ProbabilityFunction pf;
         ProbabilityVariable pv;
-        DiscreteVariable aux_pv;
+        DiscreteVariable auxPv;
         DiscreteFunction ut;
         String order[];
 
-        do_produce_clusters = dpc;
+        doProduceClusters = dpc;
         ordering = ord;
 
         // Collect information from the Ordering object.
         bn = ord.bn;
-        explanation_status = ord.explanation_status;
+        explanationStatus = ord.explanationStatus;
         order = ord.order;
 
         // Indicate the first bucket to process
-        active_bucket = 0;
+        activeBucket = 0;
 
         // Check the possibility that the query has an observed variable
-        i = bn.index_of_variable(order[order.length - 1]);
-        pv = bn.get_probability_variable(i);
-        if (pv.is_observed() == true)
+        i = bn.indexOfVariable(order[order.length - 1]);
+        pv = bn.getProbabilityVariable(i);
+        if (pv.isObserved() == true)
         {
-            pf = transform_to_probability_function(bn, pv);
-            bucket_tree = new Bucket[1];
-            bucket_tree[0] = new Bucket(this, pv, do_produce_clusters);
+            pf = transformToProbabilityFunction(bn, pv);
+            bucketTree = new Bucket[1];
+            bucketTree[0] = new Bucket(this, pv, doProduceClusters);
             insert(pf);
         }
         else
         {
             // Initialize the bucket objects
-            bucket_tree = new Bucket[order.length];
+            bucketTree = new Bucket[order.length];
             for (i = 0; i < order.length; i++)
             {
-                j = bn.index_of_variable(order[i]);
-                bucket_tree[i] =
-                new Bucket(this, bn.get_probability_variable(j),
-                           do_produce_clusters);
+                j = bn.indexOfVariable(order[i]);
+                bucketTree[i] =
+                new Bucket(this, bn.getProbabilityVariable(j),
+                           doProduceClusters);
             }
-            // Insert the probability functions into the bucket_tree;
+            // Insert the probability functions into the bucketTree;
             // first mark all functions that are actually going
-            // into the bucket_tree.
-            markers = new int[bn.number_variables()];
+            // into the bucketTree.
+            markers = new int[bn.numberVariables()];
             for (i = 0; i < order.length; i++)
             {
-                markers[bn.index_of_variable(order[i])] = 1;
+                markers[bn.indexOfVariable(order[i])] = 1;
             }
             // Now insert functions that are marked and non-null.
-            for (i = 0; i < bn.number_probability_functions(); i++)
+            for (i = 0; i < bn.numberProbabilityFunctions(); i++)
             {
-                if (markers[bn.get_probability_function(i).get_index(0)] == 1)
+                if (markers[bn.getProbabilityFunction(i).getIndex(0)] == 1)
                 {
-                    pf = check_evidence(bn.get_probability_function(i));
+                    pf = checkEvidence(bn.getProbabilityFunction(i));
                     if (pf != null)
                     {
-                        aux_pv = (bn.get_probability_function(i)).
-                        get_variable(0);
-                        insert(pf, !pf.memberOf(aux_pv.get_index()));
+                        auxPv = (bn.getProbabilityFunction(i)).
+                        getVariable(0);
+                        insert(pf, !pf.memberOf(auxPv.getIndex()));
                     }
                 }
             }
-            // Insert the utility_function.
-            ut = bn.get_utility_function();
+            // Insert the utilityFunction.
+            ut = bn.getUtilityFunction();
             if (ut != null)
             {
                 insert(ut);
@@ -124,15 +124,15 @@ public class BucketTree
      * to handle the case where the query involves an observed variable.
      */
     private ProbabilityFunction
-            transform_to_probability_function(BayesNet bn,
+            transformToProbabilityFunction(BayesNet bn,
                                               ProbabilityVariable pv)
     {
         ProbabilityFunction pf = new ProbabilityFunction(bn, 1,
-                                                         pv.number_values(),
+                                                         pv.numberValues(),
                                                          null);
-        pf.set_variable(0, pv);
-        int index_of_value = pv.get_observed_index();
-        pf.set_value(index_of_value, 1.0);
+        pf.setVariable(0, pv);
+        int indexOfValue = pv.getObservedIndex();
+        pf.setValue(indexOfValue, 1.0);
         return (pf);
     }
 
@@ -141,18 +141,18 @@ public class BucketTree
      * The order of the variables that are not eliminated is
      * the same order in the original function.
      */
-    private ProbabilityFunction check_evidence(ProbabilityFunction pf)
+    private ProbabilityFunction checkEvidence(ProbabilityFunction pf)
     {
-        int i, j, k, v, aux_i;
-        boolean markers[] = new boolean[bn.number_variables()];
-        int n = build_evidence_markers(pf, markers);
+        int i, j, k, v, auxI;
+        boolean markers[] = new boolean[bn.numberVariables()];
+        int n = buildEvidenceMarkers(pf, markers);
 
         // Handle special cases
         if (n == 0)
         {
             return (null); // No variable remains
         }
-        if (n == pf.number_variables())
+        if (n == pf.numberVariables())
         {
             return (pf); // No relevant evidence
         }
@@ -160,30 +160,30 @@ public class BucketTree
         // Calculate necessary quantities in such a
         // way that the order of variables in the original
         // function is not altered.
-        int joined_indexes[] = new int[n];
-        for (i = 0, j = 0, v = 1; i < pf.number_variables(); i++)
+        int joinedIndexes[] = new int[n];
+        for (i = 0, j = 0, v = 1; i < pf.numberVariables(); i++)
         {
-            aux_i = pf.get_variable(i).get_index();
-            if (markers[aux_i] == true)
+            auxI = pf.getVariable(i).getIndex();
+            if (markers[auxI] == true)
             {
-                joined_indexes[j] = aux_i;
+                joinedIndexes[j] = auxI;
                 j++;
-                v *= bn.get_probability_variable(aux_i).number_values();
+                v *= bn.getProbabilityVariable(auxI).numberValues();
             }
         }
 
         // Create new function to be filled with joined variables
-        ProbabilityFunction new_pf = new ProbabilityFunction(bn, n, v, null);
+        ProbabilityFunction newPf = new ProbabilityFunction(bn, n, v, null);
         for (i = 0; i < n; i++)
         {
-            new_pf.set_variable(i, bn.
-                                get_probability_variable(joined_indexes[i]));
+            newPf.setVariable(i, bn.
+                                getProbabilityVariable(joinedIndexes[i]));
         }
 
         // Loop through the values
-        check_evidence_loop(new_pf, pf);
+        checkEvidenceLoop(newPf, pf);
 
-        return (new_pf);
+        return (newPf);
     }
 
     /*
@@ -193,7 +193,7 @@ public class BucketTree
      * Even explanatory variables can be observed and taken as
      * evidence.
      */
-    private int build_evidence_markers(ProbabilityFunction pf,
+    private int buildEvidenceMarkers(ProbabilityFunction pf,
                                        boolean markers[])
     {
         int i, n;
@@ -203,14 +203,14 @@ public class BucketTree
             markers[i] = false;
         }
         // Insert the variables of the ProbabilityFunction
-        for (i = 0; i < pf.number_variables(); i++)
+        for (i = 0; i < pf.numberVariables(); i++)
         {
-            markers[pf.get_index(i)] = true;
+            markers[pf.getIndex(i)] = true;
         }
         // Take the evidence out
-        for (i = 0; i < bn.number_variables(); i++)
+        for (i = 0; i < bn.numberVariables(); i++)
         {
-            if (bn.get_probability_variable(i).is_observed())
+            if (bn.getProbabilityVariable(i).isObserved())
             {
                 markers[i] = false;
             }
@@ -230,39 +230,39 @@ public class BucketTree
     /*
      * Obtain the values for the evidence plus function.
      */
-    private void check_evidence_loop(ProbabilityFunction new_pf,
+    private void checkEvidenceLoop(ProbabilityFunction newPf,
                                      ProbabilityFunction pf)
     {
         int i, j, k, l, m, p, last, current;
-        int indexes[] = new int[bn.number_variables()];
-        int value_lengths[] = new int[bn.number_variables()];
+        int indexes[] = new int[bn.numberVariables()];
+        int valueLengths[] = new int[bn.numberVariables()];
 
-        for (i = 0; i < bn.number_variables(); i++)
+        for (i = 0; i < bn.numberVariables(); i++)
         {
             indexes[i] = 0;
-            value_lengths[i] = bn.get_probability_variable(i).number_values();
+            valueLengths[i] = bn.getProbabilityVariable(i).numberValues();
         }
-        for (i = 0; i < bn.number_variables(); i++)
+        for (i = 0; i < bn.numberVariables(); i++)
         {
-            if (bn.get_probability_variable(i).is_observed())
+            if (bn.getProbabilityVariable(i).isObserved())
             {
-                indexes[i] = bn.get_probability_variable(i).get_observed_index();
+                indexes[i] = bn.getProbabilityVariable(i).getObservedIndex();
             }
         }
-        last = new_pf.number_variables() - 1;
-        for (i = 0; i < new_pf.number_values(); i++)
+        last = newPf.numberVariables() - 1;
+        for (i = 0; i < newPf.numberValues(); i++)
         {
-            p = new_pf.get_position_from_indexes(indexes);
-            new_pf.set_value(p, pf.evaluate(indexes));
+            p = newPf.getPositionFromIndexes(indexes);
+            newPf.setValue(p, pf.evaluate(indexes));
 
-            indexes[new_pf.get_index(last)]++;
+            indexes[newPf.getIndex(last)]++;
             for (j = last; j > 0; j--)
             {
-                current = new_pf.get_index(j);
-                if (indexes[current] >= value_lengths[current])
+                current = newPf.getIndex(j);
+                if (indexes[current] >= valueLengths[current])
                 {
                     indexes[current] = 0;
-                    indexes[new_pf.get_index(j - 1)]++;
+                    indexes[newPf.getIndex(j - 1)]++;
                 }
                 else
                 {
@@ -279,18 +279,18 @@ public class BucketTree
     {
         int i;
         // Reduce all Bucket objects.
-        for (i = 0; i < (bucket_tree.length - 1); i++)
+        for (i = 0; i < (bucketTree.length - 1); i++)
         {
-            active_bucket = i;
-            bucket_tree[i].reduce();
-            insert(bucket_tree[i]);
+            activeBucket = i;
+            bucketTree[i].reduce();
+            insert(bucketTree[i]);
         }
         // Now reduce the last Bucket.
-        unnormalized_result = bucket_tree[i].combine();
+        unnormalizedResult = bucketTree[i].combine();
         // Mark the last Bucket as DISTRIBUTED.
-        bucket_tree[i].bucket_status = Bucket.DISTRIBUTED;
-        // Generate the backward_pointers if necessary.
-        backward_pointers = backward_maximization();
+        bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
+        // Generate the backwardPointers if necessary.
+        backwardPointers = backwardMaximization();
     }
 
     /**
@@ -301,26 +301,26 @@ public class BucketTree
     public boolean distribute()
     {
         int i, j;
-        boolean mark_non_conditioning[] = new boolean[bn.number_variables()];
+        boolean markNonConditioning[] = new boolean[bn.numberVariables()];
 
         // First make sure the BucketTree has been reduced.
-        if (unnormalized_result == null)
+        if (unnormalizedResult == null)
         {
             reduce();
         }
         // Second make sure there is more than one Bucket in the BucketTree.
-        int last = bucket_tree.length - 1;
+        int last = bucketTree.length - 1;
         if (last < 1)
         {
             return (true);
         }
-        // Third, this method is used only if do_produce_clusters is true.
-        if (do_produce_clusters == false)
+        // Third, this method is used only if doProduceClusters is true.
+        if (doProduceClusters == false)
         {
             return (false);
         }
         // Fourth, this method is use only if no explanatory variable was max'ed out.
-        if (backward_pointers != null)
+        if (backwardPointers != null)
         {
             return (false);
         }
@@ -330,14 +330,14 @@ public class BucketTree
         for (i = (last - 1); i >= 0; i--)
         { // Start from (last-1); last does not have child.
             // Check whether the Bucket has any valid content.
-            if (bucket_tree[i].cluster == null)
+            if (bucketTree[i].cluster == null)
             {
                 break;
             }
             // Take the non-conditioning variables in a boolean array.
-            for (j = 0; j < mark_non_conditioning.length; j++)
+            for (j = 0; j < markNonConditioning.length; j++)
             {
-                mark_non_conditioning[j] = true;
+                markNonConditioning[j] = true;
             }
             // OBS: The following piece of code will actually be less efficient than
             // necessary. It will count as "conditioning" any variable in the cluster
@@ -346,11 +346,11 @@ public class BucketTree
             // be larger than necessary.
             // OBS: this code was contributed by Wei Zhou (wei@cs.ualberta.ca),
             // who also detected the problem with the original code.
-            // if (bucket_tree[i].cluster.number_variables() > bucket_tree[i].non_conditioning_variables.size())
-            for (j = 1; j < bucket_tree[i].cluster.number_variables(); j++)
+            // if (bucketTree[i].cluster.numberVariables() > bucketTree[i].nonConditioningVariables.size())
+            for (j = 1; j < bucketTree[i].cluster.numberVariables(); j++)
             {
-                mark_non_conditioning[(bucket_tree[i].cluster.get_variables())[j].
-                        get_index()] = false;
+                markNonConditioning[(bucketTree[i].cluster.getVariables())[j].
+                        getIndex()] = false;
             }
 
        // The following piece of code does the right thing (compared to the
@@ -359,33 +359,33 @@ public class BucketTree
             // of code, it will be necessary to create a "normalize" method that
             // normalizes with respect to a number of variables at at time.
        /*
-             for (j=0; j<bucket_tree[i].cluster.number_variables(); j++) {
-             mark_non_conditioning[ (bucket_tree[i].cluster.get_variables())[j].get_index() ] = false;
+             for (j=0; j<bucketTree[i].cluster.numberVariables(); j++) {
+             markNonConditioning[ (bucketTree[i].cluster.getVariables())[j].getIndex() ] = false;
              }
-             for (Iterator e = bucket_tree[i].non_conditioning_variables.elements(); e.hasMoreElements(); ) {
+             for (Iterator e = bucketTree[i].nonConditioningVariables.elements(); e.hasMoreElements(); ) {
              ProbabilityVariable pv = (ProbabilityVariable)(e.nextElement());
-             mark_non_conditioning[pv.get_index() ] = true;
+             markNonConditioning[pv.getIndex() ] = true;
              } */
             // Update the separator.
-            bucket_tree[i].separator = bucket_tree[i].child.cluster.sum_out(bn.
-            get_probability_variables(),
-                                                                            mark_non_conditioning);
+            bucketTree[i].separator = bucketTree[i].child.cluster.sumOut(bn.
+            getProbabilityVariables(),
+                                                                            markNonConditioning);
 
             // Compute cluster using new separator (note that if separator
             // is null, the cluster had all variables already processed).
-            if (bucket_tree[i].separator != null)
+            if (bucketTree[i].separator != null)
             {
                 // OBS: the method here should normalize with respect to more
                 // than one variable, to allow this algorithm to be more efficient!
-                bucket_tree[i].cluster.normalize_first();
+                bucketTree[i].cluster.normalizeFirst();
                 // Now combine the cluster and the separator.
-                bucket_tree[i].cluster =
-                bucket_tree[i].cluster.multiply(bn.get_probability_variables(),
-                                                bucket_tree[i].separator);
+                bucketTree[i].cluster =
+                bucketTree[i].cluster.multiply(bn.getProbabilityVariables(),
+                                                bucketTree[i].separator);
             }
 
             // Mark the Bucket as DISTRIBUTED.
-            bucket_tree[i].bucket_status = Bucket.DISTRIBUTED;
+            bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
         }
         // Indicate success.
         return (true);
@@ -393,69 +393,69 @@ public class BucketTree
 
     /*
      * Recover the maximizing variables going back through the
-     * maximizing bucket_tree; the variables are returned as an array
+     * maximizing bucketTree; the variables are returned as an array
      * of markers (non-explanation variables get INVALID_INDEX).
      */
-    private int[] backward_maximization()
+    private int[] backwardMaximization()
     {
         int i, j;
-        int bi = bucket_tree.length - 1;
-        DiscreteFunction back_df;
-        Bucket b = bucket_tree[bi];
+        int bi = bucketTree.length - 1;
+        DiscreteFunction backDf;
+        Bucket b = bucketTree[bi];
 
         // If there are no explanation variables in the BayesNet, return null
-        if (b.backward_pointers == null)
+        if (b.backwardPointers == null)
         {
             return (null);
         }
 
         // Initialize the markers for backward pointers with INVALID_INDEX
-        int backward_markers[] = new int[bn.number_variables()];
-        for (i = 0; i < backward_markers.length; i++)
+        int backwardMarkers[] = new int[bn.numberVariables()];
+        for (i = 0; i < backwardMarkers.length; i++)
         {
-            backward_markers[i] = BayesNet.INVALID_INDEX;
+            backwardMarkers[i] = BayesNet.INVALID_INDEX;
         }
 
         // Initialize the marker for the last bucket
-        backward_markers[b.variable.get_index()] =
-        (int) (b.backward_pointers.get_value(0) + 0.5);
+        backwardMarkers[b.variable.getIndex()] =
+        (int) (b.backwardPointers.getValue(0) + 0.5);
 
-        // Go backwards through the bucket_tree
+        // Go backwards through the bucketTree
         for (i = (bi - 1); i >= 0; i--)
         {
-            if (!bucket_tree[i].is_explanation())
+            if (!bucketTree[i].isExplanation())
             {
                 break;
             }
-            back_df = bucket_tree[i].backward_pointers;
+            backDf = bucketTree[i].backwardPointers;
             // Skip null pointers (caused by evidence)
-            if (back_df == null)
+            if (backDf == null)
             {
                 continue;
             }
             // Special treatment for bucket with only one value,
             // since it can be a bucket with only the bucket variable left
-            if (back_df.number_values() == 1)
+            if (backDf.numberValues() == 1)
             {
-                backward_markers[bucket_tree[i].variable.get_index()] =
-                (int) (back_df.get_value(0) + 0.5);
+                backwardMarkers[bucketTree[i].variable.getIndex()] =
+                (int) (backDf.getValue(0) + 0.5);
                 continue;
             }
             // Process the bucket
-            j = back_df.
-            get_position_from_indexes(bn.get_probability_variables(),
-                                      backward_markers);
-            backward_markers[bucket_tree[i].variable.get_index()] =
-            (int) (back_df.get_value(j) + 0.5);
+            j = backDf.
+            getPositionFromIndexes(bn.getProbabilityVariables(),
+                                      backwardMarkers);
+            backwardMarkers[bucketTree[i].variable.getIndex()] =
+            (int) (backDf.getValue(j) + 0.5);
         }
 
-        return (backward_markers);
+        return (backwardMarkers);
     }
 
     /*
      * Put the separator function of a Bucket buck
      * into the BucketTree beyond the current
-     * active_bucket.
+     * activeBucket.
      */
     private void insert(Bucket buck)
     {
@@ -467,28 +467,28 @@ public class BucketTree
             return;
         }
 
-        for (i = active_bucket; i < bucket_tree.length; i++)
+        for (i = activeBucket; i < bucketTree.length; i++)
         {
             // Get the index for current Bucket's variable.
-            index = bucket_tree[i].variable.get_index();
+            index = bucketTree[i].variable.getIndex();
             // If separator contains a variable in the current Bucket, then join buckets.
             if (buck.separator.memberOf(index))
             {
                 // Add separator to bucket.
-                bucket_tree[i].discrete_functions.add(buck.separator);
-                // Update the non_conditioning variables.
+                bucketTree[i].discreteFunctions.add(buck.separator);
+                // Update the nonConditioning variables.
                 // Go through the non-conditioning variables in the inserted Bucket.
-                for (Object e : buck.non_conditioning_variables)
+                for (Object e : buck.nonConditioningVariables)
                 {
-                    bucket_tree[i].non_conditioning_variables.add(e);
+                    bucketTree[i].nonConditioningVariables.add(e);
                 }
                 // Take the inserted Bucket variable out by making it CONDITIONING:
                 // Must take the variable out as it has been eliminated already.
-                bucket_tree[i].non_conditioning_variables.remove(
+                bucketTree[i].nonConditioningVariables.remove(
                         buck.variable);
                 // Mark parent/child relationship.
-                buck.child = bucket_tree[i];
-                bucket_tree[i].parents.add(buck);
+                buck.child = bucketTree[i];
+                bucketTree[i].parents.add(buck);
                 return;
             }
         }
@@ -496,7 +496,7 @@ public class BucketTree
 
     /*
      * Put a DiscreteFunction into the BucketTree beyond the current
-     * active_bucket.
+     * activeBucket.
      */
     private void insert(DiscreteFunction df)
     {
@@ -505,28 +505,28 @@ public class BucketTree
 
     /*
      * Put a DiscreteFunction into the BucketTree beyond the current
-     * active_bucket. If was_first_variable_cancelled_by_evidence is true,
+     * activeBucket. If wasFirstVariableCancelledByEvidence is true,
      * then mark the bucket accordingly.
      */
     private void insert(DiscreteFunction df,
-                        boolean was_first_variable_cancelled_by_evidence)
+                        boolean wasFirstVariableCancelledByEvidence)
     {
         int i, index;
         Bucket b;
-        for (i = active_bucket; i < bucket_tree.length; i++)
+        for (i = activeBucket; i < bucketTree.length; i++)
         {
-            index = bucket_tree[i].variable.get_index();
+            index = bucketTree[i].variable.getIndex();
             if (df.memberOf(index))
             {
-                bucket_tree[i].discrete_functions.add(df);
+                bucketTree[i].discreteFunctions.add(df);
                 // If the function is a ProbabilityFunction, store its
                 // first variable appropriately (assuming for now that
                 // the first variable is the only possible non-conditioning variable).
                 if ((df instanceof ProbabilityFunction) &&
-                    (!was_first_variable_cancelled_by_evidence))
+                    (!wasFirstVariableCancelledByEvidence))
                 {
-                    bucket_tree[i].non_conditioning_variables.add(df.
-                            get_variable(0));
+                    bucketTree[i].nonConditioningVariables.add(df.
+                            getVariable(0));
                 }
                 return;
             }
@@ -547,37 +547,37 @@ public class BucketTree
      */
     public void print(PrintStream out)
     {
-        out.println("BucketTree:" + "\n\tActive Bucket is " + active_bucket +
+        out.println("BucketTree:" + "\n\tActive Bucket is " + activeBucket +
                     ".");
-        for (int i = 0; i < bucket_tree.length; i++)
+        for (int i = 0; i < bucketTree.length; i++)
         {
-            bucket_tree[i].print(out);
+            bucketTree[i].print(out);
         }
         out.println("Bucket result: ");
-        unnormalized_result.print(out);
+        unnormalizedResult.print(out);
     }
 
     /**
      * Get the normalized result for the BucketTree.
      * @return 
      */
-    public ProbabilityFunction get_normalized_result()
+    public ProbabilityFunction getNormalizedResult()
     {
-        ProbabilityFunction aux_pf =
-                            new ProbabilityFunction(unnormalized_result, bn);
-        aux_pf.normalize();
-        return (aux_pf);
+        ProbabilityFunction auxPf =
+                            new ProbabilityFunction(unnormalizedResult, bn);
+        auxPf.normalize();
+        return (auxPf);
     }
 
     /* *************************************************************** */
     /*  Methods that allow basic manipulation of non-public variables  */
     /* *************************************************************** */
     /**
-     * Get the unnormalized_result for the BucketTree.
+     * Get the unnormalizedResult for the BucketTree.
      * @return 
      */
-    public DiscreteFunction get_unnormalized_result()
+    public DiscreteFunction getUnnormalizedResult()
     {
-        return (unnormalized_result);
+        return (unnormalizedResult);
     }
 }

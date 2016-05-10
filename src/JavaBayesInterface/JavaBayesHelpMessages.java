@@ -38,13 +38,13 @@ public class JavaBayesHelpMessages
 
 
     // Help messages
-    static final String version_number_message = "Version 0.346";
+    static final String versionNumberMessage = "Version 0.346";
 
     /**
      *
      */
-    public static final String about_message = "JavaBayes " +
-                                               version_number_message + "\n" +
+    public static final String aboutMessage = "JavaBayes " +
+                                               versionNumberMessage + "\n" +
                                                "Copyright 1996 - 1997 Carnegie Mellon University \n" +
                                                "Copyright 1998 - 2000 Fabio Gagliardi Cozman \n" +
                                                "<fgcozman@usp.br>\n" +
@@ -57,13 +57,13 @@ public class JavaBayesHelpMessages
     /**
      *
      */
-    public static final String start_message =
+    public static final String startMessage =
                                "JavaBayes starts in Move mode.\n" +
                                "To start editing networks, press the Create button and\n" +
                                "click on the JavaBayes editor, or load a network using\n" +
                                "the Network->Open menu.\n\n";
 
-    static final String create_message =
+    static final String createMessage =
                         "To create a new node, click the mouse button once\n" +
                         "on the area above.\n" +
                         "To connect two nodes, click on the parent node\n" +
@@ -71,47 +71,47 @@ public class JavaBayesHelpMessages
                         "To edit node attributes, click on Edit button.\n" +
                         "To move or delete nodes, click on appropriate button.\n\n";
 
-    static final String move_message =
+    static final String moveMessage =
                         "To move a node, click on it and drag it to the new position.\n\n";
 
-    static final String delete_message = "To delete a node, click on it.\n" +
+    static final String deleteMessage = "To delete a node, click on it.\n" +
                                          "To delete an arrow, click on the arrow's head.\n\n";
 
-    static final String edit_message =
+    static final String editMessage =
                         "To edit attributes of a node, click on it.\n\n";
 
-    static final String observe_message = "To observe a node, click on it.\n\n";
+    static final String observeMessage = "To observe a node, click on it.\n\n";
 
-    static final String query_message =
+    static final String queryMessage =
                         "To query on a particular node, click on it.\n\n";
 
     // Error and exception messages
-    static final String unexpected_end_of_input =
+    static final String unexpectedEndOfInput =
                         "Unable to complete load: Unexpected end of input!\n\n";
 
-    static final String incorrect_file_format =
+    static final String incorrectFileFormat =
                         "Unable to complete load: Incorrect file format.\n\n";
 
-    static final String unable_read_file = "Unable to read file!\n\n";
+    static final String unableReadFile = "Unable to read file!\n\n";
 
-    static final String unable_generate_parents_dialog =
+    static final String unableGenerateParentsDialog =
                         "Unable to generate parent values dialog!\n\n";
 
-    static final String duplicate_values = "Duplicate value!\n\n";
+    static final String duplicateValues = "Duplicate value!\n\n";
 
-    static final String node_name_change_failed = "Node name change failed.\n\n";
+    static final String nodeNameChangeFailed = "Node name change failed.\n\n";
 
-    static final String no_value_to_replace = "No new value to replace!\n\n";
+    static final String noValueToReplace = "No new value to replace!\n\n";
 
-    static final String no_value_selected_to_replace =
+    static final String noValueSelectedToReplace =
                         "No value selected for replace!\n\n";
 
-    static final String no_value_to_add = "No value to add!\n\n";
+    static final String noValueToAdd = "No value to add!\n\n";
 
-    static final String no_value_selected_to_delete =
+    static final String noValueSelectedToDelete =
                         "No value selected for delete!\n\n";
 
-    static final String observe_error = "No value selected for Observe!\n\n";
+    static final String observeError = "No value selected for Observe!\n\n";
 
     static final String notnode = "Please click on a node.\n\n";
 
@@ -128,11 +128,11 @@ public class JavaBayesHelpMessages
     // Constructor
     /**
      *
-     * @param java_bayes
+     * @param javaBayes
      */
-    public static void insert(JavaBayes java_bayes)
+    public static void insert(JavaBayes javaBayes)
     {
-        jb = java_bayes;
+        jb = javaBayes;
     }
 
     // Basic method to display messages

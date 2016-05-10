@@ -74,17 +74,17 @@ public class BayesNet
     /**
      *
      */
-    protected ProbabilityVariable probability_variables[];
+    protected ProbabilityVariable probabilityVariables[];
 
     /**
      *
      */
-    protected ProbabilityFunction probability_functions[];
+    protected ProbabilityFunction probabilityFunctions[];
 
     /**
      *
      */
-    protected DiscreteFunction utility_function;
+    protected DiscreteFunction utilityFunction;
 
     /**
      * Default constructor for a BayesNet.
@@ -96,28 +96,28 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param n_n Name of the network.
-     * @param n_v Number of variables in the network.
-     * @param n_f Number of probability distributions in the network.
+     * @param nN Name of the network.
+     * @param nV Number of variables in the network.
+     * @param nF Number of probability distributions in the network.
      */
-    public BayesNet(String n_n, int n_v, int n_f)
+    public BayesNet(String nN, int nV, int nF)
     {
         this();
-        name = n_n;
-        probability_variables = new ProbabilityVariable[n_v];
-        probability_functions = new ProbabilityFunction[n_f];
+        name = nN;
+        probabilityVariables = new ProbabilityVariable[nV];
+        probabilityFunctions = new ProbabilityFunction[nF];
     }
 
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param n_n Name of network.
+     * @param nN Name of network.
      * @param p   Properties of the network.
      */
-    public BayesNet(String n_n, ArrayList p)
+    public BayesNet(String nN, ArrayList p)
     {
         this();
-        name = n_n;
+        name = nN;
         properties = p;
     }
 
@@ -128,13 +128,13 @@ public class BayesNet
      */
     public BayesNet(BayesNet bn)
     {
-        this(bn.name, bn.probability_variables.length,
-             bn.probability_functions.length);
+        this(bn.name, bn.probabilityVariables.length,
+             bn.probabilityFunctions.length);
 
-        System.arraycopy(bn.probability_variables, 0, probability_variables, 0,
-                         bn.probability_variables.length);
-        System.arraycopy(bn.probability_functions, 0, probability_functions, 0,
-                         bn.probability_functions.length);
+        System.arraycopy(bn.probabilityVariables, 0, probabilityVariables, 0,
+                         bn.probabilityVariables.length);
+        System.arraycopy(bn.probabilityFunctions, 0, probabilityFunctions, 0,
+                         bn.probabilityFunctions.length);
 
         properties = bn.properties;
     }
@@ -233,24 +233,24 @@ public class BayesNet
     protected void translate(InterchangeFormat ifo)
     {
         ConvertInterchangeFormat cbn = new ConvertInterchangeFormat(ifo);
-        name = cbn.get_name();
-        properties = cbn.get_properties();
-        probability_variables = cbn.get_probability_variables(this);
-        probability_functions = cbn.get_probability_functions(this);
+        name = cbn.getName();
+        properties = cbn.getProperties();
+        probabilityVariables = cbn.getProbabilityVariables(this);
+        probabilityFunctions = cbn.getProbabilityFunctions(this);
 
         // Process BayesNet properties
-        process_properties();
+        processProperties();
 
         // Process ProbabilityVariable properties
-        for (int i = 0; i < probability_variables.length; i++)
+        for (int i = 0; i < probabilityVariables.length; i++)
         {
-            process_probability_variable_properties(i);
+            processProbabilityVariableProperties(i);
         }
 
         // Process ProbabilityFunction properties
-        for (int i = 0; i < probability_functions.length; i++)
+        for (int i = 0; i < probabilityFunctions.length; i++)
         {
-            process_probability_function_properties(i);
+            processProbabilityFunctionProperties(i);
         }
     }
 
@@ -261,7 +261,7 @@ public class BayesNet
     /**
      *
      */
-    protected void process_properties()
+    protected void processProperties()
     {
     }
 
@@ -272,9 +272,9 @@ public class BayesNet
      *
      * @param index
      */
-    protected void process_probability_variable_properties(int index)
+    protected void processProbabilityVariableProperties(int index)
     {
-        probability_variables[index].process_properties();
+        probabilityVariables[index].processProperties();
     }
 
     /*
@@ -284,9 +284,9 @@ public class BayesNet
      *
      * @param index
      */
-    protected void process_probability_function_properties(int index)
+    protected void processProbabilityFunctionProperties(int index)
     {
-        probability_functions[index].process_properties();
+        probabilityFunctions[index].processProperties();
     }
 
     /**
@@ -295,16 +295,16 @@ public class BayesNet
      * function, as it is the only reference to the variable that is guaranteed
      * to identify the variable uniquely.
      *
-     * @param p_v
+     * @param pV
      * @return
      */
-    public ProbabilityFunction get_function(ProbabilityVariable p_v)
+    public ProbabilityFunction getFunction(ProbabilityVariable pV)
     {
-        for (int i = 0; i < probability_functions.length; i++)
+        for (int i = 0; i < probabilityFunctions.length; i++)
         {
-            if (p_v.index == probability_functions[i].variables[0].index)
+            if (pV.index == probabilityFunctions[i].variables[0].index)
             {
-                return (probability_functions[i]);
+                return (probabilityFunctions[i]);
             }
         }
 
@@ -316,7 +316,7 @@ public class BayesNet
      *
      * @param out
      */
-    public void save_bif(PrintStream out)
+    public void saveBif(PrintStream out)
     {
         int i;
         String property;
@@ -326,13 +326,13 @@ public class BayesNet
         {
             out.print("network \"" + name + "\" {");
         }
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            out.print(" //" + probability_variables.length + " variables");
+            out.print(" //" + probabilityVariables.length + " variables");
         }
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            out.print(" and " + probability_functions.length +
+            out.print(" and " + probabilityFunctions.length +
                       " probability distributions");
         }
 
@@ -346,25 +346,25 @@ public class BayesNet
             }
         }
         out.println("}");
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            for (i = 0; i < probability_variables.length;
+            for (i = 0; i < probabilityVariables.length;
                  i++)
             {
-                if (probability_variables[i] != null)
+                if (probabilityVariables[i] != null)
                 {
-                    probability_variables[i].print(out);
+                    probabilityVariables[i].print(out);
                 }
             }
         }
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            for (i = 0; i < probability_functions.length;
+            for (i = 0; i < probabilityFunctions.length;
                  i++)
             {
-                if (probability_functions[i] != null)
+                if (probabilityFunctions[i] != null)
                 {
-                    probability_functions[i].print(out);
+                    probabilityFunctions[i].print(out);
                 }
             }
         }
@@ -375,7 +375,7 @@ public class BayesNet
      *
      * @param out
      */
-    public void save_embayes(PrintStream out)
+    public void saveEmbayes(PrintStream out)
     {
         int i, j;
         out.println("import ebayes.data.*");
@@ -383,17 +383,17 @@ public class BayesNet
         out.println("\tpublic " + name + "() {");
         out.println("\tsetName(\"" + name + "\");");
 
-        for (i = 0; i < probability_variables.length; i++)
+        for (i = 0; i < probabilityVariables.length; i++)
         {
             out.println("\tCategoricalVariable " +
-                        probability_variables[i].name + " = ");
+                        probabilityVariables[i].name + " = ");
             out.println("\t\tnew CategoricalVariable(\"" +
-                        probability_variables[i].name + "\",");
+                        probabilityVariables[i].name + "\",");
             out.print("\t\t\tnew String[] {");
-            for (j = 0; j < probability_variables[i].values.length; j++)
+            for (j = 0; j < probabilityVariables[i].values.length; j++)
             {
-                out.print("\"" + probability_variables[i].values[j] + "\"");
-                if (j != (probability_variables[i].values.length - 1))
+                out.print("\"" + probabilityVariables[i].values[j] + "\"");
+                if (j != (probabilityVariables[i].values.length - 1))
                 {
                     out.print(",");
                 }
@@ -401,18 +401,18 @@ public class BayesNet
             out.println("});\n");
         }
         out.println("\n\n");
-        for (i = 0; i < probability_functions.length; i++)
+        for (i = 0; i < probabilityFunctions.length; i++)
         {
             out.println("\tCategoricalProbability p" + i + " = ");
             out.println("\t\tnew CategoricalProbability(" +
-                        probability_functions[i].variables[0].get_name() + ",");
-            if (probability_functions[i].variables.length > 1)
+                        probabilityFunctions[i].variables[0].getName() + ",");
+            if (probabilityFunctions[i].variables.length > 1)
             {
                 out.print("\t\t\tnew CategoricalVariable[] {");
-                for (j = 1; j < probability_functions[i].variables.length; j++)
+                for (j = 1; j < probabilityFunctions[i].variables.length; j++)
                 {
-                    out.print(probability_functions[i].variables[j].get_name());
-                    if (j != (probability_functions[i].variables.length - 1))
+                    out.print(probabilityFunctions[i].variables[j].getName());
+                    if (j != (probabilityFunctions[i].variables.length - 1))
                     {
                         out.print(", ");
                     }
@@ -420,10 +420,10 @@ public class BayesNet
                 out.println("}, ");
             }
             out.print("\t\t\tnew double[] {");
-            for (j = 0; j < probability_functions[i].values.length; j++)
+            for (j = 0; j < probabilityFunctions[i].values.length; j++)
             {
-                out.print(probability_functions[i].values[j]);
-                if (j != (probability_functions[i].values.length - 1))
+                out.print(probabilityFunctions[i].values[j]);
+                if (j != (probabilityFunctions[i].values.length - 1))
                 {
                     out.print(", ");
                 }
@@ -433,10 +433,10 @@ public class BayesNet
         out.println("\tsetVariables(");
         out.println("\t\tnew CategoricalVariable[]");
         out.print("\t\t\t{");
-        for (i = 0; i < probability_variables.length; i++)
+        for (i = 0; i < probabilityVariables.length; i++)
         {
-            out.print(probability_variables[i].get_name());
-            if (i != (probability_variables.length - 1))
+            out.print(probabilityVariables[i].getName());
+            if (i != (probabilityVariables.length - 1))
             {
                 out.print(", ");
             }
@@ -446,10 +446,10 @@ public class BayesNet
         out.println("\tsetProbabilities(");
         out.println("\t\tnew CategoricalProbability[]");
         out.print("\t\t\t{");
-        for (i = 0; i < probability_functions.length; i++)
+        for (i = 0; i < probabilityFunctions.length; i++)
         {
             out.print("p" + i);
-            if (i != (probability_functions.length - 1))
+            if (i != (probabilityFunctions.length - 1))
             {
                 out.print(", ");
             }
@@ -465,7 +465,7 @@ public class BayesNet
      *
      * @param pstream
      */
-    public void save_xml(PrintStream pstream)
+    public void saveXml(PrintStream pstream)
     {
         int i;
         String property;
@@ -517,14 +517,14 @@ public class BayesNet
 
         // Variables
         pstream.println("<!-- Variables -->");
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            for (i = 0; i < probability_variables.length;
+            for (i = 0; i < probabilityVariables.length;
                  i++)
             {
-                if (probability_variables[i] != null)
+                if (probabilityVariables[i] != null)
                 {
-                    probability_variables[i].save_xml_0_3(pstream);
+                    probabilityVariables[i].saveXml_0_3(pstream);
                 }
             }
         }
@@ -532,14 +532,14 @@ public class BayesNet
 
         // Probability distributions.
         pstream.println("<!-- Probability distributions -->");
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            for (i = 0; i < probability_functions.length;
+            for (i = 0; i < probabilityFunctions.length;
                  i++)
             {
-                if (probability_functions[i] != null)
+                if (probabilityFunctions[i] != null)
                 {
-                    probability_functions[i].save_xml_0_3(pstream);
+                    probabilityFunctions[i].saveXml_0_3(pstream);
                 }
             }
         }
@@ -557,7 +557,7 @@ public class BayesNet
      *
      * @param pstream
      */
-    public void save_xml_0_2(PrintStream pstream)
+    public void saveXml_0_2(PrintStream pstream)
     {
         int i;
         String property;
@@ -612,14 +612,14 @@ public class BayesNet
 
         // Variables
         pstream.println("<!-- Variables -->");
-        if (probability_variables != null)
+        if (probabilityVariables != null)
         {
-            for (i = 0; i < probability_variables.length;
+            for (i = 0; i < probabilityVariables.length;
                  i++)
             {
-                if (probability_variables[i] != null)
+                if (probabilityVariables[i] != null)
                 {
-                    probability_variables[i].save_xml(pstream);
+                    probabilityVariables[i].saveXml(pstream);
                 }
             }
         }
@@ -627,14 +627,14 @@ public class BayesNet
 
         // Probability distributions.
         pstream.println("<!-- Probability distributions -->");
-        if (probability_functions != null)
+        if (probabilityFunctions != null)
         {
-            for (i = 0; i < probability_functions.length;
+            for (i = 0; i < probabilityFunctions.length;
                  i++)
             {
-                if (probability_functions[i] != null)
+                if (probabilityFunctions[i] != null)
                 {
-                    probability_functions[i].save_xml(pstream);
+                    probabilityFunctions[i].saveXml(pstream);
                 }
             }
         }
@@ -652,7 +652,7 @@ public class BayesNet
      *
      * @param pstream
      */
-    public void save_bugs(PrintStream pstream)
+    public void saveBugs(PrintStream pstream)
     {
         SaveBugs sb = new SaveBugs(this);
         sb.save(pstream);
@@ -663,52 +663,52 @@ public class BayesNet
      *
      * @return
      */
-    public String[][] get_all_evidence()
+    public String[][] getAllEvidence()
     {
         int i, j, aux;
         ProbabilityVariable pv;
         ArrayList evs = new ArrayList();
-        String all_evs[][] = null;
+        String allEvs[][] = null;
 
-        for (i = 0; i < probability_variables.length; i++)
+        for (i = 0; i < probabilityVariables.length; i++)
         {
-            pv = probability_variables[i];
-            if (pv.observed_index != BayesNet.INVALID_INDEX)
+            pv = probabilityVariables[i];
+            if (pv.observedIndex != BayesNet.INVALID_INDEX)
             {
                 evs.add(pv);
             }
         }
 
-        all_evs = new String[evs.size()][];
-        for (i = 0; i < all_evs.length; i++)
+        allEvs = new String[evs.size()][];
+        for (i = 0; i < allEvs.length; i++)
         {
-            all_evs[i] = new String[2];
+            allEvs[i] = new String[2];
         }
 
         j = 0;
         for (Object e : evs)
         {
             pv = (ProbabilityVariable) (e);
-            all_evs[j][0] = pv.name;
-            aux = pv.observed_index;
-            all_evs[j][1] = pv.values[aux];
+            allEvs[j][0] = pv.name;
+            aux = pv.observedIndex;
+            allEvs[j][1] = pv.values[aux];
         }
 
-        return (all_evs);
+        return (allEvs);
     }
 
     /**
      * Determine the position of a variable given its name.
      *
-     * @param n_vb
+     * @param nVb
      * @return
      */
-    public int index_of_variable(String n_vb)
+    public int indexOfVariable(String nVb)
     {
         int i;
-        for (i = 0; i < probability_variables.length; i++)
+        for (i = 0; i < probabilityVariables.length; i++)
         {
-            if (probability_variables[i].name.equals(n_vb))
+            if (probabilityVariables[i].name.equals(nVb))
             {
                 return (i);
             }
@@ -731,7 +731,7 @@ public class BayesNet
      */
     public void print(PrintStream out)
     {
-        save_bif(out);
+        saveBif(out);
     }
 
     /* *************************************************************** *
@@ -742,7 +742,7 @@ public class BayesNet
      *
      * @return
      */
-    public String get_name()
+    public String getName()
     {
         return (name);
     }
@@ -752,7 +752,7 @@ public class BayesNet
      *
      * @param n
      */
-    public void set_name(String n)
+    public void setName(String n)
     {
         name = n;
     }
@@ -762,7 +762,7 @@ public class BayesNet
      *
      * @return
      */
-    public ArrayList get_properties()
+    public ArrayList getProperties()
     {
         return (properties);
     }
@@ -772,7 +772,7 @@ public class BayesNet
      *
      * @param prop
      */
-    public void set_properties(ArrayList prop)
+    public void setProperties(ArrayList prop)
     {
         properties = prop;
     }
@@ -782,7 +782,7 @@ public class BayesNet
      *
      * @param prop
      */
-    public void add_property(String prop)
+    public void addProperty(String prop)
     {
         if (properties == null)
         {
@@ -796,7 +796,7 @@ public class BayesNet
      *
      * @param prop
      */
-    public void remove_property(String prop)
+    public void removeProperty(String prop)
     {
         properties.remove(prop);
     }
@@ -806,7 +806,7 @@ public class BayesNet
      *
      * @param i
      */
-    public void remove_property(int i)
+    public void removeProperty(int i)
     {
         properties.remove(i);
     }
@@ -816,13 +816,13 @@ public class BayesNet
      *
      * @return
      */
-    public int number_variables()
+    public int numberVariables()
     {
-        if (probability_variables == null)
+        if (probabilityVariables == null)
         {
             return (BayesNet.INVALID_INDEX);
         }
-        return (probability_variables.length);
+        return (probabilityVariables.length);
     }
 
     /**
@@ -830,13 +830,13 @@ public class BayesNet
      *
      * @return
      */
-    public int number_probability_functions()
+    public int numberProbabilityFunctions()
     {
-        if (probability_functions == null)
+        if (probabilityFunctions == null)
         {
             return (BayesNet.INVALID_INDEX);
         }
-        return (probability_functions.length);
+        return (probabilityFunctions.length);
     }
 
     /**
@@ -845,11 +845,11 @@ public class BayesNet
      * @param index
      * @return
      */
-    public ProbabilityVariable get_probability_variable(int index)
+    public ProbabilityVariable getProbabilityVariable(int index)
     {
-        if (index <= probability_variables.length)
+        if (index <= probabilityVariables.length)
         {
-            return (probability_variables[index]);
+            return (probabilityVariables[index]);
         }
         else
         {
@@ -863,11 +863,11 @@ public class BayesNet
      * @param index
      * @return
      */
-    public ProbabilityFunction get_probability_function(int index)
+    public ProbabilityFunction getProbabilityFunction(int index)
     {
-        if (index <= probability_functions.length)
+        if (index <= probabilityFunctions.length)
         {
-            return (probability_functions[index]);
+            return (probabilityFunctions[index]);
         }
         else
         {
@@ -880,9 +880,9 @@ public class BayesNet
      *
      * @return
      */
-    public ProbabilityVariable[] get_probability_variables()
+    public ProbabilityVariable[] getProbabilityVariables()
     {
-        return (probability_variables);
+        return (probabilityVariables);
     }
 
     /**
@@ -890,9 +890,9 @@ public class BayesNet
      *
      * @return
      */
-    public ProbabilityFunction[] get_probability_functions()
+    public ProbabilityFunction[] getProbabilityFunctions()
     {
-        return (probability_functions);
+        return (probabilityFunctions);
     }
 
     /**
@@ -900,9 +900,9 @@ public class BayesNet
      *
      * @return
      */
-    public DiscreteFunction get_utility_function()
+    public DiscreteFunction getUtilityFunction()
     {
-        return (utility_function);
+        return (utilityFunction);
     }
 
     /**
@@ -913,12 +913,12 @@ public class BayesNet
      * @param name
      * @param v
      */
-    public void set_probability_variable(int index, String name,
+    public void setProbabilityVariable(int index, String name,
                                          String v[], ArrayList vec)
     {
-        if (index <= probability_variables.length)
+        if (index <= probabilityVariables.length)
         {
-            probability_variables[index] =
+            probabilityVariables[index] =
             new ProbabilityVariable(this, name, index, v, vec);
         }
     }
@@ -931,13 +931,13 @@ public class BayesNet
      * @param vec
      * @param values
      */
-    public void set_probability_function(int index,
+    public void setProbabilityFunction(int index,
                                          ProbabilityVariable[] variables,
                                          double values[], ArrayList vec)
     {
-        if (index <= probability_functions.length)
+        if (index <= probabilityFunctions.length)
         {
-            probability_functions[index] =
+            probabilityFunctions[index] =
             new ProbabilityFunction(this, variables, values, vec);
         }
     }
@@ -946,25 +946,25 @@ public class BayesNet
      * Set a probability variable given its index.
      *
      * @param index
-     * @param p_v
+     * @param pV
      */
-    public void set_probability_variable(int index, ProbabilityVariable p_v)
+    public void setProbabilityVariable(int index, ProbabilityVariable pV)
     {
-        p_v.bn = this;
-        p_v.index = index;
-        probability_variables[index] = p_v;
+        pV.bn = this;
+        pV.index = index;
+        probabilityVariables[index] = pV;
     }
 
     /**
      * Set a probability variable given its index.
      *
      * @param index
-     * @param p_f
+     * @param pF
      */
-    public void set_probability_function(int index, ProbabilityFunction p_f)
+    public void setProbabilityFunction(int index, ProbabilityFunction pF)
     {
-        p_f.bn = this;
-        probability_functions[index] = p_f;
+        pF.bn = this;
+        probabilityFunctions[index] = pF;
     }
 
     /**
@@ -972,9 +972,9 @@ public class BayesNet
      *
      * @param pvs
      */
-    public void set_probability_variables(ProbabilityVariable pvs[])
+    public void setProbabilityVariables(ProbabilityVariable pvs[])
     {
-        probability_variables = pvs;
+        probabilityVariables = pvs;
     }
 
     /**
@@ -982,8 +982,8 @@ public class BayesNet
      *
      * @param pfs
      */
-    public void set_probability_functions(ProbabilityFunction pfs[])
+    public void setProbabilityFunctions(ProbabilityFunction pfs[])
     {
-        probability_functions = pfs;
+        probabilityFunctions = pfs;
     }
 }

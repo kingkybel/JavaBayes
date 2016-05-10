@@ -30,15 +30,15 @@ class PropertyManager
             getLogger(PropertyManager.class.getName());
 
     // The original properties.
-    private ArrayList original_properties;
+    private ArrayList originalProperties;
     // The vector holding a copy of the relevant properties.
-    private ArrayList modified_properties;
+    private ArrayList modifiedProperties;
     // A flag indicating whether the original properties are valid.
-    private boolean are_original_properties_still_valid;
+    private boolean areOriginalPropertiesStillValid;
     // The index of the displayed property;
-    private int displayed_property_index;
+    private int displayedPropertyIndex;
     // The text field that displays the property;
-    private TextField text_field;
+    private TextField textField;
 
     /**
      * Default constructor for PropertyManager.
@@ -48,135 +48,135 @@ class PropertyManager
         String property;
 
         // Copy the inputs into internal variables.
-        original_properties = op;
-        text_field = tf;
+        originalProperties = op;
+        textField = tf;
         // Make the copy of the properties.
-        modified_properties = new ArrayList();
+        modifiedProperties = new ArrayList();
         if (op != null)
         {
             for (Object e : op)
             {
-                modified_properties.add(e);
+                modifiedProperties.add(e);
             }
         }
-        are_original_properties_still_valid = true;
+        areOriginalPropertiesStillValid = true;
         // Now display if possible.
-        if (modified_properties.size() > 0)
+        if (modifiedProperties.size() > 0)
         {
-            property = (String) (modified_properties.get(0));
-            text_field.setText(property);
-            displayed_property_index = 0;
+            property = (String) (modifiedProperties.get(0));
+            textField.setText(property);
+            displayedPropertyIndex = 0;
         }
         else
         {
-            displayed_property_index = -1;
+            displayedPropertyIndex = -1;
         }
     }
 
     /*
      * Create a new property.
      */
-    void new_property()
+    void newProperty()
     {
         String property;
 
-        if (displayed_property_index != -1)
+        if (displayedPropertyIndex != -1)
         {
-            property = (String) modified_properties.
-            get(displayed_property_index);
+            property = (String) modifiedProperties.
+            get(displayedPropertyIndex);
         }
         else
         {
             property = "";
         }
-        if (!(property.equals(text_field.getText())))
+        if (!(property.equals(textField.getText())))
         {
-            update_property();
+            updateProperty();
         }
 
-        displayed_property_index = -1;
-        text_field.setText("");
+        displayedPropertyIndex = -1;
+        textField.setText("");
     }
 
     /*
      * Go to the next property.
      */
-    void next_property()
+    void nextProperty()
     {
         String property;
 
-        if (displayed_property_index != -1)
+        if (displayedPropertyIndex != -1)
         {
             property =
-            (String) (modified_properties.get(displayed_property_index));
+            (String) (modifiedProperties.get(displayedPropertyIndex));
         }
         else
         {
             property = "";
         }
-        if (!(property.equals(text_field.getText())))
+        if (!(property.equals(textField.getText())))
         {
-            update_property();
+            updateProperty();
         }
 
-        if (modified_properties.size() > 0)
+        if (modifiedProperties.size() > 0)
         {
-            displayed_property_index++;
-            if (displayed_property_index >= modified_properties.size())
+            displayedPropertyIndex++;
+            if (displayedPropertyIndex >= modifiedProperties.size())
             {
-                displayed_property_index = 0;
+                displayedPropertyIndex = 0;
             }
             property =
-            (String) (modified_properties.get(displayed_property_index));
-            text_field.setText(property);
+            (String) (modifiedProperties.get(displayedPropertyIndex));
+            textField.setText(property);
         }
     }
 
     /*
      * Modify a property when changes were detected.
      */
-    void update_property()
+    void updateProperty()
     {
-        if (displayed_property_index != -1)
+        if (displayedPropertyIndex != -1)
         {
-            modified_properties.remove(displayed_property_index);
+            modifiedProperties.remove(displayedPropertyIndex);
         }
-        if (text_field.getText().isEmpty())
+        if (textField.getText().isEmpty())
         { // Property was deleted.
-            displayed_property_index = -1;
+            displayedPropertyIndex = -1;
         }
         else
         { // Property is new or modified.
-            modified_properties.add(text_field.getText());
-            displayed_property_index =
-            modified_properties.indexOf(text_field.getText());
+            modifiedProperties.add(textField.getText());
+            displayedPropertyIndex =
+            modifiedProperties.indexOf(textField.getText());
         }
-        are_original_properties_still_valid = false;
+        areOriginalPropertiesStillValid = false;
     }
 
     /*
      * Modify a property when the dialog exits.
      */
-    ArrayList update_property_on_exit()
+    ArrayList updatePropertyOnExit()
     {
         String property;
 
-        if (displayed_property_index != -1)
+        if (displayedPropertyIndex != -1)
         {
             property =
-            (String) (modified_properties.get(displayed_property_index));
+            (String) (modifiedProperties.get(displayedPropertyIndex));
         }
         else
         {
             property = "";
         }
-        if (!(property.equals(text_field.getText())))
+        if (!(property.equals(textField.getText())))
         {
-            update_property();
+            updateProperty();
         }
-        if (are_original_properties_still_valid == false)
+        if (areOriginalPropertiesStillValid == false)
         {
-            return (modified_properties);
+            return (modifiedProperties);
         }
         else
         {

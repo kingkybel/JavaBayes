@@ -39,10 +39,10 @@ class EditCredalSet extends EditFunctionPanel
 {
 
     // Constants used to construct the panel.
-    private static final String credal_set_specification =
+    private static final String credalSetSpecification =
                                 "Credal set specification";
-    private static final String credal_set = "Index of extreme distribution:";
-    private static final String number_extreme_points_label =
+    private static final String credalSet = "Index of extreme distribution:";
+    private static final String numberExtremePointsLabel =
                                 "Number of extreme points:";
     private static final Logger LOG =
     Logger.getLogger(EditCredalSet.class.getName());
@@ -51,89 +51,89 @@ class EditCredalSet extends EditFunctionPanel
     private InferenceGraphNode node;
 
     // Variables that hold the relevant information from the node.
-    private String all_variable_names[];
-    private String all_variable_values[][];
-    private double all_probability_values[][];
-    private int index_extreme_point;
+    private String allVariableNames[];
+    private String allVariableValues[][];
+    private double allProbabilityValues[][];
+    private int indexExtremePoint;
 
     // Components used to construct the panel.
-    private FunctionTablePanel probability_table;
+    private FunctionTablePanel probabilityTable;
     private Panel csp, ics, qbpp;
-    private Choice credal_set_choice;
-    private Label local_parameter;
-    private TextField text_local_parameter;
+    private Choice credalSetChoice;
+    private Label localParameter;
+    private TextField textLocalParameter;
 
     /**
      * Default constructor for an EditCredalSet.
      */
-    EditCredalSet(InferenceGraph i_g, InferenceGraphNode i_g_n)
+    EditCredalSet(InferenceGraph iG, InferenceGraphNode iGN)
     {
-        this.ig = i_g;
-        this.node = i_g_n;
+        this.ig = iG;
+        this.node = iGN;
 
         // Copy the probability values in the node.
-        copy_probability_values();
+        copyProbabilityValues();
 
         // Get the variable names.
-        all_variable_names = node.get_all_names();
+        allVariableNames = node.getAllNames();
 
         // Get the variable values.
-        all_variable_values = node.get_all_values();
+        allVariableValues = node.getAllValues();
 
         // Construct the name of the probability function.
-        Label probability_name = create_credal_set_name();
+        Label probabilityName = createCredalSetName();
 
         // Construct the table of probability values.
-        index_extreme_point = 0;
-        probability_table = new FunctionTablePanel(all_variable_names,
-                                                   all_variable_values,
-                                                   all_probability_values[index_extreme_point]);
+        indexExtremePoint = 0;
+        probabilityTable = new FunctionTablePanel(allVariableNames,
+                                                   allVariableValues,
+                                                   allProbabilityValues[indexExtremePoint]);
 
         // Credal set panel.
-        generate_credal_set_panel();
+        generateCredalSetPanel();
 
         // Set the final layout
         setLayout(new BorderLayout());
-        add("North", probability_name);
-        add("Center", probability_table);
+        add("North", probabilityName);
+        add("Center", probabilityTable);
         add("South", csp);
     }
 
     /*
      * Copy the probability values into internal variables.
      */
-    private void copy_probability_values()
+    private void copyProbabilityValues()
     {
-        double original_probability_values[];
-        all_probability_values =
-        new double[node.number_extreme_distributions()][];
-        for (int i = 0; i < all_probability_values.length; i++)
+        double originalProbabilityValues[];
+        allProbabilityValues =
+        new double[node.numberExtremeDistributions()][];
+        for (int i = 0; i < allProbabilityValues.length; i++)
         {
-            original_probability_values = node.get_function_values(i);
-            all_probability_values[i] =
-            new double[original_probability_values.length];
-            System.arraycopy(original_probability_values, 0,
-                             all_probability_values[i], 0,
-                             all_probability_values[i].length);
+            originalProbabilityValues = node.getFunctionValues(i);
+            allProbabilityValues[i] =
+            new double[originalProbabilityValues.length];
+            System.arraycopy(originalProbabilityValues, 0,
+                             allProbabilityValues[i], 0,
+                             allProbabilityValues[i].length);
         }
     }
 
     /*
      * Create a Label containing a description of the credal set.
      */
-    private Label create_credal_set_name()
+    private Label createCredalSetName()
     {
         StringBuilder name = new StringBuilder("K(");
-        name.append(node.get_name());
+        name.append(node.getName());
         if (node.hasParent())
         {
             name.append(" |");
-            ArrayList parents = node.get_parents();
+            ArrayList parents = node.getParents();
             for (Object e : parents)
             {
                 name.append(" ").
                         append(((InferenceGraphNode) (e)).
-                                get_name()).
+                                getName()).
                         append(",");
             }
             name.setCharAt(name.length() - 1, ')');
@@ -149,47 +149,47 @@ class EditCredalSet extends EditFunctionPanel
     void accept()
     {
         int i, k;
-        all_probability_values[index_extreme_point] = probability_table.
-        get_table();
-        for (i = 0; i < all_probability_values.length; i++)
+        allProbabilityValues[indexExtremePoint] = probabilityTable.
+        getTable();
+        for (i = 0; i < allProbabilityValues.length; i++)
         {
-            node.set_function_values(i, all_probability_values[i]);
+            node.setFunctionValues(i, allProbabilityValues[i]);
         }
         // Update the number of extreme points.
         try
         {
-            int old_number_extreme_points = all_probability_values.length;
-            int number_extreme_points =
-                (new Integer(text_local_parameter.getText())).intValue();
-            if (number_extreme_points != all_probability_values.length)
+            int oldNumberExtremePoints = allProbabilityValues.length;
+            int numberExtremePoints =
+                (new Integer(textLocalParameter.getText())).intValue();
+            if (numberExtremePoints != allProbabilityValues.length)
             {
-                node.set_local_credal_set(number_extreme_points);
-                copy_probability_values();
-                if (index_extreme_point >= number_extreme_points)
+                node.setLocalCredalSet(numberExtremePoints);
+                copyProbabilityValues();
+                if (indexExtremePoint >= numberExtremePoints)
                 {
-                    index_extreme_point = number_extreme_points - 1;
+                    indexExtremePoint = numberExtremePoints - 1;
                 }
-                probability_table.insert_table(
-                        all_probability_values[index_extreme_point]);
-                if (number_extreme_points > old_number_extreme_points)
+                probabilityTable.insertTable(
+                        allProbabilityValues[indexExtremePoint]);
+                if (numberExtremePoints > oldNumberExtremePoints)
                 {
-                    for (k = old_number_extreme_points; k <
-                                                        number_extreme_points;
+                    for (k = oldNumberExtremePoints; k <
+                                                        numberExtremePoints;
                          k++)
                     {
-                        credal_set_choice.addItem(String.valueOf(k));
+                        credalSetChoice.addItem(String.valueOf(k));
                     }
                 }
-                if (old_number_extreme_points > number_extreme_points)
+                if (oldNumberExtremePoints > numberExtremePoints)
                 {
-                    for (k = (old_number_extreme_points - 1);
-                         k >= number_extreme_points;
+                    for (k = (oldNumberExtremePoints - 1);
+                         k >= numberExtremePoints;
                          k--)
                     {
-                        credal_set_choice.remove(k);
+                        credalSetChoice.remove(k);
                     }
                 }
-                credal_set_choice.select(index_extreme_point);
+                credalSetChoice.select(indexExtremePoint);
             }
         }
         catch (NumberFormatException ex)
@@ -206,35 +206,35 @@ class EditCredalSet extends EditFunctionPanel
     /**
      * Generate a panel for credal set.
      */
-    private void generate_credal_set_panel()
+    private void generateCredalSetPanel()
     {
         csp = new Panel();
         csp.setLayout(new BorderLayout());
 
-        Label credal_set_specification_label =
-              new Label(credal_set_specification, Label.CENTER);
+        Label credalSetSpecificationLabel =
+              new Label(credalSetSpecification, Label.CENTER);
 
         ics = new Panel();
         ics.setLayout(new BorderLayout());
-        Label credal_set_label = new Label(credal_set);
-        credal_set_choice = new Choice();
-        for (int i = 0; i < node.number_extreme_distributions(); i++)
+        Label credalSetLabel = new Label(credalSet);
+        credalSetChoice = new Choice();
+        for (int i = 0; i < node.numberExtremeDistributions(); i++)
         {
-            credal_set_choice.addItem(String.valueOf(i));
+            credalSetChoice.addItem(String.valueOf(i));
         }
-        ics.add("West", credal_set_label);
-        ics.add("Center", credal_set_choice);
+        ics.add("West", credalSetLabel);
+        ics.add("Center", credalSetChoice);
 
         qbpp = new Panel();
         qbpp.setLayout(new BorderLayout());
-        local_parameter = new Label(number_extreme_points_label);
-        text_local_parameter = new TextField(5);
-        int number_extreme_points = node.number_extreme_distributions();
-        text_local_parameter.setText(String.valueOf(number_extreme_points));
-        qbpp.add("West", local_parameter);
-        qbpp.add("Center", text_local_parameter);
+        localParameter = new Label(numberExtremePointsLabel);
+        textLocalParameter = new TextField(5);
+        int numberExtremePoints = node.numberExtremeDistributions();
+        textLocalParameter.setText(String.valueOf(numberExtremePoints));
+        qbpp.add("West", localParameter);
+        qbpp.add("Center", textLocalParameter);
 
-        csp.add("North", credal_set_specification_label);
+        csp.add("North", credalSetSpecificationLabel);
         csp.add("Center", qbpp);
         csp.add("South", ics);
     }
@@ -245,13 +245,13 @@ class EditCredalSet extends EditFunctionPanel
     @Override
     public boolean action(Event evt, Object arg)
     {
-        if (evt.target == credal_set_choice)
+        if (evt.target == credalSetChoice)
         {
-            all_probability_values[index_extreme_point] = probability_table.
-            get_table();
-            index_extreme_point = credal_set_choice.getSelectedIndex();
-            probability_table.insert_table(
-                    all_probability_values[index_extreme_point]);
+            allProbabilityValues[indexExtremePoint] = probabilityTable.
+            getTable();
+            indexExtremePoint = credalSetChoice.getSelectedIndex();
+            probabilityTable.insertTable(
+                    allProbabilityValues[indexExtremePoint]);
             return (true);
         }
         return (super.action(evt, arg));
