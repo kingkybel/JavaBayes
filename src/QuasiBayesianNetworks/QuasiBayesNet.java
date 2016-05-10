@@ -95,13 +95,13 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it the number
      * of variables/functions and the name of the network.
      *
-     * @param nN
+     * @param name
      * @param nF
      * @param nV
      */
-    public QuasiBayesNet(String nN, int nV, int nF)
+    public QuasiBayesNet(String name, int nV, int nF)
     {
-        super(nN, nV, nF);
+        super(name, nV, nF);
         globalNeighborhoodType = NO_CREDAL_SET;
         globalNeighborhoodParameter = 0.0;
     }
@@ -110,12 +110,12 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it the name of
      * network and properties.
      *
-     * @param nN
-     * @param p
+     * @param name
+     * @param properties
      */
-    public QuasiBayesNet(String nN, ArrayList p)
+    public QuasiBayesNet(String name, ArrayList properties)
     {
-        super(nN, p);
+        super(name, properties);
         globalNeighborhoodType = NO_CREDAL_SET;
         globalNeighborhoodParameter = 0.0;
     }
@@ -124,17 +124,17 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it a Bayesian
      * Network and it creates a new copy
      *
-     * @param bn
+     * @param bayesNet
      */
-    public QuasiBayesNet(BayesNet bn)
+    public QuasiBayesNet(BayesNet bayesNet)
     {
-        super(bn);
-        if (bn instanceof QuasiBayesNet)
+        super(bayesNet);
+        if (bayesNet instanceof QuasiBayesNet)
         {
             globalNeighborhoodType =
-            ((QuasiBayesNet) bn).globalNeighborhoodType;
+            ((QuasiBayesNet) bayesNet).globalNeighborhoodType;
             globalNeighborhoodParameter =
-            ((QuasiBayesNet) bn).globalNeighborhoodParameter;
+            ((QuasiBayesNet) bayesNet).globalNeighborhoodParameter;
         }
     }
 

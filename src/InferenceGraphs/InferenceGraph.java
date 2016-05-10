@@ -106,10 +106,8 @@ public final class InferenceGraph
     ArrayList nodes = new ArrayList();
     private final String defaultBayesNetName = "InternalNetwork";
 
-    /*
-     * Default constructor for an InferenceGraph.
-     */
     /**
+     * Default constructor for an InferenceGraph.
      *
      */
     public InferenceGraph()
@@ -117,23 +115,19 @@ public final class InferenceGraph
         qbn = new QuasiBayesNet(defaultBayesNetName, 0, 0);
     }
 
-    /*
-     * Simple constructor for an InferenceGraph.
-     */
     /**
+     * Simple constructor for an InferenceGraph.
      *
-     * @param bN
+     * @param bayesNet
      */
-    public InferenceGraph(BayesNet bN)
+    public InferenceGraph(BayesNet bayesNet)
     {
-        qbn = new QuasiBayesNet(bN);
+        qbn = new QuasiBayesNet(bayesNet);
         convertBayesNet();
     }
 
-    /*
-     * Constructor for an InferenceGraph.
-     */
     /**
+     * Constructor for an InferenceGraph.
      *
      * @param filename
      * @throws Exception
@@ -145,10 +139,8 @@ public final class InferenceGraph
         convertBayesNet();
     }
 
-    /*
-     * Constructor for an InferenceGraph.
-     */
     /**
+     * Constructor for an InferenceGraph.
      *
      * @param url
      * @throws Exception
@@ -159,10 +151,8 @@ public final class InferenceGraph
         convertBayesNet();
     }
 
-    /*
-     * Get the contents of the graph.
-     */
     /**
+     * Get the contents of the graph.
      *
      * @return
      */
@@ -171,56 +161,56 @@ public final class InferenceGraph
         return (convertGraph());
     }
 
-    /*
-     * Convert a QuasiBayesNet object to the InferenceGraph
-     * structure; returns true if the conversion is successful.
+    /**
+     * Convert a QuasiBayesNet object to the InferenceGraph structure; returns
+     * true if the conversion is successful.
      */
     boolean convertBayesNet()
     {
-        ProbabilityVariable pv = null;
-        ProbabilityFunction pf = null;
+        ProbabilityVariable probVar = null;
+        ProbabilityFunction probFunc = null;
 
         for (int i = 0; i < qbn.numberVariables(); i++)
         {
-            pv = qbn.getProbabilityVariable(i);
-            pf = null;
+            probVar = qbn.getProbabilityVariable(i);
+            probFunc = null;
             for (int j = 0; j < qbn.numberProbabilityFunctions(); j++)
             {
-                pf = qbn.getProbabilityFunction(j);
-                if (pf.getVariable(0) == pv)
+                probFunc = qbn.getProbabilityFunction(j);
+                if (probFunc.getVariable(0) == probVar)
                 {
                     break;
                 }
             }
             // The variable does not have a corresponding function
-            if (pf == null)
+            if (probFunc == null)
             {
                 return (false);
             }
 
-            nodes.add(new InferenceGraphNode(this, pv, pf));
+            nodes.add(new InferenceGraphNode(this, probVar, probFunc));
         }
         generateParentsAndChildren();
 
         return (true);
     }
 
-    /*
+    /**
      * Generate the parents and children for the nodes.
      */
     private void generateParentsAndChildren()
     {
         int i, j;
         DiscreteVariable variables[];
-        ProbabilityFunction pf;
+        ProbabilityFunction probFunc;
         InferenceGraphNode baseNode, node;
 
         for (Object e : nodes)
         {
             baseNode = (InferenceGraphNode) (e);
 
-            pf = baseNode.pf;
-            variables = pf.getVariables();
+            probFunc = baseNode.probFunc;
+            variables = probFunc.getVariables();
 
             for (i = 1; i < variables.length; i++)
             {
@@ -235,7 +225,7 @@ public final class InferenceGraph
         }
     }
 
-    /*
+    /**
      * Get the node corresponding to a given variable.
      */
     private InferenceGraphNode getNode(DiscreteVariable dv)
@@ -244,7 +234,7 @@ public final class InferenceGraph
         for (Object e : nodes)
         {
             node = (InferenceGraphNode) e;
-            if (node.pv == dv)
+            if (node.probVar == dv)
             {
                 return (node);
             }
@@ -252,7 +242,7 @@ public final class InferenceGraph
         return (null);
     }
 
-    /*
+    /**
      * Convert the InferenceGraph structure to a QuasiBayesNet object.
      */
     QuasiBayesNet convertGraph()
@@ -261,12 +251,12 @@ public final class InferenceGraph
         InferenceGraphNode node;
 
         // Create the arrays of variables and functions
-        ProbabilityVariable pvs[] = new ProbabilityVariable[nodes.size()];
-        ProbabilityFunction pfs[] = new ProbabilityFunction[nodes.size()];
+        ProbabilityVariable probVars[] = new ProbabilityVariable[nodes.size()];
+        ProbabilityFunction probFuncs[] = new ProbabilityFunction[nodes.size()];
 
         // Insert the empty arrays
-        qbn.setProbabilityVariables(pvs);
-        qbn.setProbabilityFunctions(pfs);
+        qbn.setProbabilityVariables(probVars);
+        qbn.setProbabilityFunctions(probFuncs);
 
         // Collect all variables and functions in the nodes
         // into the new QuasiBayesNet
@@ -275,8 +265,8 @@ public final class InferenceGraph
         {
             node = (InferenceGraphNode) (e);
             node.updatePosition();
-            qbn.setProbabilityVariable(i, node.pv);
-            qbn.setProbabilityFunction(i, node.pf);
+            qbn.setProbabilityVariable(i, node.probVar);
+            qbn.setProbabilityFunction(i, node.probFunc);
             i++;
         }
 
@@ -347,11 +337,11 @@ public final class InferenceGraph
     /**
      * Set the properties of the network.
      *
-     * @param prop
+     * @param properties
      */
-    public void setNetworkProperties(ArrayList prop)
+    public void setNetworkProperties(ArrayList properties)
     {
-        qbn.setProperties(prop);
+        qbn.setProperties(properties);
     }
 
     /**
@@ -417,22 +407,22 @@ public final class InferenceGraph
     /**
      * Determine whether or not a name is valid and/or repeated.
      *
-     * @param n
+     * @param name
      * @return
      */
-    public String checkName(String n)
+    public String checkName(String name)
     {
         InferenceGraphNode no;
-        String nn = validateValue(n);
+        String checkedName = validateValue(name);
         for (Object e : nodes)
         {
             no = (InferenceGraphNode) (e);
-            if (no.getName().equals(nn))
+            if (no.getName().equals(checkedName))
             {
                 return (null);
             }
         }
-        return (nn);
+        return (checkedName);
     }
 
     /**
@@ -793,7 +783,7 @@ public final class InferenceGraph
         // Initialize: headNode is marked and inserted
         int currentListedNodeIndex = 0;
         listedNodes[0] = headNode;
-        hashedNodes.put(headNode.pv.getName(), headNode);
+        hashedNodes.put(headNode.probVar.getName(), headNode);
 
         // Now expand for children until no more children, or
         // when a child is equal to bottomNode
@@ -814,9 +804,9 @@ public final class InferenceGraph
                 { // Cycle is detected
                     return (true);
                 }
-                if (!hashedNodes.containsKey(childNode.pv.getName()))
+                if (!hashedNodes.containsKey(childNode.probVar.getName()))
                 {
-                    hashedNodes.put(childNode.pv.getName(), childNode);
+                    hashedNodes.put(childNode.probVar.getName(), childNode);
                     lastListedNodeIndex++;
                     listedNodes[lastListedNodeIndex] = childNode;
                 }
@@ -838,13 +828,13 @@ public final class InferenceGraph
         InferenceGraphNode cnode;
         ArrayList children;
 
-        if (node.pv.numberValues() == values.length)
+        if (node.probVar.numberValues() == values.length)
         {
-            node.pv.setValues(values);
+            node.probVar.setValues(values);
             return;
         }
 
-        node.pv.setValues(values);
+        node.probVar.setValues(values);
         node.initDists();
 
         children = node.getChildren();

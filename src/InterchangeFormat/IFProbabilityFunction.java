@@ -62,11 +62,11 @@ public class IFProbabilityFunction
 
     /**
      *
-     * @param p
+     * @param properties
      */
-    public void setProperties(ArrayList p)
+    public void setProperties(ArrayList properties)
     {
-        properties = p;
+        this.properties = properties;
     }
 
     /**
@@ -169,7 +169,7 @@ public class IFProbabilityFunction
      */
     public void invertTables(IFBayesNet ifbn)
     {
-        IFProbabilityVariable pv;
+        IFProbabilityVariable probVar;
         ArrayList newTables;
         String runningName;
         double t[], newTable[];
@@ -186,26 +186,26 @@ public class IFProbabilityFunction
                 sizeOfOthers = 1;
                 t = (double[]) (e); // Get the table.
                 // Now get the first variable.
-                for (Object ee : ifbn.pvs)
+                for (Object ee : ifbn.probVars)
                 {
-                    pv = (IFProbabilityVariable) (ee);
-                    runningName = pv.getName();
+                    probVar = (IFProbabilityVariable) (ee);
+                    runningName = probVar.getName();
                     if (runningName.equals(sVariables[0]))
                     { // Found the first variable.
-                        sizeOfFirst = pv.getValues().length; // Obtain its size.
+                        sizeOfFirst = probVar.getValues().length; // Obtain its size.
                         break; // Get out of loop through variables.
                     }
                 }
                 // Get the size of all other variables;
                 for (j = 1; j < sVariables.length; j++)
                 {
-                    for (Object ee : ifbn.pvs)
+                    for (Object ee : ifbn.probVars)
                     {
-                        pv = (IFProbabilityVariable) (ee);
-                        runningName = pv.getName();
+                        probVar = (IFProbabilityVariable) (ee);
+                        runningName = probVar.getName();
                         if (runningName.equals(sVariables[j]))
                         { // Found the variable.
-                            sizeOfOthers *= pv.getValues().length;
+                            sizeOfOthers *= probVar.getValues().length;
                             break; // Get out of loop through variables.
                         }
                     }

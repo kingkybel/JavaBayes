@@ -49,12 +49,12 @@ public class ConstantDensityBoundedSet
      * Constructor for a ConstantDensityBoundedSet given a ProbabilityFunction
      * object and given constant.
      *
-     * @param pf
+     * @param probFunc
      * @param kk
      */
-    public ConstantDensityBoundedSet(ProbabilityFunction pf, double kk)
+    public ConstantDensityBoundedSet(ProbabilityFunction probFunc, double kk)
     {
-        super(pf);
+        super(probFunc);
         k = kk;
         if (k <= 0.0)
         {

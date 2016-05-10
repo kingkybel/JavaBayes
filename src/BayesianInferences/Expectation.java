@@ -48,7 +48,7 @@ public class Expectation
     /**
      *
      */
-    protected BayesNet bn;
+    protected BayesNet bayesNet;
 
     /**
      *
@@ -63,7 +63,7 @@ public class Expectation
     /**
      *
      */
-    protected boolean doProduceClusters;
+    protected boolean isProducingClusters;
 
     /**
      *
@@ -73,13 +73,13 @@ public class Expectation
     /**
      * Constructor for an Expectation.
      *
-     * @param bN
-     * @param dpc
+     * @param bayesNet
+     * @param isProducingClusters
      */
-    public Expectation(BayesNet bN, boolean dpc)
+    public Expectation(BayesNet bayesNet, boolean isProducingClusters)
     {
-        bn = bN;
-        doProduceClusters = dpc;
+        this.bayesNet = bayesNet;
+        this.isProducingClusters = isProducingClusters;
         initializeInference();
     }
 
@@ -88,7 +88,7 @@ public class Expectation
      */
     private void initializeInference()
     {
-        inference = new Inference(bn, doProduceClusters);
+        inference = new Inference(bayesNet, isProducingClusters);
     }
 
     /**
@@ -99,10 +99,11 @@ public class Expectation
     public void expectation()
     {
         // Construct the function with the values.
-        ProbabilityVariable pv = bn.getProbabilityVariable(0);
-        DiscreteFunction df = constructValues(pv, Expectation.EXPECTED_VALUE);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
+        DiscreteFunction discrFunc = constructValues(probVar,
+                                                     Expectation.EXPECTED_VALUE);
         // Calculate expectation.
-        expectation(df);
+        expectation(discrFunc);
     }
 
     /**
@@ -113,16 +114,17 @@ public class Expectation
     public void expectation(String queriedVariableName)
     {
         // Construct the function with the values
-        int index = bn.indexOfVariable(queriedVariableName);
+        int index = bayesNet.indexOfVariable(queriedVariableName);
         if (index == BayesNet.INVALID_INDEX)
         {
             expectation();
             return;
         }
-        ProbabilityVariable pv = bn.getProbabilityVariable(index);
-        DiscreteFunction df = constructValues(pv, Expectation.EXPECTED_VALUE);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
+        DiscreteFunction discrFunc = constructValues(probVar,
+                                                     Expectation.EXPECTED_VALUE);
         // Calculate expectation.
-        expectation(df, queriedVariableName);
+        expectation(discrFunc, queriedVariableName);
     }
 
     /**
@@ -133,16 +135,17 @@ public class Expectation
     public void expectation(String order[])
     {
         // Construct the function with the values
-        int index = bn.indexOfVariable(order[order.length - 1]);
+        int index = bayesNet.indexOfVariable(order[order.length - 1]);
         if (index == BayesNet.INVALID_INDEX)
         {
             expectation();
             return;
         }
-        ProbabilityVariable pv = bn.getProbabilityVariable(index);
-        DiscreteFunction df = constructValues(pv, Expectation.EXPECTED_VALUE);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
+        DiscreteFunction discrFunc = constructValues(probVar,
+                                                     Expectation.EXPECTED_VALUE);
         // Calculate expectation.
-        expectation(df, order);
+        expectation(discrFunc, order);
     }
 
     /**
@@ -153,10 +156,10 @@ public class Expectation
     public void expectation(int momentOrder)
     {
         // Construct the function with the values
-        ProbabilityVariable pv = bn.getProbabilityVariable(0);
-        DiscreteFunction df = constructValues(pv, momentOrder);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
+        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
         // Calculate expectation.
-        expectation(df);
+        expectation(discrFunc);
     }
 
     /**
@@ -168,16 +171,16 @@ public class Expectation
     public void expectation(int momentOrder, String queriedVariableName)
     {
         // Construct the function with the values
-        int index = bn.indexOfVariable(queriedVariableName);
+        int index = bayesNet.indexOfVariable(queriedVariableName);
         if (index == BayesNet.INVALID_INDEX)
         {
             expectation();
             return;
         }
-        ProbabilityVariable pv = bn.getProbabilityVariable(index);
-        DiscreteFunction df = constructValues(pv, momentOrder);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
+        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
         // Calculate expectation.
-        expectation(df, queriedVariableName);
+        expectation(discrFunc, queriedVariableName);
     }
 
     /**
@@ -189,86 +192,87 @@ public class Expectation
     public void expectation(int momentOrder, String order[])
     {
         // Construct the function with the values
-        int index = bn.indexOfVariable(order[order.length - 1]);
+        int index = bayesNet.indexOfVariable(order[order.length - 1]);
         if (index == BayesNet.INVALID_INDEX)
         {
             expectation();
             return;
         }
-        ProbabilityVariable pv = bn.getProbabilityVariable(index);
-        DiscreteFunction df = constructValues(pv, momentOrder);
+        ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
+        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
         // Calculate expectation.
-        expectation(df, order);
+        expectation(discrFunc, order);
     }
 
     /**
      * Do the Expectation, assuming the input DiscreteFunction is a function
      * only of the queried variable.
      *
-     * @param df
+     * @param discrFunc
      */
-    public void expectation(DiscreteFunction df)
+    public void expectation(DiscreteFunction discrFunc)
     {
         inference.inference();
-        doExpectationFromInference(df);
+        doExpectationFromInference(discrFunc);
     }
 
     /**
      * Do the Expectation, assuming the input DiscreteFunction is a function
      * only of the queried variable.
      *
-     * @param df
+     * @param discrFunc
      * @param queriedVariableName
      */
-    public void expectation(DiscreteFunction df,
+    public void expectation(DiscreteFunction discrFunc,
                             String queriedVariableName)
     {
         inference.inference(queriedVariableName);
-        doExpectationFromInference(df);
+        doExpectationFromInference(discrFunc);
     }
 
     /**
      * Do the Expectation given order, assuming the input DiscreteFunction is a
      * function only of the queried variable.
      *
-     * @param df
+     * @param discrFunc
      * @param order
      */
-    public void expectation(DiscreteFunction df, String order[])
+    public void expectation(DiscreteFunction discrFunc, String order[])
     {
         inference.inference(order);
-        doExpectationFromInference(df);
+        doExpectationFromInference(discrFunc);
     }
 
     /**
      * Construct the utility function that produces the requested moment.
      */
-    private DiscreteFunction constructValues(ProbabilityVariable pv,
+    private DiscreteFunction constructValues(ProbabilityVariable probVar,
                                              int momentOrder)
     {
-        DiscreteFunction df = pv.getNumericValues();
+        DiscreteFunction discrFunc = probVar.getNumericValues();
         if (momentOrder > 1)
         {
-            for (int i = 0; i < df.numberValues(); i++)
+            for (int i = 0; i < discrFunc.numberValues(); i++)
             {
-                df.setValue(i, Math.pow(df.getValue(i), momentOrder));
+                discrFunc.setValue(i, Math.pow(discrFunc.getValue(i),
+                                               momentOrder));
             }
         }
-        return (df);
+        return (discrFunc);
     }
 
     /**
-     * Do the expectations from inference.
+     * Do the expectations discrFunc inference.
      *
-     * @param df
+     * @param discrFunc
      */
-    protected void doExpectationFromInference(DiscreteFunction df)
+    protected void doExpectationFromInference(DiscreteFunction discrFunc)
     {
-        currentFunction = df;
+        currentFunction = discrFunc;
 
         ProbabilityFunction res = inference.getResult();
         results = new double[1];
-        results[0] = res.expectedValue(df);
+        results[0] = res.expectedValue(discrFunc);
     }
 
     /**
@@ -308,7 +312,7 @@ public class Expectation
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
         int i, bp[];
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
 
         // Print it all.
         out.print("Posterior expectation: [");

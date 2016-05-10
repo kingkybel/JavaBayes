@@ -288,7 +288,7 @@ class EditVariableDialog extends Dialog
     private void fillDialog()
     {
         String values[], allValues = "";
-        ArrayList prop;
+        ArrayList properties;
         String property;
 
         // Synchronize the network if necessary.
@@ -344,7 +344,7 @@ class EditVariableDialog extends Dialog
     @Override
     public boolean action(Event evt, Object arg)
     {
-        ArrayList prop;
+        ArrayList properties;
         String values[], property, checkedName;
 
         if (evt.target == dismissButton)

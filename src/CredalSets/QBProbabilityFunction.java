@@ -56,15 +56,17 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param bN
-     * @param prop
+     * @param bayesNet
+     * @param properties
      * @param nVb
      * @param nVl
      */
-    public QBProbabilityFunction(BayesNet bN, int nVb, int nVl,
-                                 ArrayList prop)
+    public QBProbabilityFunction(BayesNet bayesNet,
+                                 int nVb,
+                                 int nVl,
+                                 ArrayList properties)
     {
-        super(bN, nVb, nVl, prop);
+        super(bayesNet, nVb, nVl, properties);
         lowerEnvelope = new double[nVl];
         upperEnvelope = new double[nVl];
     }
@@ -72,18 +74,21 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param bN
-     * @param prop
+     * @param bayesNet
+     * @param properties
      * @param dvs
      * @param up
      * @param v
      * @param lp
      */
-    public QBProbabilityFunction(BayesNet bN, DiscreteVariable dvs[],
-                                 double v[], double lp[], double up[],
-                                 ArrayList prop)
+    public QBProbabilityFunction(BayesNet bayesNet,
+                                 DiscreteVariable dvs[],
+                                 double v[],
+                                 double lp[],
+                                 double up[],
+                                 ArrayList properties)
     {
-        super(bN, dvs, v, prop);
+        super(bayesNet, dvs, v, properties);
         lowerEnvelope = lp;
         upperEnvelope = up;
     }
@@ -91,15 +96,17 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param df
+     * @param discrFunc
      * @param newUp
      * @param newValues
      * @param newLp
      */
-    public QBProbabilityFunction(DiscreteFunction df, double newValues[],
-                                 double newLp[], double newUp[])
+    public QBProbabilityFunction(DiscreteFunction discrFunc,
+                                 double newValues[],
+                                 double newLp[],
+                                 double newUp[])
     {
-        super(df, newValues);
+        super(discrFunc, newValues);
         lowerEnvelope = newLp;
         upperEnvelope = newUp;
     }

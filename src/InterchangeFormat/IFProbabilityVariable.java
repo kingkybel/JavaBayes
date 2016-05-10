@@ -54,11 +54,11 @@ public class IFProbabilityVariable
 
     /**
      *
-     * @param p
+     * @param properties
      */
-    public void setProperties(ArrayList p)
+    public void setProperties(ArrayList properties)
     {
-        properties = p;
+        this.properties = properties;
     }
 
     /**

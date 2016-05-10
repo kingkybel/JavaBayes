@@ -38,16 +38,16 @@ public class SaveBugs
     private static final String CLASS_NAME = SaveBugs.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    BayesNet bn;
+    BayesNet bayesNet;
 
     /**
      * Default constructor for a SaveBUGS object.
      *
-     * @param bN
+     * @param bayesNet
      */
-    public SaveBugs(BayesNet bN)
+    public SaveBugs(BayesNet bayesNet)
     {
-        bn = bN;
+        this.bayesNet = bayesNet;
     }
 
     /**
@@ -78,7 +78,7 @@ public class SaveBugs
      */
     private void saveModel(PrintStream pstream)
     {
-        pstream.println("model " + bn.name + ";");
+        pstream.println("model " + bayesNet.name + ";");
     }
 
     /**
@@ -86,21 +86,22 @@ public class SaveBugs
      */
     private void saveVariables(PrintStream pstream)
     {
-        ProbabilityFunction pf;
-        ProbabilityVariable pv;
+        ProbabilityFunction probFunc;
+        ProbabilityVariable probVar;
         int i, j;
 
         pstream.println("var");
-        for (i = (bn.probabilityVariables.length - 1); i >= 0; i--)
+        for (i = (bayesNet.probabilityVariables.length - 1); i >= 0; i--)
         {
-            pstream.println("\t" + bn.probabilityVariables[i].name + ",");
+            pstream.println("\t" + bayesNet.probabilityVariables[i].name + ",");
         }
 
-        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probabilityFunctions[i];
-            pv = (ProbabilityVariable) (pf.variables[0]);
-            pstream.print("\tp." + pv.name + "[" + pf.values.length + "]");
+            probFunc = bayesNet.probabilityFunctions[i];
+            probVar = (ProbabilityVariable) (probFunc.variables[0]);
+            pstream.print("\tp." + probVar.name + "[" + probFunc.values.length +
+                          "]");
             if (i > 0)
             {
                 pstream.println(",");
@@ -123,19 +124,19 @@ public class SaveBugs
      */
     private void saveStructure(PrintStream pstream)
     {
-        ProbabilityFunction pf;
-        ProbabilityVariable pv;
+        ProbabilityFunction probFunc;
+        ProbabilityVariable probVar;
         int i, j;
 
         pstream.println("{");
-        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probabilityFunctions[i];
-            pv = (ProbabilityVariable) (pf.variables[0]);
-            pstream.print(pv.name + "  ~  dcat(p." + pv.name + "[");
-            for (j = 1; j < pf.variables.length; j++)
+            probFunc = bayesNet.probabilityFunctions[i];
+            probVar = (ProbabilityVariable) (probFunc.variables[0]);
+            pstream.print(probVar.name + "  ~  dcat(p." + probVar.name + "[");
+            for (j = 1; j < probFunc.variables.length; j++)
             {
-                pstream.print(pf.variables[j].name);
+                pstream.print(probFunc.variables[j].name);
                 pstream.print(",");
             }
             pstream.println("]);");
@@ -150,33 +151,33 @@ public class SaveBugs
      */
     private void saveData(PrintStream pstream)
     {
-        ProbabilityFunction pf;
-        ProbabilityVariable pv;
+        ProbabilityFunction probFunc;
+        ProbabilityVariable probVar;
         int i, j, k;
         int step;
         double value;
 
         pstream.println("list(");
-        for (i = (bn.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
         {
-            pf = bn.probabilityFunctions[i];
-            pv = (ProbabilityVariable) (pf.variables[0]);
+            probFunc = bayesNet.probabilityFunctions[i];
+            probVar = (ProbabilityVariable) (probFunc.variables[0]);
             /**
              * ** Put distribution values in the correct format. ***
              */
-            pstream.print("\tp." + pv.name + "  = c(");
+            pstream.print("\tp." + probVar.name + "  = c(");
             step = 1;
-            for (j = 1; j < pf.variables.length; j++)
+            for (j = 1; j < probFunc.variables.length; j++)
             {
-                step *= pf.variables[j].values.length;
+                step *= probFunc.variables[j].values.length;
             }
             for (j = 0; j < step; j++)
             {
-                for (k = 0; k < pf.variables[0].values.length; k++)
+                for (k = 0; k < probFunc.variables[0].values.length; k++)
                 {
-                    value = pf.values[k * step + j];
+                    value = probFunc.values[k * step + j];
                     pstream.print(" " + value);
-                    if (k < (pf.variables[0].values.length - 1))
+                    if (k < (probFunc.variables[0].values.length - 1))
                     {
                         pstream.print(",");
                     }

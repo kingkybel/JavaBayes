@@ -44,43 +44,54 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet bN, int nVb, int nVl, ArrayList prop)
+    FinitelyGeneratedSet(BayesNet bayesNet,
+                         int nVb,
+                         int nVl,
+                         ArrayList properties)
     {
-        super(bN, nVb, nVl, prop);
+        super(bayesNet, nVb, nVl, properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet bN, DiscreteVariable pvs[],
-                         double v[], double lp[], double up[], ArrayList prop)
+    FinitelyGeneratedSet(BayesNet bayesNet,
+                         DiscreteVariable pvs[],
+                         double v[],
+                         double lp[],
+                         double up[],
+                         ArrayList properties)
     {
-        super(bN, pvs, v, lp, up, prop);
+        super(bayesNet, pvs, v, lp, up, properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(BayesNet bN, DiscreteVariable pvs[],
-                         double v[], ArrayList prop)
+    FinitelyGeneratedSet(BayesNet bayesNet,
+                         DiscreteVariable pvs[],
+                         double v[],
+                         ArrayList properties)
     {
-        this(bN, pvs, v, (double[]) null, (double[]) null, prop);
+        this(bayesNet, pvs, v, (double[]) null, (double[]) null, properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(DiscreteFunction df, double newValues[],
-                         double newLp[], double newUp[])
+    FinitelyGeneratedSet(DiscreteFunction discrFunc,
+                         double newValues[],
+                         double newLp[],
+                         double newUp[])
     {
-        super(df, newValues, newLp, newUp);
+        super(discrFunc, newValues, newLp, newUp);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(DiscreteFunction df, double newValues[])
+    FinitelyGeneratedSet(DiscreteFunction discrFunc, double newValues[])
     {
-        super(df, newValues, (double[]) null, (double[]) null);
+        super(discrFunc, newValues, (double[]) null, (double[]) null);
     }
 }

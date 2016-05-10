@@ -58,7 +58,7 @@ public class Inference
     /**
      *
      */
-    protected BayesNet bn;
+    protected BayesNet bayesNet;
 
     /**
      *
@@ -83,20 +83,20 @@ public class Inference
     /**
      *
      */
-    protected boolean doProduceClusters;
+    protected boolean isProducingClusters;
 
     /**
      * Constructor for an Inference.
      *
-     * @param bN
-     * @param dpc
+     * @param bayesNet
+     * @param isProducingClusters
      */
-    public Inference(BayesNet bN, boolean dpc)
+    public Inference(BayesNet bayesNet, boolean isProducingClusters)
     {
-        bn = bN;
-        bucketForVariable = new Bucket[bN.numberVariables()];
+        this.bayesNet = bayesNet;
+        bucketForVariable = new Bucket[bayesNet.numberVariables()];
         bucketForest = new ArrayList();
-        doProduceClusters = dpc;
+        this.isProducingClusters = isProducingClusters;
     }
 
     /**
@@ -114,26 +114,26 @@ public class Inference
      */
     protected void inference(String queriedVariableName)
     {
-        if (doProduceClusters)
+        if (isProducingClusters)
         { // If clusters are generated:
-            int indexQueried = bn.indexOfVariable(queriedVariableName);
+            int indexQueried = bayesNet.indexOfVariable(queriedVariableName);
             if (indexQueried != BayesNet.INVALID_INDEX)
             { // If the queriedVariableName is valid:
                 Bucket buck = bucketForVariable[indexQueried];
-                // If the variable has no Bucket or a Bucket without valid cluster:
+                // If the probVar has no Bucket or a Bucket without valid cluster:
                 if ((buck == null) || (buck.cluster == null))
                 {
-                    inference(new Ordering(bn, queriedVariableName,
+                    inference(new Ordering(bayesNet, queriedVariableName,
                                            IGNORE_EXPLANATION,
                                            Ordering.MINIMUM_WEIGHT));
                 }
                 else
-                { // If variable already has a Bucket:
+                { // If probVar already has a Bucket:
                     // Get the BucketTree.
                     bucketTree = buck.bucketTree;
                     // Note that the method bucketTree.distribute() below must return true:
                     //     - the bucketTree is constructed with IGNORE_EXPLANATION.
-                    //     - this block only runs if doProduceClusters is true.
+                    //     - this block only runs if isProducingClusters is true.
                     if (buck.bucketStatus != Bucket.DISTRIBUTED)
                     {
                         if (buck ==
@@ -158,14 +158,14 @@ public class Inference
             }
             else
             { // If the queriedVariableName is invalid:
-                inference(new Ordering(bn, (String) null,
+                inference(new Ordering(bayesNet, (String) null,
                                        IGNORE_EXPLANATION,
                                        Ordering.MINIMUM_WEIGHT));
             }
         }
         else
         { // If no cluster is generated:
-            inference(new Ordering(bn, queriedVariableName,
+            inference(new Ordering(bayesNet, queriedVariableName,
                                    IGNORE_EXPLANATION, Ordering.MINIMUM_WEIGHT));
         }
     }
@@ -178,7 +178,7 @@ public class Inference
      */
     protected void inference(String order[])
     {
-        inference(new Ordering(bn, order, IGNORE_EXPLANATION));
+        inference(new Ordering(bayesNet, order, IGNORE_EXPLANATION));
     }
 
     /**
@@ -187,9 +187,9 @@ public class Inference
     private void inference(Ordering or)
     {
         // Create the Ordering and the BucketTree.
-        bucketTree = new BucketTree(or, doProduceClusters);
+        bucketTree = new BucketTree(or, isProducingClusters);
         // Add the new BucketTree to the bucketForest and update bucketForVariable.
-        if (doProduceClusters)
+        if (isProducingClusters)
         {
             addBucketTree();
         }
@@ -211,7 +211,7 @@ public class Inference
         for (Bucket bucketTree1 : bucketTree.bucketTree)
         {
             buck = bucketTree1;
-            bucketForVariable[buck.variable.getIndex()] = buck;
+            bucketForVariable[buck.probVar.getIndex()] = buck;
         }
     }
 
@@ -252,7 +252,7 @@ public class Inference
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
         int i, bp[];
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
 
         // Do inference if Inference is null.
         if (result == null)
@@ -272,9 +272,6 @@ public class Inference
         result.print(out);
     }
 
-    /* ************************************************************* */
-    /* Methods that allow basic manipulation of non-public variables */
-    /* ************************************************************* */
     /**
      * Get the BucketTree.
      *
@@ -292,7 +289,7 @@ public class Inference
      */
     public BayesNet getBayesNet()
     {
-        return (bn);
+        return (bayesNet);
     }
 
     /**
@@ -312,6 +309,6 @@ public class Inference
      */
     public boolean areClustersProduced()
     {
-        return (doProduceClusters);
+        return (isProducingClusters);
     }
 }

@@ -72,7 +72,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      *
      */
-    protected BayesNet bn;
+    protected BayesNet bayesNet;
 
     /**
      * Default constructor for a ProbabilityVariable.
@@ -85,67 +85,71 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bN
-     * @param p
+     * @param bayesNet
+     * @param properties
      * @param nVb
      */
-    public ProbabilityVariable(BayesNet bN, String nVb, ArrayList p)
+    public ProbabilityVariable(BayesNet bayesNet, String nVb,
+                               ArrayList properties)
     {
         super(nVb);
-        properties = p;
-        bn = bN;
+        this.properties = properties;
+        this.bayesNet = bayesNet;
     }
 
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bN
-     * @param p
+     * @param bayesNet
+     * @param properties
      * @param nVb
      * @param vl
      * @param vi
      */
-    public ProbabilityVariable(BayesNet bN, String nVb, int vi,
-                               String vl[], ArrayList p)
+    public ProbabilityVariable(BayesNet bayesNet,
+                               String nVb,
+                               int vi,
+                               String vl[],
+                               ArrayList properties)
     {
         super(nVb, vi, vl);
-        properties = p;
-        bn = bN;
+        this.properties = properties;
+        this.bayesNet = bayesNet;
     }
 
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param pv
+     * @param probVar
      */
-    public ProbabilityVariable(ProbabilityVariable pv)
+    public ProbabilityVariable(ProbabilityVariable probVar)
     {
-        super(pv);
+        super(probVar);
 
-        observedIndex = pv.observedIndex;
-        explanationIndex = pv.explanationIndex;
-        type = pv.type;
+        observedIndex = probVar.observedIndex;
+        explanationIndex = probVar.explanationIndex;
+        type = probVar.type;
 
-        properties = pv.properties;
-        bn = pv.bn;
+        properties = probVar.properties;
+        bayesNet = probVar.bayesNet;
     }
 
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bN
-     * @param pv
+     * @param bayesNet
+     * @param probVar
      */
-    public ProbabilityVariable(BayesNet bN, ProbabilityVariable pv)
+    public ProbabilityVariable(BayesNet bayesNet, ProbabilityVariable probVar)
     {
-        super(pv);
+        super(probVar);
 
-        observedIndex = pv.observedIndex;
-        explanationIndex = pv.explanationIndex;
-        type = pv.type;
+        observedIndex = probVar.observedIndex;
+        explanationIndex = probVar.explanationIndex;
+        type = probVar.type;
 
-        properties = pv.properties;
-        bn = bN;
+        properties = probVar.properties;
+        this.bayesNet = bayesNet;
     }
 
     /**
@@ -480,11 +484,11 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the properties.
      *
-     * @param prop
+     * properties prop
      */
-    public void setProperties(ArrayList prop)
+    public void setProperties(ArrayList properties)
     {
-        properties = prop;
+        this.properties = properties;
     }
 
     /**

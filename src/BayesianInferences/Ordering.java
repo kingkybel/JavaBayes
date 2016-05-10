@@ -54,7 +54,7 @@ public class Ordering
     public static final int MINIMUM_WEIGHT = 2;
     private static final String CLASS_NAME = Ordering.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    BayesNet bn;
+    BayesNet bayesNet;
     String order[];
     int explanationStatus = Inference.IGNORE_EXPLANATION;
     int orderingType = MINIMUM_WEIGHT;
@@ -62,72 +62,75 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bN
-     * @param ot
+     * @param bayesNet
+     * @param orderingType
      * @param objective
      */
-    public Ordering(BayesNet bN, String objective, int ot)
+    public Ordering(BayesNet bayesNet, String objective, int orderingType)
     {
-        bn = bN;
-        explanationStatus = obtainExplanationStatus(bN);
-        orderingType = ot;
+        this.bayesNet = bayesNet;
+        explanationStatus = obtainExplanationStatus(bayesNet);
+        this.orderingType = orderingType;
         order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
      *
-     * @param bN
-     * @param or
+     * @param bayesNet
+     * @param order
      */
-    public Ordering(BayesNet bN, String or[])
+    public Ordering(BayesNet bayesNet, String order[])
     {
-        bn = bN;
-        order = or;
-        explanationStatus = obtainExplanationStatus(bN);
+        this.bayesNet = bayesNet;
+        this.order = order;
+        this.explanationStatus = obtainExplanationStatus(bayesNet);
     }
 
     /**
      * Basic constructor for Ordering.
      *
-     * @param bN
-     * @param ot
+     * @param bayesNet
+     * @param orderingType
      * @param objective
-     * @param ds
+     * @param explanationStatus
      */
-    public Ordering(BayesNet bN, String objective, int ds, int ot)
+    public Ordering(BayesNet bayesNet,
+                    String objective,
+                    int explanationStatus,
+                    int orderingType)
     {
-        bn = bN;
-        explanationStatus = ds;
-        orderingType = ot;
+        this.bayesNet = bayesNet;
+        this.explanationStatus = explanationStatus;
+        this.orderingType = orderingType;
         order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
      *
-     * @param bN
-     * @param ds
-     * @param or
+     * @param bayesNet
+     * @param explanationStatus
+     * @param order
      */
-    public Ordering(BayesNet bN, String or[], int ds)
+    public Ordering(BayesNet bayesNet, String order[], int explanationStatus)
     {
-        bn = bN;
-        order = or;
-        explanationStatus = ds;
+        this.bayesNet = bayesNet;
+        this.order = order;
+        this.explanationStatus = explanationStatus;
     }
 
     /**
      * Obtain explanationStatus: unless there are explanations the status is
      * IGNORE_EXPLANATION.
      */
-    private int obtainExplanationStatus(BayesNet bN)
+    private int obtainExplanationStatus(BayesNet bayesNet)
     {
         int explanationStatusFlag = Inference.IGNORE_EXPLANATION;
-        for (int i = 0; i < bN.numberVariables(); i++)
+        for (int i = 0; i < bayesNet.numberVariables(); i++)
         {
-            if ((!(bN.getProbabilityVariable(i).isObserved())) &&
-                (bN.getProbabilityVariable(i).isExplanation()))
+            if ((!(bayesNet.getProbabilityVariable(i).isObserved())) &&
+                (bayesNet.getProbabilityVariable(i).isExplanation()))
             {
                 explanationStatusFlag = Inference.EXPLANATION;
                 break;
@@ -144,17 +147,17 @@ public class Ordering
         int i;
         ArrayList variablesToOrder = new ArrayList();
 
-        int objectiveIndex = bn.indexOfVariable(objective);
+        int objectiveIndex = bayesNet.indexOfVariable(objective);
         if (objectiveIndex == BayesNet.INVALID_INDEX)
         {
             objectiveIndex = 0;
         }
 
-        if (bn.getProbabilityVariable(objectiveIndex).isObserved())
+        if (bayesNet.getProbabilityVariable(objectiveIndex).isObserved())
         {
             String oneOrder[] =
             {
-                bn.getProbabilityVariable(objectiveIndex).getName()
+                bayesNet.getProbabilityVariable(objectiveIndex).getName()
             };
             return (oneOrder);
         }
@@ -162,9 +165,9 @@ public class Ordering
         if (orderingType == USER_ORDER)
         {
             // For user order, just collect all variables.
-            for (i = 0; i < bn.numberVariables(); i++)
+            for (i = 0; i < bayesNet.numberVariables(); i++)
             {
-                variablesToOrder.add(bn.getProbabilityVariable(i));
+                variablesToOrder.add(bayesNet.getProbabilityVariable(i));
             }
             return (userOrder(variablesToOrder, objectiveIndex));
         }
@@ -173,15 +176,15 @@ public class Ordering
             // For explanations, just collect all variables.
             if (explanationStatus != Inference.IGNORE_EXPLANATION)
             {
-                for (i = 0; i < bn.numberVariables(); i++)
+                for (i = 0; i < bayesNet.numberVariables(); i++)
                 {
                     variablesToOrder.
-                            add(bn.getProbabilityVariable(i));
+                            add(bayesNet.getProbabilityVariable(i));
                 }
             }
             else
             { // For inference, get only the affecting variables.
-                DSeparation dsep = new DSeparation(bn);
+                DSeparation dsep = new DSeparation(bayesNet);
                 variablesToOrder = dsep.allAffecting(objectiveIndex);
             }
             return (heuristicOrder(variablesToOrder, objectiveIndex,
@@ -209,7 +212,7 @@ public class Ordering
     {
         int i, j;
         boolean isVariableExplanationFlag = false;
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
         ArrayList nonExplanationVariables = new ArrayList();
         ArrayList explanationVariables = new ArrayList();
         String ord[];
@@ -217,9 +220,9 @@ public class Ordering
         // Collect variables into related vectors
         for (Object e : variablesToOrder)
         {
-            pv = (ProbabilityVariable) (e);
+            probVar = (ProbabilityVariable) (e);
             // Skip transparent variables
-            if (pv.getType() == ProbabilityVariable.TRANSPARENT)
+            if (probVar.getType() == ProbabilityVariable.TRANSPARENT)
             {
                 continue;
             }
@@ -230,7 +233,7 @@ public class Ordering
                     isVariableExplanationFlag = false;
                     break;
                 case Inference.EXPLANATION:
-                    isVariableExplanationFlag = pv.isExplanation();
+                    isVariableExplanationFlag = probVar.isExplanation();
                     break;
                 case Inference.FULL_EXPLANATION:
                     isVariableExplanationFlag = true;
@@ -239,7 +242,7 @@ public class Ordering
 
             // Observed variables are not explanation variables
             // (evidence has precedence over explanations).
-            if (pv.isObserved())
+            if (probVar.isObserved())
             {
                 isVariableExplanationFlag = false;
             }
@@ -247,11 +250,11 @@ public class Ordering
             // Put the variable in the correct vector
             if (isVariableExplanationFlag)
             {
-                explanationVariables.add(pv.getName());
+                explanationVariables.add(probVar.getName());
             }
             else
             {
-                nonExplanationVariables.add(pv.getName());
+                nonExplanationVariables.add(probVar.getName());
             }
         }
 
@@ -264,14 +267,15 @@ public class Ordering
             for (Object e : nonExplanationVariables)
             {
                 ord[i] = (String) (e);
-                if (ord[i].equals(bn.getProbabilityVariable(objectiveIndex).
+                if (ord[i].equals(bayesNet.
+                        getProbabilityVariable(objectiveIndex).
                         getName()))
                 {
                     i--;
                 }
                 i++;
             }
-            ord[i] = bn.getProbabilityVariable(objectiveIndex).getName();
+            ord[i] = bayesNet.getProbabilityVariable(objectiveIndex).getName();
         }
         else
         {
@@ -302,10 +306,10 @@ public class Ordering
      * variables</li>
      * </ol>
      * Produce an ordering for the variables in variablesToOrder, assuming that
-     * all variables are in the BayesNet bn object. The orderingType indicates
-     * which heuristic to use in the elimination procedure.
+     * all variables are in the BayesNet bayesNet object. The orderingType
+     * indicates which heuristic to use in the elimination procedure.
      */
-    private String[] heuristicOrder(ArrayList vo,
+    private String[] heuristicOrder(ArrayList origVars,
                                     int objectiveIndex,
                                     int orderingType)
     {
@@ -318,9 +322,9 @@ public class Ordering
         int numberVariablesInPhase;
         int numberVariablesInPhaseTwo = 0;
 
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
         ProbabilityVariable neighbors[];
-        ProbabilityFunction pf;
+        ProbabilityFunction probFunc;
 
         // The vector with the filtered variables to order.
         ArrayList variablesToOrder = new ArrayList();
@@ -330,32 +334,32 @@ public class Ordering
 
         // Phase markers: indicates in which phase of the
         // algorithm a variable will be eliminated.
-        int phaseMarkers[] = new int[bn.numberVariables()];
+        int phaseMarkers[] = new int[bayesNet.numberVariables()];
         for (i = 0; i < phaseMarkers.length; i++)
         {
             phaseMarkers[i] = PHASE_ONE;
         }
 
         // Filter the incoming variables
-        for (Object e : vo)
+        for (Object e : origVars)
         {
-            pv = (ProbabilityVariable) (e);
-            if (pv.isObserved())
+            probVar = (ProbabilityVariable) (e);
+            if (probVar.isObserved())
             { // Put observed variables at the beginning
-                eliminationOrdering.add(pv);
+                eliminationOrdering.add(probVar);
             }
             else
             { // Skip transparent variables
-                if (pv.getType() != ProbabilityVariable.TRANSPARENT)
+                if (probVar.getType() != ProbabilityVariable.TRANSPARENT)
                 {
                     // Order all other variables
-                    variablesToOrder.add(pv);
+                    variablesToOrder.add(probVar);
                     // Check the status of the variable as an explanatory variable
                     if ((explanationStatus == Inference.FULL_EXPLANATION) ||
                         ((explanationStatus == Inference.EXPLANATION) &&
-                         (pv.isExplanation())))
+                         (probVar.isExplanation())))
                     {
-                        phaseMarkers[pv.getIndex()] = PHASE_TWO;
+                        phaseMarkers[probVar.getIndex()] = PHASE_TWO;
                         numberVariablesInPhaseTwo++;
                     }
                 }
@@ -372,12 +376,12 @@ public class Ordering
 
         // Each variable is associated to a vector (the vector contains
         // all variables that are linked to the variable).
-        ArrayList vectors[] = new ArrayList[bn.numberVariables()];
+        ArrayList vectors[] = new ArrayList[bayesNet.numberVariables()];
         // Initialize the vectors only for the variables that are to be ordered.
         for (Object e : variablesToOrder)
         {
-            pv = (ProbabilityVariable) (e);
-            vectors[pv.getIndex()] = new ArrayList();
+            probVar = (ProbabilityVariable) (e);
+            vectors[probVar.getIndex()] = new ArrayList();
         }
 
         // Moralize the network: build an undirected graph where each variable
@@ -389,10 +393,10 @@ public class Ordering
         // to its children.
         for (Object e : variablesToOrder)
         {
-            pv = (ProbabilityVariable) (e);
-            pf = bn.getFunction(pv);
-            vectors[pv.getIndex()].add(pv);
-            interconnect(bn, vectors, pf.getVariables());
+            probVar = (ProbabilityVariable) (e);
+            probFunc = bayesNet.getFunction(probVar);
+            vectors[probVar.getIndex()].add(probVar);
+            interconnect(bayesNet, vectors, probFunc.getVariables());
         }
 
         // Decide which phase to start;
@@ -437,8 +441,8 @@ public class Ordering
 
             // Add the variable with minimum value for the heuristic
             // to the ordering.
-            pv = bn.getProbabilityVariable(minIndex);
-            eliminationOrdering.add(pv);
+            probVar = bayesNet.getProbabilityVariable(minIndex);
+            eliminationOrdering.add(probVar);
 
             // Now remove the variable:
             //   Remove it from every other list of variables
@@ -446,7 +450,7 @@ public class Ordering
             { // Go through all lists of variables.
                 if (vectors[j] != null)
                 { // Only proceed is list is non-null.
-                    vectors[j].remove(pv); // Now remove the variable from the vector
+                    vectors[j].remove(probVar); // Now remove the variable from the vector
                 }
             }
             //   Interconnect all its neighbors
@@ -454,11 +458,11 @@ public class Ordering
             j = 0;
             for (Object e : vectors[minIndex])
             {
-                pv = (ProbabilityVariable) (e);
-                neighbors[j] = pv;
+                probVar = (ProbabilityVariable) (e);
+                neighbors[j] = probVar;
                 j++;
             }
-            interconnect(bn, vectors, neighbors);
+            interconnect(bayesNet, vectors, neighbors);
             //   Erase its list of neighbors.
             vectors[minIndex] = null;
         }
@@ -468,8 +472,8 @@ public class Ordering
         i = 0;
         for (Object e : eliminationOrdering)
         {
-            pv = (ProbabilityVariable) (e);
-            returnOrdering[i] = pv.getName();
+            probVar = (ProbabilityVariable) (e);
+            returnOrdering[i] = probVar.getName();
             i++;
         }
         return (returnOrdering);
@@ -479,18 +483,18 @@ public class Ordering
      * Obtain the heuristic value of eliminating a variable, represented by the
      * list of variables linked to it.
      */
-    private long obtainValue(ArrayList v, int orderingType)
+    private long obtainValue(ArrayList linkedVars, int orderingType)
     {
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
         long value = 0;
 
         if (orderingType == Ordering.MINIMUM_WEIGHT)
         {
             long weight = 1;
-            for (Object e : v)
+            for (Object e : linkedVars)
             {
-                pv = (ProbabilityVariable) (e);
-                weight *= pv.numberValues();
+                probVar = (ProbabilityVariable) (e);
+                weight *= probVar.numberValues();
             }
             value = weight;
         }
@@ -502,7 +506,8 @@ public class Ordering
      * Interconnect a group of variables; each variable connected to all the
      * others.
      */
-    private void interconnect(BayesNet bn, ArrayList vectors[],
+    private void interconnect(BayesNet bayesNet,
+                              ArrayList vectors[],
                               DiscreteVariable variablesToBeInterconnected[])
     {
         int i, j;
@@ -510,7 +515,8 @@ public class Ordering
         {
             for (j = (i + 1); j < variablesToBeInterconnected.length; j++)
             {
-                interconnect(bn, vectors,
+                interconnect(bayesNet,
+                             vectors,
                              variablesToBeInterconnected[i],
                              variablesToBeInterconnected[j]);
             }
@@ -520,11 +526,13 @@ public class Ordering
     /**
      * Connect two variables.
      */
-    private void interconnect(BayesNet bn, ArrayList vectors[],
-                              DiscreteVariable pvi, DiscreteVariable pvj)
+    private void interconnect(BayesNet bayesNet,
+                              ArrayList vectors[],
+                              DiscreteVariable probVar_i,
+                              DiscreteVariable probVar_j)
     {
-        ArrayList iv = vectors[pvi.getIndex()];
-        ArrayList jv = vectors[pvj.getIndex()];
+        ArrayList iv = vectors[probVar_i.getIndex()];
+        ArrayList jv = vectors[probVar_j.getIndex()];
 
         // Avoid problems if parent is observed or transparent.
         if ((iv == null) || (jv == null))
@@ -533,13 +541,13 @@ public class Ordering
         }
 
         // Now interconnect.
-        if (!iv.contains(pvj))
+        if (!iv.contains(probVar_j))
         {
-            iv.add(pvj);
+            iv.add(probVar_j);
         }
-        if (!jv.contains(pvi))
+        if (!jv.contains(probVar_i))
         {
-            jv.add(pvi);
+            jv.add(probVar_i);
         }
     }
 }

@@ -50,18 +50,18 @@ public class Explanation
     private static final String CLASS_NAME = Explanation.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    BayesNet bn;
+    BayesNet bayesNet;
     BucketTree bucketTree;
     ProbabilityFunction results[];
 
     /**
      * Constructor for an Explanation.
      *
-     * @param bN
+     * @param bayesNet
      */
-    public Explanation(BayesNet bN)
+    public Explanation(BayesNet bayesNet)
     {
-        bn = bN;
+        this.bayesNet = bayesNet;
     }
 
     /**
@@ -87,7 +87,8 @@ public class Explanation
      */
     public void explanation(int explanationStatus)
     {
-        bucketTree = new BucketTree(new Ordering(bn, (String) null,
+        bucketTree = new BucketTree(new Ordering(bayesNet,
+                                                 (String) null,
                                                  explanationStatus,
                                                  Ordering.MINIMUM_WEIGHT));
         doInferenceFromBucketTree();
@@ -122,7 +123,7 @@ public class Explanation
     public void explanation(String order[], int explanationStatus)
     {
         bucketTree =
-        new BucketTree(new Ordering(bn, order, explanationStatus));
+        new BucketTree(new Ordering(bayesNet, order, explanationStatus));
         doInferenceFromBucketTree();
     }
 
@@ -173,7 +174,7 @@ public class Explanation
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
         int i, bp[];
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
 
         // Do explanation if Explanation is null.
         if (results == null)
@@ -204,9 +205,9 @@ public class Explanation
             {
                 if (bp[i] != BayesNet.INVALID_INDEX)
                 {
-                    pv = bn.getProbabilityVariable(i);
-                    out.println("Variable " + pv.getName() + ": " +
-                                pv.getValue(bp[i]));
+                    probVar = bayesNet.getProbabilityVariable(i);
+                    out.println("Variable " + probVar.getName() + ": " +
+                                probVar.getValue(bp[i]));
                 }
             }
         }

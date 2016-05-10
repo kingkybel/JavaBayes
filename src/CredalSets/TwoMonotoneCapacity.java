@@ -51,11 +51,11 @@ public abstract class TwoMonotoneCapacity
      * Constructor for an TwoMonotoneCapacity ProbabilityFunction object and
      * given epsilon.
      *
-     * @param pf
+     * @param probFunc
      */
-    public TwoMonotoneCapacity(ProbabilityFunction pf)
+    public TwoMonotoneCapacity(ProbabilityFunction probFunc)
     {
-        super(pf, pf.getValues());
+        super(probFunc, probFunc.getValues());
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class TwoMonotoneCapacity
     {
         double lowerValues[] = new double[values.length];
         double upperValues[] = new double[values.length];
-        DiscreteFunction df = new DiscreteFunction(1, values.length);
+        DiscreteFunction discrFunc = new DiscreteFunction(1, values.length);
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
@@ -137,10 +137,10 @@ public abstract class TwoMonotoneCapacity
     /**
      * Perform calculation of expected value for density ratio
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] expectedValues(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction discrFunc)
     {
         double results[] = new double[2];
 
@@ -150,7 +150,7 @@ public abstract class TwoMonotoneCapacity
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
             return (results);
@@ -159,7 +159,8 @@ public abstract class TwoMonotoneCapacity
         // Else, apply the marginalization property and the
         // fact that total variation neighborhoods are 2-monotone.
         GeneralizedChoquetIntegral gci =
-                                   new GeneralizedChoquetIntegral(this, df);
+                                   new GeneralizedChoquetIntegral(this,
+                                                                  discrFunc);
 
         return (gci.results);
     }
@@ -169,10 +170,10 @@ public abstract class TwoMonotoneCapacity
      * probability values are not normalized; probability values are p(x, e)
      * where e is the fixed evidence .
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] posteriorExpectedValues(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
         Bracketing bracket = new Bracketing();
         double results[] = new double[2];
@@ -183,7 +184,7 @@ public abstract class TwoMonotoneCapacity
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
             return (results);
@@ -192,22 +193,22 @@ public abstract class TwoMonotoneCapacity
         // Else, apply the marginalization property and the
         // fact that total variation neighborhoods are 2-monotone.
         // Obtain the maximum and minimum of functions
-        double maxDfValue = df.getValue(0);
-        double minDfValue = df.getValue(0);
-        for (int i = 1; i < df.numberValues(); i++)
+        double maxDfValue = discrFunc.getValue(0);
+        double minDfValue = discrFunc.getValue(0);
+        for (int i = 1; i < discrFunc.numberValues(); i++)
         {
-            if (maxDfValue < df.getValue(i))
+            if (maxDfValue < discrFunc.getValue(i))
             {
-                maxDfValue = df.getValue(i);
+                maxDfValue = discrFunc.getValue(i);
             }
-            if (minDfValue > df.getValue(i))
+            if (minDfValue > discrFunc.getValue(i))
             {
-                minDfValue = df.getValue(i);
+                minDfValue = discrFunc.getValue(i);
             }
         }
 
         // Prepare the temporaryDiscreteFunction variable for bracketing
-        temporaryDiscreteFunction = df;
+        temporaryDiscreteFunction = discrFunc;
 
         // Bracket the lower expectation
         double lowerExpectation =

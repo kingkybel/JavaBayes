@@ -97,47 +97,53 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param nN Name of the network.
-     * @param nV Number of variables in the network.
-     * @param nF Number of probability distributions in the network.
+     * @param name          Name of the network.
+     * @param numberOfVars  Number of variables in the network.
+     * @param numberOfFuncs Number of probability distributions in the network.
      */
-    public BayesNet(String nN, int nV, int nF)
+    public BayesNet(String name, int numberOfVars, int numberOfFuncs)
     {
         this();
-        name = nN;
-        probabilityVariables = new ProbabilityVariable[nV];
-        probabilityFunctions = new ProbabilityFunction[nF];
+        this.name = name;
+        probabilityVariables = new ProbabilityVariable[numberOfVars];
+        probabilityFunctions = new ProbabilityFunction[numberOfFuncs];
     }
 
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param nN Name of network.
-     * @param p  Properties of the network.
+     * @param name       Name of network.
+     * @param properties Properties of the network.
      */
-    public BayesNet(String nN, ArrayList p)
+    public BayesNet(String name, ArrayList properties)
     {
         this();
-        name = nN;
-        properties = p;
+        this.name = name;
+        this.properties = properties;
     }
 
     /**
      * Simple constructor for a BayesNet; creates a copy of a given network.
      *
-     * @param bn Network to be copied.
+     * @param bayesNet Network to be copied.
      */
-    public BayesNet(BayesNet bn)
+    public BayesNet(BayesNet bayesNet)
     {
-        this(bn.name, bn.probabilityVariables.length,
-             bn.probabilityFunctions.length);
+        this(bayesNet.name,
+             bayesNet.probabilityVariables.length,
+             bayesNet.probabilityFunctions.length);
 
-        System.arraycopy(bn.probabilityVariables, 0, probabilityVariables, 0,
-                         bn.probabilityVariables.length);
-        System.arraycopy(bn.probabilityFunctions, 0, probabilityFunctions, 0,
-                         bn.probabilityFunctions.length);
+        System.arraycopy(bayesNet.probabilityVariables,
+                         0,
+                         probabilityVariables,
+                         0,
+                         bayesNet.probabilityVariables.length);
+        System.arraycopy(bayesNet.probabilityFunctions,
+                         0, probabilityFunctions,
+                         0,
+                         bayesNet.probabilityFunctions.length);
 
-        properties = bn.properties;
+        properties = bayesNet.properties;
     }
 
     /**
@@ -286,14 +292,14 @@ public class BayesNet
      * function, as it is the only reference to the variable that is guaranteed
      * to identify the variable uniquely.
      *
-     * @param pV
+     * @param probVar
      * @return
      */
-    public ProbabilityFunction getFunction(ProbabilityVariable pV)
+    public ProbabilityFunction getFunction(ProbabilityVariable probVar)
     {
         for (int i = 0; i < probabilityFunctions.length; i++)
         {
-            if (pV.index == probabilityFunctions[i].variables[0].index)
+            if (probVar.index == probabilityFunctions[i].variables[0].index)
             {
                 return (probabilityFunctions[i]);
             }
@@ -657,16 +663,16 @@ public class BayesNet
     public String[][] getAllEvidence()
     {
         int i, j, aux;
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
         ArrayList evs = new ArrayList();
         String allEvs[][] = null;
 
         for (i = 0; i < probabilityVariables.length; i++)
         {
-            pv = probabilityVariables[i];
-            if (pv.observedIndex != BayesNet.INVALID_INDEX)
+            probVar = probabilityVariables[i];
+            if (probVar.observedIndex != BayesNet.INVALID_INDEX)
             {
-                evs.add(pv);
+                evs.add(probVar);
             }
         }
 
@@ -679,10 +685,10 @@ public class BayesNet
         j = 0;
         for (Object e : evs)
         {
-            pv = (ProbabilityVariable) (e);
-            allEvs[j][0] = pv.name;
-            aux = pv.observedIndex;
-            allEvs[j][1] = pv.values[aux];
+            probVar = (ProbabilityVariable) (e);
+            allEvs[j][0] = probVar.name;
+            aux = probVar.observedIndex;
+            allEvs[j][1] = probVar.values[aux];
         }
 
         return (allEvs);
@@ -761,11 +767,11 @@ public class BayesNet
     /**
      * Set the properties.
      *
-     * @param prop
+     * properties prop
      */
-    public void setProperties(ArrayList prop)
+    public void setProperties(ArrayList properties)
     {
-        properties = prop;
+        this.properties = properties;
     }
 
     /**
@@ -937,44 +943,44 @@ public class BayesNet
      * Set a probability variable given its index.
      *
      * @param index
-     * @param pV
+     * @param probVar
      */
-    public void setProbabilityVariable(int index, ProbabilityVariable pV)
+    public void setProbabilityVariable(int index, ProbabilityVariable probVar)
     {
-        pV.bn = this;
-        pV.index = index;
-        probabilityVariables[index] = pV;
+        probVar.bayesNet = this;
+        probVar.index = index;
+        probabilityVariables[index] = probVar;
     }
 
     /**
      * Set a probability variable given its index.
      *
      * @param index
-     * @param pF
+     * @param probFunc
      */
-    public void setProbabilityFunction(int index, ProbabilityFunction pF)
+    public void setProbabilityFunction(int index, ProbabilityFunction probFunc)
     {
-        pF.bn = this;
-        probabilityFunctions[index] = pF;
+        probFunc.bayesNet = this;
+        probabilityFunctions[index] = probFunc;
     }
 
     /**
      * Set the vector of probability variables.
      *
-     * @param pvs
+     * @param probVars
      */
-    public void setProbabilityVariables(ProbabilityVariable pvs[])
+    public void setProbabilityVariables(ProbabilityVariable probVars[])
     {
-        probabilityVariables = pvs;
+        probabilityVariables = probVars;
     }
 
     /**
      * Set the vector of probability functions.
      *
-     * @param pfs
+     * @param probFuncs
      */
-    public void setProbabilityFunctions(ProbabilityFunction pfs[])
+    public void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {
-        probabilityFunctions = pfs;
+        probabilityFunctions = probFuncs;
     }
 }

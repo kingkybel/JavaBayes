@@ -47,12 +47,12 @@ public class EpsilonContaminatedSet
      * Constructor for an EpsilonContaminatedSet ProbabilityFunction object and
      * given epsilon.
      *
-     * @param pf
+     * @param probFunc
      * @param eps
      */
-    public EpsilonContaminatedSet(ProbabilityFunction pf, double eps)
+    public EpsilonContaminatedSet(ProbabilityFunction probFunc, double eps)
     {
-        super(pf, pf.getValues());
+        super(probFunc, probFunc.getValues());
         epsilon = eps;
         if ((epsilon < 0.0) || (epsilon > 1.0))
         {
@@ -107,17 +107,17 @@ public class EpsilonContaminatedSet
             }
         }
 
-        return (new QBProbabilityFunction(bn, variables, values,
+        return (new QBProbabilityFunction(bayesNet, variables, values,
                                           lowerValues, upperValues, properties));
     }
 
     /**
      * Perform calculation of expected value.
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] expectedValues(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction discrFunc)
     {
         double oneMinusEpsilon = 1.0 - epsilon;
         double results[] = new double[2];
@@ -128,7 +128,7 @@ public class EpsilonContaminatedSet
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
@@ -138,20 +138,20 @@ public class EpsilonContaminatedSet
             double uTotal = 0.0;
             for (int i = 0; i < numberValues(); i++)
             {
-                uTotal += df.getValue(i) * values[i];
+                uTotal += discrFunc.getValue(i) * values[i];
             }
             // Obtain the maximum and minimum of functions
-            double maxDfValue = df.getValue(0);
-            double minDfValue = df.getValue(0);
-            for (int i = 1; i < df.numberValues(); i++)
+            double maxDfValue = discrFunc.getValue(0);
+            double minDfValue = discrFunc.getValue(0);
+            for (int i = 1; i < discrFunc.numberValues(); i++)
             {
-                if (maxDfValue < df.getValue(i))
+                if (maxDfValue < discrFunc.getValue(i))
                 {
-                    maxDfValue = df.getValue(i);
+                    maxDfValue = discrFunc.getValue(i);
                 }
-                if (minDfValue > df.getValue(i))
+                if (minDfValue > discrFunc.getValue(i))
                 {
-                    minDfValue = df.getValue(i);
+                    minDfValue = discrFunc.getValue(i);
                 }
             }
             // Calculate the values
@@ -167,10 +167,10 @@ public class EpsilonContaminatedSet
      * probability values are not normalized; probability values are p(x, e)
      * where e is the fixed evidence.
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] posteriorExpectedValues(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
         double oneMinusEpsilon = 1.0 - epsilon;
         double results[] = new double[2];
@@ -181,7 +181,7 @@ public class EpsilonContaminatedSet
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
@@ -193,20 +193,20 @@ public class EpsilonContaminatedSet
             for (int i = 0; i < values.length; i++)
             {
                 pTotal += values[i];
-                uTotal += df.getValue(i) * values[i];
+                uTotal += discrFunc.getValue(i) * values[i];
             }
             // Obtain the maximum and minimum of functions
-            double maxDfValue = df.getValue(0);
-            double minDfValue = df.getValue(0);
-            for (int i = 1; i < df.numberValues(); i++)
+            double maxDfValue = discrFunc.getValue(0);
+            double minDfValue = discrFunc.getValue(0);
+            for (int i = 1; i < discrFunc.numberValues(); i++)
             {
-                if (maxDfValue < df.getValue(i))
+                if (maxDfValue < discrFunc.getValue(i))
                 {
-                    maxDfValue = df.getValue(i);
+                    maxDfValue = discrFunc.getValue(i);
                 }
-                if (minDfValue > df.getValue(i))
+                if (minDfValue > discrFunc.getValue(i))
                 {
-                    minDfValue = df.getValue(i);
+                    minDfValue = discrFunc.getValue(i);
                 }
             }
             // Calculate the values

@@ -46,16 +46,16 @@ public class TotalVariationSet
      * Constructor for an TotalVariationQBProbabilityFunction
      * ProbabilityFunction object and given epsilon.
      *
-     * @param pf
-     * @param eps
+     * @param probFunc
+     * @param epsilon
      */
-    public TotalVariationSet(ProbabilityFunction pf, double eps)
+    public TotalVariationSet(ProbabilityFunction probFunc, double epsilon)
     {
-        super(pf);
-        epsilon = eps;
-        if ((epsilon < 0.0) || (epsilon > 1.0))
+        super(probFunc);
+        this.epsilon = epsilon;
+        if ((this.epsilon < 0.0) || (this.epsilon > 1.0))
         {
-            epsilon = 0.0;
+            this.epsilon = 0.0;
         }
     }
 

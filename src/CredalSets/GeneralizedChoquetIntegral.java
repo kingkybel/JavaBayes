@@ -47,10 +47,11 @@ public class GeneralizedChoquetIntegral
      * generalization, for a total variation neighborhood.
      *
      * @param tmc
-     * @param df
+     * @param discrFunc
      */
     public GeneralizedChoquetIntegral(TwoMonotoneCapacity tmc,
-                                      DiscreteFunction df)
+                                      DiscreteFunction discrFunc
+    )
     {
         int i;
         double positiveSide, negativeSide;
@@ -60,11 +61,11 @@ public class GeneralizedChoquetIntegral
 
         // Order the non-negative values of df in increasing order
         // Zero is the first element of the vector
-        ArrayList positive = sortPositive(df);
+        ArrayList positive = sortPositive(discrFunc);
 
         // Order the non-positive values of df in decreasing order
         // Zero is the first element of the vector
-        ArrayList negative = sortNegative(df);
+        ArrayList negative = sortNegative(discrFunc);
 
         // Create an array of value differences from the positive side
         double dfPositive[] = new double[positive.size() - 1];
@@ -86,13 +87,13 @@ public class GeneralizedChoquetIntegral
         // values for the positive side
         double lpPositive[] = new double[dfPositive.length];
         double upPositive[] = new double[dfPositive.length];
-        boundPositive(tmc, df, positive, lpPositive, upPositive);
+        boundPositive(tmc, discrFunc, positive, lpPositive, upPositive);
 
         // Create arrays of lower and upper probability
         // values for the positive side
         double lpNegative[] = new double[dfNegative.length];
         double upNegative[] = new double[dfNegative.length];
-        boundNegative(tmc, df, negative, lpNegative, upNegative);
+        boundNegative(tmc, discrFunc, negative, lpNegative, upNegative);
 
         // First obtain the lower Walley integral
         positiveSide = 0.0;
@@ -125,7 +126,7 @@ public class GeneralizedChoquetIntegral
      * Collect the positive values in df and sort them in increasing order
      * (first value is assumed zero).
      */
-    private ArrayList sortPositive(DiscreteFunction df)
+    private ArrayList sortPositive(DiscreteFunction discrFunc)
     {
         ArrayList sorted = new ArrayList();
 
@@ -133,10 +134,10 @@ public class GeneralizedChoquetIntegral
         sorted.add(0.0);
 
         // Go through df values
-        for (int i = 0; i < df.numberValues(); i++)
+        for (int i = 0; i < discrFunc.numberValues(); i++)
         {
             // Process only positive values
-            if (df.getValue(i) <= 0.0)
+            if (discrFunc.getValue(i) <= 0.0)
             {
                 continue;
             }
@@ -144,14 +145,14 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (df.getValue(i) < ((Double) sorted.get(j)))
+                if (discrFunc.getValue(i) < ((Double) sorted.get(j)))
                 {
-                    sorted.add(df.getValue(i));
+                    sorted.add(discrFunc.getValue(i));
                 }
             }
 
             // Insert value last in vector if it is not inserted at this point
-            sorted.add(df.getValue(i));
+            sorted.add(discrFunc.getValue(i));
         }
         return (sorted);
     }
@@ -160,7 +161,7 @@ public class GeneralizedChoquetIntegral
      * Collect the negative values in df and sort them in decreasing order
      * (first value is assumed zero).
      */
-    private ArrayList sortNegative(DiscreteFunction df)
+    private ArrayList sortNegative(DiscreteFunction discrFunc)
     {
         ArrayList sorted = new ArrayList();
 
@@ -168,10 +169,10 @@ public class GeneralizedChoquetIntegral
         sorted.add(0.0);
 
         // Go through df values
-        for (int i = 0; i < df.numberValues(); i++)
+        for (int i = 0; i < discrFunc.numberValues(); i++)
         {
             // Process only negative values
-            if (df.getValue(i) >= 0.0)
+            if (discrFunc.getValue(i) >= 0.0)
             {
                 continue;
             }
@@ -179,14 +180,14 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (df.getValue(i) > ((Double) sorted.get(j)))
+                if (discrFunc.getValue(i) > ((Double) sorted.get(j)))
                 {
-                    sorted.add(df.getValue(i));
+                    sorted.add(discrFunc.getValue(i));
                 }
             }
 
             // Insert value last in vector if it is not inserted at this point
-            sorted.add(df.getValue(i));
+            sorted.add(discrFunc.getValue(i));
         }
         return (sorted);
     }
@@ -196,8 +197,10 @@ public class GeneralizedChoquetIntegral
      * sortedValue[i] }
      */
     private void boundPositive(TwoMonotoneCapacity tmc,
-                               DiscreteFunction df, ArrayList sortedValues,
-                               double lps[], double ups[])
+                               DiscreteFunction discrFunc,
+                               ArrayList sortedValues,
+                               double lps[],
+                               double ups[])
     {
         int i, j;
         double lp;
@@ -210,9 +213,9 @@ public class GeneralizedChoquetIntegral
             sortedValue = ((Double) e);
             // Collect the base probability for
             // all atoms such that df(xJ > sortedValues[i])
-            for (j = 0; j < df.numberValues(); j++)
+            for (j = 0; j < discrFunc.numberValues(); j++)
             {
-                if (df.getValue(j) > sortedValue)
+                if (discrFunc.getValue(j) > sortedValue)
                 {
                     // Add base probability of this atom
                     lp += tmc.getAtomProbability(j);
@@ -230,8 +233,10 @@ public class GeneralizedChoquetIntegral
      * sortedValue[i] }
      */
     private void boundNegative(TwoMonotoneCapacity tmc,
-                               DiscreteFunction df, ArrayList sortedValues,
-                               double lps[], double ups[])
+                               DiscreteFunction discrFunc,
+                               ArrayList sortedValues,
+                               double lps[],
+                               double ups[])
     {
         int i, j;
         double lp;
@@ -244,9 +249,9 @@ public class GeneralizedChoquetIntegral
             sortedValue = ((Double) e);
             // Collect the base probability for
             // all atoms such that df(xJ > sortedValues[i])
-            for (j = 0; j < df.numberValues(); j++)
+            for (j = 0; j < discrFunc.numberValues(); j++)
             {
-                if (df.getValue(j) < sortedValue)
+                if (discrFunc.getValue(j) < sortedValue)
                 {
                     // Add base probability of this atom
                     lp += tmc.getAtomProbability(j);

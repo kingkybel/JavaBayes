@@ -65,16 +65,16 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * @return
      */
     @Override
-    protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
+    protected ProbabilityFunction getProbabilityFunction(BayesNet bayesNet,
                                                          IFProbabilityFunction upf)
     {
         int i, jump, numberOfValues;
         double values[];
         double extremePoints[][] = null;
-        ProbabilityVariable pv, variables[];
+        ProbabilityVariable probVar, variables[];
 
         // Check and insert the probability variable indexes
-        variables = createVariables(bn, upf);
+        variables = createVariables(bayesNet, upf);
 
         // Calculate the jump, i.e., the number of values
         // in the conditional distribution table for each value
@@ -82,8 +82,8 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         jump = 1;
         for (i = 1; i < variables.length; i++)
         {
-            pv = variables[i];
-            jump *= pv.numberValues();
+            probVar = variables[i];
+            jump *= probVar.numberValues();
         }
 
         // Calculate the number of values in the distribution
@@ -103,7 +103,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         processDefaults(upf, values, extremePoints, jump);
 
         // Process entries
-        processEntries(bn, upf, variables, values, extremePoints, jump);
+        processEntries(bayesNet, upf, variables, values, extremePoints, jump);
 
         // Finish calculating the values
         finishValues(values, extremePoints);
@@ -111,12 +111,12 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         // Insert the data
         if (extremePoints == null)
         {
-            return (new ProbabilityFunction(bn, variables, values, upf.
+            return (new ProbabilityFunction(bayesNet, variables, values, upf.
                                             getProperties()));
         }
         else
         {
-            return (new VertexSet(bn, variables, extremePoints,
+            return (new VertexSet(bayesNet, variables, extremePoints,
                                   upf.getProperties()));
         }
     }
@@ -200,7 +200,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     /**
      * Insert entries specified in the upf object.
      */
-    void processEntries(BayesNet bn,
+    void processEntries(BayesNet bayesNet,
                         IFProbabilityFunction upf,
                         ProbabilityVariable variables[],
                         double values[], double extremePoints[][], int jump)
@@ -209,7 +209,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         int entryValueIndexes[];
         double eentryEntries[];
         String eentryValues[];
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
         IFProbabilityEntry entry;
 
         // Process the entries
@@ -225,9 +225,9 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
                 entryValueIndexes = new int[eentryValues.length];
                 for (i = 0; i < entryValueIndexes.length; i++)
                 {
-                    pv = variables[i + 1];
+                    probVar = variables[i + 1];
                     entryValueIndexes[i] =
-                    pv.indexOfValue(eentryValues[i]);
+                    probVar.indexOfValue(eentryValues[i]);
                 }
                 pos = 0;
                 step = 1;
@@ -237,8 +237,8 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
                     step *=
                     variables[k].numberValues();
                 }
-                pv = variables[0];
-                for (i = 0; i < pv.numberValues(); i++)
+                probVar = variables[0];
+                for (i = 0; i < probVar.numberValues(); i++)
                 {
                     k = i * jump + pos;
                     values[k] = eentryEntries[i];

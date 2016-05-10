@@ -54,16 +54,18 @@ public final class VertexSet
     /**
      * Default constructor for a VertexQBProbabilityFunction.
      *
-     * @param bN
-     * @param prop
-     * @param pvs
+     * @param bayesNet
+     * @param properties
+     * @param probVars
      * @param ep
      */
-    public VertexSet(BayesNet bN, ProbabilityVariable pvs[],
-                     double ep[][], ArrayList prop)
+    public VertexSet(BayesNet bayesNet,
+                     ProbabilityVariable probVars[],
+                     double ep[][],
+                     ArrayList properties)
     {
         // Call the super constructor with ep[0].
-        super(bN, pvs, ep[0], prop);
+        super(bayesNet, probVars, ep[0], properties);
 
         // Now replace ep[0] with a new array to avoid wrong
         // cross-references among arrays.
@@ -78,35 +80,39 @@ public final class VertexSet
     /**
      * Constructor for a VertexQBProbabilityFunction.
      *
-     * @param bN
+     * @param bayesNet
      * @param ep
-     * @param pvs
-     * @param prop
+     * @param probVars
+     * @param properties
      * @param v
      */
-    public VertexSet(BayesNet bN, ProbabilityVariable pvs[],
-                     double v[], ArrayList prop, double ep[][])
+    public VertexSet(BayesNet bayesNet,
+                     ProbabilityVariable probVars[],
+                     double v[],
+                     ArrayList properties,
+                     double ep[][])
     {
-        super(bN, pvs, v, (double[]) null, (double[]) null, prop);
+        super(bayesNet, probVars, v, (double[]) null, (double[]) null,
+              properties);
         extremePoints = ep;
     }
 
     /**
      * Constructor for a VertexQBProbabilityFunction.
      *
-     * @param pf
+     * @param probFunc
      */
-    public VertexSet(ProbabilityFunction pf)
+    public VertexSet(ProbabilityFunction probFunc)
     {
-        super(pf, pf.getValues());
-        if (pf instanceof VertexSet)
+        super(probFunc, probFunc.getValues());
+        if (probFunc instanceof VertexSet)
         {
-            extremePoints = ((VertexSet) pf).extremePoints;
+            extremePoints = ((VertexSet) probFunc).extremePoints;
         }
         else
         {
             extremePoints = new double[1][];
-            extremePoints[0] = pf.getValues();
+            extremePoints[0] = probFunc.getValues();
         }
     }
 
@@ -114,21 +120,21 @@ public final class VertexSet
      * Constructor for a VertexQBProbabilityFunction from a ProbabilityFunction
      * object and new values.
      *
-     * @param pf
+     * @param probFunc
      * @param newValues
      */
-    public VertexSet(ProbabilityFunction pf, double newValues[])
+    public VertexSet(ProbabilityFunction probFunc, double newValues[])
     {
-        super(pf, newValues);
-        if (pf instanceof VertexSet)
+        super(probFunc, newValues);
+        if (probFunc instanceof VertexSet)
         {
-            extremePoints = ((VertexSet) pf).extremePoints;
-            auxiliaryVariable = ((VertexSet) pf).auxiliaryVariable;
+            extremePoints = ((VertexSet) probFunc).extremePoints;
+            auxiliaryVariable = ((VertexSet) probFunc).auxiliaryVariable;
         }
         else
         {
             extremePoints = new double[1][];
-            extremePoints[0] = pf.getValues();
+            extremePoints[0] = probFunc.getValues();
         }
     }
 
@@ -172,7 +178,7 @@ public final class VertexSet
         // Use the newValues array to create a new
         // VertexQBProbabilityFunction that incorporates the auxiliaryVariable
         VertexSet newQbpf = new VertexSet(this, newValues);
-        newQbpf.bn = transformedBn;
+        newQbpf.bayesNet = transformedBn;
         newQbpf.auxiliaryVariable = auxv;
         newQbpf.variables = newVariables;
 
@@ -249,22 +255,23 @@ public final class VertexSet
                            int indexExtremePoint)
     {
         int index;
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
 
         // Initialize with zeros an array of markers.
-        int valueIndexes[] = new int[bn.numberVariables()];
+        int valueIndexes[] = new int[bayesNet.numberVariables()];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bn.indexOfVariable(variableValuePair[0]);
-            pv = bn.getProbabilityVariable(index);
-            valueIndexes[index] = pv.indexOfValue(variableValuePair[1]);
+            index = bayesNet.indexOfVariable(variableValuePair[0]);
+            probVar = bayesNet.getProbabilityVariable(index);
+            valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Now evaluate
-        int position = getPositionFromIndexes(bn.getProbabilityVariables(),
-                                              valueIndexes);
+        int position =
+            getPositionFromIndexes(bayesNet.getProbabilityVariables(),
+                                   valueIndexes);
         return (extremePoints[indexExtremePoint][position]);
     }
 
@@ -279,21 +286,21 @@ public final class VertexSet
                          int indexExtremePoint)
     {
         int index;
-        ProbabilityVariable pv;
+        ProbabilityVariable probVar;
 
         // Initialize with zeros an array of markers.
-        int valueIndexes[] = new int[bn.numberVariables()];
+        int valueIndexes[] = new int[bayesNet.numberVariables()];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bn.indexOfVariable(variableValuePair[0]);
-            pv = bn.getProbabilityVariable(index);
-            valueIndexes[index] = pv.indexOfValue(variableValuePair[1]);
+            index = bayesNet.indexOfVariable(variableValuePair[0]);
+            probVar = bayesNet.getProbabilityVariable(index);
+            valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
-        int pos = getPositionFromIndexes(bn.getProbabilityVariables(),
+        int pos = getPositionFromIndexes(bayesNet.getProbabilityVariables(),
                                          valueIndexes);
         // Set the value.
         extremePoints[indexExtremePoint][pos] = val;

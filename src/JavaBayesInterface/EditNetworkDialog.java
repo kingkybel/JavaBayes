@@ -236,7 +236,7 @@ class EditNetworkDialog extends Dialog
     private void fillDialog()
     {
         String values[], allValues = "";
-        ArrayList prop;
+        ArrayList properties;
         String property;
         double par;
 
@@ -325,10 +325,10 @@ class EditNetworkDialog extends Dialog
         }
 
         // Update the properties (if necessary).
-        ArrayList prop = propertyManager.updatePropertyOnExit();
-        if (prop != null)
+        ArrayList properties = propertyManager.updatePropertyOnExit();
+        if (properties != null)
         {
-            ig.setNetworkProperties(prop);
+            ig.setNetworkProperties(properties);
         }
 
         // Update the global neighborhood parameters.

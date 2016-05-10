@@ -59,12 +59,12 @@ public class QBExpectation extends Expectation
     /**
      * Constructor for a QBExpectation.
      *
-     * @param bN
-     * @param dpc
+     * @param bayesNet
+     * @param isProducingClusters
      */
-    public QBExpectation(BayesNet bN, boolean dpc)
+    public QBExpectation(BayesNet bayesNet, boolean isProducingClusters)
     {
-        super(bN, dpc);
+        super(bayesNet, isProducingClusters);
     }
 
     /**
@@ -72,33 +72,33 @@ public class QBExpectation extends Expectation
      */
     private void initializeInference()
     {
-        inference = new QBInference(bn, doProduceClusters);
+        inference = new QBInference(bayesNet, isProducingClusters);
     }
 
     /**
      * Do the Expectation.
      *
-     * @param df
+     * @param discrFunc
      */
     @Override
-    protected void doExpectationFromInference(DiscreteFunction df)
+    protected void doExpectationFromInference(DiscreteFunction discrFunc)
     {
-        currentFunction = df;
+        currentFunction = discrFunc;
 
         if (((QBInference) inference).isInferenceWithoutLocalNeighborhoods)
         {
-            expectationWithoutLocalNeighborhoods(df);
+            expectationWithoutLocalNeighborhoods(discrFunc);
         }
         else
         {
-            expectationWithLocalNeighborhoods(df);
+            expectationWithLocalNeighborhoods(discrFunc);
         }
     }
 
     /**
      * Perform calculation of expectations when local neighborhoods are present.
      */
-    private void expectationWithLocalNeighborhoods(DiscreteFunction df)
+    private void expectationWithLocalNeighborhoods(DiscreteFunction discrFunc)
     {
         int i, j, jump = 1;
         double v, min, max;
@@ -113,17 +113,17 @@ public class QBExpectation extends Expectation
         {
             jump *= normalizedResults.getVariable(i).numberValues();
         }
-        min = df.getValue(0);
-        max = df.getValue(0);
-        for (i = 0; i < df.numberValues(); i++)
+        min = discrFunc.getValue(0);
+        max = discrFunc.getValue(0);
+        for (i = 0; i < discrFunc.numberValues(); i++)
         {
-            if (min < df.getValue(i))
+            if (min < discrFunc.getValue(i))
             {
-                min = df.getValue(i);
+                min = discrFunc.getValue(i);
             }
-            if (max > df.getValue(i))
+            if (max > discrFunc.getValue(i))
             {
-                max = df.getValue(i);
+                max = discrFunc.getValue(i);
             }
         }
         for (j = 0; j < jump; j++)
@@ -132,7 +132,7 @@ public class QBExpectation extends Expectation
             for (i = 0; i < normalizedResults.getVariable(0).numberValues();
                  i++)
             {
-                v += df.getValue(i) * normalizedResults.
+                v += discrFunc.getValue(i) * normalizedResults.
                      getValue(j + i * jump);
             }
             if (min > v)
@@ -155,7 +155,7 @@ public class QBExpectation extends Expectation
      * Perform calculation of expectations when local pneighborhoods are absent;
      * handles global neighborhoods if necessary.
      */
-    private void expectationWithoutLocalNeighborhoods(DiscreteFunction df)
+    private void expectationWithoutLocalNeighborhoods(DiscreteFunction discrFunc)
     {
         QBInference qbInference = (QBInference) inference;
         QuasiBayesNet qbn = ((QuasiBayesNet) (qbInference.getBayesNet()));
@@ -165,7 +165,7 @@ public class QBExpectation extends Expectation
             case QuasiBayesNet.NO_CREDAL_SET:
                 ProbabilityFunction res = qbInference.getResult();
                 results = new double[1];
-                results[0] = res.expectedValue(df);
+                results[0] = res.expectedValue(discrFunc);
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
                 ProbabilityFunction cdrRes =
@@ -176,7 +176,7 @@ public class QBExpectation extends Expectation
                                         new ConstantDensityRatioSet(cdrRes,
                                                                     qbn.
                                                                     getGlobalNeighborhoodParameter());
-                results = cdr.posteriorExpectedValues(df);
+                results = cdr.posteriorExpectedValues(discrFunc);
                 break;
             case QuasiBayesNet.EPSILON_CONTAMINATED:
                 ProbabilityFunction epsRes =
@@ -186,7 +186,7 @@ public class QBExpectation extends Expectation
                 EpsilonContaminatedSet eps =
                                        new EpsilonContaminatedSet(epsRes, qbn.
                                                                   getGlobalNeighborhoodParameter());
-                results = eps.posteriorExpectedValues(df);
+                results = eps.posteriorExpectedValues(discrFunc);
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
                 ProbabilityFunction cdbRes =
@@ -197,7 +197,7 @@ public class QBExpectation extends Expectation
                                           new ConstantDensityBoundedSet(cdbRes,
                                                                         qbn.
                                                                         getGlobalNeighborhoodParameter());
-                results = cdb.posteriorExpectedValues(df);
+                results = cdb.posteriorExpectedValues(discrFunc);
                 break;
             case QuasiBayesNet.TOTAL_VARIATION:
                 ProbabilityFunction tvRes =
@@ -207,7 +207,7 @@ public class QBExpectation extends Expectation
                 TotalVariationSet tv =
                                   new TotalVariationSet(tvRes, qbn.
                                                         getGlobalNeighborhoodParameter());
-                results = tv.posteriorExpectedValues(df);
+                results = tv.posteriorExpectedValues(discrFunc);
                 break;
         }
     }

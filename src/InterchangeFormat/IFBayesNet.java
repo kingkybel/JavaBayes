@@ -39,7 +39,7 @@ public class IFBayesNet
 
     String name;
     ArrayList properties;
-    ArrayList pvs;
+    ArrayList probVars;
     ArrayList upfs;
 
     /**
@@ -52,7 +52,7 @@ public class IFBayesNet
     {
         name = n;
         properties = p;
-        pvs = new ArrayList();
+        probVars = new ArrayList();
         upfs = new ArrayList();
     }
 
@@ -80,7 +80,7 @@ public class IFBayesNet
      */
     public ArrayList getPvs()
     {
-        return (pvs);
+        return (probVars);
     }
 
     /**
@@ -95,11 +95,11 @@ public class IFBayesNet
     /**
      * Method that adds a ProbabilityVariable object to the vector of variables.
      *
-     * @param pv
+     * @param probVar
      */
-    public void add(IFProbabilityVariable pv)
+    public void add(IFProbabilityVariable probVar)
     {
-        pvs.add(pv);
+        probVars.add(probVar);
     }
 
     /**

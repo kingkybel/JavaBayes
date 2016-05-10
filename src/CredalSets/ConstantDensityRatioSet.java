@@ -53,12 +53,12 @@ public class ConstantDensityRatioSet
      * Constructor for an ConstantDensityRatioSet ProbabilityFunction object and
      * given constant.
      *
-     * @param pf
+     * @param probFunc
      * @param kk
      */
-    public ConstantDensityRatioSet(ProbabilityFunction pf, double kk)
+    public ConstantDensityRatioSet(ProbabilityFunction probFunc, double kk)
     {
-        super(pf, pf.getValues());
+        super(probFunc, probFunc.getValues());
         k = kk;
         if (k <= 0.0)
         {
@@ -116,17 +116,17 @@ public class ConstantDensityRatioSet
             }
         }
 
-        return (new QBProbabilityFunction(bn, variables, values,
+        return (new QBProbabilityFunction(bayesNet, variables, values,
                                           lowerValues, upperValues, properties));
     }
 
     /**
      * Perform calculation of expected value for density ratio.
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] expectedValues(DiscreteFunction df)
+    public double[] expectedValues(DiscreteFunction discrFunc)
     {
         Bracketing bracket = new Bracketing();
         double results[] = new double[2];
@@ -137,7 +137,7 @@ public class ConstantDensityRatioSet
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            df.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
             return (results);
@@ -145,22 +145,22 @@ public class ConstantDensityRatioSet
      // Else, apply the marginalization property.
 
         // Obtain the maximum and minimum of functions
-        double maxDfValue = df.getValue(0);
-        double minDfValue = df.getValue(0);
-        for (int i = 1; i < df.numberValues(); i++)
+        double maxDfValue = discrFunc.getValue(0);
+        double minDfValue = discrFunc.getValue(0);
+        for (int i = 1; i < discrFunc.numberValues(); i++)
         {
-            if (maxDfValue < df.getValue(i))
+            if (maxDfValue < discrFunc.getValue(i))
             {
-                maxDfValue = df.getValue(i);
+                maxDfValue = discrFunc.getValue(i);
             }
-            if (minDfValue > df.getValue(i))
+            if (minDfValue > discrFunc.getValue(i))
             {
-                minDfValue = df.getValue(i);
+                minDfValue = discrFunc.getValue(i);
             }
         }
 
         // Prepare the temporaryDiscreteFunction variable for bracketing
-        temporaryDiscreteFunction = df;
+        temporaryDiscreteFunction = discrFunc;
 
         // Bracket the lower expectation
         double lowerExpectation =
@@ -184,12 +184,12 @@ public class ConstantDensityRatioSet
      * probability values are not normalized; probability values are p(x, e)
      * where e is the fixed evidence
      *
-     * @param df
+     * @param discrFunc
      * @return
      */
-    public double[] posteriorExpectedValues(DiscreteFunction df)
+    public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
-        return (expectedValues(df));
+        return (expectedValues(discrFunc));
     }
 
     /**

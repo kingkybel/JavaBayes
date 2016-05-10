@@ -38,16 +38,16 @@ class DSeparation
     private final static int AFFECTING_VARIABLES = 1;
     private static final String CLASS_NAME = DSeparation.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    BayesNet bn;
+    BayesNet bayesNet;
     boolean[] above;
     boolean[] below;
 
     /**
      * Constructor for DSeparation object.
      */
-    DSeparation(BayesNet bN)
+    DSeparation(BayesNet bayesNet)
     {
-        bn = bN;
+        this.bayesNet = bayesNet;
     }
 
     /**
@@ -72,7 +72,7 @@ class DSeparation
      */
     private void separationRelations(int x, int flag)
     {
-        int nvertices = bn.numberProbabilityFunctions();
+        int nvertices = bayesNet.numberProbabilityFunctions();
         if (flag == AFFECTING_VARIABLES)
         {
             nvertices += nvertices;
@@ -200,7 +200,7 @@ class DSeparation
     private ArrayList separation(int x, int flag)
     {
         int i;
-        int nvertices = bn.numberProbabilityFunctions();
+        int nvertices = bayesNet.numberProbabilityFunctions();
         ArrayList dSeparatedVariables = new ArrayList();
 
         // Run algorithm
@@ -213,7 +213,7 @@ class DSeparation
             {
                 if (below[i] || above[i])
                 {
-                    dSeparatedVariables.add(bn.getProbabilityVariable(i));
+                    dSeparatedVariables.add(bayesNet.getProbabilityVariable(i));
                 }
             }
         }
@@ -223,8 +223,8 @@ class DSeparation
             {
                 if (below[i] || above[i])
                 {
-                    dSeparatedVariables.add(
-                            bn.getProbabilityVariable(i - nvertices));
+                    dSeparatedVariables.add(bayesNet.getProbabilityVariable(i -
+                                                                            nvertices));
                 }
             }
         }
@@ -240,9 +240,9 @@ class DSeparation
     {
         if ((flag == CONNECTED_VARIABLES) ||
             ((flag == AFFECTING_VARIABLES) &&
-             (i < bn.numberProbabilityFunctions())))
+             (i < bayesNet.numberProbabilityFunctions())))
         {
-            return (bn.getProbabilityVariable(i).isObserved());
+            return (bayesNet.getProbabilityVariable(i).isObserved());
         }
         else
         {
@@ -256,30 +256,30 @@ class DSeparation
      */
     private boolean adj(int indexFrom, int indexTo, int flag)
     {
-        ProbabilityFunction pf = null;
+        ProbabilityFunction probFunc = null;
 
         if ((flag == CONNECTED_VARIABLES) ||
             ((flag == AFFECTING_VARIABLES) &&
-             (indexTo < bn.numberProbabilityFunctions()) &&
-             (indexFrom < bn.numberProbabilityFunctions())))
+             (indexTo < bayesNet.numberProbabilityFunctions()) &&
+             (indexFrom < bayesNet.numberProbabilityFunctions())))
         {
 
-            for (int i = 0; i < bn.numberProbabilityFunctions(); i++)
+            for (int i = 0; i < bayesNet.numberProbabilityFunctions(); i++)
             {
-                if (bn.getProbabilityFunction(i).getIndex(0) == indexTo)
+                if (bayesNet.getProbabilityFunction(i).getIndex(0) == indexTo)
                 {
-                    pf = bn.getProbabilityFunction(i);
+                    probFunc = bayesNet.getProbabilityFunction(i);
                     break;
                 }
             }
-            if (pf == null)
+            if (probFunc == null)
             {
                 return (false);
             }
 
-            for (int i = 1; i < pf.numberVariables(); i++)
+            for (int i = 1; i < probFunc.numberVariables(); i++)
             {
-                if (pf.getIndex(i) == indexFrom)
+                if (probFunc.getIndex(i) == indexFrom)
                 {
                     return (true);
                 }
@@ -288,7 +288,7 @@ class DSeparation
         }
         else
         {
-            if ((indexFrom - indexTo) == bn.numberProbabilityFunctions())
+            if ((indexFrom - indexTo) == bayesNet.numberProbabilityFunctions())
             {
                 return (true);
             }

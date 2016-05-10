@@ -100,18 +100,18 @@ public class DiscreteFunction
      * Method that determines whether a DiscreteFunction contain some
      * DiscreteVariable in common with the current DiscreteFunction.
      *
-     * @param df DiscreteFunction to be compared with the current
-     *           DiscreteFunction.
+     * @param discrFunc DiscreteFunction to be compared with the current
+     *                  DiscreteFunction.
      */
-    boolean sameVariables(DiscreteFunction df)
+    boolean sameVariables(DiscreteFunction discrFunc)
     {
-        if (variables.length != df.variables.length)
+        if (variables.length != discrFunc.variables.length)
         {
             return (false);
         }
         for (int i = 0; i < variables.length; i++)
         {
-            if (variables[i] != df.variables[i])
+            if (variables[i] != discrFunc.variables[i])
             {
                 return (false);
             }
