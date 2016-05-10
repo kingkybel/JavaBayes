@@ -1,26 +1,27 @@
-/**
+/*
  * JavaBayesConsoleFrame.java
+ * @author Fabio G. Cozman
+ * Copyright 1996 - 1999, Fabio G. Cozman,
+ *          Carnergie Mellon University, Universidade de Sao Paulo
+ * fgcozman@usp.br, http://www.cs.cmu.edu/~fgcozman/home.html
  *
- * @author Fabio G. Cozman Copyright 1996 - 1999, Fabio G. Cozman, Carnergie
- * Mellon University, Universidade de Sao Paulo fgcozman@usp.br,
- * http://www.cs.cmu.edu/~fgcozman/home.html
- *
- * The JavaBayes distribution is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation (either version 2 of the License or, at your
- * option, any later version), provided that this notice and the name of the
- * author appear in all copies. Upon request to the author, some of the packages
- * in the JavaBayes distribution can be licensed under the GNU Lesser General
- * Public License as published by the Free Software Foundation (either version 2
- * of the License, or (at your option) any later version). If you're using the
- * software, please notify fgcozman@usp.br so that you can receive updates and
- * patches. JavaBayes is distributed "as is", in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details. You should have received a copy of the GNU
- * General Public License along with the JavaBayes distribution. If not, write
- * to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139,
- * USA.
+ * The JavaBayes distribution is free software; you can
+ * redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License or, at your option, any later version),
+ * provided that this notice and the name of the author appear in all
+ * copies. Upon request to the author, some of the packages in the
+ * JavaBayes distribution can be licensed under the GNU Lesser General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License, or (at your option) any later version).
+ * If you're using the software, please notify fgcozman@usp.br so
+ * that you can receive updates and patches. JavaBayes is distributed
+ * "as is", in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with the JavaBayes distribution. If not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 package JavaBayesInterface;
 
@@ -40,12 +41,10 @@ import java.io.PrintStream;
 import java.util.logging.Logger;
 
 /**
- *
- * @author kybelksd
+ * @author Fabio G. Cozman
  */
 public final class JavaBayesConsoleFrame extends Frame
 {
-
 
     static final String appletInvalidOperation =
                         "This operation is not allowed in an applet!";
@@ -81,8 +80,8 @@ public final class JavaBayesConsoleFrame extends Frame
     final static String helpTitle = "Help";
     final static String aboutTitle = "About";
     private static final Logger LOGGER =
-    Logger.getLogger(JavaBayesConsoleFrame.class.
-            getName());
+                                Logger.getLogger(JavaBayesConsoleFrame.class.
+                                        getName());
     private JavaBayes jb;
     // Declare controls
     FileDialog OpenFileDialog;
@@ -111,7 +110,7 @@ public final class JavaBayesConsoleFrame extends Frame
     CheckboxMenuItem sensitivityAnalysis;
 
     /*
-    * End of Network Actions.
+     * End of Network Actions.
      */
     /**
      * Constructor for JavaBayesConsoleFrame.
@@ -126,15 +125,15 @@ public final class JavaBayesConsoleFrame extends Frame
 
         // Initialize controls.
         OpenFileDialog = new java.awt.FileDialog(this, openDialogTitle,
-                FileDialog.LOAD);
+                                                 FileDialog.LOAD);
         SaveFileDialog = new java.awt.FileDialog(this, saveDialogTitle,
-                FileDialog.SAVE);
+                                                 FileDialog.SAVE);
         textArea1 = new java.awt.TextArea();
         add("Center", textArea1);
-        
+
         // Menus.
         mainMenuBar = new java.awt.MenuBar();
-        
+
         menu1 = new java.awt.Menu(fileLabel);
         menu1.add(openMenuitemTitle);
         menu1.add(openUrlMenuitemTitle);
@@ -145,40 +144,40 @@ public final class JavaBayesConsoleFrame extends Frame
         menu1.addSeparator();
         menu1.add(quitMenuitemTitle);
         mainMenuBar.add(menu1);
-        
+
         menu4 = new Menu(optionsLabel);
-        
+
         menu6 = new Menu(whatToShowTitle);
         menu6.add(showBayesNet = new CheckboxMenuItem(showBayesNetTitle));
         menu6.add(showBuckets = new CheckboxMenuItem(showBucketsTitle));
         menu4.add(menu6);
-        
+
         menu7 = new Menu(algorithmTitle);
         menu7.add(algorithmVariableElimination = new CheckboxMenuItem(
-                algorithmVariableEliminationTitle));
+                  algorithmVariableEliminationTitle));
         menu7.add(algorithmBucketTree = new CheckboxMenuItem(
-                algorithmBucketTreeTitle));
+                  algorithmBucketTreeTitle));
         menu4.add(menu7);
-        
+
         menu2 = new Menu(inferenceModeTitle);
         menu2.add(posteriorMarginal = new CheckboxMenuItem(
-                posteriorMarginalTitle));
+                  posteriorMarginalTitle));
         menu2.add(posteriorExpectation = new CheckboxMenuItem(
-                posteriorExpectationTitle));
+                  posteriorExpectationTitle));
         menu2.add(explanation = new CheckboxMenuItem(explanationTitle));
         menu2.add(bestConfiguration = new CheckboxMenuItem(
-                bestConfigurationTitle));
+                  bestConfigurationTitle));
         // menu2.add( sensitivityAnalysis = new CheckboxMenuItem(sensitivityAnalysisTitle));
         menu4.add(menu2);
-        
+
         menu5 = new Menu(saveLabel);
         menu5.add(bifFormat = new CheckboxMenuItem(bifSaveLabel));
         menu5.add(xmlFormat = new CheckboxMenuItem(xmlSaveLabel));
         menu5.add(bugsFormat = new CheckboxMenuItem(bugsSaveLabel));
         menu4.add(menu5);
-        
+
         mainMenuBar.add(menu4);
-        
+
         menu3 = new java.awt.Menu(helpTitle);
         menu3.add(aboutTitle);
         // The following try block was contributed
@@ -192,28 +191,28 @@ public final class JavaBayesConsoleFrame extends Frame
             mainMenuBar.add(menu3);
         }
         setMenuBar(mainMenuBar);
-        
+
         // Initialize the inference menu
         posteriorMarginal.setState(true); // Simulate a true state.
         PosteriorMarginalAction();
-        
+
         // Initialize the save format menu
         bifFormat.setState(true); // Simulate a true state.
         BifFormatAction();
-        
+
         // Initialize the algorithm menu
         algorithmVariableElimination.setState(true); // Simulate a true state.
         AlgorithmVariableEliminationAction();
-        
+
         // Resize the frame.
         Toolkit t = Toolkit.getDefaultToolkit();
         Dimension d = t.getScreenSize();
-        
+
         d.width /= 2;
         d.height /= 2;
         resize(d);
     }
-    
+
     /**
      * Constructor for JavaBayesConsoleFrame.
      *
@@ -223,7 +222,7 @@ public final class JavaBayesConsoleFrame extends Frame
     {
         this(jb, ((String) null));
     }
-    
+
     void BucketTreeAction()
     {
         jb.whatToShowBucketTreeAction(showBuckets.getState());
@@ -237,8 +236,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void PosteriorExpectationAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu2, posteriorExpectation,
-                                                     posteriorMarginal);
+                         updateCheckboxMenu(menu2, posteriorExpectation,
+                                            posteriorMarginal);
         if (activeItem == posteriorExpectation)
         {
             jb.posteriorExpectationAction();
@@ -252,8 +251,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void PosteriorMarginalAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu2, posteriorMarginal,
-                                                     posteriorExpectation);
+                         updateCheckboxMenu(menu2, posteriorMarginal,
+                                            posteriorExpectation);
         if (activeItem == posteriorExpectation)
         {
             jb.posteriorExpectationAction();
@@ -267,8 +266,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void EstimateBestConfigurationAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu2, bestConfiguration,
-                                                     posteriorMarginal);
+                         updateCheckboxMenu(menu2, bestConfiguration,
+                                            posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
             jb.posteriorMarginalAction();
@@ -282,8 +281,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void SensitivityAnalysisAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu2, sensitivityAnalysis,
-                                                     posteriorMarginal);
+                         updateCheckboxMenu(menu2, sensitivityAnalysis,
+                                            posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
             jb.posteriorMarginalAction();
@@ -297,8 +296,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void EstimateExplanationVariablesAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu2, explanation,
-                                                     posteriorMarginal);
+                         updateCheckboxMenu(menu2, explanation,
+                                            posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
             jb.posteriorMarginalAction();
@@ -312,7 +311,7 @@ public final class JavaBayesConsoleFrame extends Frame
     void BifFormatAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu5, bifFormat, xmlFormat);
+                         updateCheckboxMenu(menu5, bifFormat, xmlFormat);
         if (activeItem == bifFormat)
         {
             jb.bifFormatAction();
@@ -326,7 +325,7 @@ public final class JavaBayesConsoleFrame extends Frame
     void XmlFormatAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu5, xmlFormat, bifFormat);
+                         updateCheckboxMenu(menu5, xmlFormat, bifFormat);
         if (activeItem == xmlFormat)
         {
             jb.xmlFormatAction();
@@ -340,7 +339,7 @@ public final class JavaBayesConsoleFrame extends Frame
     void BugsFormatAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu5, bugsFormat, bifFormat);
+                         updateCheckboxMenu(menu5, bugsFormat, bifFormat);
         if (activeItem == bugsFormat)
         {
             jb.bugsFormatAction();
@@ -354,9 +353,9 @@ public final class JavaBayesConsoleFrame extends Frame
     void AlgorithmVariableEliminationAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu7,
-                                              algorithmVariableElimination,
-                                              algorithmBucketTree);
+                         updateCheckboxMenu(menu7,
+                                            algorithmVariableElimination,
+                                            algorithmBucketTree);
         if (activeItem == algorithmVariableElimination)
         {
             jb.setAlgorithmVariableElimination();
@@ -370,8 +369,8 @@ public final class JavaBayesConsoleFrame extends Frame
     void AlgorithmBucketTreeAction()
     {
         CheckboxMenuItem activeItem =
-        updateCheckboxMenu(menu7, algorithmBucketTree,
-                                    algorithmVariableElimination);
+                         updateCheckboxMenu(menu7, algorithmBucketTree,
+                                            algorithmVariableElimination);
         if (activeItem == algorithmBucketTree)
         {
             jb.setAlgorithmBucketTree();
@@ -662,7 +661,7 @@ public final class JavaBayesConsoleFrame extends Frame
      * It returns the checkbox that got on.
      */
     private CheckboxMenuItem updateCheckboxMenu(Menu m, CheckboxMenuItem cur,
-                                                  CheckboxMenuItem def)
+                                                CheckboxMenuItem def)
     {
         boolean s = cur.getState();
 

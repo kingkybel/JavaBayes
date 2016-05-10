@@ -1,8 +1,9 @@
-/**
+/*
  * DSeparation.java
  *
- * @author Fabio G. Cozman Copyright 1996 - 1999, Fabio G. Cozman, Carnergie
- * Mellon University, Universidade de Sao Paulo fgcozman@usp.br,
+ * @author Fabio G. Cozman
+ * Copyright 1996 - 1999, Fabio G. Cozman, Carnergie Mellon University,
+ * Universidade de Sao Paulo fgcozman@usp.br,
  * http://www.cs.cmu.edu/~fgcozman/home.html
  *
  * The JavaBayes distribution is free software; you can redistribute it and/or

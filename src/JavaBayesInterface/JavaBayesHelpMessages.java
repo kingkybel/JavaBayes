@@ -1,41 +1,40 @@
-/**
- * JavaBayesHelpSystem.java
+/*
+ * JavaBayesHelpMessages.java
+ * @author Fabio G. Cozman
+ * Copyright 1996 - 1999, Fabio G. Cozman,
+ *          Carnergie Mellon University, Universidade de Sao Paulo
+ * fgcozman@usp.br, http://www.cs.cmu.edu/~fgcozman/home.html
  *
- * @author Fabio G. Cozman Copyright 1996 - 1999, Fabio G. Cozman, Carnergie
- * Mellon University, Universidade de Sao Paulo fgcozman@usp.br,
- * http://www.cs.cmu.edu/~fgcozman/home.html
- *
- * The JavaBayes distribution is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation (either version 2 of the License or, at your
- * option, any later version), provided that this notice and the name of the
- * author appear in all copies. Upon request to the author, some of the packages
- * in the JavaBayes distribution can be licensed under the GNU Lesser General
- * Public License as published by the Free Software Foundation (either version 2
- * of the License, or (at your option) any later version). If you're using the
- * software, please notify fgcozman@usp.br so that you can receive updates and
- * patches. JavaBayes is distributed "as is", in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details. You should have received a copy of the GNU
- * General Public License along with the JavaBayes distribution. If not, write
- * to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139,
- * USA.
+ * The JavaBayes distribution is free software; you can
+ * redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License or, at your option, any later version),
+ * provided that this notice and the name of the author appear in all
+ * copies. Upon request to the author, some of the packages in the
+ * JavaBayes distribution can be licensed under the GNU Lesser General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License, or (at your option) any later version).
+ * If you're using the software, please notify fgcozman@usp.br so
+ * that you can receive updates and patches. JavaBayes is distributed
+ * "as is", in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with the JavaBayes distribution. If not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 package JavaBayesInterface;
 
 import java.util.logging.Logger;
 
 /**
- *
- * @author kybelksd
+ * @author Fabio G. Cozman
  */
 public class JavaBayesHelpMessages
 {
 
     // Static JavaBayes object; there must be a single JavaBayesHelpMessages
     static JavaBayes jb;
-
 
     // Help messages
     static final String versionNumberMessage = "Version 0.346";
@@ -44,15 +43,15 @@ public class JavaBayesHelpMessages
      *
      */
     public static final String aboutMessage = "JavaBayes " +
-                                               versionNumberMessage + "\n" +
-                                               "Copyright 1996 - 1997 Carnegie Mellon University \n" +
-                                               "Copyright 1998 - 2000 Fabio Gagliardi Cozman \n" +
-                                               "<fgcozman@usp.br>\n" +
-                                               "<http://www.cs.cmu.edu/~fgcozman/home.html>\n" +
-                                               "JavaBayes is a system for inferences with Bayesian \n" +
-                                               "networks entirely written in Java.\n" +
-                                               "More documentation at\n" +
-                                               "<http://www.cs.cmu.edu/~javabayes/>\n\n";
+                                              versionNumberMessage + "\n" +
+                                              "Copyright 1996 - 1997 Carnegie Mellon University \n" +
+                                              "Copyright 1998 - 2000 Fabio Gagliardi Cozman \n" +
+                                              "<fgcozman@usp.br>\n" +
+                                              "<http://www.cs.cmu.edu/~fgcozman/home.html>\n" +
+                                              "JavaBayes is a system for inferences with Bayesian \n" +
+                                              "networks entirely written in Java.\n" +
+                                              "More documentation at\n" +
+                                              "<http://www.cs.cmu.edu/~javabayes/>\n\n";
 
     /**
      *
@@ -75,7 +74,7 @@ public class JavaBayesHelpMessages
                         "To move a node, click on it and drag it to the new position.\n\n";
 
     static final String deleteMessage = "To delete a node, click on it.\n" +
-                                         "To delete an arrow, click on the arrow's head.\n\n";
+                                        "To delete an arrow, click on the arrow's head.\n\n";
 
     static final String editMessage =
                         "To edit attributes of a node, click on it.\n\n";

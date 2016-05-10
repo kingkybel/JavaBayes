@@ -33,20 +33,16 @@ import InterchangeFormat.InterchangeFormat;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-/* ********************************************************** *
- * Class that converts the contents of an InterchangeFormat   *
- * object to the BayesNet object in the BayesianNetworks      *
- * package                                                    *
- * ********************************************************** */
 /**
- *
- * @author kybelksd
+ * Class that converts the contents of an InterchangeFormat object to the
+ * BayesNet object in the BayesianNetworks package.
  */
 public class ConvertInterchangeFormat
 {
-    private static final Logger LOGGER =
-    Logger.getLogger(ConvertInterchangeFormat.class.
-            getName());
+
+    private static final String CLASS_NAME =
+                                ConvertInterchangeFormat.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     InterchangeFormat ifo;
 
@@ -169,7 +165,7 @@ public class ConvertInterchangeFormat
      * @return
      */
     protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
-                                                           IFProbabilityFunction upf)
+                                                         IFProbabilityFunction upf)
     {
         int i, jump, numberOfValues;
         double values[];
@@ -226,7 +222,7 @@ public class ConvertInterchangeFormat
      * @return
      */
     protected ProbabilityVariable[] createVariables(BayesNet bn,
-                                                     IFProbabilityFunction upf)
+                                                    IFProbabilityFunction upf)
     {
         int index;
         String ssVariables[] = upf.getVariables();
@@ -254,7 +250,7 @@ public class ConvertInterchangeFormat
      * @param values
      */
     protected void processTables(IFProbabilityFunction upf,
-                                  double values[])
+                                 double values[])
     {
         // Put the table values
         ArrayList ttables = upf.getTables();
@@ -286,7 +282,7 @@ public class ConvertInterchangeFormat
      * specification of defaults in the IFProbabilityFunction.
      */
     void processDefaults(IFProbabilityFunction upf,
-                          double values[], int jump)
+                         double values[], int jump)
     {
         int i, j, k;
 
@@ -313,9 +309,9 @@ public class ConvertInterchangeFormat
      * Insert entries specified in the IFProbabilityFunction.
      */
     void processEntries(BayesNet bn,
-                         IFProbabilityFunction upf,
-                         ProbabilityVariable variables[], double values[],
-                         int jump)
+                        IFProbabilityFunction upf,
+                        ProbabilityVariable variables[], double values[],
+                        int jump)
     {
         int i, j, k, pos, step;
         int entryValueIndexes[];

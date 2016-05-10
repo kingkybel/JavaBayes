@@ -1,7 +1,8 @@
-/**
+/*
  * BayesNet.java
  *
- * @author Fabio G. Cozman Copyright 1996 - 1999, Fabio G. Cozman, Carnergie
+ * @author Fabio G. Cozman
+ * Copyright 1996 - 1999, Fabio G. Cozman, Carnergie
  * Mellon University, Universidade de Sao Paulo fgcozman@usp.br,
  * http://www.cs.cmu.edu/~fgcozman/home.html
  *
@@ -34,8 +35,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 /**
- *
- * @author kybelksd
+ * @author Fabio G. Cozman
  */
 public class BayesNet
 {

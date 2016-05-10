@@ -1,3 +1,28 @@
+/*
+ * QBConvertInterchangeFormat.java
+ * @author Fabio G. Cozman
+ * Copyright 1996 - 1999, Fabio G. Cozman,
+ *          Carnergie Mellon University, Universidade de Sao Paulo
+ * fgcozman@usp.br, http://www.cs.cmu.edu/~fgcozman/home.html
+ *
+ * The JavaBayes distribution is free software; you can
+ * redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License or, at your option, any later version),
+ * provided that this notice and the name of the author appear in all
+ * copies. Upon request to the author, some of the packages in the
+ * JavaBayes distribution can be licensed under the GNU Lesser General
+ * Public License as published by the Free Software Foundation (either
+ * version 2 of the License, or (at your option) any later version).
+ * If you're using the software, please notify fgcozman@usp.br so
+ * that you can receive updates and patches. JavaBayes is distributed
+ * "as is", in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with the JavaBayes distribution. If not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 package QuasiBayesianNetworks;
 
 import BayesianNetworks.BayesNet;
@@ -17,10 +42,10 @@ import java.util.logging.Logger;
  */
 public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
 {
-    private static final Logger LOGGER =
-    Logger.getLogger(
-            QBConvertInterchangeFormat.class.
-                    getName());
+
+    private static final String CLASS_NAME =
+                                QBConvertInterchangeFormat.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -43,7 +68,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      */
     @Override
     protected ProbabilityFunction getProbabilityFunction(BayesNet bn,
-                                                           IFProbabilityFunction upf)
+                                                         IFProbabilityFunction upf)
     {
         int i, jump, numberOfValues;
         double values[];
@@ -104,7 +129,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * **********************************************************
      */
     double[][] processExtremeTables(IFProbabilityFunction upf,
-                                      double values[])
+                                    double values[])
     {
         int i, j;
         double table[], extremePoints[][];
@@ -155,7 +180,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * **********************************************************
      */
     void processDefaults(IFProbabilityFunction upf,
-                          double values[], double extremePoints[][], int jump)
+                         double values[], double extremePoints[][], int jump)
     {
         int i, j, k;
 
@@ -184,9 +209,9 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * **********************************************************
      */
     void processEntries(BayesNet bn,
-                         IFProbabilityFunction upf,
-                         ProbabilityVariable variables[],
-                         double values[], double extremePoints[][], int jump)
+                        IFProbabilityFunction upf,
+                        ProbabilityVariable variables[],
+                        double values[], double extremePoints[][], int jump)
     {
         int i, j, k, pos, step;
         int entryValueIndexes[];
