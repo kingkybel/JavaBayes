@@ -39,7 +39,8 @@ class Bucket
     static final int EMPTY = 0;
     static final int REDUCED = 1;
     static final int DISTRIBUTED = 2;
-    private static final Logger LOG = Logger.getLogger(Bucket.class.getName());
+    private static final String CLASS_NAME = Bucket.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     BucketTree bucketTree; // BucketTree that holds the Bucket.
 
     ProbabilityVariable variable; // The Bucket variable.
@@ -247,11 +248,11 @@ class Bucket
             {
                 v *= orderedDfs[m].evaluate(bucketTree.bn.
                 getProbabilityVariables(),
-                                             indexes);
+                                            indexes);
             }
             p = newDf.getPositionFromIndexes(bucketTree.bn.
             getProbabilityVariables(),
-                                                 indexes);
+                                             indexes);
             newDf.setValue(p, v);
 
             // Update the indexes
@@ -429,7 +430,7 @@ class Bucket
         // Create new function to be filled with joined variables
         DiscreteFunction newDf = new DiscreteFunction(n, v);
         buildNewVariables(newDf, joinedIndexes,
-                            isBucketVariableIncluded, n);
+                          isBucketVariableIncluded, n);
 
         return (newDf);
             }
@@ -440,9 +441,9 @@ class Bucket
              * the first variable.
              */
             private void buildNewVariables(DiscreteFunction newDf,
-                                             int joinedIndexes[],
-                                             boolean isBucketVariableIncluded,
-                                             int n)
+                                           int joinedIndexes[],
+                                           boolean isBucketVariableIncluded,
+                                           int n)
             {
                 // Bucket variable comes first if present
                 if (isBucketVariableIncluded == true)
@@ -452,16 +453,16 @@ class Bucket
                         if (joinedIndexes[i] == variable.getIndex())
                         {
                             newDf.setVariable(0,
-                                                bucketTree.bn.
-                                                getProbabilityVariable(
-                                                        variable.getIndex()));
+                                              bucketTree.bn.
+                                              getProbabilityVariable(
+                                                      variable.getIndex()));
                         }
                         else
                         {
                             newDf.setVariable(j,
-                                                bucketTree.bn.
-                                                getProbabilityVariable(
-                                                        joinedIndexes[i]));
+                                              bucketTree.bn.
+                                              getProbabilityVariable(
+                                                      joinedIndexes[i]));
                             j++;
                         }
                     }
@@ -471,9 +472,9 @@ class Bucket
                     for (int i = 0; i < n; i++)
                     {
                         newDf.setVariable(i,
-                                            bucketTree.bn.
-                                            getProbabilityVariable(
-                                                    joinedIndexes[i]));
+                                          bucketTree.bn.
+                                          getProbabilityVariable(
+                                                  joinedIndexes[i]));
                     }
                 }
             }
@@ -521,7 +522,7 @@ class Bucket
                         if (doProduceClusters)
                         { // If necessary, insert value in the cluster.
                             pCluster = cluster.getPositionFromIndexes(dvs,
-                                                                          indexes);
+                                                                      indexes);
                             cluster.setValue(pCluster, t);
                         }
                         v += t; // Finally, do the summation for each value of the newDf.
@@ -585,7 +586,7 @@ class Bucket
                         {
                             t *= orderedDfs[m].evaluate(bucketTree.bn.
                             getProbabilityVariables(),
-                                                         indexes);
+                                                        indexes);
                         }
                         // Perform the maximization
                         if (v <= t)
@@ -597,7 +598,7 @@ class Bucket
                     // Update functions
                     p = newDf.getPositionFromIndexes(bucketTree.bn.
                     getProbabilityVariables(),
-                                                         indexes);
+                                                     indexes);
                     newDf.setValue(p, v);
                     backwardPointers.setValue(p, (double) u);
 

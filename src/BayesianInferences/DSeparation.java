@@ -35,8 +35,8 @@ class DSeparation
 
     private final static int CONNECTED_VARIABLES = 0;
     private final static int AFFECTING_VARIABLES = 1;
-    private static final Logger LOG =
-    Logger.getLogger(DSeparation.class.getName());
+    private static final String CLASS_NAME = DSeparation.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     BayesNet bn;
     boolean[] above;
     boolean[] below;

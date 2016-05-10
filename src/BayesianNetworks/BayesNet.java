@@ -59,7 +59,8 @@ public class BayesNet
      *
      */
     public static final int BUGS = 3;
-    private static final Logger LOG = Logger.getLogger(BayesNet.class.getName());
+    private static final String CLASS_NAME = BayesNet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -112,7 +113,7 @@ public class BayesNet
      * Simple constructor for a BayesNet.
      *
      * @param nN Name of network.
-     * @param p   Properties of the network.
+     * @param p  Properties of the network.
      */
     public BayesNet(String nN, ArrayList p)
     {
@@ -914,7 +915,7 @@ public class BayesNet
      * @param v
      */
     public void setProbabilityVariable(int index, String name,
-                                         String v[], ArrayList vec)
+                                       String v[], ArrayList vec)
     {
         if (index <= probabilityVariables.length)
         {
@@ -932,8 +933,8 @@ public class BayesNet
      * @param values
      */
     public void setProbabilityFunction(int index,
-                                         ProbabilityVariable[] variables,
-                                         double values[], ArrayList vec)
+                                       ProbabilityVariable[] variables,
+                                       double values[], ArrayList vec)
     {
         if (index <= probabilityFunctions.length)
         {

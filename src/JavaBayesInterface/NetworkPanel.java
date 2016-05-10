@@ -52,8 +52,8 @@ public class NetworkPanel extends Canvas
     private static final int EDIT_VARIABLE_MODE = 6;
     private static final int EDIT_FUNCTION_MODE = 7;
     private static final int EDIT_NETWORK_MODE = 8;
-    private static final Logger LOG =
-    Logger.getLogger(NetworkPanel.class.getName());
+    private static final String CLASS_NAME = NetworkPanel.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private EditorFrame frame; // Used for changing mouse cursor
     // Used for changing mouse cursor
     private ScrollingPanel scrollPanel; // Used to control scrolling
@@ -112,10 +112,11 @@ public class NetworkPanel extends Canvas
 
     /**
      * Process mouse down events.
+     *
      * @param evt
      * @param y
      * @param x
-     * @return 
+     * @return
      */
     @Override
     public boolean mouseDown(Event evt, int x, int y)
@@ -186,10 +187,11 @@ public class NetworkPanel extends Canvas
 
     /**
      * Process mouse drag events.
+     *
      * @param evt
      * @param y
      * @param x
-     * @return 
+     * @return
      */
     @Override
     public boolean mouseDrag(Event evt, int x, int y)
@@ -216,10 +218,11 @@ public class NetworkPanel extends Canvas
 
     /**
      * Process mouse up events.
+     *
      * @param evt
      * @param y
      * @param x
-     * @return 
+     * @return
      */
     @Override
     public boolean mouseUp(Event evt, int x, int y)
@@ -322,7 +325,7 @@ public class NetworkPanel extends Canvas
      * does not lie over or above the segment, return -1.0
      */
     double squareDistancePointArc(InferenceGraphNode hnode,
-                                     InferenceGraphNode pnode, int x3, int y3)
+                                  InferenceGraphNode pnode, int x3, int y3)
     {
         int x1, y1, x2, y2;
         double area, squareBase, squareHeight, squareHyp;
@@ -344,13 +347,13 @@ public class NetworkPanel extends Canvas
         squareHyp = squareBase + squareHeight;
         // Check first extreme point
         if (squareHyp < ((double) ((x3 - x1) * (x3 - x1) + (y3 - y1) *
-                                                            (y3 - y1))))
+                                                           (y3 - y1))))
         {
             return (-1.0);
         }
         // Check second extreme point
         if (squareHyp < ((double) ((x3 - x2) * (x3 - x2) + (y3 - y2) *
-                                                            (y3 - y2))))
+                                                           (y3 - y2))))
         {
             return (-1.0);
         }
@@ -531,7 +534,7 @@ public class NetworkPanel extends Canvas
      * Auxiliary function that draws an arc.
      */
     private void drawArc(Graphics g, InferenceGraphNode node,
-                          InferenceGraphNode parent)
+                         InferenceGraphNode parent)
     {
         int nodeX, nodeY, parentX, parentY;
         int x1, x2, x3, y1, y2, y3;
@@ -731,8 +734,8 @@ public class NetworkPanel extends Canvas
             {
                 node = (InferenceGraphNode) e;
                 ig.setPos(node, // Move all nodes in the group.
-                           new Point(node.getPosX() - deltaX, node.
-                                     getPosY() - deltaY));
+                          new Point(node.getPosX() - deltaX, node.
+                                    getPosY() - deltaY));
             }
         }
     }

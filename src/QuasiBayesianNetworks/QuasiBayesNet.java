@@ -73,8 +73,8 @@ public class QuasiBayesNet extends BayesNet
      *
      */
     public final static int TOTAL_VARIATION = 5;
-    private static final Logger LOG =
-                                Logger.getLogger(QuasiBayesNet.class.getName());
+    private static final String CLASS_NAME = QuasiBayesNet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     int globalNeighborhoodType; // do not set this here; set by translate()
     // do not set this here; set by translate()
     double globalNeighborhoodParameter; // do not set this here; set by translate()

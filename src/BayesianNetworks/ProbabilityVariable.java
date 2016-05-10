@@ -46,8 +46,8 @@ public class ProbabilityVariable extends DiscreteVariable
     public static final int TRANSPARENT = 1;
     static final String observedPropertyName = "observed";
     static final String explanationPropertyName = "explanation";
-    private static final Logger LOG =
-    Logger.getLogger(ProbabilityVariable.class.getName());
+    private static final String CLASS_NAME = ProbabilityVariable.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -84,6 +84,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
+     *
      * @param bN
      * @param p
      * @param nVb
@@ -97,6 +98,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
+     *
      * @param bN
      * @param p
      * @param nVb
@@ -113,6 +115,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
+     *
      * @param pv
      */
     public ProbabilityVariable(ProbabilityVariable pv)
@@ -129,6 +132,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Constructor for ProbabilityVariable.
+     *
      * @param bN
      * @param pv
      */
@@ -193,6 +197,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Save the contents of a ProbabilityVariable object into a PrintStream
      * using the XMLBIF v0.3 format.
+     *
      * @param out
      */
     public void saveXml_0_3(PrintStream out)
@@ -242,6 +247,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Save the contents of a ProbabilityVariable object into a PrintStream.
+     *
      * @param out
      */
     public void saveXml(PrintStream out)
@@ -347,7 +353,8 @@ public class ProbabilityVariable extends DiscreteVariable
     /* *************************************************************** */
     /**
      * Get the type of the ProbabilityVariable.
-     * @return 
+     *
+     * @return
      */
     public int getType()
     {
@@ -357,7 +364,8 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Indicate whether the current ProbabilityVariable is an explanatory
      * variable or not.
-     * @return 
+     *
+     * @return
      */
     public boolean isExplanation()
     {
@@ -367,7 +375,8 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Indicate whether the current ProbabilityVariable has been observed or
      * not.
-     * @return 
+     *
+     * @return
      */
     public boolean isObserved()
     {
@@ -401,6 +410,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Add a property to the current ProbabilityVariable.
+     *
      * @param prop
      */
     public void addProperty(String prop)
@@ -414,6 +424,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Remove a property from the current ProbabilityVariable.
+     *
      * @param prop
      */
     public void removeProperty(String prop)
@@ -428,6 +439,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Remove a property from the current ProbabilityVariable given the position
      * of the property.
+     *
      * @param i
      */
     public void removeProperty(int i)
@@ -441,7 +453,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Get the index of the observed value.
-     * @return 
+     *
+     * @return
      */
     public int getObservedIndex()
     {
@@ -450,7 +463,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Get the index of the assigned value in the variable.
-     * @return 
+     *
+     * @return
      */
     public int getExplanationIndex()
     {
@@ -459,7 +473,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Get the properties.
-     * @return 
+     *
+     * @return
      */
     public ArrayList getProperties()
     {
@@ -468,6 +483,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Set the properties.
+     *
      * @param prop
      */
     public void setProperties(ArrayList prop)
@@ -477,7 +493,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Get an Iterator with the properties.
-     * @return 
+     *
+     * @return
      */
     public ArrayList getEnumeratedProperties()
     {
@@ -486,6 +503,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Set the index of the variable.
+     *
      * @param ind
      */
     public void setIndex(int ind)
@@ -512,6 +530,7 @@ public class ProbabilityVariable extends DiscreteVariable
 
     /**
      * Set the type of the current ProbabilityVariable.
+     *
      * @param t
      */
     public void setType(int t)

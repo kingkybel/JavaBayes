@@ -33,8 +33,9 @@ import java.util.logging.Logger;
  */
 public class IFBayesNet
 {
-    private static final Logger LOG =
-    Logger.getLogger(IFBayesNet.class.getName());
+
+    private static final String CLASS_NAME = IFBayesNet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String name;
     ArrayList properties;
@@ -43,6 +44,7 @@ public class IFBayesNet
 
     /**
      * Basic constructor.
+     *
      * @param n
      * @param p
      */
@@ -92,6 +94,7 @@ public class IFBayesNet
 
     /**
      * Method that adds a ProbabilityVariable object to the vector of variables.
+     *
      * @param pv
      */
     public void add(IFProbabilityVariable pv)
@@ -102,6 +105,7 @@ public class IFBayesNet
     /**
      * Method that adds a IFProbabilityFunction object to the vector of
      * functions.
+     *
      * @param upf
      */
     public void add(IFProbabilityFunction upf)

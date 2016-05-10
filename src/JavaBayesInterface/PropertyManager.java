@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 class PropertyManager
 {
-    private static final Logger LOG =
-    Logger.
-            getLogger(PropertyManager.class.getName());
+
+    private static final String CLASS_NAME = PropertyManager.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // The original properties.
     private ArrayList originalProperties;

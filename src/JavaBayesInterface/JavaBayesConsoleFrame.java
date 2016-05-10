@@ -80,7 +80,7 @@ public final class JavaBayesConsoleFrame extends Frame
     final static String sensitivityAnalysisTitle = "Sensitivity analysis";
     final static String helpTitle = "Help";
     final static String aboutTitle = "About";
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(JavaBayesConsoleFrame.class.
             getName());
     private JavaBayes jb;

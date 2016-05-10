@@ -28,7 +28,8 @@ public class Ordering
      *
      */
     public static final int MINIMUM_WEIGHT = 2;
-    private static final Logger LOG = Logger.getLogger(Ordering.class.getName());
+    private static final String CLASS_NAME = Ordering.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     BayesNet bn;
     String order[];
     int explanationStatus = Inference.IGNORE_EXPLANATION;
@@ -36,6 +37,7 @@ public class Ordering
 
     /**
      * Basic constructor for Ordering.
+     *
      * @param bN
      * @param ot
      * @param objective
@@ -50,6 +52,7 @@ public class Ordering
 
     /**
      * Basic constructor for Ordering.
+     *
      * @param bN
      * @param or
      */
@@ -62,6 +65,7 @@ public class Ordering
 
     /**
      * Basic constructor for Ordering.
+     *
      * @param bN
      * @param ot
      * @param objective
@@ -77,6 +81,7 @@ public class Ordering
 
     /**
      * Basic constructor for Ordering.
+     *
      * @param bN
      * @param ds
      * @param or
@@ -157,7 +162,7 @@ public class Ordering
                 variablesToOrder = dsep.allAffecting(objectiveIndex);
             }
             return (heuristicOrder(variablesToOrder, objectiveIndex,
-                                    orderingType));
+                                   orderingType));
         }
     }
 
@@ -177,7 +182,7 @@ public class Ordering
      *    (objective variable last for inference).
      */
     private String[] userOrder(ArrayList variablesToOrder,
-                                int objectiveIndex)
+                               int objectiveIndex)
     {
         int i, j;
         boolean isVariableExplanationFlag = false;
@@ -278,8 +283,8 @@ public class Ordering
      * elimination procedure.
      */
     private String[] heuristicOrder(ArrayList vo,
-                                     int objectiveIndex,
-                                     int orderingType)
+                                    int objectiveIndex,
+                                    int orderingType)
     {
         int i, j;
         int PHASE_ONE = 1;

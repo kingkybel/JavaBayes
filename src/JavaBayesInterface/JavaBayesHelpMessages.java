@@ -121,7 +121,7 @@ public class JavaBayesHelpMessages
     static final String selfarc = "Can not create arc to self.\n\n";
 
     static final String circular = "Circular parent relations not allowed.\n\n";
-    private static final Logger LOG =
+    private static final Logger LOGGER =
                                 Logger.getLogger(JavaBayesHelpMessages.class.
                                         getName());
 

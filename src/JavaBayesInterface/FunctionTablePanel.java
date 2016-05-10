@@ -43,8 +43,8 @@ public final class FunctionTablePanel extends Panel
 
     private static final Color colorParents = Color.red;
     private static final String parentsAnnounceLabel = "Values for parents:";
-    private static final Logger LOG =
-    Logger.getLogger(FunctionTablePanel.class.getName());
+    private static final String CLASS_NAME = FunctionTablePanel.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private String allVariableNames[];
     private String allVariableValues[][];
     private double tableValues[];
@@ -62,6 +62,7 @@ public final class FunctionTablePanel extends Panel
 
     /**
      * Default constructor for an FunctionTablePanel.
+     *
      * @param avn
      * @param tv
      * @param avv
@@ -94,7 +95,8 @@ public final class FunctionTablePanel extends Panel
 
     /**
      * Return the current table.
-     * @return 
+     *
+     * @return
      */
     public double[] getTable()
     {
@@ -104,6 +106,7 @@ public final class FunctionTablePanel extends Panel
 
     /**
      * Insert a new table.
+     *
      * @param newTable
      */
     public void insertTable(double newTable[])
@@ -126,8 +129,8 @@ public final class FunctionTablePanel extends Panel
                      j++)
                 {
                     fields[i][j].setText(String.valueOf(tableValues[i *
-                                                                     allVariableValues[1].length +
-                                                                     j]));
+                                                                    allVariableValues[1].length +
+                                                                    j]));
                 }
             }
         }
@@ -270,7 +273,7 @@ public final class FunctionTablePanel extends Panel
                     fields[j][i] = new TextField();
                     fields[j][i].setText(String.valueOf(
                             tableValues[(j * allVariableValues[1].length + i) *
-                                         jump]));
+                                        jump]));
                     dp.add(fields[j][i]);
                 }
             }
@@ -279,9 +282,10 @@ public final class FunctionTablePanel extends Panel
 
     /**
      * Handle events in the panel.
+     *
      * @param evt
      * @param arg
-     * @return 
+     * @return
      */
     @Override
     public boolean action(Event evt, Object arg)
@@ -328,8 +332,8 @@ public final class FunctionTablePanel extends Panel
                      j++)
                 {
                     fields[i][j].setText(String.valueOf(tableValues[i *
-                                                                     allVariableValues[1].length +
-                                                                     j]));
+                                                                    allVariableValues[1].length +
+                                                                    j]));
                 }
             }
         }

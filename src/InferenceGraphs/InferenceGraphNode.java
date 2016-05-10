@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public final class InferenceGraphNode
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(InferenceGraphNode.class.
             getName());
 

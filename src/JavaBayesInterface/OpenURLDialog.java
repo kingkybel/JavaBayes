@@ -40,14 +40,12 @@ import java.util.logging.Logger;
  */
 public class OpenURLDialog extends Dialog
 {
-    //}}
-    private static final Logger LOG =
-    Logger.getLogger(OpenURLDialog.class.getName());
+
+    private static final String CLASS_NAME = OpenURLDialog.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     JavaBayes jb;
 
-
-    //{{DECLARE_CONTROLS
     java.awt.TextField textURL;
     java.awt.Panel panelButtons;
     java.awt.Button okButton;
@@ -95,7 +93,7 @@ public class OpenURLDialog extends Dialog
      * @param modal
      */
     public OpenURLDialog(Frame parent, JavaBayes javaBayes,
-                                       String title, boolean modal)
+                         String title, boolean modal)
     {
         this(parent, javaBayes, modal);
         setTitle(title);

@@ -29,11 +29,14 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 /**
- * @author kybelksd***********************************************************************
+ * @author
+ * kybelksd***********************************************************************
  */
 public class SaveBugs
 {
-    private static final Logger LOG = Logger.getLogger(SaveBugs.class.getName());
+
+    private static final String CLASS_NAME = SaveBugs.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     BayesNet bn;
 

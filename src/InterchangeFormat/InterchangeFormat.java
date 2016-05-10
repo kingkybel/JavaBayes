@@ -37,7 +37,7 @@ public class InterchangeFormat
 
     // Size of the buffer for reading and resetting streams
     private static final int MARK_READ_LIMIT = 10000;
-    private static final Logger LOG =
+    private static final Logger LOGGER =
                                 Logger.getLogger(InterchangeFormat.class.
                                         getName());
     InputStream istream;

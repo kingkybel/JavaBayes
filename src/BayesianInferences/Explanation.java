@@ -6,7 +6,7 @@ import BayesianNetworks.ProbabilityVariable;
 import java.io.PrintStream;
 import java.util.logging.Logger;
 
-/* 
+/*
  * There are two cases to be considered:
  *     EXPLANATION or FULL_EXPLANATION
  * the only difference is which variables are considered
@@ -28,8 +28,9 @@ import java.util.logging.Logger;
  */
 public class Explanation
 {
-    private static final Logger LOG =
-    Logger.getLogger(Explanation.class.getName());
+
+    private static final String CLASS_NAME = Explanation.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     BayesNet bn;
     BucketTree bucketTree;
@@ -72,8 +73,8 @@ public class Explanation
     public void explanation(int explanationStatus)
     {
         bucketTree = new BucketTree(new Ordering(bn, (String) null,
-                                                  explanationStatus,
-                                                  Ordering.MINIMUM_WEIGHT));
+                                                 explanationStatus,
+                                                 Ordering.MINIMUM_WEIGHT));
         doInferenceFromBucketTree();
     }
 

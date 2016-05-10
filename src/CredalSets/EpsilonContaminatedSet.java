@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 public class EpsilonContaminatedSet
         extends FinitelyGeneratedSet
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(EpsilonContaminatedSet.class.
             getName());
 

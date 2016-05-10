@@ -40,8 +40,8 @@ public class ScrollingPanel extends Panel
 
     static final int VIRTUAL_WIDTH = 10000;
     static final int VIRTUAL_HEIGHT = 10000;
-    private static final Logger LOG =
-                                Logger.getLogger(ScrollingPanel.class.getName());
+    private static final String CLASS_NAME = ScrollingPanel.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     Scrollbar horizontal;
     Scrollbar vertical;
 

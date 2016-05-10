@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class ConstantDensityBoundedSet
         extends TwoMonotoneCapacity
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(
             ConstantDensityBoundedSet.class.
                     getName());

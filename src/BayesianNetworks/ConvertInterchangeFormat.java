@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  */
 public class ConvertInterchangeFormat
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(ConvertInterchangeFormat.class.
             getName());
 

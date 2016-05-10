@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  */
 public class DiscreteVariable
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(DiscreteVariable.class.
             getName());
 

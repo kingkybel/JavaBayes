@@ -18,8 +18,9 @@ public class ConstantDensityRatioSet
     private final static int UPPER_EXPECTATION_BRACKET = 1;
 
     private final static double ACCURACY = 10E-8;
-    private static final Logger LOG =
-    Logger.getLogger(ConstantDensityRatioSet.class.getName());
+    private static final String CLASS_NAME =
+                                ConstantDensityRatioSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private double k;
     // Auxiliary variable that holds a discrete function for bracketing.
     private DiscreteFunction temporaryDiscreteFunction;
@@ -27,6 +28,7 @@ public class ConstantDensityRatioSet
     /**
      * Constructor for an ConstantDensityRatioSet ProbabilityFunction object and
      * given constant.
+     *
      * @param pf
      * @param kk
      */
@@ -50,14 +52,15 @@ public class ConstantDensityRatioSet
     /**
      * Perform calculation of marginal posterior distributions for. a density
      * ratio global neighborhood.
-     * @return 
+     *
+     * @return
      */
     public ProbabilityFunction posteriorMarginal()
     {
         double lowerValues[] = new double[values.length];
         double upperValues[] = new double[values.length];
 
-     // Check the possibility that the query has an observed variable,
+        // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
             (((ProbabilityVariable) variables[0]).isObserved() == true))
@@ -95,15 +98,16 @@ public class ConstantDensityRatioSet
 
     /**
      * Perform calculation of expected value for density ratio.
+     *
      * @param df
-     * @return 
+     * @return
      */
     public double[] expectedValues(DiscreteFunction df)
     {
         Bracketing bracket = new Bracketing();
         double results[] = new double[2];
 
-     // Check the possibility that the query has an observed variable,
+        // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
             (((ProbabilityVariable) variables[0]).isObserved() == true))
@@ -155,8 +159,9 @@ public class ConstantDensityRatioSet
      * Perform calculation of posterior expected value. Assumes that the
      * probability values are not normalized; probability values are p(x, e)
      * where e is the fixed evidence
+     *
      * @param df
-     * @return 
+     * @return
      */
     public double[] posteriorExpectedValues(DiscreteFunction df)
     {

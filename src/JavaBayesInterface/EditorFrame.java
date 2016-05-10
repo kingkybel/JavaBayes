@@ -48,7 +48,6 @@ import java.util.logging.Logger;
 public class EditorFrame extends Frame
 {
 
-
     // Constants
     /**
      *
@@ -74,7 +73,6 @@ public class EditorFrame extends Frame
      *
      */
     final static public int ALGORITHM_BUCKET_TREE = 1;
-
 
     // constants for caption text of all buttons
     /**
@@ -116,8 +114,8 @@ public class EditorFrame extends Frame
      *
      */
     public static final String editNetworkLabel = "Edit Network";
-    private static final Logger LOG =
-    Logger.getLogger(EditorFrame.class.getName());
+    private static final String CLASS_NAME = EditorFrame.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     JavaBayes jb;
     Panel cmdPanel;
     Panel editPanel;
@@ -457,17 +455,17 @@ public class EditorFrame extends Frame
      * @param ig
      */
     protected void printMarginal(PrintStream pstream, InferenceGraph ig,
-                                  String queriedVariable)
+                                 String queriedVariable)
     {
         if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
             ig.printMarginal(pstream, queriedVariable, false,
-                              whatToShowBucketTreeState);
+                             whatToShowBucketTreeState);
         }
         else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
             ig.printMarginal(pstream, queriedVariable, true,
-                              whatToShowBucketTreeState);
+                             whatToShowBucketTreeState);
         }
         else
         {
@@ -483,17 +481,17 @@ public class EditorFrame extends Frame
      * @param ig
      */
     protected void printExpectation(PrintStream pstream, InferenceGraph ig,
-                                     String queriedVariable)
+                                    String queriedVariable)
     {
         if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
             ig.printExpectation(pstream, queriedVariable, false,
-                                 whatToShowBucketTreeState);
+                                whatToShowBucketTreeState);
         }
         else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
             ig.printExpectation(pstream, queriedVariable, true,
-                                 whatToShowBucketTreeState);
+                                whatToShowBucketTreeState);
         }
         else
         {
@@ -531,7 +529,7 @@ public class EditorFrame extends Frame
      * @param ig
      */
     protected void printSensitivityAnalysis(PrintStream pstream,
-                                              InferenceGraph ig)
+                                            InferenceGraph ig)
     {
         ig.printSensitivityAnalysis(pstream);
     }

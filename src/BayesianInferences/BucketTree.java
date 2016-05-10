@@ -17,8 +17,8 @@ public class BucketTree
 
     static final int MAX_OUT = 2;
     static final int SUM_OUT = 1;
-    private static final Logger LOG =
-    Logger.getLogger(BucketTree.class.getName());
+    private static final String CLASS_NAME = BucketTree.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     Bucket bucketTree[]; // Array of Bucket objects.
     BayesNet bn; // BayesNet that contains the variables.
 
@@ -34,6 +34,7 @@ public class BucketTree
 
     /**
      * Simple constructor for BucketTree.
+     *
      * @param ord
      */
     public BucketTree(Ordering ord)
@@ -44,6 +45,7 @@ public class BucketTree
     /**
      * Constructor for BucketTree. Does the whole initialization; it should be
      * the only method that deals with symbolic names for variables.
+     *
      * @param ord
      * @param dpc
      */
@@ -125,7 +127,7 @@ public class BucketTree
      */
     private ProbabilityFunction
             transformToProbabilityFunction(BayesNet bn,
-                                              ProbabilityVariable pv)
+                                           ProbabilityVariable pv)
     {
         ProbabilityFunction pf = new ProbabilityFunction(bn, 1,
                                                          pv.numberValues(),
@@ -177,7 +179,7 @@ public class BucketTree
         for (i = 0; i < n; i++)
         {
             newPf.setVariable(i, bn.
-                                getProbabilityVariable(joinedIndexes[i]));
+                              getProbabilityVariable(joinedIndexes[i]));
         }
 
         // Loop through the values
@@ -194,7 +196,7 @@ public class BucketTree
      * evidence.
      */
     private int buildEvidenceMarkers(ProbabilityFunction pf,
-                                       boolean markers[])
+                                     boolean markers[])
     {
         int i, n;
         // Initialize the markers
@@ -231,7 +233,7 @@ public class BucketTree
      * Obtain the values for the evidence plus function.
      */
     private void checkEvidenceLoop(ProbabilityFunction newPf,
-                                     ProbabilityFunction pf)
+                                   ProbabilityFunction pf)
     {
         int i, j, k, l, m, p, last, current;
         int indexes[] = new int[bn.numberVariables()];
@@ -369,7 +371,7 @@ public class BucketTree
             // Update the separator.
             bucketTree[i].separator = bucketTree[i].child.cluster.sumOut(bn.
             getProbabilityVariables(),
-                                                                            markNonConditioning);
+                                                                         markNonConditioning);
 
             // Compute cluster using new separator (note that if separator
             // is null, the cluster had all variables already processed).
@@ -381,7 +383,7 @@ public class BucketTree
                 // Now combine the cluster and the separator.
                 bucketTree[i].cluster =
                 bucketTree[i].cluster.multiply(bn.getProbabilityVariables(),
-                                                bucketTree[i].separator);
+                                               bucketTree[i].separator);
             }
 
             // Mark the Bucket as DISTRIBUTED.
@@ -444,7 +446,7 @@ public class BucketTree
             // Process the bucket
             j = backDf.
             getPositionFromIndexes(bn.getProbabilityVariables(),
-                                      backwardMarkers);
+                                   backwardMarkers);
             backwardMarkers[bucketTree[i].variable.getIndex()] =
             (int) (backDf.getValue(j) + 0.5);
         }
@@ -543,6 +545,7 @@ public class BucketTree
 
     /**
      * Print method for BucketTree.
+     *
      * @param out
      */
     public void print(PrintStream out)
@@ -559,7 +562,8 @@ public class BucketTree
 
     /**
      * Get the normalized result for the BucketTree.
-     * @return 
+     *
+     * @return
      */
     public ProbabilityFunction getNormalizedResult()
     {
@@ -574,7 +578,8 @@ public class BucketTree
     /* *************************************************************** */
     /**
      * Get the unnormalizedResult for the BucketTree.
-     * @return 
+     *
+     * @return
      */
     public DiscreteFunction getUnnormalizedResult()
     {

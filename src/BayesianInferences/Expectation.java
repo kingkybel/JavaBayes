@@ -18,8 +18,8 @@ public class Expectation
     static final int SECOND_MOMENT = 2;
     static final int THIRD_MOMENT = 3;
     static final int FOURTH_MOMENT = 4;
-    private static final Logger LOG =
-    Logger.getLogger(Expectation.class.getName());
+    private static final String CLASS_NAME = Expectation.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -221,7 +221,7 @@ public class Expectation
      * requested moment.
      */
     private DiscreteFunction constructValues(ProbabilityVariable pv,
-                                              int momentOrder)
+                                             int momentOrder)
     {
         DiscreteFunction df = pv.getNumericValues();
         if (momentOrder > 1)

@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class IFProbabilityVariable
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(IFProbabilityVariable.class.
             getName());
 

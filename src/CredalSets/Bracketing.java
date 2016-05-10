@@ -35,8 +35,8 @@ class Bracketing
     private final static int TOO_MANY_BISECTIONS = 0;
     private final static int EXACT_ROOT_FOUND = 1;
     private final static int APPROXIMATE_ROOT_FOUND = 2;
-    private static final Logger LOG =
-    Logger.getLogger(Bracketing.class.getName());
+    private static final String CLASS_NAME = Bracketing.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     int status;
 
     /**

@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class QBProbabilityFunction extends ProbabilityFunction
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(QBProbabilityFunction.class.
             getName());
 

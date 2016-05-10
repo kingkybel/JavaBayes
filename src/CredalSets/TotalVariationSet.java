@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class TotalVariationSet
         extends TwoMonotoneCapacity
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(TotalVariationSet.class.
             getName());
 

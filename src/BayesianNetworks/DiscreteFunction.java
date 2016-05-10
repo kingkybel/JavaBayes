@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class DiscreteFunction
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(DiscreteFunction.class.
             getName());
 

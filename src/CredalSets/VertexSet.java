@@ -39,8 +39,9 @@ import java.util.logging.Logger;
 public final class VertexSet
         extends FinitelyGeneratedSet
 {
-    private static final Logger LOG =
-    Logger.getLogger(VertexSet.class.getName());
+
+    private static final String CLASS_NAME = VertexSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Variable that indicates which extreme point is active
     ProbabilityVariable auxiliaryVariable;
@@ -263,7 +264,7 @@ public final class VertexSet
 
         // Now evaluate
         int position = getPositionFromIndexes(bn.getProbabilityVariables(),
-                                                 valueIndexes);
+                                              valueIndexes);
         return (extremePoints[indexExtremePoint][position]);
     }
 
@@ -275,7 +276,7 @@ public final class VertexSet
      * @param val
      */
     public void setValue(String variableValuePairs[][], double val,
-                          int indexExtremePoint)
+                         int indexExtremePoint)
     {
         int index;
         ProbabilityVariable pv;
@@ -293,7 +294,7 @@ public final class VertexSet
 
         // Get the position of the value in the array of values
         int pos = getPositionFromIndexes(bn.getProbabilityVariables(),
-                                            valueIndexes);
+                                         valueIndexes);
         // Set the value.
         extremePoints[indexExtremePoint][pos] = val;
         composeValues();

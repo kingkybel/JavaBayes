@@ -32,8 +32,9 @@ import java.util.logging.Logger;
  */
 public class IFProbabilityEntry
 {
-    private static final Logger LOG =
-    Logger.getLogger(IFProbabilityEntry.class.getName());
+
+    private static final String CLASS_NAME = IFProbabilityEntry.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String values[];
     double entries[];

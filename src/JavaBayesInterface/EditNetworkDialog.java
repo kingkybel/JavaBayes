@@ -72,8 +72,8 @@ class EditNetworkDialog extends Dialog
                                 "Global neighborhood parameter:";
     private final static String okLabel = "Apply";
     private final static String dismissLabel = "Dismiss";
-    private static final Logger LOG =
-    Logger.getLogger(EditNetworkDialog.class.getName());
+    private static final String CLASS_NAME = EditNetworkDialog.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // The InferenceGraph object that contains the network.
     InferenceGraph ig;
     // Variables that hold the properties in the dialog.
@@ -113,7 +113,7 @@ class EditNetworkDialog extends Dialog
         super(parent, dialogTitle, true);
         this.ig = iG;
 
-    	// Compose the whole frame.
+        // Compose the whole frame.
         // Panel for the name.
         np = new Panel();
         np.setLayout(new BorderLayout());
@@ -248,7 +248,7 @@ class EditNetworkDialog extends Dialog
 
         // Fill and store network properties
         propertyManager = new PropertyManager(ig.getNetworkProperties(),
-                                               networkPropertiesText);
+                                              networkPropertiesText);
 
         // Set global neighborhood
         switch (ig.getGlobalNeighborhoodType())

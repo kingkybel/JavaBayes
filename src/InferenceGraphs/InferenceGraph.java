@@ -98,8 +98,8 @@ public final class InferenceGraph
      *
      */
     public final static int TOTAL_VARIATION = QuasiBayesNet.TOTAL_VARIATION;
-    private static final Logger LOG =
-                                Logger.getLogger(InferenceGraph.class.getName());
+    private static final String CLASS_NAME = InferenceGraph.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     QuasiBayesNet qbn;
     QBInference qbi;
     QBExpectation qbe;
@@ -470,14 +470,14 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queriedVariable    indicates the variable of interest.
+     * @param queriedVariable   indicates the variable of interest.
      * @param showBucketTree    determines whether or not to present a
-     *                            description of the BucketTree.
+     *                          description of the BucketTree.
      * @param doComputeClusters
      */
     public void printMarginal(PrintStream pstream, String queriedVariable,
-                               boolean doComputeClusters,
-                               boolean showBucketTree)
+                              boolean doComputeClusters,
+                              boolean showBucketTree)
     {
         if ((doComputeClusters == false) || (qbi == null) ||
             (qbi.areClustersProduced() == false))
@@ -501,14 +501,14 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queriedVariable    indicates the variable of interest.
+     * @param queriedVariable   indicates the variable of interest.
      * @param showBucketTree    determines whether or not to present a
-     *                            description of the BucketTree.
+     *                          description of the BucketTree.
      * @param doComputeClusters
      */
     public void printExpectation(PrintStream pstream, String queriedVariable,
-                                  boolean doComputeClusters,
-                                  boolean showBucketTree)
+                                 boolean doComputeClusters,
+                                 boolean showBucketTree)
     {
         if ((doComputeClusters == false) || (qbe == null) ||
             (qbi.areClustersProduced() == false))
@@ -532,8 +532,8 @@ public final class InferenceGraph
      * given PrintStream.
      *
      * @param pstream
-     * @param showBucketTree determines whether or not to present a
-     *                         description of the BucketTree.
+     * @param showBucketTree determines whether or not to present a description
+     *                       of the BucketTree.
      */
     public void printExplanation(PrintStream pstream, boolean showBucketTree)
     {
@@ -547,11 +547,11 @@ public final class InferenceGraph
      * the given PrintStream.
      *
      * @param pstream
-     * @param showBucketTree determines whether or not to present a
-     *                         description of the BucketTree.
+     * @param showBucketTree determines whether or not to present a description
+     *                       of the BucketTree.
      */
     public void printFullExplanation(PrintStream pstream,
-                                       boolean showBucketTree)
+                                     boolean showBucketTree)
     {
         Explanation fex = new Explanation(getBayesNet());
         fex.fullExplanation();
@@ -683,7 +683,7 @@ public final class InferenceGraph
      * @return
      */
     public boolean createArc(InferenceGraphNode parent,
-                              InferenceGraphNode child)
+                             InferenceGraphNode child)
     {
         // Check whether the given parent is already a parent of the
         // given child.
@@ -750,7 +750,7 @@ public final class InferenceGraph
      * @param child
      */
     public void deleteArc(InferenceGraphNode parent,
-                           InferenceGraphNode child)
+                          InferenceGraphNode child)
     {
         // First remove child into the children of parent
         parent.children.remove(child);

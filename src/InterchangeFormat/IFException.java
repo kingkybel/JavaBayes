@@ -33,8 +33,9 @@ import java.util.logging.Logger;
 public class IFException extends Exception
 {
 
-    private static final Logger LOG =
-                                Logger.getLogger(IFException.class.getName());
+    private static final String CLASS_NAME = IFException.class.getName();
+
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *

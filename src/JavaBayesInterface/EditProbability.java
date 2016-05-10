@@ -33,9 +33,9 @@ import java.util.logging.Logger;
 
 class EditProbability extends EditFunctionPanel
 {
-    private static final Logger LOG =
-    Logger.
-            getLogger(EditProbability.class.getName());
+
+    private static final String CLASS_NAME = EditProbability.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     EditFunctionDialog parentDialog;
 
@@ -77,8 +77,8 @@ class EditProbability extends EditFunctionPanel
 
         // Construct the table of probability values.
         probabilityTable = new FunctionTablePanel(allVariableNames,
-                                                   allVariableValues,
-                                                   probabilityValues);
+                                                  allVariableValues,
+                                                  probabilityValues);
 
         // Set the final layout
         setLayout(new BorderLayout());

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
 {
-    private static final Logger LOG =
+    private static final Logger LOGGER =
     Logger.getLogger(
             QBConvertInterchangeFormat.class.
                     getName());

@@ -34,8 +34,9 @@ import java.util.logging.Logger;
  */
 public class GeneralizedChoquetIntegral
 {
+
     private static final String CLASS_NAME =
-    GeneralizedChoquetIntegral.class.getName();
+                                GeneralizedChoquetIntegral.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double results[];
@@ -70,8 +71,8 @@ public class GeneralizedChoquetIntegral
         {
             dfPositive[i - 1] = ((Double) (positive.get(i))).
             doubleValue() -
-                                 ((Double) (positive.get(i - 1))).
-                                 doubleValue();
+                                ((Double) (positive.get(i - 1))).
+                                doubleValue();
         }
 
         // Create an array of value differences from the negative side
@@ -80,8 +81,8 @@ public class GeneralizedChoquetIntegral
         {
             dfNegative[i - 1] = ((Double) (negative.get(i))).
             doubleValue() -
-                                 ((Double) (negative.get(i - 1))).
-                                 doubleValue();
+                                ((Double) (negative.get(i - 1))).
+                                doubleValue();
         }
 
         // Create arrays of lower and upper probability
@@ -198,8 +199,8 @@ public class GeneralizedChoquetIntegral
      * sortedValue[i] }
      */
     private void boundPositive(TwoMonotoneCapacity tmc,
-                                DiscreteFunction df, ArrayList sortedValues,
-                                double lps[], double ups[])
+                               DiscreteFunction df, ArrayList sortedValues,
+                               double lps[], double ups[])
     {
         int i, j;
         double lp;
@@ -232,8 +233,8 @@ public class GeneralizedChoquetIntegral
      * sortedValue[i] }
      */
     private void boundNegative(TwoMonotoneCapacity tmc,
-                                DiscreteFunction df, ArrayList sortedValues,
-                                double lps[], double ups[])
+                               DiscreteFunction df, ArrayList sortedValues,
+                               double lps[], double ups[])
     {
         int i, j;
         double lp;

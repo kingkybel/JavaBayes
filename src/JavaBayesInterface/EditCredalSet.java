@@ -44,8 +44,8 @@ class EditCredalSet extends EditFunctionPanel
     private static final String credalSet = "Index of extreme distribution:";
     private static final String numberExtremePointsLabel =
                                 "Number of extreme points:";
-    private static final Logger LOG =
-    Logger.getLogger(EditCredalSet.class.getName());
+    private static final String CLASS_NAME = EditCredalSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // The graph and node that contain the probability function.
     private InferenceGraph ig;
     private InferenceGraphNode node;
@@ -86,8 +86,8 @@ class EditCredalSet extends EditFunctionPanel
         // Construct the table of probability values.
         indexExtremePoint = 0;
         probabilityTable = new FunctionTablePanel(allVariableNames,
-                                                   allVariableValues,
-                                                   allProbabilityValues[indexExtremePoint]);
+                                                  allVariableValues,
+                                                  allProbabilityValues[indexExtremePoint]);
 
         // Credal set panel.
         generateCredalSetPanel();
@@ -174,7 +174,7 @@ class EditCredalSet extends EditFunctionPanel
                 if (numberExtremePoints > oldNumberExtremePoints)
                 {
                     for (k = oldNumberExtremePoints; k <
-                                                        numberExtremePoints;
+                                                     numberExtremePoints;
                          k++)
                     {
                         credalSetChoice.addItem(String.valueOf(k));

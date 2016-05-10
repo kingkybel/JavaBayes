@@ -73,8 +73,8 @@ class EditVariableDialog extends Dialog
     private final static String editFunctionLabel = "Edit function";
     private final static String okLabel = "Apply";
     private final static String dismissLabel = "Dismiss";
-    private static final Logger LOG =
-    Logger.getLogger(EditVariableDialog.class.getName());
+    private static final String CLASS_NAME = EditVariableDialog.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // Network panel, used to repaint screen and access dialogs.
     NetworkPanel npan;
     // The InferenceGraph and InferenceGraphNode objects
@@ -172,9 +172,9 @@ class EditVariableDialog extends Dialog
         qbp.setLayout(new GridLayout(2, 1));
         functionTypes = new CheckboxGroup();
         noLocalCredalSetType = new Checkbox(noLocalCredalSetLabel,
-                                                functionTypes, true);
+                                            functionTypes, true);
         localCredalSetType = new Checkbox(localCredalSetLabel,
-                                             functionTypes, false);
+                                          functionTypes, false);
 
         qbp.add(noLocalCredalSetType);
         qbp.add(localCredalSetType);

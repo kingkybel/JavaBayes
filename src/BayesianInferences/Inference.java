@@ -28,8 +28,8 @@ public class Inference
      *
      */
     protected static final int FULL_EXPLANATION = 2;
-    private static final Logger LOG =
-    Logger.getLogger(Inference.class.getName());
+    private static final String CLASS_NAME = Inference.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -65,13 +65,11 @@ public class Inference
     /*
      * Constructor for an Inference.
      */
-
     /**
      *
      * @param bN
      * @param dpc
      */
-    
     public Inference(BayesNet bN, boolean dpc)
     {
         bn = bN;
@@ -90,6 +88,7 @@ public class Inference
 
     /**
      * Calculation of marginal posterior distribution for an arbitrary BayesNet.
+     *
      * @param queriedVariableName
      */
     protected void inference(String queriedVariableName)
@@ -118,7 +117,7 @@ public class Inference
                     {
                         if (buck ==
                             bucketTree.bucketTree[bucketTree.bucketTree.length -
-                                                    1])
+                                                  1])
                         {
                             bucketTree.reduce(); // If Bucket is the last bucket, then just reduce;
                         }
@@ -153,6 +152,7 @@ public class Inference
     /**
      * Calculation of marginal posterior distribution using a given ordering,
      * and an arbitrary BayesNet.
+     *
      * @param order
      */
     protected void inference(String order[])
@@ -207,6 +207,7 @@ public class Inference
 
     /**
      * Print the Inference.
+     *
      * @param out
      */
     public void print(PrintStream out)
@@ -216,6 +217,7 @@ public class Inference
 
     /**
      * Print the Inference.
+     *
      * @param shouldPrintBucketTree
      */
     public void print(boolean shouldPrintBucketTree)
@@ -225,6 +227,7 @@ public class Inference
 
     /**
      * Print the Inference.
+     *
      * @param out
      * @param shouldPrintBucketTree
      */
@@ -256,7 +259,8 @@ public class Inference
     /* ************************************************************* */
     /**
      * Get the BucketTree.
-     * @return 
+     *
+     * @return
      */
     public BucketTree getBucketTree()
     {
@@ -265,7 +269,8 @@ public class Inference
 
     /**
      * Get the BayesNet.
-     * @return 
+     *
+     * @return
      */
     public BayesNet getBayesNet()
     {
@@ -274,7 +279,8 @@ public class Inference
 
     /**
      * Get the current result of the Inference.
-     * @return 
+     *
+     * @return
      */
     public ProbabilityFunction getResult()
     {
@@ -283,7 +289,8 @@ public class Inference
 
     /**
      * Get the status of the clustering process.
-     * @return 
+     *
+     * @return
      */
     public boolean areClustersProduced()
     {

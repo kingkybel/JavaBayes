@@ -26,8 +26,8 @@ class EditFunctionDialog extends Dialog
     private final static String okLabel = "Apply";
     private final static String dialogTitle = "Edit Function";
     private final static String dismissLabel = "Dismiss";
-    private static final Logger LOG =
-    Logger.getLogger(EditFunctionDialog.class.getName());
+    private static final String CLASS_NAME = EditFunctionDialog.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // Variables used to construct the dialog.
     Frame parent;
     EditFunctionPanel efp;
