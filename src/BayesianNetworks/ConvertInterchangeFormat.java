@@ -53,7 +53,7 @@ public class ConvertInterchangeFormat
      */
     public ConvertInterchangeFormat(InterchangeFormat interchangeFmt)
     {
-        this.interchangeFmt = interchangeFmt;
+        this.interchangeFmt = new InterchangeFormat(interchangeFmt);
     }
 
     /**
@@ -63,7 +63,7 @@ public class ConvertInterchangeFormat
      */
     public String getName()
     {
-        IFBayesNet ifbn = interchangeFmt.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
             return (null);
@@ -78,7 +78,7 @@ public class ConvertInterchangeFormat
      */
     public ArrayList getProperties()
     {
-        IFBayesNet ifbn = interchangeFmt.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
             return (null);
@@ -98,7 +98,7 @@ public class ConvertInterchangeFormat
     {
         int i;
         IFProbabilityVariable ipv;
-        IFBayesNet ifbn = interchangeFmt.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
             return (null);
@@ -136,7 +136,7 @@ public class ConvertInterchangeFormat
     {
         int i;
         IFProbabilityFunction upf;
-        IFBayesNet ifbn = interchangeFmt.getIfbn();
+        IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
             return (null);

@@ -54,7 +54,7 @@ public class BIFv015 extends InterchangeFormat
      * Retrieve the Bayes net interface.
      * @return the interface
      */
-    public IFBayesNet get_ifbn()
+    public IFBayesNet getBayesNetFromInterchangeFmt()
     {
         return(ifbn);
     }

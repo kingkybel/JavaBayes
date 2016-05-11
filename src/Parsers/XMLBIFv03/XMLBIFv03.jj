@@ -57,9 +57,9 @@ public class XMLBIFv03 extends InterchangeFormat
     static final int UTILITY_DEFINE = 3;
 
     /**
-     * Retrieve the bayes net interface.
+     * Retrieve the Bayes net from the interchange format.
      */
-    public IFBayesNet get_ifbn()
+    public IFBayesNet getBayesNetFromInterchangeFmt()
     {
         return(ifbn);
     }

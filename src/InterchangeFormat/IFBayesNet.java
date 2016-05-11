@@ -39,21 +39,21 @@ public class IFBayesNet
 
     String name;
     ArrayList properties;
-    ArrayList probVars;
-    ArrayList upfs;
+    ArrayList<IFProbabilityVariable> probVars;
+    ArrayList<IFProbabilityFunction> probFuncs;
 
     /**
      * Basic constructor.
      *
-     * @param n
-     * @param p
+     * @param name
+     * @param properties
      */
-    public IFBayesNet(String n, ArrayList p)
+    public IFBayesNet(String name, ArrayList properties)
     {
-        name = n;
-        properties = p;
-        probVars = new ArrayList();
-        upfs = new ArrayList();
+        this.name = name;
+        this.properties = properties;
+        probVars = new ArrayList<>();
+        probFuncs = new ArrayList<>();
     }
 
     /**
@@ -89,7 +89,7 @@ public class IFBayesNet
      */
     public ArrayList getUpfs()
     {
-        return (upfs);
+        return (probFuncs);
     }
 
     /**
@@ -106,11 +106,11 @@ public class IFBayesNet
      * Method that adds a IFProbabilityFunction object to the vector of
      * functions.
      *
-     * @param upf
+     * @param probFunc
      */
-    public void add(IFProbabilityFunction upf)
+    public void add(IFProbabilityFunction probFunc)
     {
-        upfs.add(upf);
+        probFuncs.add(probFunc);
     }
 
     /**
@@ -120,9 +120,9 @@ public class IFBayesNet
      */
     public void invertProbabilityTables()
     {
-        for (Object e : upfs)
+        for (IFProbabilityFunction probFunc : probFuncs)
         {
-            ((IFProbabilityFunction) (e)).invertTables(this);
+            probFunc.invertTables(this);
         }
     }
 }

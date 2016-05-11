@@ -52,6 +52,14 @@ public class InterchangeFormat
     {
     }
 
+    public InterchangeFormat(InterchangeFormat rhs)
+    {
+        xmlBif03 = rhs.xmlBif03;
+        xmlBif02 = rhs.xmlBif02;
+        bif015 = rhs.bif015;
+        bif01 = rhs.bif01;
+    }
+
     /**
      *
      * @param is
@@ -92,11 +100,12 @@ public class InterchangeFormat
             errorMessages.append("\nNo support for reset operation.");
         }
 
-        xmlBif03 = new Parsers.XMLBIFv03.XMLBIFv03(istream);
         try
         {
+            xmlBif03 = new Parsers.XMLBIFv03.XMLBIFv03(istream);
             xmlBif03.CompilationUnit();
             xmlBif03.invertProbabilityTables();
+            return;
         }
         catch (Throwable e4)
         { // Catch anything!
@@ -110,110 +119,86 @@ public class InterchangeFormat
                 errorMessages.append("\n\nReset not allowed!");
             }
             errorMessages.append("Input stream reset!\n");
-            // Note that the following lines are within an enclosing catch block.
+            xmlBif03 = null;
+        }
+
+        try
+        {
             xmlBif02 = new Parsers.XMLBIFv02.XMLBIFv02(istream);
+            xmlBif02.CompilationUnit();
+            return;
+        }
+        catch (Throwable e3)
+        { // Catch anything!
+            errorMessages.append(e3);
             try
             {
-                xmlBif02.CompilationUnit();
+                istream.reset();
             }
-            catch (Throwable e3)
-            { // Catch anything!
-                errorMessages.append(e3);
-                try
-                {
-                    istream.reset();
-                }
-                catch (Exception e)
-                {
-                    errorMessages.append("\n\nReset not allowed!");
-                }
-                errorMessages.append("Input stream reset!\n");
-                // Note that the following lines are within an enclosing catch block.
-                bif015 = new Parsers.BIFv015.BIFv015(istream);
-                try
-                {
-                    bif015.CompilationUnit();
-                }
-                catch (Throwable e2)
-                { // Catch anything!
-                    errorMessages.append(e2);
-                    try
-                    {
-                        istream.reset();
-                    }
-                    catch (Exception e)
-                    {
-                        errorMessages.append("\n\nReset not allowed!");
-                    }
-                    errorMessages.append("Input stream reset!\n");
-                    // Note that the following lines are within an enclosing catch block.
-                    bif01 = new Parsers.BIFv01.BIFv01(istream);
-                    try
-                    {
-                        bif01.CompilationUnit();
-                    }
-                    catch (Throwable e1)
-                    { // Catch anything!
-                        errorMessages.append(e1);
-                        throw new IFException(new String(errorMessages));
-                    } // End bif01
-                } // End bif015
-            } // End xmlBif02
-        } // End xmlBif03
+            catch (Exception e)
+            {
+                errorMessages.append("\n\nReset not allowed!");
+            }
+            errorMessages.append("Input stream reset!\n");
+            xmlBif02 = null;
+        }
+
+        try
+        {
+            bif015 = new Parsers.BIFv015.BIFv015(istream);
+            bif015.CompilationUnit();
+            return;
+        }
+        catch (Throwable e2)
+        { // Catch anything!
+            errorMessages.append(e2);
+            try
+            {
+                istream.reset();
+            }
+            catch (Exception e)
+            {
+                errorMessages.append("\n\nReset not allowed!");
+            }
+            errorMessages.append("Input stream reset!\n");
+            bif015 = null;
+        }
+        // Note that the following lines are within an enclosing catch block.
+        try
+        {
+            bif01 = new Parsers.BIFv01.BIFv01(istream);
+            bif01.CompilationUnit();
+        }
+        catch (Throwable e1)
+        { // Catch anything!
+            errorMessages.append(e1);
+            bif01 = null;
+            throw new IFException(new String(errorMessages));
+        }
     }
 
     /**
      *
      * @return
      */
-    public IFBayesNet getIfbn()
+    public IFBayesNet getBayesNetFromInterchangeFmt()
     {
-        IFBayesNet ifbn = null;
-
-        if (xmlBif03 != null)
+        if (xmlBif03 != null && xmlBif03.getBayesNetFromInterchangeFmt() != null)
         {
-            ifbn = xmlBif03.getIfbn();
+            return xmlBif03.getBayesNetFromInterchangeFmt();
         }
-        if (ifbn != null)
+        if (xmlBif02 != null && xmlBif02.getBayesNetFromInterchangeFmt() != null)
         {
-            return (ifbn);
+            return xmlBif02.getBayesNetFromInterchangeFmt();
         }
-        else
+        if (bif015 != null && bif015.getBayesNetFromInterchangeFmt() != null)
         {
-            // Note that the following lines are inside an else.
-            if (xmlBif02 != null)
-            {
-                ifbn = xmlBif02.getIfbn();
-            }
-            if (ifbn != null)
-            {
-                return (ifbn);
-            }
-            else
-            {
-                // Note that the following lines are inside an else.
-                if (bif015 != null)
-                {
-                    ifbn = bif015.getIfbn();
-                }
-                if (ifbn != null)
-                {
-                    return (ifbn);
-                }
-                else
-                {
-                    // Note that the following lines are inside an else.
-                    if (bif01 != null)
-                    {
-                        ifbn = bif01.getIfbn();
-                    }
-                    if (ifbn != null)
-                    {
-                        return (ifbn);
-                    }
-                } // End of bif01
-            } // End of bif015
-        } // End of xmlBif02
-        return (ifbn);
+            return bif015.getBayesNetFromInterchangeFmt();
+        }
+        if (bif01 != null && bif015.getBayesNetFromInterchangeFmt() != null)
+        {
+            return bif01.getBayesNetFromInterchangeFmt();
+        }
+        return (null);
     }
 }

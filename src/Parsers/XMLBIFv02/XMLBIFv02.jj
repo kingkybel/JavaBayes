@@ -52,7 +52,7 @@ public class XMLBIFv02 extends InterchangeFormat
     /**
      * Retrieve the bayes-net interface.
      */
-    public IFBayesNet get_ifbn()
+    public IFBayesNet getBayesNetFromInterchangeFmt()
     {
         return(ifbn);
     }

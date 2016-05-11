@@ -42,7 +42,8 @@ import InterchangeFormat.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/** Definition of the Interchange Format class and its
+/**
+ * Definition of the Interchange Format class and its
  * variables. The IFBayesNet ifbn contains the
  * parsed bayesian network.
  */
@@ -50,7 +51,7 @@ public class BIFv01 extends InterchangeFormat
 {
     IFBayesNet ifbn;
 
-    public IFBayesNet get_ifbn()
+    public IFBayesNet getBayesNetFromInterchangeFmt()
     {
         return(ifbn);
     }
@@ -138,7 +139,8 @@ TOKEN : /* Definition of a non-negative number */
 // THE INTERCHANGE FORMAT GRAMMAR STARTS HERE
 // ==========================================================
 
-/* Basic parsing function. First looks for a Network Declaration,
+/**
+ * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
  * in the vectors ifbn.pvs and ifbn.upfs.
@@ -167,7 +169,7 @@ void CompilationUnit() :
 void NetworkDeclaration() :
 {
     Token t;
-    ArrayList properties;
+    ArrayList<String> properties;
 }
 {
   <NETWORK> t=<WORD> properties = NetworkContent()
@@ -177,9 +179,9 @@ void NetworkDeclaration() :
 /**
  * Fill the network list of properties.
  */
-ArrayList NetworkContent() :
+ArrayList<String> NetworkContent() :
 {
-    ArrayList properties = new ArrayList();
+    ArrayList<String> properties = new ArrayList<String>();
     String s;
 }
 {
@@ -209,7 +211,7 @@ IFProbabilityVariable VariableContent(String name) :
 {
     String s;
     String values[] = null;
-    ArrayList properties = new ArrayList();
+    ArrayList<String> properties = new ArrayList<String>();
     IFProbabilityVariable pv = new IFProbabilityVariable();
 }
 {
@@ -245,7 +247,7 @@ String[] VariableValuesList() :
     int i;
     String value;
     String values[] = null;
-    ArrayList v = new ArrayList();
+    ArrayList<String> v = new ArrayList<String>();
     Iterator e;
 }
 {
@@ -307,7 +309,7 @@ void ProbabilityVariablesList(IFProbabilityFunction upf) :
     String variable_name;
     int cond = -1;
     String vs[];
-    ArrayList v_list = new ArrayList();
+    ArrayList<String> v_list = new ArrayList<String>();
 }
 {
    "("
@@ -333,7 +335,9 @@ void ProbabilityVariablesList(IFProbabilityFunction upf) :
         }
 }
 
-/* Find the conditional mark */
+/**
+ *  Find the conditional mark.
+ */
 int ConditionalMark(ArrayList v):
 {
 }
@@ -362,7 +366,7 @@ String ProbabilityVariableName() :
 void ProbabilityContent(IFProbabilityFunction upf) :
 {
     String s = null;
-    ArrayList properties = new ArrayList();
+    ArrayList<String> properties = new ArrayList<String>();
     IFProbabilityEntry e = null;
     ArrayList entries = new ArrayList();
     ArrayList defs = new ArrayList();
@@ -408,7 +412,7 @@ String[] ProbabilityValuesList() :
     Iterator e;
     String variable_name;
     String vs[];
-    ArrayList v_list = new ArrayList();
+    ArrayList<String> v_list = new ArrayList<String>();
 }
 {
    "("
@@ -461,7 +465,7 @@ double[] FloatingPointList() :
     int i;
     Double d;
     double ds[];
-    ArrayList d_list = new ArrayList();
+    ArrayList<Double> d_list = new ArrayList<Double>();
     Iterator e;
 }
 {
@@ -485,7 +489,8 @@ double[] FloatingPointList() :
         }
 }
 
-/** Pick a non-negative floating number; necessary to allow
+/**
+ * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
  */
@@ -500,7 +505,9 @@ Double FloatingPointNumber() :
         }
 }
 
-/* Property definition */
+/**
+ * Property definition.
+ */
 String Property() :
 {
     int k;

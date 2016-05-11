@@ -253,7 +253,7 @@ public class EditorFrame extends Frame
      */
     public boolean open(String filename)
     {
-        InferenceGraph ig;
+        InferenceGraph inferenceGraph;
 
         try
         {
@@ -264,7 +264,7 @@ public class EditorFrame extends Frame
             else
             {
                 jb.appendText("\nLoading " + filename + "\n");
-                ig = new InferenceGraph(filename);
+                inferenceGraph = new InferenceGraph(filename);
             }
         }
         catch (Exception e)
@@ -274,7 +274,7 @@ public class EditorFrame extends Frame
         }
 
         // Put the network into the graphical interface
-        setInferenceGraph(ig);
+        setInferenceGraph(inferenceGraph);
 
         return (true);
     }

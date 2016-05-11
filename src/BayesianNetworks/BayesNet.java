@@ -70,7 +70,7 @@ public class BayesNet
     /**
      *
      */
-    protected ArrayList properties;
+    protected ArrayList<String> properties = new ArrayList<>();
 
     /**
      *
