@@ -52,6 +52,10 @@ public class InterchangeFormat
     {
     }
 
+    /**
+     *
+     * @param rhs
+     */
     public InterchangeFormat(InterchangeFormat rhs)
     {
         xmlBif03 = rhs.xmlBif03;
@@ -81,7 +85,6 @@ public class InterchangeFormat
     /**
      *
      * @throws IFException
-     * @throws Parsers.BIFv01.ParseException
      */
     public void CompilationUnit() throws Exception
     {

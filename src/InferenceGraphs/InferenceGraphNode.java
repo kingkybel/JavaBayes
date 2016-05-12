@@ -44,11 +44,10 @@ import java.util.logging.Logger;
 public final class InferenceGraphNode
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(InferenceGraphNode.class.
-                                        getName());
+    private static final String CLASS_NAME = InferenceGraphNode.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    InferenceGraph ig;
+    InferenceGraph inferenceGraph;
 
     ProbabilityVariable probVar;
     ProbabilityFunction probFunc;
@@ -68,9 +67,9 @@ public final class InferenceGraphNode
     /**
      * Default constructor for an InferenceGraphNode.
      */
-    InferenceGraphNode(InferenceGraph iG, String name)
+    InferenceGraphNode(InferenceGraph inferenceGraph, String name)
     {
-        this(iG, name, new Point(100, 100));
+        this(inferenceGraph, name, new Point(100, 100));
     }
 
     /**
@@ -79,9 +78,11 @@ public final class InferenceGraphNode
      * necessarily attached to the current network in the InferenceGraph; no
      * parents nor children are defined for such a node.
      */
-    InferenceGraphNode(InferenceGraph iG, String name, Point position)
+    InferenceGraphNode(InferenceGraph inferenceGraph,
+                       String name,
+                       Point position)
     {
-        ig = iG;
+        this.inferenceGraph = inferenceGraph;
 
         // Initialize the variable
         probVar = new ProbabilityVariable(defaultInferenceGraphNodeBayesNet,
@@ -98,11 +99,11 @@ public final class InferenceGraphNode
      * Constructor for a InferenceGraphNode object. Note that parents and
      * children are not properly set here.
      */
-    InferenceGraphNode(InferenceGraph iG,
+    InferenceGraphNode(InferenceGraph inferenceGraph,
                        ProbabilityVariable probVar,
                        ProbabilityFunction probFunc)
     {
-        ig = iG;
+        this.inferenceGraph = inferenceGraph;
         this.probVar = probVar;
         this.probFunc = probFunc;
         pos = parsePosition(probVar);
@@ -112,12 +113,12 @@ public final class InferenceGraphNode
      * Constructor for a InferenceGraphNode object. Note that parents and
      * children are not properly set here.
      */
-    InferenceGraphNode(InferenceGraph iG,
+    InferenceGraphNode(InferenceGraph inferenceGraph,
                        ProbabilityVariable probVar,
                        ProbabilityFunction probFunc,
                        Point position)
     {
-        ig = iG;
+        this.inferenceGraph = inferenceGraph;
         this.probVar = probVar;
         this.probFunc = probFunc;
         pos = position;
@@ -354,20 +355,21 @@ public final class InferenceGraphNode
     /**
      * Set an array containing an extreme point of the credal set.
      *
-     * @param iep
-     * @param fv
+     * @param indexExtremePoint
+     * @param values
      */
-    public void setFunctionValues(int iep, double[] fv)
+    public void setFunctionValues(int indexExtremePoint,
+                                  double[] values)
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).setExtremePoint(iep, fv);
+            ((VertexSet) probFunc).setExtremePoint(indexExtremePoint, values);
         }
         else
         {
-            if (iep == 0)
+            if (indexExtremePoint == 0)
             {
-                probFunc.setValues(fv);
+                probFunc.setValues(values);
             }
         }
     }
@@ -399,19 +401,20 @@ public final class InferenceGraphNode
      *
      * @param variableValuePairs
      * @param indexExtremePoint
-     * @param val
+     * @param value
      */
-    public void setFunctionValue(String variableValuePairs[][], double val,
+    public void setFunctionValue(String variableValuePairs[][],
+                                 double value,
                                  int indexExtremePoint)
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).setValue(variableValuePairs, val,
+            ((VertexSet) probFunc).setValue(variableValuePairs, value,
                                             indexExtremePoint);
         }
         else
         {
-            probFunc.setValue(variableValuePairs, val);
+            probFunc.setValue(variableValuePairs, value);
         }
     }
 
@@ -428,11 +431,11 @@ public final class InferenceGraphNode
     /**
      * Set the name of the variable.
      *
-     * @param n
+     * @param name
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        probVar.setName(n);
+        probVar.setName(name);
     }
 
     /**
@@ -806,11 +809,11 @@ public final class InferenceGraphNode
     /**
      * Add a property from to function.
      *
-     * @param prop
+     * @param property
      */
-    public void addFunctionProperty(String prop)
+    public void addFunctionProperty(String property)
     {
-        probFunc.addProperty(prop);
+        probFunc.addProperty(property);
     }
 
 }

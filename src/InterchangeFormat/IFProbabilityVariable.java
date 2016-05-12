@@ -45,11 +45,11 @@ public class IFProbabilityVariable
 
     /**
      *
-     * @param n
+     * @param name
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        name = n;
+        this.name = name;
     }
 
     /**
@@ -63,11 +63,11 @@ public class IFProbabilityVariable
 
     /**
      *
-     * @param vs
+     * values vs
      */
-    public void setValues(String vs[])
+    public void setValues(String values[])
     {
-        values = vs;
+        this.values = values;
     }
 
     /**

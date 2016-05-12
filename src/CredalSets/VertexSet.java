@@ -56,24 +56,24 @@ public final class VertexSet
      *
      * @param bayesNet
      * @param properties
-     * @param probVars
-     * @param ep
+     * @param variables
+     * @param extremePoints
      */
     public VertexSet(BayesNet bayesNet,
-                     ProbabilityVariable probVars[],
-                     double ep[][],
+                     ProbabilityVariable variables[],
+                     double extremePoints[][],
                      ArrayList properties)
     {
         // Call the super constructor with ep[0].
-        super(bayesNet, probVars, ep[0], properties);
+        super(bayesNet, variables, extremePoints[0], properties);
 
         // Now replace ep[0] with a new array to avoid wrong
         // cross-references among arrays.
-        double[] vals = new double[ep[0].length];
+        double[] vals = new double[extremePoints[0].length];
         values = vals;
 
         // Update the extremePoints and the values.
-        extremePoints = ep;
+        this.extremePoints = extremePoints;
         composeValues();
     }
 
@@ -81,20 +81,24 @@ public final class VertexSet
      * Constructor for a VertexQBProbabilityFunction.
      *
      * @param bayesNet
-     * @param ep
+     * @param extremePoints
      * @param probVars
      * @param properties
-     * @param v
+     * @param values
      */
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable probVars[],
-                     double v[],
+                     double values[],
                      ArrayList properties,
-                     double ep[][])
+                     double extremePoints[][])
     {
-        super(bayesNet, probVars, v, (double[]) null, (double[]) null,
+        super(bayesNet,
+              probVars,
+              values,
+              (double[]) null,
+              (double[]) null,
               properties);
-        extremePoints = ep;
+        this.extremePoints = extremePoints;
     }
 
     /**
@@ -121,11 +125,11 @@ public final class VertexSet
      * object and new values.
      *
      * @param probFunc
-     * @param newValues
+     * @param values
      */
-    public VertexSet(ProbabilityFunction probFunc, double newValues[])
+    public VertexSet(ProbabilityFunction probFunc, double values[])
     {
-        super(probFunc, newValues);
+        super(probFunc, values);
         if (probFunc instanceof VertexSet)
         {
             extremePoints = ((VertexSet) probFunc).extremePoints;
@@ -141,9 +145,12 @@ public final class VertexSet
     /**
      * Put together all the values for the possible vertices of credal set and
      * create an auxiliary variable to indicate which vertex to consider There
-     * are three things to do: 1) Create an auxiliaryVariable with correct
-     * values. 2) Combine the values into a new array. 3) Insert the
-     * auxiliaryVariable into the variables array.
+     * are three things to do:
+     * <ol>
+     * <li>Create an auxiliaryVariable with correct values. </li>
+     * <li> Combine the values into a new array.</li>
+     * <li> Insert the auxiliaryVariable into the variables array.</li>
+     * </ol>
      *
      * @param transformedBn
      * @return
@@ -280,9 +287,10 @@ public final class VertexSet
      *
      * @param variableValuePairs
      * @param indexExtremePoint
-     * @param val
+     * @param value
      */
-    public void setValue(String variableValuePairs[][], double val,
+    public void setValue(String variableValuePairs[][],
+                         double value,
                          int indexExtremePoint)
     {
         int index;
@@ -303,7 +311,7 @@ public final class VertexSet
         int pos = getPositionFromIndexes(bayesNet.getProbabilityVariables(),
                                          valueIndexes);
         // Set the value.
-        extremePoints[indexExtremePoint][pos] = val;
+        extremePoints[indexExtremePoint][pos] = value;
         composeValues();
     }
 
@@ -458,11 +466,11 @@ public final class VertexSet
      * Set an extreme point of the credal set.
      *
      * @param index
-     * @param ep
+     * @param extremePoints
      */
-    public void setExtremePoint(int index, double ep[])
+    public void setExtremePoint(int index, double extremePoints[])
     {
-        extremePoints[index] = ep;
+        this.extremePoints[index] = extremePoints;
     }
 
     /**

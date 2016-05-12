@@ -37,7 +37,7 @@ import java.awt.Point;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -134,8 +134,8 @@ public final class InferenceGraph
      */
     public InferenceGraph(String filename) throws Exception
     {
-        qbn = new QuasiBayesNet(new java.io.DataInputStream(
-        new java.io.FileInputStream(filename)));
+        qbn = new QuasiBayesNet(
+        new java.io.DataInputStream(new java.io.FileInputStream(filename)));
         convertBayesNet();
     }
 
@@ -273,16 +273,16 @@ public final class InferenceGraph
         return (qbn);
     }
 
-    /*
+    /**
      * Generate a valid name for a new variable.
      */
-    private String generateName(int i)
+    private String generateName(int index)
     {
         InferenceGraphNode no;
 
         // generate names of the form a..z, a1..z1, a2..z2, etc.
-        char namec = (char) ((int) 'a' + i % 26);
-        int suffix = i / 26;
+        char namec = (char) ((int) 'a' + index % 26);
+        int suffix = index / 26;
         String name;
         if (suffix > 0)
         {
@@ -298,7 +298,7 @@ public final class InferenceGraph
             no = (InferenceGraphNode) (e);
             if (no.getName().equals(name))
             {
-                return (generateName(i + 1));
+                return (generateName(index + 1));
             }
         }
         return (name);
@@ -397,11 +397,11 @@ public final class InferenceGraph
     /**
      * Add a property to the network.
      *
-     * @param prop
+     * @param property
      */
-    public void addNetworkProperty(String prop)
+    public void addNetworkProperty(String property)
     {
-        qbn.addProperty(prop);
+        qbn.addProperty(property);
     }
 
     /**
@@ -465,11 +465,13 @@ public final class InferenceGraph
      *                          description of the BucketTree.
      * @param doComputeClusters
      */
-    public void printMarginal(PrintStream pstream, String queriedVariable,
+    public void printMarginal(PrintStream pstream,
+                              String queriedVariable,
                               boolean doComputeClusters,
                               boolean showBucketTree)
     {
-        if ((doComputeClusters == false) || (qbi == null) ||
+        if ((doComputeClusters == false) ||
+            (qbi == null) ||
             (qbi.areClustersProduced() == false))
         {
             qbi = new QBInference(getBayesNet(), doComputeClusters);
@@ -496,7 +498,8 @@ public final class InferenceGraph
      *                          description of the BucketTree.
      * @param doComputeClusters
      */
-    public void printExpectation(PrintStream pstream, String queriedVariable,
+    public void printExpectation(PrintStream pstream,
+                                 String queriedVariable,
                                  boolean doComputeClusters,
                                  boolean showBucketTree)
     {
@@ -601,7 +604,7 @@ public final class InferenceGraph
     }
 
     /**
-     * Print method for an InferenceGraph
+     * Print method for an InferenceGraph.
      */
     public void print()
     {
@@ -609,7 +612,7 @@ public final class InferenceGraph
     }
 
     /**
-     * Print method for an InferenceGraph
+     * Print method for an InferenceGraph.
      *
      * @param out
      */
@@ -640,7 +643,7 @@ public final class InferenceGraph
     }
 
     /**
-     * Get the number of variables in the network
+     * Get the number of variables in the network.
      *
      * @return
      */
@@ -775,7 +778,7 @@ public final class InferenceGraph
                              new InferenceGraphNode[nodes.size()];
 
         // Hashtable for efficient lookup of already listed nodes
-        Hashtable hashedNodes = new Hashtable();
+        HashMap hashedNodes = new HashMap();
 
         // Index of last node in listedNodes
         int lastListedNodeIndex = 0;

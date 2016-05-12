@@ -507,9 +507,9 @@ public class BucketTree
                 bucketTree[i].discreteFunctions.add(bucket.separator);
                 // Update the nonConditioning variables.
                 // Go through the non-conditioning variables in the inserted Bucket.
-                for (Object e : bucket.nonConditioningVariables)
+                for (DiscreteVariable probVar : bucket.nonConditioningVariables)
                 {
-                    bucketTree[i].nonConditioningVariables.add(e);
+                    bucketTree[i].nonConditioningVariables.add(probVar);
                 }
                 // Take the inserted Bucket probVar out by making it CONDITIONING:
                 // Must take the probVar out as it has been eliminated already.

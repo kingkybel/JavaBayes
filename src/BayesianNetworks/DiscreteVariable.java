@@ -34,9 +34,8 @@ import java.util.logging.Logger;
 public class DiscreteVariable
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(DiscreteVariable.class.
-                                        getName());
+    private static final String CLASS_NAME = DiscreteVariable.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -66,11 +65,11 @@ public class DiscreteVariable
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param nVb Name of the variable.
+     * @param name Name of the variable.
      */
-    public DiscreteVariable(String nVb)
+    public DiscreteVariable(String name)
     {
-        name = nVb;
+        this.name = name;
         index = BayesNet.INVALID_INDEX;
         values = null;
     }
@@ -78,27 +77,27 @@ public class DiscreteVariable
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param vb Name of the variable.
-     * @param vi Index of the variable.
-     * @param vl Values of the variable.
+     * @param name   Name of the variable.
+     * @param index  Index of the variable.
+     * @param values Values of the variable.
      */
-    public DiscreteVariable(String vb, int vi, String vl[])
+    public DiscreteVariable(String name, int index, String values[])
     {
-        name = vb;
-        index = vi;
-        values = vl;
+        this.name = name;
+        this.index = index;
+        this.values = values;
     }
 
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param dv DiscreteVariable that is copied into current DiscreteVariable.
+     * @param rhs DiscreteVariable that is copied into current DiscreteVariable.
      */
-    public DiscreteVariable(DiscreteVariable dv)
+    public DiscreteVariable(DiscreteVariable rhs)
     {
-        name = dv.name;
-        index = dv.index;
-        values = dv.values;
+        name = rhs.name;
+        index = rhs.index;
+        values = rhs.values;
     }
 
     /**
@@ -240,21 +239,22 @@ public class DiscreteVariable
     /**
      * Set the values of the current DiscreteVariable.
      *
-     * @param vals
+     * @param values
      */
-    public void setValues(String vals[])
+    public void setValues(String values[])
     {
-        values = vals;
+        this.values = values;
     }
 
     /**
      * Get a value of the current DiscreteVariable.
      *
-     * @param i Position of the value in the array of values.
+     * @param index Position of the value in the array of values.
+     *
      * @return
      */
-    public String getValue(int i)
+    public String getValue(int index)
     {
-        return (values[i]);
+        return (values[index]);
     }
 }

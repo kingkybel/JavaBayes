@@ -103,7 +103,7 @@ public class ConvertInterchangeFormat
         {
             return (null);
         }
-        ArrayList pvs = ifbn.getPvs();
+        ArrayList pvs = ifbn.getProbabilityVariables();
 
         ProbabilityVariable probabilityVariables[] =
                               new ProbabilityVariable[pvs.size()];
@@ -141,7 +141,7 @@ public class ConvertInterchangeFormat
         {
             return (null);
         }
-        ArrayList upfs = ifbn.getUpfs();
+        ArrayList upfs = ifbn.getProbabilityFunctions();
 
         ProbabilityFunction probabilityFunctions[] =
                               new ProbabilityFunction[upfs.size()];

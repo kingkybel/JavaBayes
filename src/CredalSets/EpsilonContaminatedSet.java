@@ -37,9 +37,9 @@ public class EpsilonContaminatedSet
         extends FinitelyGeneratedSet
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(EpsilonContaminatedSet.class.
-                                        getName());
+    private static final String CLASS_NAME =
+                                EpsilonContaminatedSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double epsilon;
 

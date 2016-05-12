@@ -34,7 +34,6 @@ public class IFException extends Exception
 {
 
     private static final String CLASS_NAME = IFException.class.getName();
-
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
@@ -47,10 +46,10 @@ public class IFException extends Exception
 
     /**
      *
-     * @param s
+     * @param message
      */
-    public IFException(String s)
+    public IFException(String message)
     {
-        super(s);
+        super(message);
     }
 }

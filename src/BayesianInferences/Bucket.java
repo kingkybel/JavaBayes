@@ -41,21 +41,35 @@ class Bucket
     static final int DISTRIBUTED = 2;
     private static final String CLASS_NAME = Bucket.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    BucketTree bucketTree; // BucketTree that holds the Bucket.
 
-    ProbabilityVariable probVar; // The Bucket probVar.
-    ArrayList discreteFunctions;    // The functions in the Bucket.
+    // BucketTree that holds the Bucket.
+    BucketTree bucketTree;
+
+    // The Bucket variable.
+    ProbabilityVariable probVar;
+
+    // The functions in the Bucket.
+    ArrayList<DiscreteFunction> discreteFunctions;
 
     DiscreteFunction backwardPointers; // The pointers used for maximization.
 
-    DiscreteFunction separator; // The function that is sent from a Bucket to another.
-    boolean isProducingClusters; // Whether or not to compute distributions for all variables in the Bucket.
-    DiscreteFunction cluster; // The distribution for all variables involved in the Bucket.
+    // The function that is sent from a Bucket to another.
+    DiscreteFunction separator;
 
-    ArrayList nonConditioningVariables; // Variables that are not conditioning variables.
+    // Whether or not to compute distributions for all variables in the Bucket.
+    boolean isProducingClusters;
 
-    ArrayList parents; // The parents of the Bucket in the BucketTree.
-    Bucket child; // The child of the Bucket in the BucketTree.
+    // The distribution for all variables involved in the Bucket.
+    DiscreteFunction cluster;
+
+    // Variables that are not conditioning variables.
+    ArrayList<DiscreteVariable> nonConditioningVariables;
+
+    // The parents of the Bucket in the BucketTree.
+    ArrayList<Bucket> parents;
+
+    // The child of the Bucket in the BucketTree.
+    Bucket child;
 
     int bucketStatus = EMPTY;
 
@@ -78,7 +92,7 @@ class Bucket
      * Basic constructor for Bucket.
      *
      * @param bucketTree          The BucketTree that holds the bucket.
-     * @param probVar             The bucket probVar for the Bucket.
+     * @param probVar             The bucket variable for the Bucket.
      * @param isProducingClusters Flag that indicates whether distributions for
      *                            clusters of variables are to be computed or
      *                            not.
@@ -89,10 +103,10 @@ class Bucket
     {
         this.bucketTree = bucketTree;
         this.probVar = probVar;
-        discreteFunctions = new ArrayList();
+        discreteFunctions = new ArrayList<>();
         this.isProducingClusters = isProducingClusters;
-        nonConditioningVariables = new ArrayList();
-        parents = new ArrayList();
+        nonConditioningVariables = new ArrayList<>();
+        parents = new ArrayList<>();
     }
 
     /**
@@ -158,10 +172,9 @@ class Bucket
         if (parents.size() > 0)
         {
             out.println("\tParents:");
-            for (Object e : parents)
+            for (Bucket bucket : parents)
             {
-                out.println("\t" + ((Bucket) (e)).probVar.
-                            getName());
+                out.println("\t" + bucket.probVar.getName());
             }
         }
         if (child != null)

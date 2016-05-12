@@ -44,7 +44,9 @@ class Bracketing
      * Perform bisection.
      */
     double perform(MappingDouble function,
-                   double x1, double x2, double xAccuracy)
+                   double x1,
+                   double x2,
+                   double xAccuracy)
     {
         return (perform(function, 0, x1, x2, xAccuracy));
     }
@@ -52,9 +54,11 @@ class Bracketing
     /**
      * Perform bisection.
      */
-    double
-            perform(MappingDouble function, int functionType,
-                    double x1, double x2, double xAccuracy)
+    double perform(MappingDouble function,
+                   int functionType,
+                   double x1,
+                   double x2,
+                   double xAccuracy)
     {
         int j;
         double f1, f2;

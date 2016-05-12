@@ -57,25 +57,25 @@ public class DiscreteFunction
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param nVb Number of variables in the function.
-     * @param nVl Number of values in the function.
+     * @param numberOfVars   Number of variables in the function.
+     * @param numberOfValues Number of values in the function.
      */
-    public DiscreteFunction(int nVb, int nVl)
+    public DiscreteFunction(int numberOfVars, int numberOfValues)
     {
-        variables = new DiscreteVariable[nVb];
-        values = new double[nVl];
+        variables = new DiscreteVariable[numberOfVars];
+        values = new double[numberOfValues];
     }
 
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param pvs An array of ProbabilityVariable objects.
-     * @param v   An array of values for the function.
+     * @param variables An array of ProbabilityVariable objects.
+     * @param values    An array of values for the function.
      */
-    public DiscreteFunction(DiscreteVariable pvs[], double v[])
+    public DiscreteFunction(DiscreteVariable variables[], double values[])
     {
-        variables = pvs;
-        values = v;
+        this.variables = variables;
+        this.values = values;
     }
 
     /**
@@ -125,14 +125,14 @@ public class DiscreteFunction
      * function to be evaluated, assuming an array of DiscreteVariable objects
      * is present.
      *
-     * @param pvs          The array of DiscreteVariable objects that is used to
+     * @param variables    The array of DiscreteVariable objects that is used to
      *                     compute the position indicated by the markers.
      * @param valueIndexes The markers.
      * @return
      */
-    public double evaluate(DiscreteVariable pvs[], int valueIndexes[])
+    public double evaluate(DiscreteVariable variables[], int valueIndexes[])
     {
-        int position = getPositionFromIndexes(pvs, valueIndexes);
+        int position = getPositionFromIndexes(variables, valueIndexes);
         return (values[position]);
     }
 
@@ -140,11 +140,11 @@ public class DiscreteFunction
      * Get position in a function from a (possibly partial) instantiation of
      * variables through the indexes.
      *
-     * @param pvs
+     * @param variables
      * @param variableIndexes
      * @return
      */
-    public int getPositionFromIndexes(DiscreteVariable pvs[],
+    public int getPositionFromIndexes(DiscreteVariable variables[],
                                       int variableIndexes[])
     {
         int k, pos = 0, jump = 1;
@@ -152,7 +152,7 @@ public class DiscreteFunction
         {
             k = variables[i].index;
             pos += variableIndexes[k] * jump;
-            jump *= pvs[k].values.length;
+            jump *= variables[k].values.length;
         }
         return (pos);
     }
@@ -160,26 +160,27 @@ public class DiscreteFunction
     /**
      * Sum out some variables in the function.
      *
-     * @param dvs
-     * @param markers A boolean vector indicating which variables are to be
-     *                summed out. If markers[i] is true, then the ith variable
-     *                is to be summed out; if markers[i] is false, the ith
-     *                variable is not to be summed out.
+     * @param variables
+     * @param markers   A boolean vector indicating which variables are to be
+     *                  summed out. If markers[i] is true, then the ith variable
+     *                  is to be summed out; if markers[i] is false, the ith
+     *                  variable is not to be summed out.
      * @return
      */
-    public DiscreteFunction sumOut(DiscreteVariable dvs[], boolean markers[])
+    public DiscreteFunction sumOut(DiscreteVariable variables[],
+                                   boolean markers[])
     {
         int i, j, k, current;
         double t, v;
 
         // Initialize the indexes and the maximum length for all ProbabilityVariable objects.
         // This is used to circle through all the values in the newDf.
-        int indexes[] = new int[dvs.length];
-        int valueLengths[] = new int[dvs.length];
-        for (i = 0; i < dvs.length; i++)
+        int indexes[] = new int[variables.length];
+        int valueLengths[] = new int[variables.length];
+        for (i = 0; i < variables.length; i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = dvs[i].numberValues();
+            valueLengths[i] = variables[i].numberValues();
         }
 
         // Collect some information used to construct the newDf.
@@ -218,9 +219,8 @@ public class DiscreteFunction
               new int[numberOfVariablesToSumOut];
 
         // Build the newDf and the indexes of variables to sum out.
-        DiscreteFunction newDf =
-                         new DiscreteFunction(numberOfVariablesToStay,
-                                              numberOfValuesNewDf);
+        DiscreteFunction newDf = new DiscreteFunction(numberOfVariablesToStay,
+                                                      numberOfValuesNewDf);
 
         for (i = 0, j = 0, k = 0; i < variables.length; i++)
         {
@@ -253,7 +253,7 @@ public class DiscreteFunction
             // Do the summation for a value.
             for (j = 0; j < numberOfValuesToSumOut; j++)
             { // Go through all values to be summed out.
-                v += evaluate(dvs, indexes); // Do the summation for each value of the newDf.
+                v += evaluate(variables, indexes); // Do the summation for each value of the newDf.
 
                 // Increment the last index to be summed out.
                 indexes[indexForVariablesToSumOut[lastIndexForVariablesToSumOut]]++;
@@ -296,24 +296,24 @@ public class DiscreteFunction
     /**
      * Multiply two DiscreteFunction objects.
      *
-     * @param dvs
-     * @param mult
+     * @param variables
+     * @param multDiscrFunc
      * @return
      */
-    public DiscreteFunction multiply(DiscreteVariable dvs[],
-                                     DiscreteFunction mult)
+    public DiscreteFunction multiply(DiscreteVariable variables[],
+                                     DiscreteFunction multDiscrFunc)
     {
         int i, j, k, n, v, current, joinedIndexes[];
         double t;
-        boolean variableMarkers[] = new boolean[dvs.length];
+        boolean variableMarkers[] = new boolean[variables.length];
 
         // This is used to circle through all the values in the newDf.
-        int indexes[] = new int[dvs.length];
-        int valueLengths[] = new int[dvs.length];
-        for (i = 0; i < dvs.length; i++)
+        int indexes[] = new int[variables.length];
+        int valueLengths[] = new int[variables.length];
+        for (i = 0; i < variables.length; i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = dvs[i].numberValues();
+            valueLengths[i] = variables[i].numberValues();
             variableMarkers[i] = false;
         }
 
@@ -328,9 +328,9 @@ public class DiscreteFunction
                 n++;
             }
         }
-        for (j = 0; j < mult.numberVariables(); j++)
+        for (j = 0; j < multDiscrFunc.numberVariables(); j++)
         {
-            k = mult.getIndex(j);
+            k = multDiscrFunc.getIndex(j);
             if (variableMarkers[k] == false)
             {
                 variableMarkers[k] = true;
@@ -347,7 +347,7 @@ public class DiscreteFunction
             {
                 joinedIndexes[j] = i;
                 j++;
-                v *= dvs[i].numberValues();
+                v *= variables[i].numberValues();
             }
         }
 
@@ -355,7 +355,7 @@ public class DiscreteFunction
         DiscreteFunction newDf = new DiscreteFunction(n, v);
         for (i = 0; i < n; i++)
         {
-            newDf.setVariable(i, dvs[joinedIndexes[i]]);
+            newDf.setVariable(i, variables[joinedIndexes[i]]);
         }
 
         // Store the last valid indexes (efficiency purposes only).
@@ -364,7 +364,8 @@ public class DiscreteFunction
         // Now circle through all the values, doing the multiplication.
         for (i = 0; i < newDf.numberValues(); i++)
         { // Go through all values of the newDf.
-            t = this.evaluate(dvs, indexes) * mult.evaluate(dvs, indexes);
+            t = this.evaluate(variables, indexes) *
+                multDiscrFunc.evaluate(variables, indexes);
             // Insert the summation for the value of newDf into newDf.
             newDf.setValue(i, t);
 
@@ -411,7 +412,7 @@ public class DiscreteFunction
 
     /**
      * Normalize a function (in-place) assuming that it is a conditional
-     * distribution for the first variable
+     * distribution for the first variable.
      */
     public void normalizeFirst()
     {

@@ -60,15 +60,15 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param bayesNet
      * @param properties
-     * @param nVb
-     * @param nVl
+     * @param numberOfVars
+     * @param numberOfValues
      */
     public ProbabilityFunction(BayesNet bayesNet,
-                               int nVb,
-                               int nVl,
+                               int numberOfVars,
+                               int numberOfValues,
                                ArrayList properties)
     {
-        super(nVb, nVl);
+        super(numberOfVars, numberOfValues);
         this.properties = properties;
         this.bayesNet = bayesNet;
     }
@@ -78,15 +78,15 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param bayesNet
      * @param properties
-     * @param pvs
-     * @param v
+     * @param variables
+     * @param values
      */
     public ProbabilityFunction(BayesNet bayesNet,
-                               DiscreteVariable pvs[],
-                               double v[],
+                               DiscreteVariable variables[],
+                               double values[],
                                ArrayList properties)
     {
-        super(pvs, v);
+        super(variables, values);
         this.properties = properties;
         this.bayesNet = bayesNet;
     }
@@ -95,11 +95,11 @@ public class ProbabilityFunction extends DiscreteFunction
      * Constructor for ProbabilityFunction.
      *
      * @param discrFunc
-     * @param newValues
+     * @param values
      */
-    public ProbabilityFunction(DiscreteFunction discrFunc, double[] newValues)
+    public ProbabilityFunction(DiscreteFunction discrFunc, double[] values)
     {
-        super(discrFunc.variables, newValues);
+        super(discrFunc.variables, values);
         if (discrFunc instanceof ProbabilityFunction)
         {
             bayesNet = ((ProbabilityFunction) discrFunc).bayesNet;
@@ -134,9 +134,9 @@ public class ProbabilityFunction extends DiscreteFunction
      * Set a single value of the probability function.
      *
      * @param variableValuePairs
-     * @param val
+     * @param value
      */
-    public void setValue(String variableValuePairs[][], double val)
+    public void setValue(String variableValuePairs[][], double value)
     {
         int index;
         ProbabilityVariable probVar;
@@ -145,18 +145,18 @@ public class ProbabilityFunction extends DiscreteFunction
         int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
 
         // Fill the array of markers.
-        for (int i = 0; i < variableValuePairs.length; i++)
+        for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePairs[i][0]);
+            index = bayesNet.indexOfVariable(variableValuePair[0]);
             probVar = bayesNet.probabilityVariables[index];
-            valueIndexes[index] = probVar.indexOfValue(variableValuePairs[i][1]);
+            valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
         int pos = getPositionFromIndexes(bayesNet.probabilityVariables,
                                          valueIndexes);
         // Set the value.
-        values[pos] = val;
+        values[pos] = value;
     }
 
     /**
@@ -175,11 +175,11 @@ public class ProbabilityFunction extends DiscreteFunction
         int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
 
         // Fill the array of markers.
-        for (int i = 0; i < variableValuePairs.length; i++)
+        for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePairs[i][0]);
+            index = bayesNet.indexOfVariable(variableValuePair[0]);
             probVar = bayesNet.probabilityVariables[index];
-            valueIndexes[index] = probVar.indexOfValue(variableValuePairs[i][1]);
+            valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Now evaluate
@@ -449,7 +449,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Set the properties.
      *
-     * properties prop
+     * @param properties
      */
     public void setProperties(ArrayList properties)
     {
@@ -469,42 +469,42 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Add a property to the current ProbabilityFunction.
      *
-     * @param prop
+     * @param property
      */
-    public void addProperty(String prop)
+    public void addProperty(String property)
     {
         if (properties == null)
         {
             properties = new ArrayList();
         }
-        properties.add(prop);
+        properties.add(property);
     }
 
     /**
      * Remove a property in the current ProbabilityFunction.
      *
-     * @param prop
+     * @param property
      */
-    public void removeProperty(String prop)
+    public void removeProperty(String property)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(prop);
+        properties.remove(property);
     }
 
     /**
      * Remove a property in a given position in the current ProbabilityFunction.
      *
-     * @param i Position of the property.
+     * @param index Position of the property.
      */
-    public void removeProperty(int i)
+    public void removeProperty(int index)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(i);
+        properties.remove(index);
     }
 }

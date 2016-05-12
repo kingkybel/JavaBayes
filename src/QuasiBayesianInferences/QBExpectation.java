@@ -53,7 +53,6 @@ public class QBExpectation extends Expectation
 {
 
     private static final String CLASS_NAME = QBExpectation.class.getName();
-
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

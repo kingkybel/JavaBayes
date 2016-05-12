@@ -193,13 +193,15 @@ public class BayesNet
     {
         this();
         URL url = new URL(context, spec);
-        InputStream istream = url.openStream();
         // Read the BayesNet from the stream
-        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
-        interchangeFmt.CompilationUnit();
-        // Now transfer information from the parser
-        translate(interchangeFmt);
-        istream.close();
+        try (InputStream istream = url.openStream())
+        {
+            // Read the BayesNet from the stream
+            InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+            interchangeFmt.CompilationUnit();
+            // Now transfer information from the parser
+            translate(interchangeFmt);
+        }
     }
 
     /**
@@ -211,13 +213,15 @@ public class BayesNet
     public BayesNet(URL url) throws Exception
     {
         this();
-        InputStream istream = url.openStream();
         // Read the BayesNet from the stream
-        InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
-        interchangeFmt.CompilationUnit();
-        // Now transfer information from the parser
-        translate(interchangeFmt);
-        istream.close();
+        try (InputStream istream = url.openStream())
+        {
+            // Read the BayesNet from the stream
+            InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
+            interchangeFmt.CompilationUnit();
+            // Now transfer information from the parser
+            translate(interchangeFmt);
+        }
     }
 
     /**
@@ -299,11 +303,11 @@ public class BayesNet
      */
     public ProbabilityFunction getFunction(ProbabilityVariable probVar)
     {
-        for (int i = 0; i < probabilityFunctions.length; i++)
+        for (ProbabilityFunction probabilityFunction : probabilityFunctions)
         {
-            if (probVar.index == probabilityFunctions[i].variables[0].index)
+            if (probVar.index == probabilityFunction.variables[0].index)
             {
-                return (probabilityFunctions[i]);
+                return probabilityFunction;
             }
         }
 
@@ -769,7 +773,7 @@ public class BayesNet
     /**
      * Set the properties.
      *
-     * properties prop
+     * @param properties
      */
     public void setProperties(ArrayList properties)
     {
@@ -779,35 +783,35 @@ public class BayesNet
     /**
      * Add a property.
      *
-     * @param prop
+     * @param property
      */
-    public void addProperty(String prop)
+    public void addProperty(String property)
     {
         if (properties == null)
         {
             properties = new ArrayList();
         }
-        properties.add(prop);
+        properties.add(property);
     }
 
     /**
      * Remove a property.
      *
-     * @param prop
+     * @param property
      */
-    public void removeProperty(String prop)
+    public void removeProperty(String property)
     {
-        properties.remove(prop);
+        properties.remove(property);
     }
 
     /**
      * Remove a property.
      *
-     * @param i
+     * @param index
      */
-    public void removeProperty(int i)
+    public void removeProperty(int index)
     {
-        properties.remove(i);
+        properties.remove(index);
     }
 
     /**
@@ -908,17 +912,22 @@ public class BayesNet
      * Set a probability variable given its constituents.
      *
      * @param index
-     * @param vec
+     * @param properties
      * @param name
-     * @param v
+     * @param values
      */
-    public void setProbabilityVariable(int index, String name,
-                                       String v[], ArrayList vec)
+    public void setProbabilityVariable(int index,
+                                       String name,
+                                       String values[],
+                                       ArrayList properties)
     {
         if (index <= probabilityVariables.length)
         {
-            probabilityVariables[index] =
-            new ProbabilityVariable(this, name, index, v, vec);
+            probabilityVariables[index] = new ProbabilityVariable(this,
+                                                                  name,
+                                                                  index,
+                                                                  values,
+                                                                  properties);
         }
     }
 
@@ -927,17 +936,18 @@ public class BayesNet
      *
      * @param index
      * @param variables
-     * @param vec
      * @param values
+     * @param properties
      */
     public void setProbabilityFunction(int index,
                                        ProbabilityVariable[] variables,
-                                       double values[], ArrayList vec)
+                                       double values[],
+                                       ArrayList properties)
     {
         if (index <= probabilityFunctions.length)
         {
             probabilityFunctions[index] =
-            new ProbabilityFunction(this, variables, values, vec);
+            new ProbabilityFunction(this, variables, values, properties);
         }
     }
 

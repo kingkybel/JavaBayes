@@ -74,7 +74,7 @@ public class ConstantDensityRatioSet
     }
 
     /**
-     * Perform calculation of marginal posterior distributions for. a density
+     * Perform calculation of marginal posterior distributions for a density
      * ratio global neighborhood.
      *
      * @return

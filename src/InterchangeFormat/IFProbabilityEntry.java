@@ -42,13 +42,13 @@ public class IFProbabilityEntry
     /**
      * Simple constructor for an entry object
      *
-     * @param v
-     * @param e
+     * @param values
+     * @param entries
      */
-    public IFProbabilityEntry(String v[], double e[])
+    public IFProbabilityEntry(String values[], double entries[])
     {
-        values = v;
-        entries = e;
+        this.values = values;
+        this.entries = entries;
     }
 
     /**

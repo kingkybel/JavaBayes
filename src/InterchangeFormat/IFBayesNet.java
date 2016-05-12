@@ -78,7 +78,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public ArrayList getPvs()
+    public ArrayList getProbabilityVariables()
     {
         return (probVars);
     }
@@ -87,7 +87,7 @@ public class IFBayesNet
      *
      * @return
      */
-    public ArrayList getUpfs()
+    public ArrayList getProbabilityFunctions()
     {
         return (probFuncs);
     }

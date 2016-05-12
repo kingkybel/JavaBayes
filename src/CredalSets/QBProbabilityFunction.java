@@ -58,17 +58,17 @@ public class QBProbabilityFunction extends ProbabilityFunction
      *
      * @param bayesNet
      * @param properties
-     * @param nVb
-     * @param nVl
+     * @param numberOfVars
+     * @param numberOfValues
      */
     public QBProbabilityFunction(BayesNet bayesNet,
-                                 int nVb,
-                                 int nVl,
+                                 int numberOfVars,
+                                 int numberOfValues,
                                  ArrayList properties)
     {
-        super(bayesNet, nVb, nVl, properties);
-        lowerEnvelope = new double[nVl];
-        upperEnvelope = new double[nVl];
+        super(bayesNet, numberOfVars, numberOfValues, properties);
+        lowerEnvelope = new double[numberOfValues];
+        upperEnvelope = new double[numberOfValues];
     }
 
     /**
@@ -76,55 +76,47 @@ public class QBProbabilityFunction extends ProbabilityFunction
      *
      * @param bayesNet
      * @param properties
-     * @param dvs
-     * @param up
-     * @param v
-     * @param lp
+     * @param variables
+     * @param upperEnvelope
+     * @param values
+     * @param lowerEnvelope
      */
     public QBProbabilityFunction(BayesNet bayesNet,
-                                 DiscreteVariable dvs[],
-                                 double v[],
-                                 double lp[],
-                                 double up[],
+                                 DiscreteVariable variables[],
+                                 double values[],
+                                 double lowerEnvelope[],
+                                 double upperEnvelope[],
                                  ArrayList properties)
     {
-        super(bayesNet, dvs, v, properties);
-        lowerEnvelope = lp;
-        upperEnvelope = up;
+        super(bayesNet, variables, values, properties);
+        this.lowerEnvelope = lowerEnvelope;
+        this.upperEnvelope = upperEnvelope;
     }
 
     /**
      * Constructor for QBProbabilityFunction.
      *
      * @param discrFunc
-     * @param newUp
-     * @param newValues
-     * @param newLp
+     * @param upperEnvelope
+     * @param values
+     * @param lowerEnvelope
      */
     public QBProbabilityFunction(DiscreteFunction discrFunc,
-                                 double newValues[],
-                                 double newLp[],
-                                 double newUp[])
+                                 double values[],
+                                 double lowerEnvelope[],
+                                 double upperEnvelope[])
     {
-        super(discrFunc, newValues);
-        lowerEnvelope = newLp;
-        upperEnvelope = newUp;
+        super(discrFunc, values);
+        this.lowerEnvelope = lowerEnvelope;
+        this.upperEnvelope = upperEnvelope;
     }
 
-    /**
-     * Print QBProbabilityFunction.
-     */
     @Override
     public void print()
     {
         print(System.out);
     }
 
-    /**
-     * Print QBProbabilityFunction.
-     *
-     * @param out
-     */
     @Override
     public void print(PrintStream out)
     {

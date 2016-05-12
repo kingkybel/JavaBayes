@@ -36,9 +36,8 @@ public class TotalVariationSet
         extends TwoMonotoneCapacity
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(TotalVariationSet.class.
-                                        getName());
+    private static final String CLASS_NAME = TotalVariationSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private double epsilon;
 

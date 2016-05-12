@@ -26,6 +26,7 @@
 package BayesianInferences;
 
 import BayesianNetworks.BayesNet;
+import BayesianNetworks.DiscreteVariable;
 import BayesianNetworks.ProbabilityFunction;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -53,7 +54,7 @@ class DSeparation
     /**
      * Return a list of all variables that are d-connected to a given variable.
      */
-    public ArrayList allConnected(int x)
+    public ArrayList<DiscreteVariable> allConnected(int x)
     {
         return (separation(x, CONNECTED_VARIABLES));
     }
@@ -197,11 +198,11 @@ class DSeparation
     /**
      * Run the separation algorithm and process its results.
      */
-    private ArrayList separation(int x, int flag)
+    private ArrayList<DiscreteVariable> separation(int x, int flag)
     {
         int i;
         int nvertices = bayesNet.numberProbabilityFunctions();
-        ArrayList dSeparatedVariables = new ArrayList();
+        ArrayList<DiscreteVariable> dSeparatedVariables = new ArrayList<>();
 
         // Run algorithm
         separationRelations(x, flag);

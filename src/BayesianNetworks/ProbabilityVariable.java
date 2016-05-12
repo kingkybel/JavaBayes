@@ -87,12 +87,13 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param bayesNet
      * @param properties
-     * @param nVb
+     * @param name
      */
-    public ProbabilityVariable(BayesNet bayesNet, String nVb,
+    public ProbabilityVariable(BayesNet bayesNet,
+                               String name,
                                ArrayList properties)
     {
-        super(nVb);
+        super(name);
         this.properties = properties;
         this.bayesNet = bayesNet;
     }
@@ -102,17 +103,17 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param bayesNet
      * @param properties
-     * @param nVb
-     * @param vl
-     * @param vi
+     * @param name
+     * @param values
+     * @param index
      */
     public ProbabilityVariable(BayesNet bayesNet,
-                               String nVb,
-                               int vi,
-                               String vl[],
+                               String name,
+                               int index,
+                               String values[],
                                ArrayList properties)
     {
-        super(nVb, vi, vl);
+        super(name, index, values);
         this.properties = properties;
         this.bayesNet = bayesNet;
     }
@@ -158,7 +159,6 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     void processProperties()
     {
-        int indexOfObservedValue, indexOfExplanationValue;
         String pp, property, propertyValue, keyword;
         ArrayList propertiesToRemove = new ArrayList();
 
@@ -386,11 +386,11 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set a value of the current ProbabilityVariable as observed.
      *
-     * @param v Observed value.
+     * @param value Observed value.
      */
-    public void setObservedValue(String v)
+    public void setObservedValue(String value)
     {
-        int foundIndex = indexOfValue(v);
+        int foundIndex = indexOfValue(value);
         if (foundIndex == BayesNet.INVALID_INDEX)
         {
             return;
@@ -401,54 +401,54 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the variable as explanatory with a given value.
      *
-     * @param i Index of the value that is assigned to the variable.
+     * @param index Index of the value that is assigned to the variable.
      */
-    public void setExplanationValue(int i)
+    public void setExplanationValue(int index)
     {
-        explanationIndex = i;
+        explanationIndex = index;
     }
 
     /**
      * Add a property to the current ProbabilityVariable.
      *
-     * @param prop
+     * @param property
      */
-    public void addProperty(String prop)
+    public void addProperty(String property)
     {
         if (properties == null)
         {
             properties = new ArrayList();
         }
-        properties.add(prop);
+        properties.add(property);
     }
 
     /**
      * Remove a property from the current ProbabilityVariable.
      *
-     * @param prop
+     * @param property
      */
-    public void removeProperty(String prop)
+    public void removeProperty(String property)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(prop);
+        properties.remove(property);
     }
 
     /**
      * Remove a property from the current ProbabilityVariable given the position
      * of the property.
      *
-     * @param i
+     * @param index
      */
-    public void removeProperty(int i)
+    public void removeProperty(int index)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(i);
+        properties.remove(index);
     }
 
     /**
@@ -484,7 +484,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the properties.
      *
-     * properties prop
+     * @param properties
      */
     public void setProperties(ArrayList properties)
     {
@@ -504,11 +504,11 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the index of the variable.
      *
-     * @param ind
+     * @param index
      */
-    public void setIndex(int ind)
+    public void setIndex(int index)
     {
-        index = ind;
+        this.index = index;
     }
 
     /**
@@ -531,10 +531,10 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the type of the current ProbabilityVariable.
      *
-     * @param t
+     * @param type
      */
-    public void setType(int t)
+    public void setType(int type)
     {
-        type = t;
+        this.type = type;
     }
 }

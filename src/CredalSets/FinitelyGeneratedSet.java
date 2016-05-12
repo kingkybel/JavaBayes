@@ -45,53 +45,63 @@ abstract class FinitelyGeneratedSet
      * Constructor for FinitelyGeneratedSet.
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
-                         int nVb,
-                         int nVl,
+                         int numberOfVars,
+                         int numberOfValues,
                          ArrayList properties)
     {
-        super(bayesNet, nVb, nVl, properties);
+        super(bayesNet, numberOfVars, numberOfValues, properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
-                         DiscreteVariable pvs[],
-                         double v[],
-                         double lp[],
-                         double up[],
+                         DiscreteVariable variables[],
+                         double values[],
+                         double lowerEnvelope[],
+                         double upperEnvelope[],
                          ArrayList properties)
     {
-        super(bayesNet, pvs, v, lp, up, properties);
+        super(bayesNet,
+              variables,
+              values,
+              lowerEnvelope,
+              upperEnvelope,
+              properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
-                         DiscreteVariable pvs[],
-                         double v[],
+                         DiscreteVariable variables[],
+                         double values[],
                          ArrayList properties)
     {
-        this(bayesNet, pvs, v, (double[]) null, (double[]) null, properties);
+        this(bayesNet,
+             variables,
+             values,
+             (double[]) null,
+             (double[]) null,
+             properties);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
     FinitelyGeneratedSet(DiscreteFunction discrFunc,
-                         double newValues[],
-                         double newLp[],
-                         double newUp[])
+                         double values[],
+                         double lowerEnvelope[],
+                         double upperEnvelope[])
     {
-        super(discrFunc, newValues, newLp, newUp);
+        super(discrFunc, values, lowerEnvelope, upperEnvelope);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      */
-    FinitelyGeneratedSet(DiscreteFunction discrFunc, double newValues[])
+    FinitelyGeneratedSet(DiscreteFunction discrFunc, double values[])
     {
-        super(discrFunc, newValues, (double[]) null, (double[]) null);
+        super(discrFunc, values, (double[]) null, (double[]) null);
     }
 }

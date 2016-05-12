@@ -46,10 +46,10 @@ public class GeneralizedChoquetIntegral
      * Calculate the lower and upper Choquet integrals using Walley's
      * generalization, for a total variation neighborhood.
      *
-     * @param tmc
+     * @param twoMonotoneCapacity
      * @param discrFunc
      */
-    public GeneralizedChoquetIntegral(TwoMonotoneCapacity tmc,
+    public GeneralizedChoquetIntegral(TwoMonotoneCapacity twoMonotoneCapacity,
                                       DiscreteFunction discrFunc
     )
     {
@@ -87,13 +87,21 @@ public class GeneralizedChoquetIntegral
         // values for the positive side
         double lpPositive[] = new double[dfPositive.length];
         double upPositive[] = new double[dfPositive.length];
-        boundPositive(tmc, discrFunc, positive, lpPositive, upPositive);
+        boundPositive(twoMonotoneCapacity,
+                      discrFunc,
+                      positive,
+                      lpPositive,
+                      upPositive);
 
         // Create arrays of lower and upper probability
         // values for the positive side
         double lpNegative[] = new double[dfNegative.length];
         double upNegative[] = new double[dfNegative.length];
-        boundNegative(tmc, discrFunc, negative, lpNegative, upNegative);
+        boundNegative(twoMonotoneCapacity,
+                      discrFunc,
+                      negative,
+                      lpNegative,
+                      upNegative);
 
         // First obtain the lower Walley integral
         positiveSide = 0.0;
@@ -123,8 +131,8 @@ public class GeneralizedChoquetIntegral
     }
 
     /**
-     * Collect the positive values in df and sort them in increasing order
-     * (first value is assumed zero).
+     * Collect the positive values in discrFunc and sort them in increasing
+     * order (first value is assumed zero).
      */
     private ArrayList sortPositive(DiscreteFunction discrFunc)
     {
@@ -158,8 +166,8 @@ public class GeneralizedChoquetIntegral
     }
 
     /**
-     * Collect the negative values in df and sort them in decreasing order
-     * (first value is assumed zero).
+     * Collect the negative values in discrFunc and sort them in decreasing
+     * order (first value is assumed zero).
      */
     private ArrayList sortNegative(DiscreteFunction discrFunc)
     {
@@ -194,7 +202,7 @@ public class GeneralizedChoquetIntegral
 
     /**
      * Obtain the lower and upper probability for the event { df(x) >
-     * sortedValue[i] }
+     * sortedValue[i] }.
      */
     private void boundPositive(TwoMonotoneCapacity tmc,
                                DiscreteFunction discrFunc,
@@ -229,10 +237,10 @@ public class GeneralizedChoquetIntegral
     }
 
     /**
-     * Obtain the lower and upper probability for the event { df(x) <
+     * Obtain the lower and upper probability for the event { discrFunc(x) &lt;
      * sortedValue[i] }
      */
-    private void boundNegative(TwoMonotoneCapacity tmc,
+    private void boundNegative(TwoMonotoneCapacity twoMonotoneCapacity,
                                DiscreteFunction discrFunc,
                                ArrayList sortedValues,
                                double lps[],
@@ -254,12 +262,12 @@ public class GeneralizedChoquetIntegral
                 if (discrFunc.getValue(j) < sortedValue)
                 {
                     // Add base probability of this atom
-                    lp += tmc.getAtomProbability(j);
+                    lp += twoMonotoneCapacity.getAtomProbability(j);
                 }
             }
             // Calculate the lower and upper probabilities
-            lps[i] = tmc.getLowerProbabilityFromBase(lp);
-            ups[i] = tmc.getUpperProbabilityFromBase(lp);
+            lps[i] = twoMonotoneCapacity.getLowerProbabilityFromBase(lp);
+            ups[i] = twoMonotoneCapacity.getUpperProbabilityFromBase(lp);
             i++;
         }
     }

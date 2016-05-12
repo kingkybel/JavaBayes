@@ -35,10 +35,9 @@ public class ConstantDensityBoundedSet
         extends TwoMonotoneCapacity
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(
-                                        ConstantDensityBoundedSet.class.
-                                        getName());
+    private static final String CLASS_NAME =
+                                ConstantDensityBoundedSet.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      * The "size" of the density bounded class.

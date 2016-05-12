@@ -73,7 +73,7 @@ public class Inference
     /**
      *
      */
-    protected ArrayList bucketForest;
+    protected ArrayList<BucketTree> bucketForest;
 
     /**
      *
@@ -95,7 +95,7 @@ public class Inference
     {
         this.bayesNet = bayesNet;
         bucketForVariable = new Bucket[bayesNet.numberVariables()];
-        bucketForest = new ArrayList();
+        bucketForest = new ArrayList<>();
         this.isProducingClusters = isProducingClusters;
     }
 

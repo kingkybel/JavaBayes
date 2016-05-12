@@ -211,14 +211,18 @@ public abstract class TwoMonotoneCapacity
         temporaryDiscreteFunction = discrFunc;
 
         // Bracket the lower expectation
-        double lowerExpectation =
-               bracket.perform(this, LOWER_EXPECTATION_BRACKET,
-                               minDfValue, maxDfValue, ACCURACY);
+        double lowerExpectation = bracket.perform(this,
+                                                  LOWER_EXPECTATION_BRACKET,
+                                                  minDfValue,
+                                                  maxDfValue,
+                                                  ACCURACY);
 
         // Bracket the upper expectation
-        double upperExpectation =
-               bracket.perform(this, UPPER_EXPECTATION_BRACKET,
-                               minDfValue, maxDfValue, ACCURACY);
+        double upperExpectation = bracket.perform(this,
+                                                  UPPER_EXPECTATION_BRACKET,
+                                                  minDfValue,
+                                                  maxDfValue,
+                                                  ACCURACY);
 
         // Calculate the values
         results[0] = lowerExpectation;
