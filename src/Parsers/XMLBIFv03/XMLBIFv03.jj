@@ -95,7 +95,7 @@ public class XMLBIFv03 extends InterchangeFormat
         return(p.toString());
     }
 
-    void glob_heading() throws ParseException
+    void globHeading() throws ParseException
     {
         Token t;
         while (true)
@@ -272,7 +272,7 @@ void CompilationUnit() :
 {
   OpenTag()
     {
-        glob_heading();
+        globHeading();
     }
 
   NetworkDeclaration()

@@ -21,7 +21,6 @@
 /*
  * Options for JavaCC (only non-default options).
  */
-
 options
 {
     STATIC = false;
@@ -77,7 +76,7 @@ public class XMLBIFv02 extends InterchangeFormat
         return(p.toString());
     }
 
-    void glob_heading() throws ParseException
+    void globHeading() throws ParseException
     {
         Token t;
         while (true)
@@ -205,7 +204,7 @@ void CompilationUnit() :
 {
     OpenTag()
     {
-        glob_heading();
+        globHeading();
     }
 
     NetworkDeclaration()

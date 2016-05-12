@@ -18,24 +18,21 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-/* ========================================================== */
-/* Options for Jack (only non-default options)                */
-/* ========================================================== */
+// ==========================================================
+// Options for Jack (only non-default options)
+// ==========================================================
 
 options
 {
     STATIC = false; 
 }
 
-/* ========================================================== */
-/* Java code that is incorporated into the parser             */
-/* ========================================================== */
+// ==========================================================
+// Java code that is incorporated into the parser
+// ==========================================================
 
 PARSER_BEGIN(BIFv01)
 
-/* This parser uses the data structures in the JavaBayes core *
- * engine (package BayesianNetworks); other implementations   *
- * may use different data structures                          */
 package Parsers.BIFv01;
 
 import InterchangeFormat.*;
@@ -43,9 +40,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Definition of the Interchange Format class and its
- * variables. The IFBayesNet ifbn contains the
- * parsed bayesian network.
+ * Definition of the Interchange Format class and its variables. The IFBayesNet
+ * ifbn contains the parsed bayesian network.
+ * This parser uses the data structures in the JavaBayes core engine (package 
+ * BayesianNetworks); other implementations may use different data structures.
  */
 public class BIFv01 extends InterchangeFormat
 {
@@ -57,7 +55,7 @@ public class BIFv01 extends InterchangeFormat
     }
 
     /* Method responsible for globbing undefined text in an input file */
-    void glob_undefined_text() throws ParseException
+    void globUndefinedText() throws ParseException
     {
 	Token t;
 	while (true)
@@ -151,14 +149,14 @@ void CompilationUnit() :
     IFProbabilityFunction upf;
 }
 {
-	{ glob_undefined_text(); }
+	{ globUndefinedText(); }
   NetworkDeclaration()
-	{ glob_undefined_text(); }
+	{ globUndefinedText(); }
   ( pv=VariableDeclaration()
-	{ ifbn.add(pv); glob_undefined_text(); }
+	{ ifbn.add(pv); globUndefinedText(); }
   |
     upf=ProbabilityDeclaration()
-	{ ifbn.add(upf); glob_undefined_text(); }
+	{ ifbn.add(upf); globUndefinedText(); }
   )*
   <EOF>
 }
@@ -348,7 +346,9 @@ int ConditionalMark(ArrayList v):
     }
 }
 
-/* Pick a single word as a probability variable name */
+/**
+ * Pick a single word as a probability variable name.
+ */
 String ProbabilityVariableName() :
 {
     Token t;
@@ -361,7 +361,7 @@ String ProbabilityVariableName() :
 }
 
 /**
- * Fill a Probability list of properties
+ * Fill a Probability list of properties.
  */
 void ProbabilityContent(IFProbabilityFunction upf) :
 {
@@ -393,6 +393,9 @@ void ProbabilityContent(IFProbabilityFunction upf) :
 	  upf.setTables(tabs); }
 }
 
+/**
+ * Pick a probability entry.
+ */
 IFProbabilityEntry ProbabilityEntry() :
 {
     String s[];

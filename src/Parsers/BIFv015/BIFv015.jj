@@ -27,15 +27,12 @@ options
   STATIC = false;
 }
 
-/* ========================================================== */
-/* Java code that is incorporated into the parser             */
-/* ========================================================== */
+// ==========================================================
+// Java code that is incorporated into the parser
+// ==========================================================
 
 PARSER_BEGIN(BIFv015)
 
-/* This parser uses the data structures in the JavaBayes core *
- * engine (package BayesianNetworks); other implementations   *
- * may use different data structures                          */
 package Parsers.BIFv015;
 
 import InterchangeFormat.*;
@@ -43,8 +40,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Definition of the Interchange Format class and its variables.
- * The IFBayesNet ifbn contains the parsed bayesian network. 
+ * Definition of the Interchange Format class and its variables. The IFBayesNet
+ * ifbn contains the parsed bayesian network. 
+ * This parser uses the data structures in the JavaBayes core engine (package
+ * BayesianNetworks); other implementationsmay use different data structures.
  */
 public class BIFv015 extends InterchangeFormat
 {
@@ -63,7 +62,7 @@ public class BIFv015 extends InterchangeFormat
      * Method responsible for globbing undefined text in an input file
      * @throws ParseException
      */
-    void glob_undefined_text() throws ParseException
+    void globUndefinedText() throws ParseException
     {
 	Token t;
 	while (true)
@@ -156,7 +155,8 @@ TOKEN : /* Definition of a string */
 // THE INTERCHANGE FORMAT GRAMMAR STARTS HERE
 // ==========================================================
 
-/** Basic parsing function. First looks for a Network Declaration,
+/**
+ * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
  * in the vectors ifbn.pvs and ifbn.upfs.
@@ -168,30 +168,30 @@ void CompilationUnit() :
 }
 {
 	{
-            glob_undefined_text();
+            globUndefinedText();
         }
   NetworkDeclaration()
 	{
-            glob_undefined_text();
+            globUndefinedText();
         }
   ( pv=VariableDeclaration()
 	{
             ifbn.add(pv);
-            glob_undefined_text();
+            globUndefinedText();
         }
   |
     upf=ProbabilityDeclaration()
 	{
             ifbn.add(upf);
-            glob_undefined_text();
+            globUndefinedText();
         }
   )*
   <EOF>
 }
 
-/* ========================================================== */
-/* Detect and initialize the network                          */
-/* ========================================================== */
+/**
+ * Detect and initialize the network
+ */
 void NetworkDeclaration() :
 {
     String s;
@@ -204,7 +204,9 @@ void NetworkDeclaration() :
         }
 }
 
-/* Fill the network list of properties */
+/**
+ * Fill the network list of properties.
+ */
 ArrayList NetworkContent() :
 {
     ArrayList properties = new ArrayList();
@@ -222,7 +224,7 @@ ArrayList NetworkContent() :
 }
 
 /**
-/* Detect a variable declaration.
+ * Detect a variable declaration.
  */
 IFProbabilityVariable VariableDeclaration() :
 {
@@ -390,7 +392,9 @@ int ConditionalMark(ArrayList v):
     }
 }
 
-/* Pick a single word as a probability variable name */
+/**
+ * Pick a single word as a probability variable name.
+ */
 String ProbabilityVariableName() :
 {
     String s;
@@ -547,7 +551,8 @@ double[] FloatingPointList() :
         }
 }
 
-/** Pick a non-negative floating number. This is necessary to allow
+/**
+ * Pick a non-negative floating number. This is necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
  */
