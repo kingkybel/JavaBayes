@@ -205,7 +205,7 @@ public class QBInference extends Inference
     @Override
     public void inference(String order[])
     {
-        inference(order);
+        super.inference(order);
         doQuasiBayesianInference();
     }
 

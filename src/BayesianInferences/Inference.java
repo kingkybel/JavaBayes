@@ -27,7 +27,6 @@ package BayesianInferences;
 
 import BayesianNetworks.BayesNet;
 import BayesianNetworks.ProbabilityFunction;
-import BayesianNetworks.ProbabilityVariable;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -123,7 +122,8 @@ public class Inference
                 // If the probVar has no Bucket or a Bucket without valid cluster:
                 if ((buck == null) || (buck.cluster == null))
                 {
-                    inference(new Ordering(bayesNet, queriedVariableName,
+                    inference(new Ordering(bayesNet,
+                                           queriedVariableName,
                                            IGNORE_EXPLANATION,
                                            Ordering.MINIMUM_WEIGHT));
                 }
@@ -158,15 +158,18 @@ public class Inference
             }
             else
             { // If the queriedVariableName is invalid:
-                inference(new Ordering(bayesNet, (String) null,
+                inference(new Ordering(bayesNet,
+                                       (String) null,
                                        IGNORE_EXPLANATION,
                                        Ordering.MINIMUM_WEIGHT));
             }
         }
         else
         { // If no cluster is generated:
-            inference(new Ordering(bayesNet, queriedVariableName,
-                                   IGNORE_EXPLANATION, Ordering.MINIMUM_WEIGHT));
+            inference(new Ordering(bayesNet,
+                                   queriedVariableName,
+                                   IGNORE_EXPLANATION,
+                                   Ordering.MINIMUM_WEIGHT));
         }
     }
 
@@ -251,10 +254,7 @@ public class Inference
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
-        int i, bp[];
-        ProbabilityVariable probVar;
-
-        // Do inference if Inference is null.
+        // Do inference if result is null.
         if (result == null)
         {
             inference();

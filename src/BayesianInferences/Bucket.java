@@ -500,32 +500,36 @@ class Bucket
     {
         DiscreteVariable dvs[];
         int i, j, k, l, m, p, pCluster, last, current;
-        int n = probVar.numberValues();
-        int indexes[] = new int[bucketTree.bayesNet.numberVariables()];
-        int valueLengths[] = new int[bucketTree.bayesNet.numberVariables()];
+        int numVals = probVar.numberValues();
+        final int numVariables = bucketTree.bayesNet.numberVariables();
+        int indexes[] = new int[numVariables];
+        int valueLengths[] = new int[numVariables];
         double t, v;
 
         // Initialize some necessary values.
         dvs = bucketTree.bayesNet.getProbabilityVariables();
-        for (i = 0; i < bucketTree.bayesNet.numberVariables(); i++)
+        for (i = 0; i < numVariables; i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = bucketTree.bayesNet.
-            getProbabilityVariable(i).numberValues();
+            valueLengths[i] =
+            bucketTree.bayesNet.getProbabilityVariable(i).numberValues();
         }
         if (isProducingClusters)
         { // If necessary, start up the cluster for the Bucket.
             cluster = buildNewFunction(true);
         }
 
+        // Auxiliary variable to hold last valid index.
+        last = newDf.numberVariables() - 1;
+
         // Do the whole summation.
-        last = newDf.numberVariables() - 1; // Auxiliary probVar to hold last valid index.
         for (i = 0; i < newDf.numberValues(); i++)
         { // Compute all values of the newDf.
             v = 0.0;
-            for (l = 0; l < n; l++)
-            { // For each value of the bucket probVar,
-                indexes[probVar.getIndex()] = l; // mark the current value in the indexes,
+            for (l = 0; l < numVals; l++)
+            { // For each value of the bucket variable,
+                // mark the current value in the indexes,
+                indexes[probVar.getIndex()] = l;
                 t = 1.0;
                 for (m = 0; m < orderedDfs.length; m++)
                 {

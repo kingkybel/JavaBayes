@@ -150,7 +150,7 @@ public class BayesGUI extends javax.swing.JFrame
         final JFileChooser fc = new JFileChooser(bayesNetModelFile);
         fc.setCurrentDirectory(
                 new File(
-                        "/home/kybelksd/NetBeansProjects/JavaBayes2/src/Examples"));
+                        "/home/dieter/NetBeansProjects/JavaBayes2/src/Examples"));
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.addChoosableFileFilter(
                 new FileNameExtensionFilter(

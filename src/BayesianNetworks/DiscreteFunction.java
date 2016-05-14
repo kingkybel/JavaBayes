@@ -86,9 +86,9 @@ public class DiscreteFunction
      */
     public boolean memberOf(int index)
     {
-        for (int i = 0; i < variables.length; i++)
+        for (DiscreteVariable variable : variables)
         {
-            if (index == variables[i].index)
+            if (index == variable.index)
             {
                 return (true);
             }
@@ -140,11 +140,11 @@ public class DiscreteFunction
      * Get position in a function from a (possibly partial) instantiation of
      * variables through the indexes.
      *
-     * @param variables
+     * @param probVar
      * @param variableIndexes
      * @return
      */
-    public int getPositionFromIndexes(DiscreteVariable variables[],
+    public int getPositionFromIndexes(DiscreteVariable probVar[],
                                       int variableIndexes[])
     {
         int k, pos = 0, jump = 1;
@@ -152,7 +152,7 @@ public class DiscreteFunction
         {
             k = variables[i].index;
             pos += variableIndexes[k] * jump;
-            jump *= variables[k].values.length;
+            jump *= probVar[k].values.length;
         }
         return (pos);
     }
@@ -160,14 +160,14 @@ public class DiscreteFunction
     /**
      * Sum out some variables in the function.
      *
-     * @param variables
-     * @param markers   A boolean vector indicating which variables are to be
-     *                  summed out. If markers[i] is true, then the ith variable
-     *                  is to be summed out; if markers[i] is false, the ith
-     *                  variable is not to be summed out.
+     * @param newVariables
+     * @param markers      A boolean vector indicating which variables are to be
+     *                     summed out. If markers[i] is true, then the ith
+     *                     variable is to be summed out; if markers[i] is false,
+     *                     the ith variable is not to be summed out.
      * @return
      */
-    public DiscreteFunction sumOut(DiscreteVariable variables[],
+    public DiscreteFunction sumOut(DiscreteVariable newVariables[],
                                    boolean markers[])
     {
         int i, j, k, current;
@@ -175,12 +175,12 @@ public class DiscreteFunction
 
         // Initialize the indexes and the maximum length for all ProbabilityVariable objects.
         // This is used to circle through all the values in the newDf.
-        int indexes[] = new int[variables.length];
-        int valueLengths[] = new int[variables.length];
-        for (i = 0; i < variables.length; i++)
+        int indexes[] = new int[newVariables.length];
+        int valueLengths[] = new int[newVariables.length];
+        for (i = 0; i < newVariables.length; i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = variables[i].numberValues();
+            valueLengths[i] = newVariables[i].numberValues();
         }
 
         // Collect some information used to construct the newDf.
@@ -253,7 +253,9 @@ public class DiscreteFunction
             // Do the summation for a value.
             for (j = 0; j < numberOfValuesToSumOut; j++)
             { // Go through all values to be summed out.
-                v += evaluate(variables, indexes); // Do the summation for each value of the newDf.
+
+                // Do the summation for each value of the newDf.
+                v += evaluate(newVariables, indexes);
 
                 // Increment the last index to be summed out.
                 indexes[indexForVariablesToSumOut[lastIndexForVariablesToSumOut]]++;

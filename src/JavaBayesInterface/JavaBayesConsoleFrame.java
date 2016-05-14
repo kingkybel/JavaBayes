@@ -79,9 +79,9 @@ public final class JavaBayesConsoleFrame extends Frame
     final static String sensitivityAnalysisTitle = "Sensitivity analysis";
     final static String helpTitle = "Help";
     final static String aboutTitle = "About";
-    private static final Logger LOGGER =
-                                Logger.getLogger(JavaBayesConsoleFrame.class.
-                                        getName());
+    private static final String CLASS_NAME =
+                                JavaBayesConsoleFrame.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private JavaBayes jb;
     // Declare controls
     FileDialog OpenFileDialog;
@@ -121,10 +121,14 @@ public final class JavaBayesConsoleFrame extends Frame
         setTitle(title);
 
         // Initialize controls.
-        OpenFileDialog = new java.awt.FileDialog(this, openDialogTitle,
+        OpenFileDialog = new java.awt.FileDialog(this,
+                                                 openDialogTitle,
                                                  FileDialog.LOAD);
-        SaveFileDialog = new java.awt.FileDialog(this, saveDialogTitle,
+        SaveFileDialog = new java.awt.FileDialog(this,
+                                                 saveDialogTitle,
                                                  FileDialog.SAVE);
+        OpenFileDialog.setFile(
+                "/home/dieter/NetBeansProjects/JavaBayes2/src/Examples");
         textArea1 = new java.awt.TextArea();
         add("Center", textArea1);
 
