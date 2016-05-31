@@ -32,13 +32,32 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+/**
+ * d-separation is a criterion for deciding, from a given a causal graph,
+ * whether a set X of variables is independent of another set Y, given a third
+ * set Z. The idea is to associate "dependence" with "connectedness" (i.e., the
+ * existence of a connecting path) and "independence" with "unconnected-ness" or
+ * "separation". The only twist on this simple idea is to define what we mean by
+ * "connecting path", given that we are dealing with a system of directed arrows
+ * in which some vertices (those residing in Z) correspond to measured
+ * variables, whose values are known precisely. To account for the orientations
+ * of the arrows we use the terms "d-separated" and "d-connected" (d connotes
+ * "directional").
+ *
+ * http://bayes.cs.ucla.edu/BOOK-2K/d-sep.html
+ *
+ */
 class DSeparation
 {
 
-    private final static int CONNECTED_VARIABLES = 0;
-    private final static int AFFECTING_VARIABLES = 1;
     private static final String CLASS_NAME = DSeparation.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
+    public enum ConnectionType
+    {
+
+        CONNECTED_VARIABLES, AFFECTING_VARIABLES;
+    }
     BayesNet bayesNet;
     boolean[] above;
     boolean[] below;
@@ -56,7 +75,7 @@ class DSeparation
      */
     public ArrayList<DiscreteVariable> allConnected(int x)
     {
-        return (separation(x, CONNECTED_VARIABLES));
+        return (separation(x, ConnectionType.CONNECTED_VARIABLES));
     }
 
     /**
@@ -65,26 +84,24 @@ class DSeparation
      */
     public ArrayList allAffecting(int x)
     {
-        return (separation(x, AFFECTING_VARIABLES));
+        return (separation(x, ConnectionType.AFFECTING_VARIABLES));
     }
 
     /**
      * Find all d-separation relations.
      */
-    private void separationRelations(int x, int flag)
+    private void separationRelations(int x, ConnectionType flag)
     {
         int nvertices = bayesNet.numberProbabilityFunctions();
-        if (flag == AFFECTING_VARIABLES)
+        if (flag == ConnectionType.AFFECTING_VARIABLES)
         {
             nvertices += nvertices;
         }
 
-        boolean ans = false;
-
         above = new boolean[nvertices];
         below = new boolean[nvertices];
 
-        int current[] = new int[2];
+        int current[];
 
         int i, j, v, subscript;
 
@@ -198,7 +215,7 @@ class DSeparation
     /**
      * Run the separation algorithm and process its results.
      */
-    private ArrayList<DiscreteVariable> separation(int x, int flag)
+    private ArrayList<DiscreteVariable> separation(int x, ConnectionType flag)
     {
         int i;
         int nvertices = bayesNet.numberProbabilityFunctions();
@@ -208,7 +225,7 @@ class DSeparation
         separationRelations(x, flag);
 
         // Process results
-        if (flag == CONNECTED_VARIABLES)
+        if (flag == ConnectionType.CONNECTED_VARIABLES)
         {
             for (i = 0; i < nvertices; i++)
             {
@@ -237,10 +254,10 @@ class DSeparation
      * Check whether the variable given by the index is in the list of
      * separators (i.e., it is observed).
      */
-    private boolean isSeparator(int i, int flag)
+    private boolean isSeparator(int i, ConnectionType flag)
     {
-        if ((flag == CONNECTED_VARIABLES) ||
-            ((flag == AFFECTING_VARIABLES) &&
+        if ((flag == ConnectionType.CONNECTED_VARIABLES) ||
+            ((flag == ConnectionType.AFFECTING_VARIABLES) &&
              (i < bayesNet.numberProbabilityFunctions())))
         {
             return (bayesNet.getProbabilityVariable(i).isObserved());
@@ -255,12 +272,12 @@ class DSeparation
      * Check whether there is a link from variable indexFrom to variable
      * indexTo.
      */
-    private boolean adj(int indexFrom, int indexTo, int flag)
+    private boolean adj(int indexFrom, int indexTo, ConnectionType flag)
     {
         ProbabilityFunction probFunc = null;
 
-        if ((flag == CONNECTED_VARIABLES) ||
-            ((flag == AFFECTING_VARIABLES) &&
+        if ((flag == ConnectionType.CONNECTED_VARIABLES) ||
+            ((flag == ConnectionType.AFFECTING_VARIABLES) &&
              (indexTo < bayesNet.numberProbabilityFunctions()) &&
              (indexFrom < bayesNet.numberProbabilityFunctions())))
         {

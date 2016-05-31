@@ -71,7 +71,7 @@ public class QBExpectation extends Expectation
      */
     private void initializeInference()
     {
-        inference = new QBInference(bayesNet, isProducingClusters);
+        setInference(new QBInference(getBayesNet(), isProducingClusters()));
     }
 
     /**
@@ -82,9 +82,9 @@ public class QBExpectation extends Expectation
     @Override
     protected void doExpectationFromInference(DiscreteFunction discrFunc)
     {
-        currentFunction = discrFunc;
+        setCurrentFunction(discrFunc);
 
-        if (((QBInference) inference).isInferenceWithoutLocalNeighborhoods)
+        if (((QBInference) getInference()).isInferenceWithoutLocalNeighborhoods)
         {
             expectationWithoutLocalNeighborhoods(discrFunc);
         }
@@ -105,7 +105,7 @@ public class QBExpectation extends Expectation
 
         // Get result normalized with respect to transparent variables
         normalizedResults =
-        ((QBInference) inference).listOfLocalNeighborhoodResults;
+        ((QBInference) getInference()).listOfLocalNeighborhoodResults;
 
         // Get the bounds on expectations
         for (i = 1; i < normalizedResults.numberVariables(); i++)
@@ -144,10 +144,7 @@ public class QBExpectation extends Expectation
             }
         }
 
-        // Construct results
-        results = new double[2];
-        results[0] = min;
-        results[1] = max;
+        setResults(min, max);
     }
 
     /**
@@ -156,15 +153,14 @@ public class QBExpectation extends Expectation
      */
     private void expectationWithoutLocalNeighborhoods(DiscreteFunction discrFunc)
     {
-        QBInference qbInference = (QBInference) inference;
+        QBInference qbInference = (QBInference) getInference();
         QuasiBayesNet qbn = ((QuasiBayesNet) (qbInference.getBayesNet()));
 
         switch (qbn.getGlobalNeighborhoodType())
         {
             case QuasiBayesNet.NO_CREDAL_SET:
                 ProbabilityFunction res = qbInference.getResult();
-                results = new double[1];
-                results[0] = res.expectedValue(discrFunc);
+                setResults(res.expectedValue(discrFunc));
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
                 ProbabilityFunction cdrRes =
@@ -175,38 +171,40 @@ public class QBExpectation extends Expectation
                                         new ConstantDensityRatioSet(cdrRes,
                                                                     qbn.
                                                                     getGlobalNeighborhoodParameter());
-                results = cdr.posteriorExpectedValues(discrFunc);
+                setResults(cdr.posteriorExpectedValues(discrFunc));
                 break;
             case QuasiBayesNet.EPSILON_CONTAMINATED:
                 ProbabilityFunction epsRes =
-                                    new ProbabilityFunction(qbInference.
-                                            getBucketTree().
-                                            getUnnormalizedResult(), qbn);
+                                    new ProbabilityFunction(
+                                            qbInference.getBucketTree().
+                                            getUnnormalizedResult(),
+                                            qbn);
                 EpsilonContaminatedSet eps =
-                                       new EpsilonContaminatedSet(epsRes, qbn.
-                                                                  getGlobalNeighborhoodParameter());
-                results = eps.posteriorExpectedValues(discrFunc);
+                                       new EpsilonContaminatedSet(
+                                               epsRes,
+                                               qbn.
+                                               getGlobalNeighborhoodParameter());
+                setResults(eps.posteriorExpectedValues(discrFunc));
                 break;
             case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
-                ProbabilityFunction cdbRes =
-                                    new ProbabilityFunction(qbInference.
-                                            getBucketTree().
-                                            getUnnormalizedResult(), qbn);
-                ConstantDensityBoundedSet cdb =
-                                          new ConstantDensityBoundedSet(cdbRes,
-                                                                        qbn.
-                                                                        getGlobalNeighborhoodParameter());
-                results = cdb.posteriorExpectedValues(discrFunc);
+                ProbabilityFunction cdbRes = new ProbabilityFunction(
+                                    qbInference.getBucketTree().
+                                    getUnnormalizedResult(),
+                                    qbn);
+                ConstantDensityBoundedSet cdb = new ConstantDensityBoundedSet(
+                                          cdbRes,
+                                          qbn.getGlobalNeighborhoodParameter());
+                setResults(cdb.posteriorExpectedValues(discrFunc));
                 break;
             case QuasiBayesNet.TOTAL_VARIATION:
                 ProbabilityFunction tvRes =
                                     new ProbabilityFunction(qbInference.
                                             getBucketTree().
                                             getUnnormalizedResult(), qbn);
-                TotalVariationSet tv =
-                                  new TotalVariationSet(tvRes, qbn.
-                                                        getGlobalNeighborhoodParameter());
-                results = tv.posteriorExpectedValues(discrFunc);
+                TotalVariationSet tv = new TotalVariationSet(
+                                  tvRes,
+                                  qbn.getGlobalNeighborhoodParameter());
+                setResults(tv.posteriorExpectedValues(discrFunc));
                 break;
         }
     }

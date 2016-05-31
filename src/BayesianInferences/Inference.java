@@ -38,20 +38,11 @@ import java.util.logging.Logger;
 public class Inference
 {
 
-    /**
-     *
-     */
-    protected static final int IGNORE_EXPLANATION = 0;
+    public enum ExplanationType
+    {
 
-    /**
-     *
-     */
-    protected static final int EXPLANATION = 1;
-
-    /**
-     *
-     */
-    protected static final int FULL_EXPLANATION = 2;
+        IGNORE, SIMPLE, FULL;
+    }
     private static final String CLASS_NAME = Inference.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
@@ -123,18 +114,19 @@ public class Inference
                 // If the probVar has no Bucket or a Bucket without valid cluster:
                 if ((buck == null) || (buck.cluster == null))
                 {
-                    inference(new Ordering(bayesNet, queriedVariableName,
-                                           IGNORE_EXPLANATION,
-                                           Ordering.MINIMUM_WEIGHT));
+                    inference(new Ordering(bayesNet,
+                                           queriedVariableName,
+                                           ExplanationType.IGNORE,
+                                           Ordering.Type.MINIMUM_WEIGHT));
                 }
                 else
                 { // If probVar already has a Bucket:
                     // Get the BucketTree.
                     bucketTree = buck.bucketTree;
                     // Note that the method bucketTree.distribute() below must return true:
-                    //     - the bucketTree is constructed with IGNORE_EXPLANATION.
+                    //     - the bucketTree is constructed with IGNORE.
                     //     - this block only runs if isProducingClusters is true.
-                    if (buck.bucketStatus != Bucket.DISTRIBUTED)
+                    if (buck.bucketStatus != Bucket.Type.DISTRIBUTED)
                     {
                         if (buck ==
                             bucketTree.bucketTree[bucketTree.bucketTree.length -
@@ -158,15 +150,18 @@ public class Inference
             }
             else
             { // If the queriedVariableName is invalid:
-                inference(new Ordering(bayesNet, (String) null,
-                                       IGNORE_EXPLANATION,
-                                       Ordering.MINIMUM_WEIGHT));
+                inference(new Ordering(bayesNet,
+                                       (String) null,
+                                       ExplanationType.IGNORE,
+                                       Ordering.Type.MINIMUM_WEIGHT));
             }
         }
         else
         { // If no cluster is generated:
-            inference(new Ordering(bayesNet, queriedVariableName,
-                                   IGNORE_EXPLANATION, Ordering.MINIMUM_WEIGHT));
+            inference(new Ordering(bayesNet,
+                                   queriedVariableName,
+                                   ExplanationType.IGNORE,
+                                   Ordering.Type.MINIMUM_WEIGHT));
         }
     }
 
@@ -178,7 +173,9 @@ public class Inference
      */
     protected void inference(String order[])
     {
-        inference(new Ordering(bayesNet, order, IGNORE_EXPLANATION));
+        inference(new Ordering(bayesNet,
+                               order,
+                               ExplanationType.IGNORE));
     }
 
     /**

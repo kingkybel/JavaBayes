@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * that are observed.
  *
  * In EXPLANATION only variables that are marked as explanation variables are
- * used in the maximization; an observed variable is not used even if it is
+ * used in the maximization; an observed variable is not used, even if it is
  * marked as explanation variable. Note that in EXPLANATION mode, if there are
  * no variables marked as explanation variables, the final result is the
  * posterior marginal.
@@ -69,7 +69,7 @@ public class Explanation
      */
     public void explanation()
     {
-        explanation(Inference.EXPLANATION);
+        explanation(Inference.ExplanationType.SIMPLE);
     }
 
     /**
@@ -77,7 +77,7 @@ public class Explanation
      */
     public void fullExplanation()
     {
-        explanation(Inference.FULL_EXPLANATION);
+        explanation(Inference.ExplanationType.FULL);
     }
 
     /**
@@ -85,12 +85,12 @@ public class Explanation
      *
      * @param explanationStatus
      */
-    public void explanation(int explanationStatus)
+    public void explanation(Inference.ExplanationType explanationStatus)
     {
         bucketTree = new BucketTree(new Ordering(bayesNet,
                                                  (String) null,
                                                  explanationStatus,
-                                                 Ordering.MINIMUM_WEIGHT));
+                                                 Ordering.Type.MINIMUM_WEIGHT));
         doInferenceFromBucketTree();
     }
 
@@ -101,7 +101,7 @@ public class Explanation
      */
     public void explanation(String order[])
     {
-        explanation(order, Inference.EXPLANATION);
+        explanation(order, Inference.ExplanationType.SIMPLE);
     }
 
     /**
@@ -111,7 +111,7 @@ public class Explanation
      */
     public void fullExplanation(String order[])
     {
-        explanation(order, Inference.FULL_EXPLANATION);
+        explanation(order, Inference.ExplanationType.FULL);
     }
 
     /**
@@ -120,7 +120,8 @@ public class Explanation
      * @param order
      * @param explanationStatus
      */
-    public void explanation(String order[], int explanationStatus)
+    public void explanation(String order[],
+                            Inference.ExplanationType explanationStatus)
     {
         bucketTree =
         new BucketTree(new Ordering(bayesNet, order, explanationStatus));

@@ -78,7 +78,7 @@ public class SaveBugs
      */
     private void saveModel(PrintStream pstream)
     {
-        pstream.println("model " + bayesNet.name + ";");
+        pstream.println("model " + bayesNet.getName() + ";");
     }
 
     /**

@@ -38,26 +38,19 @@ import java.util.logging.Logger;
 public class Ordering
 {
 
-    /**
-     *
-     */
-    public static final int USER_DEFINED = 0;
-
-    /**
-     *
-     */
-    public static final int USER_ORDER = 1;
-
-    /**
-     *
-     */
-    public static final int MINIMUM_WEIGHT = 2;
     private static final String CLASS_NAME = Ordering.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
+    public enum Type
+    {
+
+        USER_DEFINED, USER_ORDER, MINIMUM_WEIGHT;
+    }
     BayesNet bayesNet;
     String order[];
-    int explanationStatus = Inference.IGNORE_EXPLANATION;
-    int orderingType = MINIMUM_WEIGHT;
+    Inference.ExplanationType explanationStatus =
+                              Inference.ExplanationType.IGNORE;
+    Type orderingType = Type.MINIMUM_WEIGHT;
 
     /**
      * Basic constructor for Ordering.
@@ -66,7 +59,7 @@ public class Ordering
      * @param orderingType
      * @param objective
      */
-    public Ordering(BayesNet bayesNet, String objective, int orderingType)
+    public Ordering(BayesNet bayesNet, String objective, Type orderingType)
     {
         this.bayesNet = bayesNet;
         explanationStatus = obtainExplanationStatus(bayesNet);
@@ -97,8 +90,8 @@ public class Ordering
      */
     public Ordering(BayesNet bayesNet,
                     String objective,
-                    int explanationStatus,
-                    int orderingType)
+                    Inference.ExplanationType explanationStatus,
+                    Type orderingType)
     {
         this.bayesNet = bayesNet;
         this.explanationStatus = explanationStatus;
@@ -113,7 +106,9 @@ public class Ordering
      * @param explanationStatus
      * @param order
      */
-    public Ordering(BayesNet bayesNet, String order[], int explanationStatus)
+    public Ordering(BayesNet bayesNet,
+                    String order[],
+                    Inference.ExplanationType explanationStatus)
     {
         this.bayesNet = bayesNet;
         this.order = order;
@@ -122,17 +117,18 @@ public class Ordering
 
     /**
      * Obtain explanationStatus: unless there are explanations the status is
-     * IGNORE_EXPLANATION.
+     * IGNORE.
      */
-    private int obtainExplanationStatus(BayesNet bayesNet)
+    private Inference.ExplanationType obtainExplanationStatus(BayesNet bayesNet)
     {
-        int explanationStatusFlag = Inference.IGNORE_EXPLANATION;
+        Inference.ExplanationType explanationStatusFlag =
+                                  Inference.ExplanationType.IGNORE;
         for (int i = 0; i < bayesNet.numberVariables(); i++)
         {
             if ((!(bayesNet.getProbabilityVariable(i).isObserved())) &&
                 (bayesNet.getProbabilityVariable(i).isExplanation()))
             {
-                explanationStatusFlag = Inference.EXPLANATION;
+                explanationStatusFlag = Inference.ExplanationType.SIMPLE;
                 break;
             }
         }
@@ -162,7 +158,7 @@ public class Ordering
             return (oneOrder);
         }
 
-        if (orderingType == USER_ORDER)
+        if (orderingType == Type.USER_ORDER)
         {
             // For user order, just collect all variables.
             for (i = 0; i < bayesNet.numberVariables(); i++)
@@ -174,7 +170,7 @@ public class Ordering
         else
         {
             // For explanations, just collect all variables.
-            if (explanationStatus != Inference.IGNORE_EXPLANATION)
+            if (explanationStatus != Inference.ExplanationType.IGNORE)
             {
                 for (i = 0; i < bayesNet.numberVariables(); i++)
                 {
@@ -187,7 +183,8 @@ public class Ordering
                 DSeparation dsep = new DSeparation(bayesNet);
                 variablesToOrder = dsep.allAffecting(objectiveIndex);
             }
-            return (heuristicOrder(variablesToOrder, objectiveIndex,
+            return (heuristicOrder(variablesToOrder,
+                                   objectiveIndex,
                                    orderingType));
         }
     }
@@ -229,13 +226,13 @@ public class Ordering
             // Check the status of the variable as a explanatory variable
             switch (explanationStatus)
             {
-                case Inference.IGNORE_EXPLANATION:
+                case IGNORE:
                     isVariableExplanationFlag = false;
                     break;
-                case Inference.EXPLANATION:
+                case SIMPLE:
                     isVariableExplanationFlag = probVar.isExplanation();
                     break;
-                case Inference.FULL_EXPLANATION:
+                case FULL:
                     isVariableExplanationFlag = true;
                     break;
             }
@@ -311,7 +308,7 @@ public class Ordering
      */
     private String[] heuristicOrder(ArrayList origVars,
                                     int objectiveIndex,
-                                    int orderingType)
+                                    Type orderingType)
     {
         int i, j;
         int PHASE_ONE = 1;
@@ -355,8 +352,8 @@ public class Ordering
                     // Order all other variables
                     variablesToOrder.add(probVar);
                     // Check the status of the variable as an explanatory variable
-                    if ((explanationStatus == Inference.FULL_EXPLANATION) ||
-                        ((explanationStatus == Inference.EXPLANATION) &&
+                    if ((explanationStatus == Inference.ExplanationType.FULL) ||
+                        ((explanationStatus == Inference.ExplanationType.SIMPLE) &&
                          (probVar.isExplanation())))
                     {
                         phaseMarkers[probVar.getIndex()] = PHASE_TWO;
@@ -483,12 +480,12 @@ public class Ordering
      * Obtain the heuristic value of eliminating a variable, represented by the
      * list of variables linked to it.
      */
-    private long obtainValue(ArrayList linkedVars, int orderingType)
+    private long obtainValue(ArrayList linkedVars, Type orderingType)
     {
         ProbabilityVariable probVar;
         long value = 0;
 
-        if (orderingType == Ordering.MINIMUM_WEIGHT)
+        if (orderingType == Type.MINIMUM_WEIGHT)
         {
             long weight = 1;
             for (Object e : linkedVars)

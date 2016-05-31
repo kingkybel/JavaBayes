@@ -38,37 +38,94 @@ import java.util.logging.Logger;
 public class Expectation
 {
 
-    static final int EXPECTED_VALUE = 1;
-    static final int SECOND_MOMENT = 2;
-    static final int THIRD_MOMENT = 3;
-    static final int FOURTH_MOMENT = 4;
     private static final String CLASS_NAME = Expectation.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
-    protected BayesNet bayesNet;
+    public void setResults(double expectedValue)
+    {
+        results = new double[1];
+        results[0] = expectedValue;
+    }
 
-    /**
-     *
-     */
-    protected Inference inference;
+    public void setResults(double min, double max)
+    {
+        results = new double[2];
+        results[0] = min;
+        results[1] = max;
+    }
 
-    /**
-     *
-     */
-    protected double results[];
+    public void setResults(double[] results)
+    {
+        this.results = results;
+    }
 
-    /**
-     *
-     */
-    protected boolean isProducingClusters;
+    public enum Type
+    {
 
-    /**
-     *
-     */
-    protected DiscreteFunction currentFunction;
+        EXPECTED_VALUE(1),
+        SECOND_MOMENT(2),
+        THIRD_MOMENT(3),
+        FOURTH_MOMENT(4);
+
+        private Type(int value)
+        {
+            this.value = value;
+
+        }
+
+        public int order()
+        {
+            return value;
+        }
+        int value;
+
+    }
+
+    public BayesNet getBayesNet()
+    {
+        return bayesNet;
+    }
+
+    public void setBayesNet(BayesNet bayesNet)
+    {
+        this.bayesNet = bayesNet;
+    }
+
+    public Inference getInference()
+    {
+        return inference;
+    }
+
+    public void setInference(Inference inference)
+    {
+        this.inference = inference;
+    }
+
+    public boolean isProducingClusters()
+    {
+        return isProducingClusters;
+    }
+
+    public void setProducingClusters(boolean isProducingClusters)
+    {
+        this.isProducingClusters = isProducingClusters;
+    }
+
+    public DiscreteFunction getCurrentFunction()
+    {
+        return currentFunction;
+    }
+
+    public void setCurrentFunction(DiscreteFunction currentFunction)
+    {
+        this.currentFunction = currentFunction;
+    }
+
+    private BayesNet bayesNet;
+    private Inference inference;
+    private double results[];
+    private boolean isProducingClusters;
+    private DiscreteFunction currentFunction;
 
     /**
      * Constructor for an Expectation.
@@ -101,7 +158,7 @@ public class Expectation
         // Construct the function with the values.
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Expectation.EXPECTED_VALUE);
+                                                     Type.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc);
     }
@@ -122,7 +179,7 @@ public class Expectation
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Expectation.EXPECTED_VALUE);
+                                                     Type.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc, queriedVariableName);
     }
@@ -143,7 +200,7 @@ public class Expectation
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Expectation.EXPECTED_VALUE);
+                                                     Type.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc, order);
     }
@@ -153,7 +210,7 @@ public class Expectation
      *
      * @param momentOrder
      */
-    public void expectation(int momentOrder)
+    public void expectation(Type momentOrder)
     {
         // Construct the function with the values
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
@@ -168,7 +225,7 @@ public class Expectation
      * @param momentOrder
      * @param queriedVariableName
      */
-    public void expectation(int momentOrder, String queriedVariableName)
+    public void expectation(Type momentOrder, String queriedVariableName)
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(queriedVariableName);
@@ -189,7 +246,7 @@ public class Expectation
      * @param momentOrder
      * @param order
      */
-    public void expectation(int momentOrder, String order[])
+    public void expectation(Type momentOrder, String order[])
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(order[order.length - 1]);
@@ -247,15 +304,16 @@ public class Expectation
      * Construct the utility function that produces the requested moment.
      */
     private DiscreteFunction constructValues(ProbabilityVariable probVar,
-                                             int momentOrder)
+                                             Type moment)
     {
         DiscreteFunction discrFunc = probVar.getNumericValues();
-        if (momentOrder > 1)
+        if (moment != Type.EXPECTED_VALUE)
         {
             for (int i = 0; i < discrFunc.numberValues(); i++)
             {
-                discrFunc.setValue(i, Math.pow(discrFunc.getValue(i),
-                                               momentOrder));
+                discrFunc.setValue(i,
+                                   Math.pow(discrFunc.getValue(i),
+                                            moment.order()));
             }
         }
         return (discrFunc);
@@ -311,14 +369,10 @@ public class Expectation
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
-        int i, bp[];
-        ProbabilityVariable probVar;
-
-        // Print it all.
         out.print("Posterior expectation: [");
-        for (i = 0; i < results.length; i++)
+        for (double val : results)
         {
-            out.print(results[i] + " ");
+            out.print(val + " ");
         }
         out.println("], for function:");
         currentFunction.print(out);

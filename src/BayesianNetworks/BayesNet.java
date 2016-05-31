@@ -45,46 +45,13 @@ public class BayesNet
      */
     public static final int INVALID_INDEX = -1;
 
-    /**
-     *
-     */
-    public static final int BIF = 1;
-
-    /**
-     *
-     */
-    public static final int XML = 2;
-
-    /**
-     *
-     */
-    public static final int BUGS = 3;
     private static final String CLASS_NAME = BayesNet.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
-    protected String name;
-
-    /**
-     *
-     */
-    protected ArrayList<String> properties = new ArrayList<>();
-
-    /**
-     *
-     */
+    private String name;
+    private ArrayList<String> properties = new ArrayList<>();
     protected ProbabilityVariable probabilityVariables[];
-
-    /**
-     *
-     */
     protected ProbabilityFunction probabilityFunctions[];
-
-    /**
-     *
-     */
     protected DiscreteFunction utilityFunction;
 
     /**
@@ -753,11 +720,11 @@ public class BayesNet
     /**
      * Set the name of the network.
      *
-     * @param n
+     * @param name
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        name = n;
+        this.name = name;
     }
 
     /**
@@ -994,5 +961,10 @@ public class BayesNet
     public void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {
         probabilityFunctions = probFuncs;
+    }
+
+    public boolean hasProperties()
+    {
+        return (properties != null) && (properties.size() > 0);
     }
 }

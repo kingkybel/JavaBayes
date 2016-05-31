@@ -40,8 +40,6 @@ import java.util.logging.Logger;
 public class BucketTree
 {
 
-    static final int MAX_OUT = 2;
-    static final int SUM_OUT = 1;
     private static final String CLASS_NAME = BucketTree.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     Bucket bucketTree[]; // Array of Bucket objects.
@@ -52,7 +50,7 @@ public class BucketTree
     DiscreteFunction unnormalizedResult;
 
     Ordering ordering;
-    int explanationStatus;
+    Inference.ExplanationType explanationStatus;
     boolean isProducingClusters;
 
     private int activeBucket;
@@ -317,7 +315,7 @@ public class BucketTree
         // Now reduce the last Bucket.
         unnormalizedResult = bucketTree[i].combine();
         // Mark the last Bucket as DISTRIBUTED.
-        bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
+        bucketTree[i].bucketStatus = Bucket.Type.DISTRIBUTED;
         // Generate the backwardPointers if necessary.
         backwardPointers = backwardMaximization();
     }
@@ -382,11 +380,11 @@ public class BucketTree
                         getIndex()] = false;
             }
 
-       // The following piece of code does the right thing (compared to the
+            // The following piece of code does the right thing (compared to the
             // piece of code above): it selects the
             // minimum number of non-conditioning variables. To use this piece
             // of code, it will be necessary to create a "normalize" method that
-            // normalizes with respect to a number of variables at at time.
+            // normalizes with respect to a number of variables at a time.
        /*
              for (j=0; j<bucketTree[i].cluster.numberVariables(); j++) {
              markNonConditioning[ (bucketTree[i].cluster.getVariables())[j].getIndex() ] = false;
@@ -416,7 +414,7 @@ public class BucketTree
             }
 
             // Mark the Bucket as DISTRIBUTED.
-            bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
+            bucketTree[i].bucketStatus = Bucket.Type.DISTRIBUTED;
         }
         // Indicate success.
         return (true);
@@ -577,9 +575,9 @@ public class BucketTree
     {
         out.println("BucketTree:" + "\n\tActive Bucket is " + activeBucket +
                     ".");
-        for (int i = 0; i < bucketTree.length; i++)
+        for (Bucket bucketTree1 : bucketTree)
         {
-            bucketTree[i].print(out);
+            bucketTree1.print(out);
         }
         out.println("Bucket result: ");
         unnormalizedResult.print(out);
@@ -606,5 +604,15 @@ public class BucketTree
     public DiscreteFunction getUnnormalizedResult()
     {
         return (unnormalizedResult);
+    }
+
+    boolean isFullExplanation()
+    {
+        return explanationStatus == Inference.ExplanationType.FULL;
+    }
+
+    boolean isIgnoreExplanation()
+    {
+        return explanationStatus == Inference.ExplanationType.IGNORE;
     }
 }

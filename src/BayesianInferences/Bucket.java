@@ -36,9 +36,11 @@ import java.util.logging.Logger;
 class Bucket
 {
 
-    static final int EMPTY = 0;
-    static final int REDUCED = 1;
-    static final int DISTRIBUTED = 2;
+    public enum Type
+    {
+
+        EMPTY, REDUCED, DISTRIBUTED;
+    }
     private static final String CLASS_NAME = Bucket.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
@@ -71,7 +73,7 @@ class Bucket
     // The child of the Bucket in the BucketTree.
     Bucket child;
 
-    int bucketStatus = EMPTY;
+    Type bucketStatus = Type.EMPTY;
 
     private DiscreteFunction orderedDfs[];
     private boolean isOrderedDfsReady;
@@ -220,7 +222,7 @@ class Bucket
         }
 
         // Mark the Bucket as REDUCED;
-        bucketStatus = REDUCED;
+        bucketStatus = Type.REDUCED;
         // Set the separator.
         separator = newDf;
     }
@@ -344,19 +346,13 @@ class Bucket
     }
 
     /**
-     * Detect whether the bucket probVar is an explanatory probVar.
+     * Detect whether the bucket variable is an explanatory variable.
      */
     boolean isExplanation()
     {
-        if (bucketTree.explanationStatus == Inference.IGNORE_EXPLANATION)
-        {
-            return (false);
-        }
-        if (bucketTree.explanationStatus == Inference.FULL_EXPLANATION)
-        {
-            return (true);
-        }
-        return (probVar.isExplanation());
+        return bucketTree.isIgnoreExplanation() ? false :
+               bucketTree.isFullExplanation() ? true :
+               probVar.isExplanation();
     }
 
     /**

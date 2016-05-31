@@ -235,7 +235,7 @@ public class ConvertInterchangeFormat
             index = bayesNet.indexOfVariable(ssVariables[i]);
             if (index != BayesNet.INVALID_INDEX)
             {
-                variables[i] = bayesNet.probabilityVariables[index];
+                variables[i] = bayesNet.getProbabilityVariable(index);
             }
         }
         return (variables);
