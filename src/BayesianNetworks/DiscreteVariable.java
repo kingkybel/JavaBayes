@@ -159,7 +159,7 @@ public class DiscreteVariable
     /**
      * Print method for DiscreteVariable.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {

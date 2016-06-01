@@ -53,7 +53,8 @@ class Bucket
     // The functions in the Bucket.
     ArrayList<DiscreteFunction> discreteFunctions;
 
-    DiscreteFunction backwardPointers; // The pointers used for maximization.
+    // The pointers used for maximization.
+    DiscreteFunction backwardPointers;
 
     // The function that is sent from a Bucket to another.
     DiscreteFunction separator;
@@ -105,10 +106,10 @@ class Bucket
     {
         this.bucketTree = bucketTree;
         this.probVar = probVar;
-        discreteFunctions = new ArrayList<>();
+        this.discreteFunctions = new ArrayList<>();
         this.isProducingClusters = isProducingClusters;
-        nonConditioningVariables = new ArrayList<>();
-        parents = new ArrayList<>();
+        this.nonConditioningVariables = new ArrayList<>();
+        this.parents = new ArrayList<>();
     }
 
     /**
@@ -121,11 +122,12 @@ class Bucket
 
     /**
      * Print method for Bucket.
+     *
+     * @param out output print stream
      */
     void print(PrintStream out)
     {
         boolean isExplanationFlag = false;
-        DiscreteFunction discrFunc;
 
         if (isExplanation())
         {
@@ -151,9 +153,8 @@ class Bucket
                 out.println("Bucket has been distributed.");
                 break;
         }
-        for (Object e : discreteFunctions)
+        for (DiscreteFunction discrFunc : discreteFunctions)
         {
-            discrFunc = (DiscreteFunction) (e);
             discrFunc.print(out);
         }
         if (isExplanationFlag && (backwardPointers != null))
@@ -211,7 +212,7 @@ class Bucket
             separator = null;
             return;
         }
-        // Either sum out or maximize out the bucket probVar.
+        // Either sum out or maximize out the bucket variable.
         if (isExplanation())
         {
             maxOut(newDf);
@@ -229,6 +230,8 @@ class Bucket
 
     /**
      * Combine a number of functions in the bucket into a single function.
+     *
+     * @return the combined function
      */
     DiscreteFunction combine()
     {
@@ -347,6 +350,8 @@ class Bucket
 
     /**
      * Detect whether the bucket variable is an explanatory variable.
+     *
+     * @return
      */
     boolean isExplanation()
     {
@@ -375,6 +380,9 @@ class Bucket
 
     /**
      * Join the indexes of the Bucket by marking the probVar markers with true.
+     *
+     * @param variableMarkers
+     * @return the number of joined Indices
      */
     private int joinIndexes(boolean variableMarkers[])
     {
@@ -400,7 +408,10 @@ class Bucket
 
     /**
      * Construct a DiscreteFunction which holds all the variables in the Bucket
-     * (maybe with the exception of the bucket probVar).
+     * (maybe with the exception of the bucket variable).
+     *
+     * @param isBucketVariableIncluded
+     * @return
      */
     private DiscreteFunction buildNewFunction(
             boolean isBucketVariableIncluded)
@@ -449,6 +460,11 @@ class Bucket
     /**
      * Construct an array of variables that contains the variables in a new
      * function; if the bucket variable is present, it is the first variable.
+     *
+     * @param newDf
+     * @param joinedIndexes
+     * @param isBucketVariableIncluded
+     * @param n
      */
     private void buildNewVariables(DiscreteFunction newDf,
                                    int joinedIndexes[],
@@ -491,6 +507,8 @@ class Bucket
     /**
      * Obtain the values for the reducedFunction. Attention: the array
      * orderedDfs is supposed to be ready!
+     *
+     * @param newDf new function
      */
     private void sumOut(DiscreteFunction newDf)
     {
@@ -561,6 +579,8 @@ class Bucket
     /**
      * Obtain the values for the reducedFunction through maximization.
      * Attention: the array orderedDfs is supposed to be ready!
+     *
+     * @param newDf new function
      */
     private void maxOut(DiscreteFunction newDf)
     {
@@ -630,6 +650,8 @@ class Bucket
 
     /**
      * Allocate and initialize the backwardPointers in the Bucket.
+     *
+     * @param newDf new function
      */
     private void createBackwardPointers(DiscreteFunction newDf)
     {

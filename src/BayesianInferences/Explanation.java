@@ -69,7 +69,7 @@ public class Explanation
      */
     public void explanation()
     {
-        explanation(Inference.ExplanationType.SIMPLE);
+        explanation(ExplanationType.SUBSET);
     }
 
     /**
@@ -77,7 +77,7 @@ public class Explanation
      */
     public void fullExplanation()
     {
-        explanation(Inference.ExplanationType.FULL);
+        explanation(ExplanationType.FULL);
     }
 
     /**
@@ -85,7 +85,7 @@ public class Explanation
      *
      * @param explanationStatus
      */
-    public void explanation(Inference.ExplanationType explanationStatus)
+    public void explanation(ExplanationType explanationStatus)
     {
         bucketTree = new BucketTree(new Ordering(bayesNet,
                                                  (String) null,
@@ -101,7 +101,7 @@ public class Explanation
      */
     public void explanation(String order[])
     {
-        explanation(order, Inference.ExplanationType.SIMPLE);
+        explanation(order, ExplanationType.SUBSET);
     }
 
     /**
@@ -111,7 +111,7 @@ public class Explanation
      */
     public void fullExplanation(String order[])
     {
-        explanation(order, Inference.ExplanationType.FULL);
+        explanation(order, ExplanationType.FULL);
     }
 
     /**
@@ -121,7 +121,7 @@ public class Explanation
      * @param explanationStatus
      */
     public void explanation(String order[],
-                            Inference.ExplanationType explanationStatus)
+                            ExplanationType explanationStatus)
     {
         bucketTree =
         new BucketTree(new Ordering(bayesNet, order, explanationStatus));
@@ -149,7 +149,7 @@ public class Explanation
     /**
      * Print Explanation.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
@@ -169,7 +169,7 @@ public class Explanation
     /**
      * Print Explanation.
      *
-     * @param out
+     * @param out                   output print stream
      * @param shouldPrintBucketTree
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)

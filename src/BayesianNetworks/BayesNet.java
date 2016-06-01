@@ -26,9 +26,9 @@
 package BayesianNetworks;
 
 import InterchangeFormat.InterchangeFormat;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -122,8 +122,8 @@ public class BayesNet
     public BayesNet(String networkDescription) throws Exception
     {
         this();
-        StringBufferInputStream istream = new StringBufferInputStream(
-                                networkDescription);
+        ByteArrayInputStream istream = new ByteArrayInputStream(
+                             networkDescription.getBytes());
         // Read the BayesNet from the stream
         InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
         interchangeFmt.CompilationUnit();
@@ -284,7 +284,7 @@ public class BayesNet
     /**
      * Save a BayesNet object in a stream, in the BIF InterchangeFormat.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveBif(PrintStream out)
     {
@@ -343,7 +343,7 @@ public class BayesNet
     /**
      * Save a BayesNet object in a stream for the EBayes engine.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveEmbayes(PrintStream out)
     {
@@ -697,7 +697,7 @@ public class BayesNet
     /**
      * Print a BayesNet in a given stream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {

@@ -39,9 +39,9 @@ import java.util.logging.Logger;
 public class QBProbabilityFunction extends ProbabilityFunction
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(QBProbabilityFunction.class.
-                                        getName());
+    private static final String CLASS_NAME =
+                                QBProbabilityFunction.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double lowerEnvelope[];
     double upperEnvelope[];

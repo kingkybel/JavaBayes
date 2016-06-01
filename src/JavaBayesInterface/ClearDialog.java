@@ -62,28 +62,29 @@ public class ClearDialog extends Dialog
         //{{INIT_CONTROLS
         setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         addNotify();
-        resize(insets().left + insets().right + 295, insets().top +
-                                                     insets().bottom + 92);
+        setSize(getInsets().left + getInsets().right + 295, getInsets().top +
+                                                            getInsets().bottom +
+                                                            92);
         yesButton = new java.awt.Button("Yes");
-        yesButton.reshape(insets().left + 51, insets().top + 20, 60, 40);
+        yesButton.setBounds(getInsets().left + 51, getInsets().top + 20, 60, 40);
         add(yesButton);
         noButton = new java.awt.Button("No");
-        noButton.reshape(insets().left + 165, insets().top + 20, 60, 40);
+        noButton.setBounds(getInsets().left + 165, getInsets().top + 20, 60, 40);
         add(noButton);
         setResizable(false);
         //}}
     }
 
     @Override
-    public void show()
+    public void setVisible(boolean show)
     {
-        Rectangle bounds = getParent().bounds();
-        Rectangle abounds = bounds();
+        Rectangle bounds = getParent().getBounds();
+        Rectangle abounds = getBounds();
 
-        move(bounds.x + (bounds.width - abounds.width) / 2,
-             bounds.y + (bounds.height - abounds.height) / 2);
+        setLocation(bounds.x + (bounds.width - abounds.width) / 2,
+                    bounds.y + (bounds.height - abounds.height) / 2);
 
-        super.show();
+        super.setVisible(show);
     }
 
     @Override

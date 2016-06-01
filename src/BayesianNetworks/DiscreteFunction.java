@@ -453,7 +453,7 @@ public class DiscreteFunction
     /**
      * Print method for DiscreteFunction into a PrintStream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {

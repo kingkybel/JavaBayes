@@ -71,7 +71,7 @@ not very accurately described):
         The XMLBIF format is updated accordingly
 	to discussions in the Interchange Format committee;
 	several major bugs in the code for junction trees are
-	fixed; the layout of Edit dialogs changes (gets insets;
+	fixed; the layout of Edit dialogs changes (gets getInsets();
 	colors for the Edit Function dialogs).
 
 - Ago 1998: JavaBayes 0.34, with new format option allows 

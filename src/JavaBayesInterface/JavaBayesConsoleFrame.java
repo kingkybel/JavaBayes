@@ -207,7 +207,7 @@ public final class JavaBayesConsoleFrame extends Frame
 
         d.width /= 2;
         d.height /= 2;
-        resize(d);
+        setSize(d);
     }
 
     /**
@@ -385,7 +385,7 @@ public final class JavaBayesConsoleFrame extends Frame
             textArea1.setText(appletInvalidOperation);
             return;
         }
-        SaveFileDialog.show();
+        SaveFileDialog.setVisible(true);
         String filename = SaveFileDialog.getFile();
         if (filename == null)
         {
@@ -412,7 +412,8 @@ public final class JavaBayesConsoleFrame extends Frame
 
     void ClearAction()
     {
-        (new ClearDialog(this, jb, "Clear the Bayesian network?", true)).show();
+        (new ClearDialog(this, jb, "Clear the Bayesian network?", true)).
+                setVisible(true);
     }
 
     void SaveAction()
@@ -440,7 +441,7 @@ public final class JavaBayesConsoleFrame extends Frame
             appendText(appletInvalidOperation);
             return;
         }
-        SaveFileDialog.show();
+        SaveFileDialog.setVisible(true);
         String filename = SaveFileDialog.getFile();
         if (filename == null)
         {
@@ -465,7 +466,7 @@ public final class JavaBayesConsoleFrame extends Frame
             textArea1.append(appletInvalidOperation);
             return;
         }
-        OpenFileDialog.show();
+        OpenFileDialog.setVisible(true);
         String filename = OpenFileDialog.getFile();
         if (filename == null)
         {
@@ -484,12 +485,13 @@ public final class JavaBayesConsoleFrame extends Frame
 
     void OpenURL_Action()
     {
-        (new OpenURLDialog(this, jb, "Insert URL of network", true)).show();
+        (new OpenURLDialog(this, jb, "Insert URL of network", true)).setVisible(
+                true);
     }
 
     void QuitAction()
     {
-        (new QuitDialog(this, jb, "Quit JavaBayes?", false)).show();
+        (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(true);
     }
 
     void AboutAction()
@@ -498,14 +500,15 @@ public final class JavaBayesConsoleFrame extends Frame
     }
 
     /**
-     * Override show() so that Console does not superimpose EditorFrame
-     * directly.
+     * Override setVisible() so that Console does not superimpose EditorFrame
+     *
+     * @param show directly.
      */
     @Override
-    public void show()
+    public void setVisible(boolean show)
     {
-        move(50, 50);
-        super.show();
+        setLocation(50, 50);
+        super.setVisible(show);
     }
 
     /**
@@ -604,7 +607,8 @@ public final class JavaBayesConsoleFrame extends Frame
         {
             if (jb != null)
             {
-                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).show();
+                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(
+                        true);
             }
         }
         return (super.handleEvent(evt));
@@ -617,7 +621,7 @@ public final class JavaBayesConsoleFrame extends Frame
      */
     public void appendText(String text)
     {
-        textArea1.appendText(text);
+        textArea1.append(text);
     }
 
     /**
@@ -636,7 +640,7 @@ public final class JavaBayesConsoleFrame extends Frame
         }
         else
         {           // If cur was off, then cur is on and all others are off.
-            for (int i = 0; i < m.countItems(); i++)
+            for (int i = 0; i < m.getItemCount(); i++)
             {
                 // Set all menu items to off,
                 ((CheckboxMenuItem) (m.getItem(i))).setState(false);

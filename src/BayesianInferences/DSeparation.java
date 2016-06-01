@@ -72,8 +72,11 @@ class DSeparation
 
     /**
      * Return a list of all variables that are d-connected to a given variable.
+     *
+     * @param x index of the variable to test
+     * @return
      */
-    public ArrayList<DiscreteVariable> allConnected(int x)
+    public ArrayList<DiscreteVariable> getDConnectedVariables(int x)
     {
         return (separation(x, ConnectionType.CONNECTED_VARIABLES));
     }
@@ -81,19 +84,25 @@ class DSeparation
     /**
      * Returns a list of all variables whose distributions can affect the
      * marginal posterior of a given variable.
+     *
+     * @param x index of the variable to test
+     * @return
      */
-    public ArrayList allAffecting(int x)
+    public ArrayList<DiscreteVariable> getAllAffectingVariables(int x)
     {
         return (separation(x, ConnectionType.AFFECTING_VARIABLES));
     }
 
     /**
      * Find all d-separation relations.
+     *
+     * @param x              index of the variable to test
+     * @param connectionType
      */
-    private void separationRelations(int x, ConnectionType flag)
+    private void separationRelations(int x, ConnectionType connectionType)
     {
         int nvertices = bayesNet.numberProbabilityFunctions();
-        if (flag == ConnectionType.AFFECTING_VARIABLES)
+        if (connectionType == ConnectionType.AFFECTING_VARIABLES)
         {
             nvertices += nvertices;
         }
@@ -138,9 +147,9 @@ class DSeparation
             {
                 for (i = 0; i < nvertices; i++)
                 {
-                    if (adj(i, v, flag))
+                    if (adj(i, v, connectionType))
                     {
-                        if ((!below[i]) && (!isSeparator(i, flag)))
+                        if ((!below[i]) && (!isSeparator(i, connectionType)))
                         {
                             below[i] = true;
                             int Vbelow[] =
@@ -153,7 +162,7 @@ class DSeparation
                 }
                 for (j = 0; j < nvertices; j++)
                 {
-                    if (adj(v, j, flag))
+                    if (adj(v, j, connectionType))
                     {
                         if (!above[j])
                         {
@@ -170,13 +179,13 @@ class DSeparation
             }  // subscript < 0
             else
             {
-                if (isSeparator(v, flag))
+                if (isSeparator(v, connectionType))
                 {  // v known
                     for (i = 0; i < nvertices; i++)
                     {
-                        if (adj(i, v, flag))
+                        if (adj(i, v, connectionType))
                         {
-                            if ((!isSeparator(i, flag)) && !below[i])
+                            if ((!isSeparator(i, connectionType)) && !below[i])
                             {
                                 below[i] = true;
                                 int Tbelow[] =
@@ -190,10 +199,9 @@ class DSeparation
                 }
                 else
                 {
-                    for (j = 0; j < nvertices;
-                         j++)
+                    for (j = 0; j < nvertices; j++)
                     {
-                        if (adj(v, j, flag))
+                        if (adj(v, j, connectionType))
                         {
                             if (!above[j])
                             {
@@ -214,18 +222,23 @@ class DSeparation
 
     /**
      * Run the separation algorithm and process its results.
+     *
+     * @param x              index of the variable to test
+     * @param connectionType
+     * @return
      */
-    private ArrayList<DiscreteVariable> separation(int x, ConnectionType flag)
+    private ArrayList<DiscreteVariable> separation(int x,
+                                                   ConnectionType connectionType)
     {
         int i;
         int nvertices = bayesNet.numberProbabilityFunctions();
         ArrayList<DiscreteVariable> dSeparatedVariables = new ArrayList<>();
 
         // Run algorithm
-        separationRelations(x, flag);
+        separationRelations(x, connectionType);
 
         // Process results
-        if (flag == ConnectionType.CONNECTED_VARIABLES)
+        if (connectionType == ConnectionType.CONNECTED_VARIABLES)
         {
             for (i = 0; i < nvertices; i++)
             {
@@ -253,14 +266,18 @@ class DSeparation
     /**
      * Check whether the variable given by the index is in the list of
      * separators (i.e., it is observed).
+     *
+     * @param varIndex
+     * @param connectionType
+     * @return
      */
-    private boolean isSeparator(int i, ConnectionType flag)
+    private boolean isSeparator(int varIndex, ConnectionType connectionType)
     {
-        if ((flag == ConnectionType.CONNECTED_VARIABLES) ||
-            ((flag == ConnectionType.AFFECTING_VARIABLES) &&
-             (i < bayesNet.numberProbabilityFunctions())))
+        if ((connectionType == ConnectionType.CONNECTED_VARIABLES) ||
+            ((connectionType == ConnectionType.AFFECTING_VARIABLES) &&
+             (varIndex < bayesNet.numberProbabilityFunctions())))
         {
-            return (bayesNet.getProbabilityVariable(i).isObserved());
+            return (bayesNet.getProbabilityVariable(varIndex).isObserved());
         }
         else
         {
@@ -271,13 +288,19 @@ class DSeparation
     /**
      * Check whether there is a link from variable indexFrom to variable
      * indexTo.
+     *
+     * @param indexFrom
+     * @param indexTo
+     * @param connectionType
+     * @return
      */
-    private boolean adj(int indexFrom, int indexTo, ConnectionType flag)
+    private boolean adj(int indexFrom, int indexTo,
+                        ConnectionType connectionType)
     {
         ProbabilityFunction probFunc = null;
 
-        if ((flag == ConnectionType.CONNECTED_VARIABLES) ||
-            ((flag == ConnectionType.AFFECTING_VARIABLES) &&
+        if ((connectionType == ConnectionType.CONNECTED_VARIABLES) ||
+            ((connectionType == ConnectionType.AFFECTING_VARIABLES) &&
              (indexTo < bayesNet.numberProbabilityFunctions()) &&
              (indexFrom < bayesNet.numberProbabilityFunctions())))
         {

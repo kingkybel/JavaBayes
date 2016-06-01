@@ -25,7 +25,7 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
+import BayesianInferences.InferenceGraph;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -192,27 +192,27 @@ class EditNetworkDialog extends Dialog
     }
 
     /**
-     * Customized show method.
+     * Customized setVisible method.
      */
     @Override
-    public void show()
+    public void setVisible(boolean show)
     {
-        Rectangle bounds = getParent().bounds();
-        Rectangle abounds = bounds();
+        Rectangle bounds = getParent().getBounds();
+        Rectangle abounds = getBounds();
 
-        move(bounds.x + (bounds.width - abounds.width) / 2,
-             bounds.y + (bounds.height - abounds.height) / 2);
+        setLocation(bounds.x + (bounds.width - abounds.width) / 2,
+                    bounds.y + (bounds.height - abounds.height) / 2);
 
-        super.show();
+        super.setVisible(show);
     }
 
     /**
-     * Customized insets method.
+     * Customized getInsets() method.
      */
     @Override
-    public Insets insets()
+    public Insets getInsets()
     {
-        Insets ins = super.insets();
+        Insets ins = super.getInsets();
         return (new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
                            ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET));
     }
@@ -254,19 +254,19 @@ class EditNetworkDialog extends Dialog
         switch (ig.getGlobalNeighborhoodType())
         {
             case InferenceGraph.NO_CREDAL_SET:
-                globals.setCurrent(noGlobal);
+                globals.setSelectedCheckbox(noGlobal);
                 break;
             case InferenceGraph.CONSTANT_DENSITY_RATIO:
-                globals.setCurrent(ratioGlobal);
+                globals.setSelectedCheckbox(ratioGlobal);
                 break;
             case InferenceGraph.EPSILON_CONTAMINATED:
-                globals.setCurrent(epsilonGlobal);
+                globals.setSelectedCheckbox(epsilonGlobal);
                 break;
             case InferenceGraph.CONSTANT_DENSITY_BOUNDED:
-                globals.setCurrent(boundedGlobal);
+                globals.setSelectedCheckbox(boundedGlobal);
                 break;
             case InferenceGraph.TOTAL_VARIATION:
-                globals.setCurrent(totalGlobal);
+                globals.setSelectedCheckbox(totalGlobal);
                 break;
         }
 
@@ -332,7 +332,7 @@ class EditNetworkDialog extends Dialog
         }
 
         // Update the global neighborhood parameters.
-        Checkbox selectedGlobalNeighborhood = globals.getCurrent();
+        Checkbox selectedGlobalNeighborhood = globals.getSelectedCheckbox();
         if (selectedGlobalNeighborhood == noGlobal)
         {
             ig.setGlobalNeighborhood(InferenceGraph.NO_CREDAL_SET);

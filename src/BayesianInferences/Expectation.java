@@ -41,24 +41,6 @@ public class Expectation
     private static final String CLASS_NAME = Expectation.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public void setResults(double expectedValue)
-    {
-        results = new double[1];
-        results[0] = expectedValue;
-    }
-
-    public void setResults(double min, double max)
-    {
-        results = new double[2];
-        results[0] = min;
-        results[1] = max;
-    }
-
-    public void setResults(double[] results)
-    {
-        this.results = results;
-    }
-
     public enum Type
     {
 
@@ -79,6 +61,43 @@ public class Expectation
         }
         int value;
 
+    }
+
+    private BayesNet bayesNet;
+    private Inference inference;
+    private double results[];
+    private boolean isProducingClusters;
+    private DiscreteFunction currentFunction;
+
+    /**
+     * Constructor for an Expectation.
+     *
+     * @param bayesNet
+     * @param isProducingClusters
+     */
+    public Expectation(BayesNet bayesNet, boolean isProducingClusters)
+    {
+        this.bayesNet = bayesNet;
+        this.isProducingClusters = isProducingClusters;
+        initializeInference();
+    }
+
+    public void setResults(double expectedValue)
+    {
+        results = new double[1];
+        results[0] = expectedValue;
+    }
+
+    public void setResults(double min, double max)
+    {
+        results = new double[2];
+        results[0] = min;
+        results[1] = max;
+    }
+
+    public void setResults(double[] results)
+    {
+        this.results = results;
     }
 
     public BayesNet getBayesNet()
@@ -119,25 +138,6 @@ public class Expectation
     public void setCurrentFunction(DiscreteFunction currentFunction)
     {
         this.currentFunction = currentFunction;
-    }
-
-    private BayesNet bayesNet;
-    private Inference inference;
-    private double results[];
-    private boolean isProducingClusters;
-    private DiscreteFunction currentFunction;
-
-    /**
-     * Constructor for an Expectation.
-     *
-     * @param bayesNet
-     * @param isProducingClusters
-     */
-    public Expectation(BayesNet bayesNet, boolean isProducingClusters)
-    {
-        this.bayesNet = bayesNet;
-        this.isProducingClusters = isProducingClusters;
-        initializeInference();
     }
 
     /**
@@ -208,13 +208,13 @@ public class Expectation
     /**
      * Calculation of Expectation.
      *
-     * @param momentOrder
+     * @param moment
      */
-    public void expectation(Type momentOrder)
+    public void expectation(Type moment)
     {
         // Construct the function with the values
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
-        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
+        DiscreteFunction discrFunc = constructValues(probVar, moment);
         // Calculate expectation.
         expectation(discrFunc);
     }
@@ -222,10 +222,10 @@ public class Expectation
     /**
      * Calculation of Expectation.
      *
-     * @param momentOrder
+     * @param moment
      * @param queriedVariableName
      */
-    public void expectation(Type momentOrder, String queriedVariableName)
+    public void expectation(Type moment, String queriedVariableName)
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(queriedVariableName);
@@ -235,7 +235,7 @@ public class Expectation
             return;
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
-        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
+        DiscreteFunction discrFunc = constructValues(probVar, moment);
         // Calculate expectation.
         expectation(discrFunc, queriedVariableName);
     }
@@ -243,10 +243,10 @@ public class Expectation
     /**
      * Calculation of expectation given order.
      *
-     * @param momentOrder
+     * @param moment
      * @param order
      */
-    public void expectation(Type momentOrder, String order[])
+    public void expectation(Type moment, String order[])
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(order[order.length - 1]);
@@ -256,7 +256,7 @@ public class Expectation
             return;
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
-        DiscreteFunction discrFunc = constructValues(probVar, momentOrder);
+        DiscreteFunction discrFunc = constructValues(probVar, moment);
         // Calculate expectation.
         expectation(discrFunc, order);
     }
@@ -302,6 +302,10 @@ public class Expectation
 
     /**
      * Construct the utility function that produces the requested moment.
+     *
+     * @param probVar
+     * @param moment
+     * @return
      */
     private DiscreteFunction constructValues(ProbabilityVariable probVar,
                                              Type moment)
@@ -344,7 +348,7 @@ public class Expectation
     /**
      * Print Expectation.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
@@ -364,7 +368,7 @@ public class Expectation
     /**
      * Print Expectation.
      *
-     * @param out
+     * @param out output print stream
      * @param shouldPrintBucketTree
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)

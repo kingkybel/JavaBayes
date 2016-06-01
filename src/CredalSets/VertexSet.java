@@ -64,7 +64,7 @@ public final class VertexSet
                      double extremePoints[][],
                      ArrayList properties)
     {
-        // Call the super constructor with ep[0].
+        // Call the super constructor with extremePoints[0].
         super(bayesNet, variables, extremePoints[0], properties);
 
         // Now replace ep[0] with a new array to avoid wrong
@@ -318,7 +318,7 @@ public final class VertexSet
     /**
      * Print method.
      *
-     * @param out
+     * @param out output print stream
      */
     @Override
     public void print(PrintStream out)
@@ -474,7 +474,7 @@ public final class VertexSet
     }
 
     /**
-     * Methods that allow basic manipulation of non-public variables.
+     * Retrieve the auxiliary variable.
      *
      * @return
      */
@@ -484,6 +484,7 @@ public final class VertexSet
     }
 
     /**
+     * Retrieve the extreme points.
      *
      * @return
      */

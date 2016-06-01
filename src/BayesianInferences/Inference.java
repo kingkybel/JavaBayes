@@ -38,43 +38,15 @@ import java.util.logging.Logger;
 public class Inference
 {
 
-    public enum ExplanationType
-    {
-
-        IGNORE, SIMPLE, FULL;
-    }
     private static final String CLASS_NAME = Inference.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
     protected BayesNet bayesNet;
-
-    /**
-     *
-     */
     protected BucketTree bucketTree;
-
-    /**
-     *
-     */
-    protected Bucket bucketForVariable[];
-
-    /**
-     *
-     */
-    protected ArrayList<BucketTree> bucketForest;
-
-    /**
-     *
-     */
+    private final Bucket bucketForVariable[];
+    private ArrayList<BucketTree> bucketForest;
     protected ProbabilityFunction result;
-
-    /**
-     *
-     */
-    protected boolean isProducingClusters;
+    private boolean isProducingClusters;
 
     /**
      * Constructor for an Inference.
@@ -87,6 +59,31 @@ public class Inference
         this.bayesNet = bayesNet;
         bucketForVariable = new Bucket[bayesNet.numberVariables()];
         bucketForest = new ArrayList<>();
+        this.isProducingClusters = isProducingClusters;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<BucketTree> getBucketForest()
+    {
+        return bucketForest;
+    }
+
+    public void setBucketForest(
+            ArrayList<BucketTree> bucketForest)
+    {
+        this.bucketForest = bucketForest;
+    }
+
+    public boolean isIsProducingClusters()
+    {
+        return isProducingClusters;
+    }
+
+    public void setIsProducingClusters(boolean isProducingClusters)
+    {
         this.isProducingClusters = isProducingClusters;
     }
 
@@ -223,7 +220,7 @@ public class Inference
     /**
      * Print the Inference.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
@@ -243,7 +240,7 @@ public class Inference
     /**
      * Print the Inference.
      *
-     * @param out
+     * @param out                   output print stream
      * @param shouldPrintBucketTree
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)

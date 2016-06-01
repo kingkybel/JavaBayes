@@ -201,7 +201,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Save the contents of a ProbabilityVariable object into a PrintStream
      * using the XMLBIF v0.3 format.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml_0_3(PrintStream out)
     {
@@ -251,7 +251,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Save the contents of a ProbabilityVariable object into a PrintStream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml(PrintStream out)
     {

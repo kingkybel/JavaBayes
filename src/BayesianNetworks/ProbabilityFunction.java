@@ -278,7 +278,7 @@ public class ProbabilityFunction extends DiscreteFunction
      * Save the contents of a ProbabilityFunction object into a PrintStream in
      * the XMLBIF v0.3 format.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml_0_3(PrintStream out)
     {
@@ -338,7 +338,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Save the contents of a ProbabilityFunction object into a PrintStream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml(PrintStream out)
     {
@@ -377,7 +377,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Print method.
      *
-     * @param out
+     * @param out output print stream
      */
     @Override
     public void print(PrintStream out)

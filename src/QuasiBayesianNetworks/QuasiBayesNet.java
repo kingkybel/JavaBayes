@@ -302,7 +302,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Print method for a QuasiBayesNet object.
      *
-     * @param out
+     * @param out output print stream
      */
     @Override
     public void print(PrintStream out)

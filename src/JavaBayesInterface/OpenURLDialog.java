@@ -64,8 +64,9 @@ public class OpenURLDialog extends Dialog
         //{{INIT_CONTROLS
         setLayout(new BorderLayout());
         addNotify();
-        resize(insets().left + insets().right + 295, insets().top +
-                                                     insets().bottom + 92);
+        setSize(getInsets().left + getInsets().right + 295, getInsets().top +
+                                                            getInsets().bottom +
+                                                            92);
 
         textURL = new TextField();
         add("North", textURL);
@@ -111,15 +112,15 @@ public class OpenURLDialog extends Dialog
     }
 
     @Override
-    public void show()
+    public void setVisible(boolean show)
     {
-        Rectangle bounds = getParent().bounds();
-        Rectangle abounds = bounds();
+        Rectangle bounds = getParent().getBounds();
+        Rectangle abounds = getBounds();
 
-        move(bounds.x + (bounds.width - abounds.width) / 2,
-             bounds.y + (bounds.height - abounds.height) / 2);
+        setLocation(bounds.x + (bounds.width - abounds.width) / 2,
+                    bounds.y + (bounds.height - abounds.height) / 2);
 
-        super.show();
+        super.setVisible(show);
     }
 
     @Override

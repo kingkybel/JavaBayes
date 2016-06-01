@@ -23,9 +23,8 @@
  * along with the JavaBayes distribution. If not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package InferenceGraphs;
+package BayesianInferences;
 
-import BayesianInferences.Explanation;
 import BayesianNetworks.BayesNet;
 import BayesianNetworks.DiscreteVariable;
 import BayesianNetworks.ProbabilityFunction;
@@ -45,31 +44,6 @@ import java.util.logging.Logger;
  */
 public final class InferenceGraph
 {
-
-    /**
-     *
-     */
-    public final static int MARGINAL_POSTERIOR = 1;
-
-    /**
-     *
-     */
-    public final static int EXPECTATION = 2;
-
-    /**
-     *
-     */
-    public final static int EXPLANATION = 3;
-
-    /**
-     *
-     */
-    public final static int FULL_EXPLANATION = 4;
-
-    /**
-     *
-     */
-    public final static int SENSITIVITY_ANALYSIS = 5;
 
     /**
      *
@@ -447,7 +421,7 @@ public final class InferenceGraph
     /**
      * Print the QuasiBayesNet.
      *
-     * @param out
+     * @param out output print stream
      */
     public void printBayesNet(PrintStream out)
     {
@@ -572,7 +546,7 @@ public final class InferenceGraph
      * Save the Bayesian network into a PrintStream in the BIF
      * InterchangeFormat.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveBif(PrintStream out)
     {
@@ -584,7 +558,7 @@ public final class InferenceGraph
      * Save the Bayesian network into a PrintStream in the XML
      * InterchangeFormat.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml(PrintStream out)
     {
@@ -595,7 +569,7 @@ public final class InferenceGraph
     /**
      * Save the Bayesian networks in BUGS format into a PrintStream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveBugs(PrintStream out)
     {
@@ -614,7 +588,7 @@ public final class InferenceGraph
     /**
      * Print method for an InferenceGraph.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
