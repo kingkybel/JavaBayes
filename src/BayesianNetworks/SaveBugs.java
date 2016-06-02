@@ -52,7 +52,7 @@ public class SaveBugs
     /**
      * Default constructor for a SaveBUGS object.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public SaveBugs(BayesNet bayesNet)
     {

@@ -86,9 +86,9 @@ public class DiscreteFunction
      */
     public boolean memberOf(int index)
     {
-        for (int i = 0; i < variables.length; i++)
+        for (DiscreteVariable variable : variables)
         {
-            if (index == variables[i].index)
+            if (index == variable.index)
             {
                 return (true);
             }

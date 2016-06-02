@@ -92,7 +92,7 @@ public final class InferenceGraph
     /**
      * Simple constructor for an InferenceGraph.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public InferenceGraph(BayesNet bayesNet)
     {

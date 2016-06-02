@@ -72,7 +72,7 @@ public class QBInference extends Inference
     /**
      * Constructor for a QBInference.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public QBInference(BayesNet bayesNet, boolean isProducingClusters)

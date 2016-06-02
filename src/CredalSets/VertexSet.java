@@ -54,7 +54,7 @@ public final class VertexSet
     /**
      * Default constructor for a VertexQBProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet      the underlying Bayesian network
      * @param properties
      * @param variables
      * @param extremePoints
@@ -80,9 +80,9 @@ public final class VertexSet
     /**
      * Constructor for a VertexQBProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet      the underlying Bayesian network
      * @param extremePoints
-     * @param probVars
+     * @param probVar       a probability variables
      * @param properties
      * @param values
      */

@@ -54,7 +54,7 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet     the underlying Bayesian network
      * @param orderingType
      * @param objective
      */
@@ -69,7 +69,7 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @param order
      */
     public Ordering(BayesNet bayesNet, String order[])
@@ -82,7 +82,7 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet          the underlying Bayesian network
      * @param objective
      * @param explanationStatus
      * @param orderingType
@@ -101,7 +101,7 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet          the underlying Bayesian network
      * @param order
      * @param explanationStatus
      */
@@ -118,7 +118,7 @@ public class Ordering
      * Obtain explanationStatus: unless there are explanations the status is
      * IGNORE.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @return
      */
     private ExplanationType obtainExplanationStatus(BayesNet bayesNet)
@@ -520,7 +520,7 @@ public class Ordering
      * Interconnect a group of variables; each variable connected to all the
      * others.
      *
-     * @param bayesNet
+     * @param bayesNet                    the underlying Bayesian network
      * @param vectors
      * @param variablesToBeInterconnected
      */
@@ -544,10 +544,10 @@ public class Ordering
     /**
      * Connect two variables.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @param vectors
-     * @param probVar_i
-     * @param probVar_j
+     * @param probVar  a probability variable_i
+     * @param probVar  a probability variable_j
      */
     private void interconnect(BayesNet bayesNet,
                               ArrayList vectors[],

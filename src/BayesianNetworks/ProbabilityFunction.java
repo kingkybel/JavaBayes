@@ -58,7 +58,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet       the underlying Bayesian network
      * @param properties
      * @param numberOfVars
      * @param numberOfValues
@@ -76,7 +76,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param properties
      * @param variables
      * @param values
@@ -111,7 +111,7 @@ public class ProbabilityFunction extends DiscreteFunction
      * Constructor for ProbabilityFunction.
      *
      * @param discrFunc
-     * @param bayesNet
+     * @param bayesNet  the underlying Bayesian network
      */
     public ProbabilityFunction(DiscreteFunction discrFunc, BayesNet bayesNet)
     {

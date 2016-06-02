@@ -115,7 +115,8 @@ public class BucketTree
             {
                 j = bayesNet.indexOfVariable(order[i]);
                 bucketTree[i] =
-                new Bucket(this, bayesNet.getProbabilityVariable(j),
+                new Bucket(this,
+                           bayesNet.getProbabilityVariable(j),
                            this.isProducingClusters);
             }
             // Insert the probability functions into the bucketTree;
@@ -151,11 +152,11 @@ public class BucketTree
 
     /**
      * Transform an observed ProbabilityVariable into a ProbabilityFunction to
-     * handle the case where the query involves an observed probVar.
+     * handle the case where the query involves an observed variable.
      *
-     * @param bayesNet
-     * @param probVar
-     * @return
+     * @param bayesNet the underlying Bayesian network
+     * @param probVar  a probability variable
+     * @return the transformed function
      */
     private ProbabilityFunction transformToProbabilityFunction(
             BayesNet bayesNet,

@@ -72,7 +72,7 @@ public class Expectation
     /**
      * Constructor for an Expectation.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public Expectation(BayesNet bayesNet, boolean isProducingClusters)
@@ -303,9 +303,9 @@ public class Expectation
     /**
      * Construct the utility function that produces the requested moment.
      *
-     * @param probVar
-     * @param moment
-     * @return
+     * @param probVar a probability variable
+     * @param moment  moment type
+     * @return discrete utility function
      */
     private DiscreteFunction constructValues(ProbabilityVariable probVar,
                                              Type moment)
@@ -368,7 +368,7 @@ public class Expectation
     /**
      * Print Expectation.
      *
-     * @param out output print stream
+     * @param out                   output print stream
      * @param shouldPrintBucketTree
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
@@ -391,7 +391,7 @@ public class Expectation
     /**
      * Get the results of Expectation.
      *
-     * @return
+     * @return the results as array of doubles
      */
     public double[] getResults()
     {

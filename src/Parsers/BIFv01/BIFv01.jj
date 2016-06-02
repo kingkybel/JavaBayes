@@ -41,7 +41,7 @@ import java.util.Iterator;
 
 /**
  * Definition of the Interchange Format class and its variables. The IFBayesNet
- * ifbn contains the parsed bayesian network.
+ * ifbn contains the parsed Bayesian network.
  * This parser uses the data structures in the JavaBayes core engine (package 
  * BayesianNetworks); other implementations may use different data structures.
  */

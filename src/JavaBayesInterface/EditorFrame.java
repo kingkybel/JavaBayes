@@ -638,7 +638,7 @@ public class EditorFrame extends Frame
     }
 
     /**
-     * Interact with menu options: whether to show bayesian networks.
+     * Interact with menu options: whether to show Bayesian networks.
      *
      *
      * @param whatToShowBayesianNetwork

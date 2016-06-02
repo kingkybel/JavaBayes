@@ -92,7 +92,7 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet; creates a copy of a given network.
      *
-     * @param bayesNet Network to be copied.
+     * @param bayesNet the underlying Bayesian network Network to be copied.
      */
     public BayesNet(BayesNet bayesNet)
     {
@@ -265,7 +265,7 @@ public class BayesNet
      * function, as it is the only reference to the variable that is guaranteed
      * to identify the variable uniquely.
      *
-     * @param probVar
+     * @param probVar a probability variable
      * @return
      */
     public ProbabilityFunction getFunction(ProbabilityVariable probVar)
@@ -922,7 +922,7 @@ public class BayesNet
      * Set a probability variable given its index.
      *
      * @param index
-     * @param probVar
+     * @param probVar a probability variable
      */
     public void setProbabilityVariable(int index, ProbabilityVariable probVar)
     {
@@ -946,7 +946,7 @@ public class BayesNet
     /**
      * Set the vector of probability variables.
      *
-     * @param probVars
+     * @param probVar a probability variables
      */
     public void setProbabilityVariables(ProbabilityVariable probVars[])
     {

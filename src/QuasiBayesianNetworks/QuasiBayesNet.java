@@ -124,7 +124,7 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it a Bayesian
      * Network and it creates a new copy
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public QuasiBayesNet(BayesNet bayesNet)
     {

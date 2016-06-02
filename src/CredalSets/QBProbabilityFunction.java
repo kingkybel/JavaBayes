@@ -56,7 +56,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet       the underlying Bayesian network
      * @param properties
      * @param numberOfVars
      * @param numberOfValues
@@ -74,7 +74,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet      the underlying Bayesian network
      * @param properties
      * @param variables
      * @param upperEnvelope

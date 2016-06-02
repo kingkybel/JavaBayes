@@ -58,7 +58,7 @@ public class QBExpectation extends Expectation
     /**
      * Constructor for a QBExpectation.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public QBExpectation(BayesNet bayesNet, boolean isProducingClusters)

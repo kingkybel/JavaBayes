@@ -57,7 +57,7 @@ public class Explanation
     /**
      * Constructor for an Explanation.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public Explanation(BayesNet bayesNet)
     {

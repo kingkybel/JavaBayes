@@ -2,9 +2,9 @@
 
 
 <!--
-	Bayesian network in XMLBIF v0.3 (BayesNet Interchange Format)
-	Produced by JavaBayes (http://www.cs.cmu.edu/~javabayes/
-	Output created Mon Nov 02 22:46:45 GMT-03:00 1998
+        Bayesian network in XMLBIF v0.3 (BayesNet Interchange Format)
+        Produced by JavaBayes (http://www.cs.cmu.edu/~javabayes/
+        Output created Mon Nov 02 22:46:45 GMT-03:00 1998
 -->
 
 
@@ -27,76 +27,76 @@
 
 
 <BIF VERSION="0.3">
-<NETWORK>
-<NAME>JohnMaryCall</NAME>
+    <NETWORK>
+        <NAME>JohnMaryCall</NAME>
 
-<!-- Variables -->
-<VARIABLE TYPE="nature">
-	<NAME>Burglary</NAME>
-	<OUTCOME>False</OUTCOME>
-	<OUTCOME>True</OUTCOME>
-	<PROPERTY>position = (145, 114)</PROPERTY>
-</VARIABLE>
+        <!-- Variables -->
+        <VARIABLE TYPE="nature">
+            <NAME>Burglary</NAME>
+            <OUTCOME>False</OUTCOME>
+            <OUTCOME>True</OUTCOME>
+            <PROPERTY>position = (145, 114)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE TYPE="nature">
-	<NAME>Earthquake</NAME>
-	<OUTCOME>False</OUTCOME>
-	<OUTCOME>True</OUTCOME>
-	<PROPERTY>position = (351, 110)</PROPERTY>
-</VARIABLE>
+        <VARIABLE TYPE="nature">
+            <NAME>Earthquake</NAME>
+            <OUTCOME>False</OUTCOME>
+            <OUTCOME>True</OUTCOME>
+            <PROPERTY>position = (351, 110)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE TYPE="nature">
-	<NAME>Alarm</NAME>
-	<OUTCOME>False</OUTCOME>
-	<OUTCOME>True</OUTCOME>
-	<PROPERTY>position = (253, 224)</PROPERTY>
-</VARIABLE>
+        <VARIABLE TYPE="nature">
+            <NAME>Alarm</NAME>
+            <OUTCOME>False</OUTCOME>
+            <OUTCOME>True</OUTCOME>
+            <PROPERTY>position = (253, 224)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE TYPE="nature">
-	<NAME>JohnCalls</NAME>
-	<OUTCOME>False</OUTCOME>
-	<OUTCOME>True</OUTCOME>
-	<PROPERTY>position = (156, 343)</PROPERTY>
-</VARIABLE>
+        <VARIABLE TYPE="nature">
+            <NAME>JohnCalls</NAME>
+            <OUTCOME>False</OUTCOME>
+            <OUTCOME>True</OUTCOME>
+            <PROPERTY>position = (156, 343)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE TYPE="nature">
-	<NAME>MaryCalls</NAME>
-	<OUTCOME>False</OUTCOME>
-	<OUTCOME>True</OUTCOME>
-	<PROPERTY>position = (344, 341)</PROPERTY>
-</VARIABLE>
-
-
-<!-- Probability distributions -->
-<DEFINITION>
-	<FOR>Burglary</FOR>
-	<TABLE>0.999 0.0010 </TABLE>
-</DEFINITION>
-
-<DEFINITION>
-	<FOR>Earthquake</FOR>
-	<TABLE>0.998 0.0020 </TABLE>
-</DEFINITION>
-
-<DEFINITION>
-	<FOR>Alarm</FOR>
-	<GIVEN>Burglary</GIVEN>
-	<GIVEN>Earthquake</GIVEN>
-	<TABLE>0.999 0.0010 0.71 0.29 0.05 0.95 0.05 0.95 </TABLE>
-</DEFINITION>
-
-<DEFINITION>
-	<FOR>JohnCalls</FOR>
-	<GIVEN>Alarm</GIVEN>
-	<TABLE>0.95 0.05 0.1 0.9 </TABLE>
-</DEFINITION>
-
-<DEFINITION>
-	<FOR>MaryCalls</FOR>
-	<GIVEN>Alarm</GIVEN>
-	<TABLE>0.99 0.01 0.3 0.7 </TABLE>
-</DEFINITION>
+        <VARIABLE TYPE="nature">
+            <NAME>MaryCalls</NAME>
+            <OUTCOME>False</OUTCOME>
+            <OUTCOME>True</OUTCOME>
+            <PROPERTY>position = (344, 341)</PROPERTY>
+        </VARIABLE>
 
 
-</NETWORK>
+        <!-- Probability distributions -->
+        <DEFINITION>
+            <FOR>Burglary</FOR>
+            <TABLE>0.999 0.0010 </TABLE>
+        </DEFINITION>
+
+        <DEFINITION>
+            <FOR>Earthquake</FOR>
+            <TABLE>0.998 0.0020 </TABLE>
+        </DEFINITION>
+
+        <DEFINITION>
+            <FOR>Alarm</FOR>
+            <GIVEN>Burglary</GIVEN>
+            <GIVEN>Earthquake</GIVEN>
+            <TABLE>0.999 0.0010 0.71 0.29 0.05 0.95 0.05 0.95 </TABLE>
+        </DEFINITION>
+
+        <DEFINITION>
+            <FOR>JohnCalls</FOR>
+            <GIVEN>Alarm</GIVEN>
+            <TABLE>0.95 0.05 0.1 0.9 </TABLE>
+        </DEFINITION>
+
+        <DEFINITION>
+            <FOR>MaryCalls</FOR>
+            <GIVEN>Alarm</GIVEN>
+            <TABLE>0.99 0.01 0.3 0.7 </TABLE>
+        </DEFINITION>
+
+
+    </NETWORK>
 </BIF>

@@ -160,7 +160,7 @@ public class JavaBayes extends Applet
     }
 
     /**
-     * Interact with menu options: whether to show bayesian networks.
+     * Interact with menu options: whether to show Bayesian networks.
      *
      *
      * @param whatToShowBayesianNetwork

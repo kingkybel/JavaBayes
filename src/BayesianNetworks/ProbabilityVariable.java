@@ -85,7 +85,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param properties
      * @param name
      */
@@ -101,7 +101,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param properties
      * @param name
      * @param values
@@ -121,7 +121,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param probVar
+     * @param probVar a probability variable
      */
     public ProbabilityVariable(ProbabilityVariable probVar)
     {
@@ -138,8 +138,8 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
-     * @param probVar
+     * @param bayesNet the underlying Bayesian network
+     * @param probVar  a probability variable
      */
     public ProbabilityVariable(BayesNet bayesNet, ProbabilityVariable probVar)
     {

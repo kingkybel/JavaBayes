@@ -51,7 +51,7 @@ public class Inference
     /**
      * Constructor for an Inference.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public Inference(BayesNet bayesNet, boolean isProducingClusters)
