@@ -85,7 +85,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param properties
      * @param name
      */
@@ -101,7 +101,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param properties
      * @param name
      * @param values
@@ -121,7 +121,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param probVar
+     * @param probVar a probability variable
      */
     public ProbabilityVariable(ProbabilityVariable probVar)
     {
@@ -138,8 +138,8 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Constructor for ProbabilityVariable.
      *
-     * @param bayesNet
-     * @param probVar
+     * @param bayesNet the underlying Bayesian network
+     * @param probVar  a probability variable
      */
     public ProbabilityVariable(BayesNet bayesNet, ProbabilityVariable probVar)
     {
@@ -201,7 +201,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Save the contents of a ProbabilityVariable object into a PrintStream
      * using the XMLBIF v0.3 format.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml_0_3(PrintStream out)
     {
@@ -251,7 +251,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Save the contents of a ProbabilityVariable object into a PrintStream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveXml(PrintStream out)
     {

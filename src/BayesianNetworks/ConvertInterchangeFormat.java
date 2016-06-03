@@ -90,8 +90,8 @@ public class ConvertInterchangeFormat
      * Generate an array of ProbabilityVariable objects from the data structures
      * in the IFBayesNet.
      *
-     * @param bayesNet The BayesNet that will receive the ProbabilityVariable
-     *                 objects.
+     * @param bayesNet the underlying Bayesian network The BayesNet that will
+     *                 receive the ProbabilityVariable objects.
      * @return
      */
     public ProbabilityVariable[] getProbabilityVariables(BayesNet bayesNet)
@@ -128,8 +128,8 @@ public class ConvertInterchangeFormat
      * Generate an array of ProbabilityFunction objects from the data structures
      * in the IFBayesNet.
      *
-     * @param bayesNet The BayesNet that will receive the ProbabilityVariable
-     *                 objects.
+     * @param bayesNet the underlying Bayesian network The BayesNet that will
+     *                 receive the ProbabilityVariable objects.
      * @return
      */
     public ProbabilityFunction[] getProbabilityFunctions(BayesNet bayesNet)
@@ -161,7 +161,7 @@ public class ConvertInterchangeFormat
      * Create a ProbabilityFunction out of the definition found by the parser
      * and the information contained in the BayesNet.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @param upf
      * @return
      */
@@ -218,7 +218,7 @@ public class ConvertInterchangeFormat
      * Create the variables in the ProbabilityFunction object from the variables
      * indicated in the IFProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @param upf
      * @return
      */
@@ -235,7 +235,7 @@ public class ConvertInterchangeFormat
             index = bayesNet.indexOfVariable(ssVariables[i]);
             if (index != BayesNet.INVALID_INDEX)
             {
-                variables[i] = bayesNet.probabilityVariables[index];
+                variables[i] = bayesNet.getProbabilityVariable(index);
             }
         }
         return (variables);

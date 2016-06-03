@@ -95,7 +95,7 @@ public class IFBayesNet
     /**
      * Method that adds a ProbabilityVariable object to the vector of variables.
      *
-     * @param probVar
+     * @param probVar a probability variable
      */
     public void add(IFProbabilityVariable probVar)
     {

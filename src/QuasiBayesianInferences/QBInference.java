@@ -72,7 +72,7 @@ public class QBInference extends Inference
     /**
      * Constructor for a QBInference.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public QBInference(BayesNet bayesNet, boolean isProducingClusters)
@@ -152,7 +152,7 @@ public class QBInference extends Inference
     /**
      * Copy all the regular and auxiliary variables into a new
      * probabilityVariables array, making the auxiliary variables available for
-     * calculation of marginals
+     * calculation of marginals.
      */
     private void transformProbabilityVariablesArray(ArrayList auxs)
     {

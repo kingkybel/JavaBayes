@@ -39,9 +39,9 @@ import java.util.logging.Logger;
 public class QBProbabilityFunction extends ProbabilityFunction
 {
 
-    private static final Logger LOGGER =
-                                Logger.getLogger(QBProbabilityFunction.class.
-                                        getName());
+    private static final String CLASS_NAME =
+                                QBProbabilityFunction.class.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double lowerEnvelope[];
     double upperEnvelope[];
@@ -56,7 +56,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet       the underlying Bayesian network
      * @param properties
      * @param numberOfVars
      * @param numberOfValues
@@ -74,7 +74,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for ProbabilityFunction.
      *
-     * @param bayesNet
+     * @param bayesNet      the underlying Bayesian network
      * @param properties
      * @param variables
      * @param upperEnvelope

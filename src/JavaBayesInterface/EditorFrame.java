@@ -25,9 +25,12 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
+import BayesianInferences.ExplanationType;
+import BayesianInferences.InferenceGraph;
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Cursor;
+import static java.awt.Cursor.getPredefinedCursor;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Frame;
@@ -123,7 +126,7 @@ public class EditorFrame extends Frame
      */
     public ScrollingPanel scrollPanel;
     // Options (controlled by menus in JavaBayesConsoleFrame)
-    int modeMenuChoice = InferenceGraph.MARGINAL_POSTERIOR;
+    ExplanationType modeMenuChoice = ExplanationType.MARGINAL_POSTERIOR;
     boolean whatToShowBayesianNetworkState = false;
     boolean whatToShowBucketTreeState = false;
     int saveFormat = BIF_FORMAT;
@@ -169,7 +172,7 @@ public class EditorFrame extends Frame
 
         d.width /= 2;
         d.height = d.height * 3 / 4;
-        resize(d);
+        setSize(d);
     }
 
     /**
@@ -185,7 +188,8 @@ public class EditorFrame extends Frame
         {
             if (jb != null)
             {
-                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).show();
+                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(
+                        true);
             }
         }
         return (super.handleEvent(evt));
@@ -211,19 +215,19 @@ public class EditorFrame extends Frame
                     scrollPanel.netPanel.setMode(label);
                     JavaBayesHelpMessages.show(
                             JavaBayesHelpMessages.createMessage);
-                    setCursor(Frame.DEFAULT_CURSOR);
+                    setCursor(getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                     break;
                 case moveLabel:
                     scrollPanel.netPanel.setMode(label);
                     JavaBayesHelpMessages.
                             show(JavaBayesHelpMessages.moveMessage);
-                    setCursor(Frame.MOVE_CURSOR);
+                    setCursor(getPredefinedCursor(Cursor.MOVE_CURSOR));
                     break;
                 case deleteLabel:
                     scrollPanel.netPanel.setMode(label);
                     JavaBayesHelpMessages.show(
                             JavaBayesHelpMessages.deleteMessage);
-                    setCursor(Frame.HAND_CURSOR);
+                    setCursor(getPredefinedCursor(Cursor.HAND_CURSOR));
                     break;
                 case queryLabel:
                     setQueryMode();
@@ -399,23 +403,25 @@ public class EditorFrame extends Frame
         }
 
         // Perform inference
-        switch (modeMenuChoice)
+        if (modeMenuChoice.isMarginalPosterior())
         {
-            case InferenceGraph.MARGINAL_POSTERIOR:
-                printMarginal(pstream, ig, queriedVariable);
-                break;
-            case InferenceGraph.EXPECTATION:
-                printExpectation(pstream, ig, queriedVariable);
-                break;
-            case InferenceGraph.EXPLANATION:
-                printExplanation(pstream, ig);
-                break;
-            case InferenceGraph.FULL_EXPLANATION:
-                printFullExplanation(pstream, ig);
-                break;
-            case InferenceGraph.SENSITIVITY_ANALYSIS:
-                printSensitivityAnalysis(pstream, ig);
-                break;
+            printMarginal(pstream, ig, queriedVariable);
+        }
+        else if (modeMenuChoice.isExpectation())
+        {
+            printExpectation(pstream, ig, queriedVariable);
+        }
+        else if (modeMenuChoice.isSubset())
+        {
+            printExplanation(pstream, ig);
+        }
+        else if (modeMenuChoice.isFull())
+        {
+            printFullExplanation(pstream, ig);
+        }
+        else if (modeMenuChoice.isSensitivityAnalysis())
+        {
+            printSensitivityAnalysis(pstream, ig);
         }
 
         // Print results to test window
@@ -548,7 +554,7 @@ public class EditorFrame extends Frame
      */
     public void setObserveMode()
     {
-        setCursor(Frame.CROSSHAIR_CURSOR);
+        setCursor(getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
         scrollPanel.netPanel.setMode(observeLabel);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.observeMessage);
     }
@@ -558,7 +564,7 @@ public class EditorFrame extends Frame
      */
     public void setEditVariableMode()
     {
-        setCursor(Frame.TEXT_CURSOR);
+        setCursor(getPredefinedCursor(Cursor.TEXT_CURSOR));
         scrollPanel.netPanel.setMode(editVariableLabel);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.editMessage);
     }
@@ -568,7 +574,7 @@ public class EditorFrame extends Frame
      */
     public void setEditFunctionMode()
     {
-        setCursor(Frame.TEXT_CURSOR);
+        setCursor(getPredefinedCursor(Cursor.TEXT_CURSOR));
         scrollPanel.netPanel.setMode(editFunctionLabel);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.editMessage);
     }
@@ -586,7 +592,7 @@ public class EditorFrame extends Frame
      */
     public void setQueryMode()
     {
-        setCursor(Frame.DEFAULT_CURSOR);
+        setCursor(getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         scrollPanel.netPanel.setMode(queryLabel);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.queryMessage);
     }
@@ -596,7 +602,7 @@ public class EditorFrame extends Frame
      *
      * @return
      */
-    public int getMode()
+    public ExplanationType getMode()
     {
         return (modeMenuChoice);
     }
@@ -632,7 +638,7 @@ public class EditorFrame extends Frame
     }
 
     /**
-     * Interact with menu options: whether to show bayesian networks.
+     * Interact with menu options: whether to show Bayesian networks.
      *
      *
      * @param whatToShowBayesianNetwork
@@ -649,7 +655,7 @@ public class EditorFrame extends Frame
      */
     public void posteriorExpectationAction()
     {
-        modeMenuChoice = InferenceGraph.EXPECTATION;
+        modeMenuChoice = ExplanationType.EXPECTATION;
         scrollPanel.netPanel.repaint();
     }
 
@@ -658,7 +664,7 @@ public class EditorFrame extends Frame
      */
     public void posteriorMarginalAction()
     {
-        modeMenuChoice = InferenceGraph.MARGINAL_POSTERIOR;
+        modeMenuChoice = ExplanationType.MARGINAL_POSTERIOR;
         scrollPanel.netPanel.repaint();
     }
 
@@ -667,7 +673,7 @@ public class EditorFrame extends Frame
      */
     public void estimateExplanationVariablesAction()
     {
-        modeMenuChoice = InferenceGraph.EXPLANATION;
+        modeMenuChoice = ExplanationType.SUBSET;
         scrollPanel.netPanel.repaint();
     }
 
@@ -676,7 +682,7 @@ public class EditorFrame extends Frame
      */
     public void estimateBestConfigurationAction()
     {
-        modeMenuChoice = InferenceGraph.FULL_EXPLANATION;
+        modeMenuChoice = ExplanationType.FULL;
         scrollPanel.netPanel.repaint();
     }
 
@@ -685,7 +691,7 @@ public class EditorFrame extends Frame
      */
     public void sensitivityAnalysisAction()
     {
-        modeMenuChoice = InferenceGraph.SENSITIVITY_ANALYSIS;
+        modeMenuChoice = ExplanationType.SENSITIVITY_ANALYSIS;
         scrollPanel.netPanel.repaint();
     }
 

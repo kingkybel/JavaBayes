@@ -23,7 +23,7 @@
  * along with the JavaBayes distribution. If not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package InferenceGraphs;
+package BayesianInferences;
 
 import BayesianNetworks.BayesNet;
 import BayesianNetworks.DiscreteVariable;
@@ -32,9 +32,12 @@ import BayesianNetworks.ProbabilityVariable;
 import CredalSets.QBProbabilityFunction;
 import CredalSets.VertexSet;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StreamTokenizer;
-import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -235,10 +238,11 @@ public final class InferenceGraphNode
                     continue;
                 }
 
-                // Parse the position property
-                StreamTokenizer st =
-                                new StreamTokenizer(new StringBufferInputStream(
-                                                s));
+                final ByteArrayInputStream byteArrayInputStream =
+                                           new ByteArrayInputStream(s.getBytes());
+                Reader reader = new BufferedReader(
+                       new InputStreamReader(byteArrayInputStream));
+                StreamTokenizer st = new StreamTokenizer(reader);
                 st.parseNumbers();
                 int tok;
                 int x = -1, y = 0;
@@ -770,9 +774,11 @@ public final class InferenceGraphNode
             // Parse the position property
             try
             {
-                StreamTokenizer st =
-                                new StreamTokenizer(new StringBufferInputStream(
-                                                s));
+                final ByteArrayInputStream byteArrayInputStream =
+                                           new ByteArrayInputStream(s.getBytes());
+                Reader reader = new BufferedReader(
+                       new InputStreamReader(byteArrayInputStream));
+                StreamTokenizer st = new StreamTokenizer(reader);
                 st.parseNumbers();
                 int tok;
                 int x = -1, y = 0;

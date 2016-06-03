@@ -25,8 +25,8 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
-import InferenceGraphs.InferenceGraphNode;
+import BayesianInferences.InferenceGraph;
+import BayesianInferences.InferenceGraphNode;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -80,7 +80,7 @@ class ObserveDialog extends Dialog
         String[] values = node.getValues();
         for (String value : values)
         {
-            valuesList.addItem(value);
+            valuesList.add(value);
         }
 
         if (observed)

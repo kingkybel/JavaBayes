@@ -25,8 +25,8 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
-import InferenceGraphs.InferenceGraphNode;
+import BayesianInferences.InferenceGraph;
+import BayesianInferences.InferenceGraphNode;
 import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Event;
@@ -178,7 +178,7 @@ class EditCredalSet extends EditFunctionPanel
                                                      numberExtremePoints;
                          k++)
                     {
-                        credalSetChoice.addItem(String.valueOf(k));
+                        credalSetChoice.add(String.valueOf(k));
                     }
                 }
                 if (oldNumberExtremePoints > numberExtremePoints)
@@ -221,7 +221,7 @@ class EditCredalSet extends EditFunctionPanel
         credalSetChoice = new Choice();
         for (int i = 0; i < node.numberExtremeDistributions(); i++)
         {
-            credalSetChoice.addItem(String.valueOf(i));
+            credalSetChoice.add(String.valueOf(i));
         }
         ics.add("West", credalSetLabel);
         ics.add("Center", credalSetChoice);

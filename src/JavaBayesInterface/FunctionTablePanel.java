@@ -197,7 +197,7 @@ public final class FunctionTablePanel extends Panel
             // Fill the choice item with the values for the parent.
             for (String allVariableValue : allVariableValues[i])
             {
-                parentChoices[i - 2].addItem(allVariableValue);
+                parentChoices[i - 2].add(allVariableValue);
             }
             // Insert the label and choice
             pp.add(parentsLabels[i - 2]);

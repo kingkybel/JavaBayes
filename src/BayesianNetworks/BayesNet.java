@@ -26,9 +26,9 @@
 package BayesianNetworks;
 
 import InterchangeFormat.InterchangeFormat;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringBufferInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,46 +45,13 @@ public class BayesNet
      */
     public static final int INVALID_INDEX = -1;
 
-    /**
-     *
-     */
-    public static final int BIF = 1;
-
-    /**
-     *
-     */
-    public static final int XML = 2;
-
-    /**
-     *
-     */
-    public static final int BUGS = 3;
     private static final String CLASS_NAME = BayesNet.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
-    protected String name;
-
-    /**
-     *
-     */
-    protected ArrayList<String> properties = new ArrayList<>();
-
-    /**
-     *
-     */
+    private String name;
+    private ArrayList<String> properties = new ArrayList<>();
     protected ProbabilityVariable probabilityVariables[];
-
-    /**
-     *
-     */
     protected ProbabilityFunction probabilityFunctions[];
-
-    /**
-     *
-     */
     protected DiscreteFunction utilityFunction;
 
     /**
@@ -125,7 +92,7 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet; creates a copy of a given network.
      *
-     * @param bayesNet Network to be copied.
+     * @param bayesNet the underlying Bayesian network Network to be copied.
      */
     public BayesNet(BayesNet bayesNet)
     {
@@ -155,8 +122,8 @@ public class BayesNet
     public BayesNet(String networkDescription) throws Exception
     {
         this();
-        StringBufferInputStream istream = new StringBufferInputStream(
-                                networkDescription);
+        ByteArrayInputStream istream = new ByteArrayInputStream(
+                             networkDescription.getBytes());
         // Read the BayesNet from the stream
         InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
         interchangeFmt.CompilationUnit();
@@ -298,7 +265,7 @@ public class BayesNet
      * function, as it is the only reference to the variable that is guaranteed
      * to identify the variable uniquely.
      *
-     * @param probVar
+     * @param probVar a probability variable
      * @return
      */
     public ProbabilityFunction getFunction(ProbabilityVariable probVar)
@@ -317,7 +284,7 @@ public class BayesNet
     /**
      * Save a BayesNet object in a stream, in the BIF InterchangeFormat.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveBif(PrintStream out)
     {
@@ -376,7 +343,7 @@ public class BayesNet
     /**
      * Save a BayesNet object in a stream for the EBayes engine.
      *
-     * @param out
+     * @param out output print stream
      */
     public void saveEmbayes(PrintStream out)
     {
@@ -730,7 +697,7 @@ public class BayesNet
     /**
      * Print a BayesNet in a given stream.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
@@ -753,11 +720,11 @@ public class BayesNet
     /**
      * Set the name of the network.
      *
-     * @param n
+     * @param name
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        name = n;
+        this.name = name;
     }
 
     /**
@@ -955,7 +922,7 @@ public class BayesNet
      * Set a probability variable given its index.
      *
      * @param index
-     * @param probVar
+     * @param probVar a probability variable
      */
     public void setProbabilityVariable(int index, ProbabilityVariable probVar)
     {
@@ -979,7 +946,7 @@ public class BayesNet
     /**
      * Set the vector of probability variables.
      *
-     * @param probVars
+     * @param probVar a probability variables
      */
     public void setProbabilityVariables(ProbabilityVariable probVars[])
     {
@@ -994,5 +961,10 @@ public class BayesNet
     public void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {
         probabilityFunctions = probFuncs;
+    }
+
+    public boolean hasProperties()
+    {
+        return (properties != null) && (properties.size() > 0);
     }
 }

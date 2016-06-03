@@ -124,7 +124,7 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it a Bayesian
      * Network and it creates a new copy
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public QuasiBayesNet(BayesNet bayesNet)
     {
@@ -201,16 +201,16 @@ public class QuasiBayesNet extends BayesNet
     {
         QBConvertInterchangeFormat qbcbn = new QBConvertInterchangeFormat(
                                    interchangeFmt);
-        name = qbcbn.getName();
-        properties = qbcbn.getProperties();
-        probabilityVariables = qbcbn.getProbabilityVariables(this);
+        setName(qbcbn.getName());
+        setProperties(qbcbn.getProperties());
+        setProbabilityVariables(qbcbn.getProbabilityVariables(this));
         probabilityFunctions = qbcbn.getProbabilityFunctions(this);
 
         // Process QuasiBayesNet properties
         processProperties();
 
         // Process ProbabilityVariable properties
-        for (int i = 0; i < probabilityVariables.length; i++)
+        for (int i = 0; i < getProbabilityVariables().length; i++)
         {
             processProbabilityVariableProperties(i);
         }
@@ -236,7 +236,7 @@ public class QuasiBayesNet extends BayesNet
         ArrayList propertiesToRemove = new ArrayList();
 
         // Go through the properties
-        for (Object e : properties)
+        for (Object e : getProperties())
         {
             property = (String) (e);
             st = new StringTokenizer(property, delimiters);
@@ -277,8 +277,7 @@ public class QuasiBayesNet extends BayesNet
 
         for (Object e : propertiesToRemove)
         {
-            property = (String) (e);
-            properties.remove(property);
+            removeProperty((String) (e));
         }
     }
 
@@ -303,7 +302,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Print method for a QuasiBayesNet object.
      *
-     * @param out
+     * @param out output print stream
      */
     @Override
     public void print(PrintStream out)
@@ -312,9 +311,9 @@ public class QuasiBayesNet extends BayesNet
         String property;
 
         out.println("// Bayesian network ");
-        if (name != null)
+        if (getName() != null)
         {
-            out.print("network \"" + name + "\" {");
+            out.print("network \"" + getName() + "\" {");
         }
         if (probabilityVariables != null)
         {
@@ -337,9 +336,9 @@ public class QuasiBayesNet extends BayesNet
                         globalNeighborhoodParameter + "\" ;");
         }
 
-        if ((properties != null) && (properties.size() > 0))
+        if (hasProperties())
         {
-            for (Object e : properties)
+            for (Object e : getProperties())
             {
                 property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");

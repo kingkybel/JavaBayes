@@ -25,8 +25,8 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
-import InferenceGraphs.InferenceGraphNode;
+import BayesianInferences.InferenceGraph;
+import BayesianInferences.InferenceGraphNode;
 import java.awt.BorderLayout;
 import java.awt.Label;
 import java.util.ArrayList;

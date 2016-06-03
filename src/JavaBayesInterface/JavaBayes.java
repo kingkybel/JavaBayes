@@ -89,9 +89,9 @@ public class JavaBayes extends Applet
         isApplet = ia;
 
         editorFrame = new EditorFrame(this, "JavaBayes Editor");
-        editorFrame.show();
+        editorFrame.setVisible(true);
         consoleFrame = new JavaBayesConsoleFrame(this, "JavaBayes Console");
-        consoleFrame.show();
+        consoleFrame.setVisible(true);
         JavaBayesHelpMessages.insert(this);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.aboutMessage);
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.startMessage);
@@ -160,7 +160,7 @@ public class JavaBayes extends Applet
     }
 
     /**
-     * Interact with menu options: whether to show bayesian networks.
+     * Interact with menu options: whether to show Bayesian networks.
      *
      *
      * @param whatToShowBayesianNetwork
@@ -243,9 +243,9 @@ public class JavaBayes extends Applet
     {
         if (isApplet)
         {
-            editorFrame.hide();
+            editorFrame.setVisible(false);
             editorFrame.dispose();
-            consoleFrame.hide();
+            consoleFrame.setVisible(false);
             consoleFrame.dispose();
         }
         else

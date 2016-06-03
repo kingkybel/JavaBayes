@@ -37,57 +37,20 @@ import java.util.logging.Logger;
 public class Inference
 {
 
-    /**
-     *
-     */
-    protected static final int IGNORE_EXPLANATION = 0;
-
-    /**
-     *
-     */
-    protected static final int EXPLANATION = 1;
-
-    /**
-     *
-     */
-    protected static final int FULL_EXPLANATION = 2;
     private static final String CLASS_NAME = Inference.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
     protected BayesNet bayesNet;
-
-    /**
-     *
-     */
     protected BucketTree bucketTree;
-
-    /**
-     *
-     */
-    protected Bucket bucketForVariable[];
-
-    /**
-     *
-     */
-    protected ArrayList<BucketTree> bucketForest;
-
-    /**
-     *
-     */
+    private final Bucket bucketForVariable[];
+    private ArrayList<BucketTree> bucketForest;
     protected ProbabilityFunction result;
-
-    /**
-     *
-     */
-    protected boolean isProducingClusters;
+    private boolean isProducingClusters;
 
     /**
      * Constructor for an Inference.
      *
-     * @param bayesNet
+     * @param bayesNet            the underlying Bayesian network
      * @param isProducingClusters
      */
     public Inference(BayesNet bayesNet, boolean isProducingClusters)
@@ -95,6 +58,31 @@ public class Inference
         this.bayesNet = bayesNet;
         bucketForVariable = new Bucket[bayesNet.numberVariables()];
         bucketForest = new ArrayList<>();
+        this.isProducingClusters = isProducingClusters;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ArrayList<BucketTree> getBucketForest()
+    {
+        return bucketForest;
+    }
+
+    public void setBucketForest(
+            ArrayList<BucketTree> bucketForest)
+    {
+        this.bucketForest = bucketForest;
+    }
+
+    public boolean isIsProducingClusters()
+    {
+        return isProducingClusters;
+    }
+
+    public void setIsProducingClusters(boolean isProducingClusters)
+    {
         this.isProducingClusters = isProducingClusters;
     }
 
@@ -124,17 +112,17 @@ public class Inference
                 {
                     inference(new Ordering(bayesNet,
                                            queriedVariableName,
-                                           IGNORE_EXPLANATION,
-                                           Ordering.MINIMUM_WEIGHT));
+                                           ExplanationType.IGNORE,
+                                           Ordering.Type.MINIMUM_WEIGHT));
                 }
                 else
                 { // If probVar already has a Bucket:
                     // Get the BucketTree.
                     bucketTree = buck.bucketTree;
                     // Note that the method bucketTree.distribute() below must return true:
-                    //     - the bucketTree is constructed with IGNORE_EXPLANATION.
+                    //     - the bucketTree is constructed with IGNORE.
                     //     - this block only runs if isProducingClusters is true.
-                    if (buck.bucketStatus != Bucket.DISTRIBUTED)
+                    if (buck.bucketStatus != Bucket.Type.DISTRIBUTED)
                     {
                         if (buck ==
                             bucketTree.bucketTree[bucketTree.bucketTree.length -
@@ -160,16 +148,16 @@ public class Inference
             { // If the queriedVariableName is invalid:
                 inference(new Ordering(bayesNet,
                                        (String) null,
-                                       IGNORE_EXPLANATION,
-                                       Ordering.MINIMUM_WEIGHT));
+                                       ExplanationType.IGNORE,
+                                       Ordering.Type.MINIMUM_WEIGHT));
             }
         }
         else
         { // If no cluster is generated:
             inference(new Ordering(bayesNet,
                                    queriedVariableName,
-                                   IGNORE_EXPLANATION,
-                                   Ordering.MINIMUM_WEIGHT));
+                                   ExplanationType.IGNORE,
+                                   Ordering.Type.MINIMUM_WEIGHT));
         }
     }
 
@@ -181,7 +169,9 @@ public class Inference
      */
     protected void inference(String order[])
     {
-        inference(new Ordering(bayesNet, order, IGNORE_EXPLANATION));
+        inference(new Ordering(bayesNet,
+                               order,
+                               ExplanationType.IGNORE));
     }
 
     /**
@@ -229,7 +219,7 @@ public class Inference
     /**
      * Print the Inference.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
@@ -249,7 +239,7 @@ public class Inference
     /**
      * Print the Inference.
      *
-     * @param out
+     * @param out                   output print stream
      * @param shouldPrintBucketTree
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)

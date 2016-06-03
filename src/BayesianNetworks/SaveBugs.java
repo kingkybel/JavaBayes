@@ -30,6 +30,15 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 /**
+ * The BUGS (Bayesian inference Using Gibbs Sampling) project is concerned with
+ * flexible software for the Bayesian analysis of complex statistical models
+ * using Markov chain Monte Carlo (MCMC) methods. The project began in 1989 in
+ * the MRC Biostatistics Unit, Cambridge, and led initially to the `Classic'
+ * BUGS program, and then onto the WinBUGS software developed jointly with the
+ * Imperial College School of Medicine at St Mary's, London.
+ *
+ * http://www.mrc-bsu.cam.ac.uk/software/bugs/
+ *
  * @author Fabio G. Cozman
  */
 public class SaveBugs
@@ -43,7 +52,7 @@ public class SaveBugs
     /**
      * Default constructor for a SaveBUGS object.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public SaveBugs(BayesNet bayesNet)
     {
@@ -78,7 +87,7 @@ public class SaveBugs
      */
     private void saveModel(PrintStream pstream)
     {
-        pstream.println("model " + bayesNet.name + ";");
+        pstream.println("model " + bayesNet.getName() + ";");
     }
 
     /**

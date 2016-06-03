@@ -5,7 +5,7 @@
  */
 package BayesGUI;
 
-import InferenceGraphs.InferenceGraph;
+import BayesianInferences.InferenceGraph;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +23,7 @@ public class BayesGUI extends javax.swing.JFrame
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
-     * Creates new form BayesGUI
+     * Creates new form BayesGUI.
      */
     public BayesGUI()
     {

@@ -25,8 +25,8 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
-import InferenceGraphs.InferenceGraphNode;
+import BayesianInferences.InferenceGraph;
+import BayesianInferences.InferenceGraphNode;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -244,27 +244,27 @@ class EditVariableDialog extends Dialog
     }
 
     /**
-     * Customized show method.
+     * Customized setVisible method.
      */
     @Override
-    public void show()
+    public void setVisible(boolean show)
     {
-        Rectangle bounds = getParent().bounds();
-        Rectangle abounds = bounds();
+        Rectangle bounds = getParent().getBounds();
+        Rectangle abounds = getBounds();
 
-        move(bounds.x + (bounds.width - abounds.width) / 2,
-             bounds.y + (bounds.height - abounds.height) / 2);
+        setLocation(bounds.x + (bounds.width - abounds.width) / 2,
+                    bounds.y + (bounds.height - abounds.height) / 2);
 
-        super.show();
+        super.setVisible(show);
     }
 
     /**
-     * Customize insets method.
+     * Customize getInsets() method.
      */
     @Override
-    public Insets insets()
+    public Insets getInsets()
     {
-        Insets ins = super.insets();
+        Insets ins = super.getInsets();
         return (new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
                            ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET));
     }
@@ -312,21 +312,21 @@ class EditVariableDialog extends Dialog
         // Set type: explanatory or chance.
         if (node.isExplanation())
         {
-            types.setCurrent(explanationType);
+            types.setSelectedCheckbox(explanationType);
         }
         else
         {
-            types.setCurrent(chanceType);
+            types.setSelectedCheckbox(chanceType);
         }
 
         // Set type: standard or credal.
         if (node.isCredalSet())
         {
-            functionTypes.setCurrent(localCredalSetType);
+            functionTypes.setSelectedCheckbox(localCredalSetType);
         }
         else
         {
-            functionTypes.setCurrent(noLocalCredalSetType);
+            functionTypes.setSelectedCheckbox(noLocalCredalSetType);
         }
 
         // Fill and store properties

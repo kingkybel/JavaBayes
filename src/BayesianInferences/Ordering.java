@@ -38,35 +38,27 @@ import java.util.logging.Logger;
 public class Ordering
 {
 
-    /**
-     *
-     */
-    public static final int USER_DEFINED = 0;
-
-    /**
-     *
-     */
-    public static final int USER_ORDER = 1;
-
-    /**
-     *
-     */
-    public static final int MINIMUM_WEIGHT = 2;
     private static final String CLASS_NAME = Ordering.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
+    public enum Type
+    {
+
+        USER_DEFINED, USER_ORDER, MINIMUM_WEIGHT;
+    }
     BayesNet bayesNet;
     String order[];
-    int explanationStatus = Inference.IGNORE_EXPLANATION;
-    int orderingType = MINIMUM_WEIGHT;
+    ExplanationType explanationStatus = ExplanationType.IGNORE;
+    Type orderingType = Type.MINIMUM_WEIGHT;
 
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet     the underlying Bayesian network
      * @param orderingType
      * @param objective
      */
-    public Ordering(BayesNet bayesNet, String objective, int orderingType)
+    public Ordering(BayesNet bayesNet, String objective, Type orderingType)
     {
         this.bayesNet = bayesNet;
         explanationStatus = obtainExplanationStatus(bayesNet);
@@ -77,7 +69,7 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      * @param order
      */
     public Ordering(BayesNet bayesNet, String order[])
@@ -90,15 +82,15 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
-     * @param orderingType
+     * @param bayesNet          the underlying Bayesian network
      * @param objective
      * @param explanationStatus
+     * @param orderingType
      */
     public Ordering(BayesNet bayesNet,
                     String objective,
-                    int explanationStatus,
-                    int orderingType)
+                    ExplanationType explanationStatus,
+                    Type orderingType)
     {
         this.bayesNet = bayesNet;
         this.explanationStatus = explanationStatus;
@@ -109,11 +101,13 @@ public class Ordering
     /**
      * Basic constructor for Ordering.
      *
-     * @param bayesNet
-     * @param explanationStatus
+     * @param bayesNet          the underlying Bayesian network
      * @param order
+     * @param explanationStatus
      */
-    public Ordering(BayesNet bayesNet, String order[], int explanationStatus)
+    public Ordering(BayesNet bayesNet,
+                    String order[],
+                    ExplanationType explanationStatus)
     {
         this.bayesNet = bayesNet;
         this.order = order;
@@ -122,17 +116,20 @@ public class Ordering
 
     /**
      * Obtain explanationStatus: unless there are explanations the status is
-     * IGNORE_EXPLANATION.
+     * IGNORE.
+     *
+     * @param bayesNet the underlying Bayesian network
+     * @return
      */
-    private int obtainExplanationStatus(BayesNet bayesNet)
+    private ExplanationType obtainExplanationStatus(BayesNet bayesNet)
     {
-        int explanationStatusFlag = Inference.IGNORE_EXPLANATION;
+        ExplanationType explanationStatusFlag = ExplanationType.IGNORE;
         for (int i = 0; i < bayesNet.numberVariables(); i++)
         {
             if ((!(bayesNet.getProbabilityVariable(i).isObserved())) &&
                 (bayesNet.getProbabilityVariable(i).isExplanation()))
             {
-                explanationStatusFlag = Inference.EXPLANATION;
+                explanationStatusFlag = ExplanationType.SUBSET;
                 break;
             }
         }
@@ -141,6 +138,9 @@ public class Ordering
 
     /**
      * Call the appropriate ordering depending on the type of ordering.
+     *
+     * @param objective
+     * @return
      */
     private String[] ordering(String objective)
     {
@@ -162,7 +162,7 @@ public class Ordering
             return (oneOrder);
         }
 
-        if (orderingType == USER_ORDER)
+        if (orderingType == Type.USER_ORDER)
         {
             // For user order, just collect all variables.
             for (i = 0; i < bayesNet.numberVariables(); i++)
@@ -174,7 +174,7 @@ public class Ordering
         else
         {
             // For explanations, just collect all variables.
-            if (explanationStatus != Inference.IGNORE_EXPLANATION)
+            if (!explanationStatus.isIgnore())
             {
                 for (i = 0; i < bayesNet.numberVariables(); i++)
                 {
@@ -185,9 +185,10 @@ public class Ordering
             else
             { // For inference, get only the affecting variables.
                 DSeparation dsep = new DSeparation(bayesNet);
-                variablesToOrder = dsep.allAffecting(objectiveIndex);
+                variablesToOrder = dsep.getAllAffectingVariables(objectiveIndex);
             }
-            return (heuristicOrder(variablesToOrder, objectiveIndex,
+            return (heuristicOrder(variablesToOrder,
+                                   objectiveIndex,
                                    orderingType));
         }
     }
@@ -206,6 +207,10 @@ public class Ordering
      * the inserted by the user, but the bucket elimination algorithm requires
      * the ordering to have this property (objective variable last for
      * inference).
+     *
+     * @param variablesToOrder
+     * @param objectiveIndex
+     * @return
      */
     private String[] userOrder(ArrayList variablesToOrder,
                                int objectiveIndex)
@@ -229,13 +234,13 @@ public class Ordering
             // Check the status of the variable as a explanatory variable
             switch (explanationStatus)
             {
-                case Inference.IGNORE_EXPLANATION:
+                case IGNORE:
                     isVariableExplanationFlag = false;
                     break;
-                case Inference.EXPLANATION:
+                case SUBSET:
                     isVariableExplanationFlag = probVar.isExplanation();
                     break;
-                case Inference.FULL_EXPLANATION:
+                case FULL:
                     isVariableExplanationFlag = true;
                     break;
             }
@@ -308,10 +313,15 @@ public class Ordering
      * Produce an ordering for the variables in variablesToOrder, assuming that
      * all variables are in the BayesNet bayesNet object. The orderingType
      * indicates which heuristic to use in the elimination procedure.
+     *
+     * @param origVars
+     * @param objectiveIndex
+     * @param orderingType
+     * @return
      */
     private String[] heuristicOrder(ArrayList origVars,
                                     int objectiveIndex,
-                                    int orderingType)
+                                    Type orderingType)
     {
         int i, j;
         int PHASE_ONE = 1;
@@ -355,8 +365,8 @@ public class Ordering
                     // Order all other variables
                     variablesToOrder.add(probVar);
                     // Check the status of the variable as an explanatory variable
-                    if ((explanationStatus == Inference.FULL_EXPLANATION) ||
-                        ((explanationStatus == Inference.EXPLANATION) &&
+                    if ((explanationStatus.isFull()) ||
+                        ((explanationStatus.isSubset()) &&
                          (probVar.isExplanation())))
                     {
                         phaseMarkers[probVar.getIndex()] = PHASE_TWO;
@@ -482,13 +492,17 @@ public class Ordering
     /**
      * Obtain the heuristic value of eliminating a variable, represented by the
      * list of variables linked to it.
+     *
+     * @param linkedVars
+     * @param orderingType
+     * @return
      */
-    private long obtainValue(ArrayList linkedVars, int orderingType)
+    private long obtainValue(ArrayList linkedVars, Type orderingType)
     {
         ProbabilityVariable probVar;
         long value = 0;
 
-        if (orderingType == Ordering.MINIMUM_WEIGHT)
+        if (orderingType == Type.MINIMUM_WEIGHT)
         {
             long weight = 1;
             for (Object e : linkedVars)
@@ -505,6 +519,10 @@ public class Ordering
     /**
      * Interconnect a group of variables; each variable connected to all the
      * others.
+     *
+     * @param bayesNet                    the underlying Bayesian network
+     * @param vectors
+     * @param variablesToBeInterconnected
      */
     private void interconnect(BayesNet bayesNet,
                               ArrayList vectors[],
@@ -525,6 +543,11 @@ public class Ordering
 
     /**
      * Connect two variables.
+     *
+     * @param bayesNet the underlying Bayesian network
+     * @param vectors
+     * @param probVar  a probability variable_i
+     * @param probVar  a probability variable_j
      */
     private void interconnect(BayesNet bayesNet,
                               ArrayList vectors[],

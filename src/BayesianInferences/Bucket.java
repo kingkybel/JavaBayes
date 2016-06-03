@@ -36,9 +36,11 @@ import java.util.logging.Logger;
 class Bucket
 {
 
-    static final int EMPTY = 0;
-    static final int REDUCED = 1;
-    static final int DISTRIBUTED = 2;
+    public enum Type
+    {
+
+        EMPTY, REDUCED, DISTRIBUTED;
+    }
     private static final String CLASS_NAME = Bucket.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
@@ -51,7 +53,8 @@ class Bucket
     // The functions in the Bucket.
     ArrayList<DiscreteFunction> discreteFunctions;
 
-    DiscreteFunction backwardPointers; // The pointers used for maximization.
+    // The pointers used for maximization.
+    DiscreteFunction backwardPointers;
 
     // The function that is sent from a Bucket to another.
     DiscreteFunction separator;
@@ -71,7 +74,7 @@ class Bucket
     // The child of the Bucket in the BucketTree.
     Bucket child;
 
-    int bucketStatus = EMPTY;
+    Type bucketStatus = Type.EMPTY;
 
     private DiscreteFunction orderedDfs[];
     private boolean isOrderedDfsReady;
@@ -81,7 +84,8 @@ class Bucket
      * distributions for clusters of variables.
      *
      * @param bucketTree The BucketTree that holds the bucket.
-     * @param probVar    The bucket variable for the Bucket.
+     * @param probVar    a probability variable The bucket variable for the
+     *                   Bucket.
      */
     Bucket(BucketTree bucketTree, ProbabilityVariable probVar)
     {
@@ -92,7 +96,8 @@ class Bucket
      * Basic constructor for Bucket.
      *
      * @param bucketTree          The BucketTree that holds the bucket.
-     * @param probVar             The bucket variable for the Bucket.
+     * @param probVar             a probability variable The bucket variable for
+     *                            the Bucket.
      * @param isProducingClusters Flag that indicates whether distributions for
      *                            clusters of variables are to be computed or
      *                            not.
@@ -103,10 +108,10 @@ class Bucket
     {
         this.bucketTree = bucketTree;
         this.probVar = probVar;
-        discreteFunctions = new ArrayList<>();
+        this.discreteFunctions = new ArrayList<>();
         this.isProducingClusters = isProducingClusters;
-        nonConditioningVariables = new ArrayList<>();
-        parents = new ArrayList<>();
+        this.nonConditioningVariables = new ArrayList<>();
+        this.parents = new ArrayList<>();
     }
 
     /**
@@ -119,11 +124,12 @@ class Bucket
 
     /**
      * Print method for Bucket.
+     *
+     * @param out output print stream
      */
     void print(PrintStream out)
     {
         boolean isExplanationFlag = false;
-        DiscreteFunction discrFunc;
 
         if (isExplanation())
         {
@@ -149,9 +155,8 @@ class Bucket
                 out.println("Bucket has been distributed.");
                 break;
         }
-        for (Object e : discreteFunctions)
+        for (DiscreteFunction discrFunc : discreteFunctions)
         {
-            discrFunc = (DiscreteFunction) (e);
             discrFunc.print(out);
         }
         if (isExplanationFlag && (backwardPointers != null))
@@ -209,7 +214,7 @@ class Bucket
             separator = null;
             return;
         }
-        // Either sum out or maximize out the bucket probVar.
+        // Either sum out or maximize out the bucket variable.
         if (isExplanation())
         {
             maxOut(newDf);
@@ -220,13 +225,15 @@ class Bucket
         }
 
         // Mark the Bucket as REDUCED;
-        bucketStatus = REDUCED;
+        bucketStatus = Type.REDUCED;
         // Set the separator.
         separator = newDf;
     }
 
     /**
      * Combine a number of functions in the bucket into a single function.
+     *
+     * @return the combined function
      */
     DiscreteFunction combine()
     {
@@ -344,19 +351,16 @@ class Bucket
     }
 
     /**
-     * Detect whether the bucket probVar is an explanatory probVar.
+     * Detect whether the bucket variable is an explanatory variable.
+     *
+     * @return true, if the bucket - tree is a (full) explanatory variable,
+     *         false otherwise
      */
     boolean isExplanation()
     {
-        if (bucketTree.explanationStatus == Inference.IGNORE_EXPLANATION)
-        {
-            return (false);
-        }
-        if (bucketTree.explanationStatus == Inference.FULL_EXPLANATION)
-        {
-            return (true);
-        }
-        return (probVar.isExplanation());
+        return bucketTree.isIgnoreExplanation() ? false :
+               bucketTree.isFullExplanation() ? true :
+               probVar.isExplanation();
     }
 
     /**
@@ -378,7 +382,10 @@ class Bucket
     }
 
     /**
-     * Join the indexes of the Bucket by marking the probVar markers with true.
+     * Join the indexes of the Bucket by marking the variable markers with true.
+     *
+     * @param variableMarkers
+     * @return the number of joined Indices
      */
     private int joinIndexes(boolean variableMarkers[])
     {
@@ -404,14 +411,17 @@ class Bucket
 
     /**
      * Construct a DiscreteFunction which holds all the variables in the Bucket
-     * (maybe with the exception of the bucket probVar).
+     * (maybe with the exception of the bucket variable).
+     *
+     * @param isBucketVariableIncluded whether or not to include the bucket
+     *                                 variable
+     * @return the new bucket function
      */
-    private DiscreteFunction buildNewFunction(
-            boolean isBucketVariableIncluded)
+    private DiscreteFunction buildNewFunction(boolean isBucketVariableIncluded)
     {
         int i, j = 0, n, v = 1;
-        boolean variableMarkers[] = new boolean[bucketTree.bayesNet.
-                  numberVariables()];
+        boolean variableMarkers[] =
+                  new boolean[bucketTree.bayesNet.numberVariables()];
 
         // Join the indexes in the bucket
         n = joinIndexes(variableMarkers);
@@ -441,10 +451,10 @@ class Bucket
         }
 
         // Create new function to be filled with joined variables
-        DiscreteFunction newDf = new DiscreteFunction(n, v);
-        buildNewVariables(newDf,
-                          joinedIndexes,
-                          isBucketVariableIncluded, n);
+        DiscreteFunction newDf = buildNewVariables(
+                         v,
+                         joinedIndexes,
+                         isBucketVariableIncluded);
 
         return (newDf);
 
@@ -453,16 +463,20 @@ class Bucket
     /**
      * Construct an array of variables that contains the variables in a new
      * function; if the bucket variable is present, it is the first variable.
+     *
+     * @param v
+     * @param joinedIndexes
+     * @param isBucketVariableIncluded
      */
-    private void buildNewVariables(DiscreteFunction newDf,
-                                   int joinedIndexes[],
-                                   boolean isBucketVariableIncluded,
-                                   int n)
+    private DiscreteFunction buildNewVariables(int v,
+                                               int joinedIndexes[],
+                                               boolean isBucketVariableIncluded)
     {
+        DiscreteFunction newDf = new DiscreteFunction(joinedIndexes.length, v);
         // Bucket probVar comes first if present
         if (isBucketVariableIncluded == true)
         {
-            for (int i = 0, j = 1; i < n; i++)
+            for (int i = 0, j = 1; i < joinedIndexes.length; i++)
             {
                 if (joinedIndexes[i] == probVar.getIndex())
                 {
@@ -472,29 +486,33 @@ class Bucket
                 }
                 else
                 {
-                    newDf.setVariable(j,
-                                      bucketTree.bayesNet.
-                                      getProbabilityVariable(
-                                              joinedIndexes[i]));
+                    newDf.setVariable(
+                            j,
+                            bucketTree.bayesNet.getProbabilityVariable(
+                                    joinedIndexes[i]));
                     j++;
                 }
             }
         }
         else
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < joinedIndexes.length; i++)
             {
-                newDf.setVariable(i,
-                                  bucketTree.bayesNet.
-                                  getProbabilityVariable(
-                                          joinedIndexes[i]));
+                newDf.setVariable(
+                        i,
+                        bucketTree.bayesNet.getProbabilityVariable(
+                                joinedIndexes[i]));
             }
         }
+
+        return newDf;
     }
 
     /**
      * Obtain the values for the reducedFunction. Attention: the array
      * orderedDfs is supposed to be ready!
+     *
+     * @param newDf new function
      */
     private void sumOut(DiscreteFunction newDf)
     {
@@ -531,10 +549,10 @@ class Bucket
                 // mark the current value in the indexes,
                 indexes[probVar.getIndex()] = l;
                 t = 1.0;
-                for (m = 0; m < orderedDfs.length; m++)
+                for (k = 0; k < orderedDfs.length; k++)
                 {
                     // loop through the functions in the Bucket.
-                    t *= orderedDfs[m].evaluate(dvs, indexes);
+                    t *= orderedDfs[k].evaluate(dvs, indexes);
                 }
                 if (isProducingClusters)
                 { // If necessary, insert value in the cluster.
@@ -569,54 +587,56 @@ class Bucket
     /**
      * Obtain the values for the reducedFunction through maximization.
      * Attention: the array orderedDfs is supposed to be ready!
+     *
+     * @param newDf new function
      */
     private void maxOut(DiscreteFunction newDf)
     {
-        int i, j, k, l, m, p, u, last, current;
-        int n = probVar.numberValues();
+        int i, j, k, lowerIndex, pos, upperIndex, last, current;
+        int numberOfVals = probVar.numberValues();
         int indexes[] = new int[bucketTree.bayesNet.numberVariables()];
         int valueLengths[] = new int[bucketTree.bayesNet.numberVariables()];
-        double t, v = 0.0;
+        double lowValue;
+        double highValue;
 
         // Initialize some necessary values
         createBackwardPointers(newDf);
         for (i = 0; i < bucketTree.bayesNet.numberVariables(); i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = bucketTree.bayesNet.
-            getProbabilityVariable(i).numberValues();
+            valueLengths[i] =
+            bucketTree.bayesNet.getProbabilityVariable(i).numberValues();
         }
 
         // Run through all the values of the bucket probVar
         last = newDf.numberVariables() - 1;
         for (i = 0; i < newDf.numberValues(); i++)
         {
-            v = 0.0;
-            u = BayesNet.INVALID_INDEX;
-            for (l = 0; l < n; l++)
+            highValue = 0.0;
+            upperIndex = BayesNet.INVALID_INDEX;
+            for (lowerIndex = 0; lowerIndex < numberOfVals; lowerIndex++)
             {
-                t = 1.0;
-                indexes[probVar.getIndex()] = l;
+                lowValue = 1.0;
+                indexes[probVar.getIndex()] = lowerIndex;
                 // Combine the values through all the functions in the bucket
-                for (m = 0; m < orderedDfs.length; m++)
+                for (k = 0; k < orderedDfs.length; k++)
                 {
-                    t *= orderedDfs[m].evaluate(bucketTree.bayesNet.
-                    getProbabilityVariables(),
-                                                indexes);
+                    lowValue *= orderedDfs[k].evaluate(
+                    bucketTree.bayesNet.getProbabilityVariables(),
+                    indexes);
                 }
                 // Perform the maximization
-                if (v <= t)
+                if (highValue <= lowValue)
                 {
-                    v = t;
-                    u = l;
+                    highValue = lowValue;
+                    upperIndex = lowerIndex;
                 }
             }
             // Update functions
-            p = newDf.getPositionFromIndexes(bucketTree.bayesNet.
-            getProbabilityVariables(),
-                                             indexes);
-            newDf.setValue(p, v);
-            backwardPointers.setValue(p, (double) u);
+            pos = newDf.getPositionFromIndexes(
+            bucketTree.bayesNet.getProbabilityVariables(), indexes);
+            newDf.setValue(pos, highValue);
+            backwardPointers.setValue(pos, (double) upperIndex);
 
             // Update the indexes
             indexes[newDf.getIndex(last)]++;
@@ -638,6 +658,8 @@ class Bucket
 
     /**
      * Allocate and initialize the backwardPointers in the Bucket.
+     *
+     * @param newDf new function
      */
     private void createBackwardPointers(DiscreteFunction newDf)
     {

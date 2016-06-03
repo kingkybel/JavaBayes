@@ -2,9 +2,9 @@
 
 
 <!--
-	Bayesian network in BIF (BayesNet Interchange Format)
-	Produced by JavaBayes (http://www.cs.cmu.edu/~javabayes/
-	Output created Thu Aug 06 08:05:23 GMT+01:00 1998
+        Bayesian network in BIF (BayesNet Interchange Format)
+        Produced by JavaBayes (http://www.cs.cmu.edu/~javabayes/
+        Output created Thu Aug 06 08:05:23 GMT+01:00 1998
 -->
 
 
@@ -30,82 +30,82 @@
 
 
 <BIF>
-<NETWORK>
-<NAME>Cancer</NAME>
+    <NETWORK>
+        <NAME>Cancer</NAME>
 
-<!-- Variables -->
-<VARIABLE>
-	<NAME>MetastaticCancer</NAME>
-	<TYPE>discrete</TYPE>
-	<VALUE>Present</VALUE>
-	<VALUE>Absent</VALUE>
-	<PROPERTY>position = (242, 136)</PROPERTY>
-</VARIABLE>
+        <!-- Variables -->
+        <VARIABLE>
+            <NAME>MetastaticCancer</NAME>
+            <TYPE>discrete</TYPE>
+            <VALUE>Present</VALUE>
+            <VALUE>Absent</VALUE>
+            <PROPERTY>position = (242, 136)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE>
-	<NAME>SerumCalcium</NAME>
-	<TYPE>discrete</TYPE>
-	<VALUE>Increased</VALUE>
-	<VALUE>NotIncreased</VALUE>
-	<PROPERTY>position = (126, 221)</PROPERTY>
-</VARIABLE>
+        <VARIABLE>
+            <NAME>SerumCalcium</NAME>
+            <TYPE>discrete</TYPE>
+            <VALUE>Increased</VALUE>
+            <VALUE>NotIncreased</VALUE>
+            <PROPERTY>position = (126, 221)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE>
-	<NAME>BrainTumor</NAME>
-	<TYPE>discrete</TYPE>
-	<VALUE>Present</VALUE>
-	<VALUE>Absent</VALUE>
-	<PROPERTY>position = (368, 216)</PROPERTY>
-</VARIABLE>
+        <VARIABLE>
+            <NAME>BrainTumor</NAME>
+            <TYPE>discrete</TYPE>
+            <VALUE>Present</VALUE>
+            <VALUE>Absent</VALUE>
+            <PROPERTY>position = (368, 216)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE>
-	<NAME>Coma</NAME>
-	<TYPE>discrete</TYPE>
-	<VALUE>Present</VALUE>
-	<VALUE>Absent</VALUE>
-	<PROPERTY>position = (244, 313)</PROPERTY>
-</VARIABLE>
+        <VARIABLE>
+            <NAME>Coma</NAME>
+            <TYPE>discrete</TYPE>
+            <VALUE>Present</VALUE>
+            <VALUE>Absent</VALUE>
+            <PROPERTY>position = (244, 313)</PROPERTY>
+        </VARIABLE>
 
-<VARIABLE>
-	<NAME>SevereHeadaches</NAME>
-	<TYPE>discrete</TYPE>
-	<VALUE>Present</VALUE>
-	<VALUE>Absent</VALUE>
-	<PROPERTY>position = (490, 309)</PROPERTY>
-</VARIABLE>
-
-
-<!-- Probability distributions -->
-<PROBABILITY>
-	<FOR>MetastaticCancer</FOR>
-	<TABLE>0.2 0.8 </TABLE>
-</PROBABILITY>
-
-<PROBABILITY>
-	<FOR>SerumCalcium</FOR>
-	<GIVEN>MetastaticCancer</GIVEN>
-	<TABLE>0.8 0.2 0.2 0.8 </TABLE>
-</PROBABILITY>
-
-<PROBABILITY>
-	<FOR>BrainTumor</FOR>
-	<GIVEN>MetastaticCancer</GIVEN>
-	<TABLE>0.2 0.05 0.8 0.95 </TABLE>
-</PROBABILITY>
-
-<PROBABILITY>
-	<FOR>Coma</FOR>
-	<GIVEN>BrainTumor</GIVEN>
-	<GIVEN>SerumCalcium</GIVEN>
-	<TABLE>0.8 0.8 0.8 0.05 0.2 0.2 0.2 0.95 </TABLE>
-</PROBABILITY>
-
-<PROBABILITY>
-	<FOR>SevereHeadaches</FOR>
-	<GIVEN>BrainTumor</GIVEN>
-	<TABLE>0.8 0.6 0.2 0.4 </TABLE>
-</PROBABILITY>
+        <VARIABLE>
+            <NAME>SevereHeadaches</NAME>
+            <TYPE>discrete</TYPE>
+            <VALUE>Present</VALUE>
+            <VALUE>Absent</VALUE>
+            <PROPERTY>position = (490, 309)</PROPERTY>
+        </VARIABLE>
 
 
-</NETWORK>
+        <!-- Probability distributions -->
+        <PROBABILITY>
+            <FOR>MetastaticCancer</FOR>
+            <TABLE>0.2 0.8 </TABLE>
+        </PROBABILITY>
+
+        <PROBABILITY>
+            <FOR>SerumCalcium</FOR>
+            <GIVEN>MetastaticCancer</GIVEN>
+            <TABLE>0.8 0.2 0.2 0.8 </TABLE>
+        </PROBABILITY>
+
+        <PROBABILITY>
+            <FOR>BrainTumor</FOR>
+            <GIVEN>MetastaticCancer</GIVEN>
+            <TABLE>0.2 0.05 0.8 0.95 </TABLE>
+        </PROBABILITY>
+
+        <PROBABILITY>
+            <FOR>Coma</FOR>
+            <GIVEN>BrainTumor</GIVEN>
+            <GIVEN>SerumCalcium</GIVEN>
+            <TABLE>0.8 0.8 0.8 0.05 0.2 0.2 0.2 0.95 </TABLE>
+        </PROBABILITY>
+
+        <PROBABILITY>
+            <FOR>SevereHeadaches</FOR>
+            <GIVEN>BrainTumor</GIVEN>
+            <TABLE>0.8 0.6 0.2 0.4 </TABLE>
+        </PROBABILITY>
+
+
+    </NETWORK>
 </BIF>

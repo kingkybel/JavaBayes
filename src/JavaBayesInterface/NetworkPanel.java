@@ -25,16 +25,18 @@
  */
 package JavaBayesInterface;
 
-import InferenceGraphs.InferenceGraph;
-import InferenceGraphs.InferenceGraphNode;
+import BayesianInferences.ExplanationType;
+import BayesianInferences.InferenceGraph;
+import BayesianInferences.InferenceGraphNode;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
+import static java.awt.Cursor.getPredefinedCursor;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -128,7 +130,7 @@ public class NetworkPanel extends Canvas
 
         // set initial mode to be MOVE.
         mode = MOVE_MODE;
-        frame.setCursor(Frame.MOVE_CURSOR);
+        setCursor(getPredefinedCursor(Cursor.MOVE_CURSOR));
 
         // set color for background
         setBackground(backgroundColor);
@@ -165,8 +167,8 @@ public class NetworkPanel extends Canvas
             else
             {
                 // Start the creation of a group.
-                groupStart.move(x, y);
-                groupEnd.move(x, y);
+                groupStart.setLocation(x, y);
+                groupEnd.setLocation(x, y);
                 modifyGroup = true;
             }
         }
@@ -233,7 +235,7 @@ public class NetworkPanel extends Canvas
         }
         else if (modifyGroup == true)
         {
-            groupEnd.move(x, y);
+            groupEnd.setLocation(x, y);
         }
 
         repaint();
@@ -393,7 +395,7 @@ public class NetworkPanel extends Canvas
     public void update(Graphics g)
     {
         // Prepare new offscreen image, for double buffering.
-        Dimension d = size();
+        Dimension d = getSize();
         MediaTracker tracker;
 
         if ((offScreenImage == null) ||
@@ -441,7 +443,7 @@ public class NetworkPanel extends Canvas
     public void paint(Graphics g)
     {
         InferenceGraphNode node, parent;
-        int explanationStatus = frame.getMode();
+        ExplanationType explanationStatus = frame.getMode();
 
         if (ig == null)
         {
@@ -484,25 +486,26 @@ public class NetworkPanel extends Canvas
                            NODE_SIZE + 2, NODE_SIZE + 2);
             }
 
-            switch (explanationStatus)
+            if (explanationStatus.isFull())
             {
-                case InferenceGraph.FULL_EXPLANATION:
+                g.setColor(explanationNodeColor);
+            }
+            else if (explanationStatus.isSubset())
+            {
+                if (node.isExplanation())
+                {
                     g.setColor(explanationNodeColor);
-                    break;
-                case InferenceGraph.EXPLANATION:
-                    if (node.isExplanation())
-                    {
-                        g.setColor(explanationNodeColor);
-                    }
-                    else
-                    {
-                        g.setColor(nodeColor);
-                    }
-                    break;
-                case InferenceGraph.SENSITIVITY_ANALYSIS:
-                case InferenceGraph.MARGINAL_POSTERIOR:
-                case InferenceGraph.EXPECTATION:
+                }
+                else
+                {
                     g.setColor(nodeColor);
+                }
+            }
+            else if (explanationStatus.isSensitivityAnalysis() ||
+                     explanationStatus.isMarginalPosterior() ||
+                     explanationStatus.isExpectation())
+            {
+                g.setColor(nodeColor);
             }
 
             if (node.isObserved())
@@ -551,7 +554,7 @@ public class NetworkPanel extends Canvas
         g.setPaintMode();
 
         // Resize the scrollbars.
-        scrollPanel.setScrollbars(size());
+        scrollPanel.setScrollbars(getSize());
     }
 
     /**
@@ -676,7 +679,7 @@ public class NetworkPanel extends Canvas
     {
         ig.resetMarginal();
         Dialog d = new ObserveDialog(this, frame, ig, node);
-        d.show();
+        d.setVisible(true);
     }
 
     /**
@@ -818,7 +821,7 @@ public class NetworkPanel extends Canvas
     {
         ig.resetMarginal();
         Dialog d = new EditVariableDialog(this, frame, ig, node);
-        d.show();
+        d.setVisible(true);
     }
 
     /**
@@ -828,7 +831,7 @@ public class NetworkPanel extends Canvas
     {
         ig.resetMarginal();
         Dialog d = new EditFunctionDialog(frame, ig, node);
-        d.show();
+        d.setVisible(true);
     }
 
     /**
@@ -838,7 +841,7 @@ public class NetworkPanel extends Canvas
     {
         ig.resetMarginal();
         Dialog d = new EditNetworkDialog(frame, ig);
-        d.show();
+        d.setVisible(true);
     }
 
 }

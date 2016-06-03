@@ -40,19 +40,22 @@ import java.util.logging.Logger;
 public class BucketTree
 {
 
-    static final int MAX_OUT = 2;
-    static final int SUM_OUT = 1;
     private static final String CLASS_NAME = BucketTree.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    Bucket bucketTree[]; // Array of Bucket objects.
-    BayesNet bayesNet; // BayesNet that contains the variables.
 
-    int backwardPointers[]; // Array that stores the index of variables for minimization.
+    // Array of Bucket objects.
+    Bucket bucketTree[];
+
+    // BayesNet that contains the variables.
+    BayesNet bayesNet;
+
+    // Array that stores the index of variables for minimization.
+    int backwardPointers[];
 
     DiscreteFunction unnormalizedResult;
 
     Ordering ordering;
-    int explanationStatus;
+    ExplanationType explanationStatus;
     boolean isProducingClusters;
 
     private int activeBucket;
@@ -112,7 +115,8 @@ public class BucketTree
             {
                 j = bayesNet.indexOfVariable(order[i]);
                 bucketTree[i] =
-                new Bucket(this, bayesNet.getProbabilityVariable(j),
+                new Bucket(this,
+                           bayesNet.getProbabilityVariable(j),
                            this.isProducingClusters);
             }
             // Insert the probability functions into the bucketTree;
@@ -148,7 +152,11 @@ public class BucketTree
 
     /**
      * Transform an observed ProbabilityVariable into a ProbabilityFunction to
-     * handle the case where the query involves an observed probVar.
+     * handle the case where the query involves an observed variable.
+     *
+     * @param bayesNet the underlying Bayesian network
+     * @param probVar  a probability variable
+     * @return the transformed function
      */
     private ProbabilityFunction transformToProbabilityFunction(
             BayesNet bayesNet,
@@ -168,6 +176,9 @@ public class BucketTree
     /**
      * Eliminates all variables defined as evidence. The order of the variables
      * that are not eliminated is the same order in the original function.
+     *
+     * @param probFunc
+     * @return
      */
     private ProbabilityFunction checkEvidence(ProbabilityFunction probFunc)
     {
@@ -220,6 +231,10 @@ public class BucketTree
      * probVar is present in the input ProbabilityFunction probFunc and is not
      * observed. Even explanatory variables can be observed and taken as
      * evidence.
+     *
+     * @param probFunc
+     * @param markers
+     * @return
      */
     private int buildEvidenceMarkers(ProbabilityFunction probFunc,
                                      boolean markers[])
@@ -257,6 +272,9 @@ public class BucketTree
 
     /**
      * Obtain the values for the evidence plus function.
+     *
+     * @param newProbFunc
+     * @param probFunc
      */
     private void checkEvidenceLoop(ProbabilityFunction newProbFunc,
                                    ProbabilityFunction probFunc)
@@ -317,7 +335,7 @@ public class BucketTree
         // Now reduce the last Bucket.
         unnormalizedResult = bucketTree[i].combine();
         // Mark the last Bucket as DISTRIBUTED.
-        bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
+        bucketTree[i].bucketStatus = Bucket.Type.DISTRIBUTED;
         // Generate the backwardPointers if necessary.
         backwardPointers = backwardMaximization();
     }
@@ -369,8 +387,8 @@ public class BucketTree
                 markNonConditioning[j] = true;
             }
             // OBS: The following piece of code will actually be less efficient than
-            // necessary. It will count as "conditioning" any probVar in the cluster
-            // except the bucket probVar. This will imply that some variables in the
+            // necessary. It will count as "conditioning" any variable in the cluster
+            // except the bucket variable. This will imply that some variables in the
             // separator will be normalized over without need, and the separator will
             // be larger than necessary.
             // OBS: this code was contributed by Wei Zhou (wei@cs.ualberta.ca),
@@ -382,11 +400,11 @@ public class BucketTree
                         getIndex()] = false;
             }
 
-       // The following piece of code does the right thing (compared to the
+            // The following piece of code does the right thing (compared to the
             // piece of code above): it selects the
             // minimum number of non-conditioning variables. To use this piece
             // of code, it will be necessary to create a "normalize" method that
-            // normalizes with respect to a number of variables at at time.
+            // normalizes with respect to a number of variables at a time.
        /*
              for (j=0; j<bucketTree[i].cluster.numberVariables(); j++) {
              markNonConditioning[ (bucketTree[i].cluster.getVariables())[j].getIndex() ] = false;
@@ -396,10 +414,10 @@ public class BucketTree
              markNonConditioning[pv.getIndex() ] = true;
              } */
             // Update the separator.
-            bucketTree[i].separator = bucketTree[i].child.cluster.sumOut(
-            bayesNet.
-            getProbabilityVariables(),
-            markNonConditioning);
+            bucketTree[i].separator =
+            bucketTree[i].child.cluster.sumOut(
+                    bayesNet.getProbabilityVariables(),
+                    markNonConditioning);
 
             // Compute cluster using new separator (note that if separator
             // is null, the cluster had all variables already processed).
@@ -410,13 +428,13 @@ public class BucketTree
                 bucketTree[i].cluster.normalizeFirst();
                 // Now combine the cluster and the separator.
                 bucketTree[i].cluster =
-                bucketTree[i].cluster.multiply(bayesNet.
-                        getProbabilityVariables(),
-                                               bucketTree[i].separator);
+                bucketTree[i].cluster.multiply(
+                        bayesNet.getProbabilityVariables(),
+                        bucketTree[i].separator);
             }
 
             // Mark the Bucket as DISTRIBUTED.
-            bucketTree[i].bucketStatus = Bucket.DISTRIBUTED;
+            bucketTree[i].bucketStatus = Bucket.Type.DISTRIBUTED;
         }
         // Indicate success.
         return (true);
@@ -426,6 +444,8 @@ public class BucketTree
      * Recover the maximizing variables going back through the maximizing
      * bucketTree; the variables are returned as an array of markers
      * (non-explanation variables get INVALID_INDEX).
+     *
+     * @return
      */
     private int[] backwardMaximization()
     {
@@ -486,6 +506,8 @@ public class BucketTree
     /**
      * Put the separator function of a Bucket buck into the BucketTree beyond
      * the current activeBucket.
+     *
+     * @param bucket
      */
     private void insert(Bucket bucket)
     {
@@ -525,6 +547,8 @@ public class BucketTree
     /**
      * Put a DiscreteFunction into the BucketTree beyond the current
      * activeBucket.
+     *
+     * @param discrFunc
      */
     private void insert(DiscreteFunction discrFunc)
     {
@@ -535,6 +559,9 @@ public class BucketTree
      * Put a DiscreteFunction into the BucketTree beyond the current
      * activeBucket. If wasFirstVariableCancelledByEvidence is true, then mark
      * the bucket accordingly.
+     *
+     * @param discrFunc
+     * @param wasFirstVariableCancelledByEvidence
      */
     private void insert(DiscreteFunction discrFunc,
                         boolean wasFirstVariableCancelledByEvidence)
@@ -571,15 +598,15 @@ public class BucketTree
     /**
      * Print method for BucketTree.
      *
-     * @param out
+     * @param out output print stream
      */
     public void print(PrintStream out)
     {
         out.println("BucketTree:" + "\n\tActive Bucket is " + activeBucket +
                     ".");
-        for (int i = 0; i < bucketTree.length; i++)
+        for (Bucket bucketTree1 : bucketTree)
         {
-            bucketTree[i].print(out);
+            bucketTree1.print(out);
         }
         out.println("Bucket result: ");
         unnormalizedResult.print(out);
@@ -606,5 +633,23 @@ public class BucketTree
     public DiscreteFunction getUnnormalizedResult()
     {
         return (unnormalizedResult);
+    }
+
+    /**
+     *
+     * @return
+     */
+    boolean isFullExplanation()
+    {
+        return explanationStatus.isFull();
+    }
+
+    /**
+     *
+     * @return
+     */
+    boolean isIgnoreExplanation()
+    {
+        return explanationStatus.isIgnore();
     }
 }
