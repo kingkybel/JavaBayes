@@ -85,7 +85,7 @@ class ObserveDialog extends Dialog
 
         if (observed)
         {
-            valuesList.select(node.getObservedValue());
+            valuesList.select(node.getObservedIndex());
         }
 
         listp.add(valuesList);

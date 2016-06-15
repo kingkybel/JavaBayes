@@ -48,4 +48,26 @@ public enum ExplanationType
     {
         return this == SENSITIVITY_ANALYSIS;
     }
+
+    @Override
+    public String toString()
+    {
+        return this == SUBSET ? "Subset of explanantory variables" :
+               this == FULL ? "Complete explanation" :
+               this == MARGINAL_POSTERIOR ? "Posterior marginal" :
+               this == EXPECTATION ? "Posterior Expectation" :
+               this == SENSITIVITY_ANALYSIS ? "" : "<IGNORE>";
+    }
+
+    public static ExplanationType[] validChoices()
+    {
+        return new ExplanationType[]
+        {
+            SUBSET,
+            FULL,
+            MARGINAL_POSTERIOR,
+            EXPECTATION,
+            SENSITIVITY_ANALYSIS
+        };
+    }
 }

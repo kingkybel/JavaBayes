@@ -103,10 +103,10 @@ public class NetworkPanel extends Canvas
     int yScroll;
 
     // Fonts.
-    private Font roman = new Font("TimesRoman", Font.BOLD, 12);
-    private Font helvetica = new Font("Helvetica", Font.BOLD, 15);
-    private FontMetrics fmetrics = getFontMetrics(roman);
-    private int h = (int) fmetrics.getHeight() / 3;
+    private final Font roman = new Font("TimesRoman", Font.BOLD, 12);
+    private final Font helvetica = new Font("Helvetica", Font.BOLD, 15);
+    private final FontMetrics fmetrics = getFontMetrics(roman);
+    private final int h = (int) fmetrics.getHeight() / 3;
 
     // For double buffering.
     private Image offScreenImage;
@@ -714,7 +714,6 @@ public class NetworkPanel extends Canvas
         if (!insideGroup(movenode))
         {
             movingNodes = null;
-            return;
         }
         else
         {

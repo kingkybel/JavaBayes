@@ -554,9 +554,19 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public int getObservedValue()
+    public int getObservedIndex()
     {
         return (probVar.getObservedIndex());
+    }
+
+    /**
+     * Return the observed value for the variable in the node.
+     *
+     * @return
+     */
+    public String getObservedValue()
+    {
+        return (probVar.getValue(getObservedIndex()));
     }
 
     /**

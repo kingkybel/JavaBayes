@@ -128,7 +128,7 @@ public final class JavaBayesConsoleFrame extends Frame
                                                  saveDialogTitle,
                                                  FileDialog.SAVE);
         OpenFileDialog.setFile(
-                "/home/dieter/NetBeansProjects/JavaBayes2/src/Examples");
+                "/home/kybelksd/NetBeansProjects/JavaBayes2/src/Examples");
         textArea1 = new java.awt.TextArea();
         add("Center", textArea1);
 
