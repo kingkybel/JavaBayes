@@ -126,14 +126,14 @@ public class BayesGUI extends javax.swing.JFrame
                              false);
 
         queryStyle = addStyle(styleContext,
-                              Color.BLUE,
+                              Color.MAGENTA,
                               Color.WHITE,
                               "courier",
                               10,
                               true);
 
         resultStyle = addStyle(styleContext,
-                               Color.GREEN,
+                               Color.BLUE,
                                Color.WHITE,
                                "courier",
                                10,
@@ -207,7 +207,7 @@ public class BayesGUI extends javax.swing.JFrame
 
     final void resultOutput(String message)
     {
-        appendToDocument(doc, resultStyle, ">\t" + message);
+        appendToDocument(doc, resultStyle, message);
     }
 
     final void errorOutput(String message)

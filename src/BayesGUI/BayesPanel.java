@@ -6,9 +6,11 @@
 package BayesGUI;
 
 import BayesGUI.BayesGUI.EditMode;
+import BayesianInferences.DSeparation;
 import BayesianInferences.ExplanationType;
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
+import BayesianNetworks.DiscreteVariable;
 import JavaBayesInterface.JavaBayesHelpMessages;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -125,7 +127,11 @@ public class BayesPanel extends JPanel
         DeleteArc,
         SetObservedNode,
         UnsetObservedNode,
-        QueryNode;
+        QueryExpectation,
+        QueryExplanation,
+        QueryFullExplanation,
+        GetSeparation,
+        SensitivityAnalysis;
 
         @Override
         public String toString()
@@ -136,24 +142,51 @@ public class BayesPanel extends JPanel
                    this == DeleteArc ? "Delete Arc" :
                    this == SetObservedNode ? "Set observed Node" :
                    this == UnsetObservedNode ? "Unset observed Node" :
-                   this == QueryNode ? "Query Node" : "<Unknown>";
+                   this == QueryExpectation ? "Query Expectation" :
+                   this == QueryExplanation ? "Query Explanation" :
+                   this == QueryFullExplanation ? "Query Full Explanation" :
+                   this == GetSeparation ? "Get the d-separation" :
+                   this == SensitivityAnalysis ? "Sensitivity Analysis" :
+                   "<Unknown>";
         }
 
-        public boolean needsNode()
+        public boolean isNodeMenuItem()
         {
-            return this == AddNode ? false :
+            return this == AddNode ? true :
                    this == DeleteNode ? true :
-                   this == AddArc ? true :
+                   this == AddArc ? false :
                    this == DeleteArc ? false :
                    this == SetObservedNode ? true :
                    this == UnsetObservedNode ? true :
-                   this == QueryNode;
+                   this == QueryExpectation ? true :
+                   this == QueryExplanation ? true :
+                   this == QueryFullExplanation ? true :
+                   this == GetSeparation ? true :
+                   this == SensitivityAnalysis;
+        }
+
+        public boolean isArcMenuItem()
+        {
+            return this == AddNode ? false :
+                   this == DeleteNode ? false :
+                   this == AddArc ? true :
+                   this == DeleteArc ? true :
+                   this == SetObservedNode ? false :
+                   this == UnsetObservedNode ? false :
+                   this == QueryExpectation ? false :
+                   this == QueryExplanation ? false :
+                   this == QueryFullExplanation ? false :
+                   this == GetSeparation ? false :
+                   this != SensitivityAnalysis;
         }
     }
 
     class NodeMenu extends JPopupMenu
     {
 
+        int x;
+        int y;
+        InferenceGraph inferenceGraph;
         InferenceGraphNode node;
 
         class AugmentedMenuItem extends JMenuItem
@@ -173,9 +206,15 @@ public class BayesPanel extends JPanel
             }
         }
 
-        NodeMenu(InferenceGraphNode node)
+        NodeMenu(InferenceGraph inferenceGraph,
+                 InferenceGraphNode node,
+                 int x,
+                 int y)
         {
+            this.inferenceGraph = inferenceGraph;
             this.node = node;
+            this.x = x;
+            this.y = y;
             ActionListener action = new ActionListener()
             {
                 @Override
@@ -188,25 +227,66 @@ public class BayesPanel extends JPanel
                     {
                         case AddNode:
                             //  BayesPanel.this.upButtonActionPerformed(e);
+                            createNode(NodeMenu.this.x, NodeMenu.this.y);
                             break;
                         case DeleteNode:
-                            //  BayesPanel.this.downButtonActionPerformed(e);
+                            deleteNode(NodeMenu.this.node);
                             break;
                         case AddArc:
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            newArc = true;
+                            arcBottomNode = NodeMenu.this.node;
+                            newArcHead = new Point(NodeMenu.this.x,
+                                                   NodeMenu.this.y);
                             break;
                         case DeleteArc:
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            if (isArcHit(NodeMenu.this.x, NodeMenu.this.y))
+                            {
+                                deleteArc();
+                                arcHeadNode = null;
+                                arcBottomNode = null;
+                            }
                             break;
                         case SetObservedNode:
-                            BayesPanel.this.
-                                    setObserved(NodeMenu.this.node, true);
+                            setObserved(
+                                    NodeMenu.this.node,
+                                    true);
                             break;
                         case UnsetObservedNode:
-                            BayesPanel.this.setObserved(NodeMenu.this.node,
-                                                        false);
+                            setObserved(NodeMenu.this.node,
+                                        false);
                             break;
-                        case QueryNode:
+                        case QueryExpectation:
+                            processQuery(
+                                    NodeMenu.this.inferenceGraph,
+                                    NodeMenu.this.node.getName(),
+                                    ExplanationType.EXPECTATION);
+                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            break;
+                        case QueryExplanation:
+                            processQuery(
+                                    NodeMenu.this.inferenceGraph,
+                                    NodeMenu.this.node.getName(),
+                                    ExplanationType.SUBSET);
+                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            break;
+                        case QueryFullExplanation:
+                            processQuery(
+                                    NodeMenu.this.inferenceGraph,
+                                    NodeMenu.this.node.getName(),
+                                    ExplanationType.FULL);
+                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            break;
+                        case GetSeparation:
+                            doSeparation(
+                                    NodeMenu.this.inferenceGraph,
+                                    NodeMenu.this.node.getName());
+                            //  BayesPanel.this.deleteButtonActionPerformed(e);
+                            break;
+                        case SensitivityAnalysis:
+                            processQuery(
+                                    NodeMenu.this.inferenceGraph,
+                                    NodeMenu.this.node.getName(),
+                                    ExplanationType.SENSITIVITY_ANALYSIS);
                             //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                     }
@@ -215,7 +295,15 @@ public class BayesPanel extends JPanel
 
             for (NodeMenuActions nma : NodeMenuActions.values())
             {
-                if (!nma.needsNode() || node != null)
+                if ((nma.isNodeMenuItem() && node != null) ||
+                    (nma == NodeMenuActions.AddNode && node == null))
+                {
+                    AugmentedMenuItem menuItem = new AugmentedMenuItem(nma);
+                    menuItem.addActionListener(action);
+                    add(menuItem);
+                }
+                if ((nma.isArcMenuItem() && isArcHit(x, y)) ||
+                    (nma == NodeMenuActions.AddArc && node != null))
                 {
                     AugmentedMenuItem menuItem = new AugmentedMenuItem(nma);
                     menuItem.addActionListener(action);
@@ -224,6 +312,8 @@ public class BayesPanel extends JPanel
             }
         }
     }
+
+    NodeMenu nodeMenu;
 
     /**
      * Determine whether a node was hit by a mouse click and return the hit
@@ -816,13 +906,50 @@ public class BayesPanel extends JPanel
     }
 
     /**
-     * Process a query.
      *
      * @param inferenceGraph
      * @param queriedVariable
      */
-    public void processQuery(InferenceGraph inferenceGraph,
+    public void doSeparation(InferenceGraph inferenceGraph,
                              String queriedVariable)
+    {
+        int varIndex = inferenceGraph.getBayesNet().indexOfVariable(
+            queriedVariable);
+        DSeparation dsep = new DSeparation(inferenceGraph.getBayesNet());
+        frame.queryOutput("Get all d-connected variables of '" +
+                          queriedVariable +
+                          "'\n");
+        ArrayList<DiscreteVariable> conn = dsep.getDConnectedVariables(varIndex);
+        String connResult = "";
+        for (DiscreteVariable discrVar : conn)
+        {
+            connResult += discrVar.getName() + "(" + discrVar.getIndex() + ")";
+        }
+        frame.resultOutput(connResult + "\n");
+        frame.queryOutput("get all affecting variables of '" +
+                          queriedVariable +
+                          "'\n");
+        ArrayList<DiscreteVariable> allAff = dsep.getAllAffectingVariables(
+                                    varIndex);
+
+        String allResult = "";
+        for (DiscreteVariable discrVar : allAff)
+        {
+            allResult += discrVar.getName() + "(" + discrVar.getIndex() + ")";
+        }
+        frame.resultOutput(allResult + "\n");
+    }
+
+    /**
+     * Process a query.
+     *
+     * @param inferenceGraph
+     * @param queriedVariable
+     * @param modeMenuChoice
+     */
+    public void processQuery(InferenceGraph inferenceGraph,
+                             String queriedVariable,
+                             ExplanationType modeMenuChoice)
     {
         // Check whether inference is possible
         if (inferenceGraph == null)
@@ -834,7 +961,6 @@ public class BayesPanel extends JPanel
         // This makes the whole inference
         ByteArrayOutputStream bstream = new ByteArrayOutputStream();
         PrintStream pstream = new PrintStream(bstream);
-        ExplanationType modeMenuChoice = frame.getCalculationType();
         // Print the Bayes net.
         if (frame.isBayesNetDisplay())
         {
@@ -844,6 +970,7 @@ public class BayesPanel extends JPanel
         // Perform inference
         if (modeMenuChoice.isMarginalPosterior())
         {
+            frame.queryOutput("Marginal of " + queriedVariable + "\n");
             inferenceGraph.printMarginal(pstream,
                                          queriedVariable,
                                          frame.isComputingClusters(),
@@ -851,6 +978,7 @@ public class BayesPanel extends JPanel
         }
         else if (modeMenuChoice.isExpectation())
         {
+            frame.queryOutput("Expectation of " + queriedVariable + "\n");
             inferenceGraph.printExpectation(pstream,
                                             queriedVariable,
                                             frame.isComputingClusters(),
@@ -858,18 +986,28 @@ public class BayesPanel extends JPanel
         }
         else if (modeMenuChoice.isSubset())
         {
+            frame.queryOutput("Explanation of " +
+                              queriedVariable +
+                              " with subset of observed nodes" +
+                              "\n");
             inferenceGraph.printExplanation(pstream, frame.isBucketTree());
         }
         else if (modeMenuChoice.isFull())
         {
+            frame.queryOutput("Full explanation of " +
+                              queriedVariable +
+                              "\n");
             inferenceGraph.printFullExplanation(pstream, frame.isBucketTree());
         }
         else if (modeMenuChoice.isSensitivityAnalysis())
         {
+            frame.queryOutput("Sensitivity analysis of " +
+                              queriedVariable +
+                              "\n");
             inferenceGraph.printSensitivityAnalysis(pstream);
         }
 
-        // Print results to test window
+        // Print results to output control
         frame.resultOutput(bstream.toString());
 
         // Close streams
@@ -880,6 +1018,8 @@ public class BayesPanel extends JPanel
         }
         catch (IOException e)
         {
+            frame.errorOutput("Error closing stream: " +
+                              e.getLocalizedMessage());
         }
     }
 
@@ -955,50 +1095,25 @@ public class BayesPanel extends JPanel
         int y = evt.getY();
 
         InferenceGraphNode node = getHitNode(x, y);
-        if (mouseButton == MouseEvent.BUTTON1 && node != null)
+        frame.metaOutput(
+                "MouseButton '" + mouseButton + "' at [" + x + "," + y + "] ");
+        if (node != null)
         {
-            setComponentPopupMenu(new NodeMenu(node));
+            frame.metaOutput("node=" + node.getName());
         }
-
-//        if (node == null)
-//        { // If no node was clicked on.
-//            if ((mode == BayesGUI.EditMode.DELETE) && (isArcHit(x, y)))
-//            { // Delete arc
-//                deleteArc();
-//                arcHeadNode = null;
-//                arcBottomNode = null;
-//            }
-//            else if (mode == BayesGUI.EditMode.CREATE)
-//            { // Create a node
-//                createNode(x, y);
-//            }
-//            else
-//            {
-//                // Start the creation of a group.
-//                groupStart.setLocation(x, y);
-//                groupEnd.setLocation(x, y);
-//                modifyGroup = true;
-//            }
-//        }
-//        else
-//        { // If a node was clicked on.
-//            if (mode == BayesGUI.EditMode.OBSERVE)
-//            { // Observe node
-//                // setObserved(node);
-//            }
-//            else if (mode == BayesGUI.EditMode.QUERY)
-//            { // Query node
-//                processQuery(inferenceGraph, node.getName());
-//            }
-//            else if (mode == BayesGUI.EditMode.MOVE)
-//            { // Move node
-//                movenode = node;
-//                generateMovingNodes();
-//            }
-//            else if (mode == BayesGUI.EditMode.DELETE)
-//            { // Delete node
-//                deleteNode(node);
-//            }
+        if (mouseButton == MouseEvent.BUTTON3)
+        {
+            if (nodeMenu != null)
+            {
+                remove(nodeMenu);
+            }
+            nodeMenu = new NodeMenu(inferenceGraph, node, x, y);
+            setComponentPopupMenu(nodeMenu);
+        }
+        else if (mouseButton == MouseEvent.BUTTON1 && node != null)
+        {
+            movenode = node;
+            generateMovingNodes();
 //            else if (mode == BayesGUI.EditMode.CREATE)
 //            { // Create arc
 //                newArc = true;
@@ -1014,6 +1129,14 @@ public class BayesPanel extends JPanel
 //                editFunction(node);
 //            }
 //        }
+        }
+        else if (mouseButton == MouseEvent.BUTTON1)
+        {
+            // Start the creation of a group.
+            groupStart.setLocation(x, y);
+            groupEnd.setLocation(x, y);
+            modifyGroup = true;
+        }
         repaint();
 
     }//GEN-LAST:event_formMousePressed
@@ -1022,7 +1145,10 @@ public class BayesPanel extends JPanel
     {//GEN-HEADEREND:event_formMouseReleased
         int x = evt.getX();
         int y = evt.getY();
-
+        if (nodeMenu != null)
+        {
+            remove(nodeMenu);
+        }
         if (movenode != null)
         {
             inferenceGraph.setPos(movenode, new Point(x, y));

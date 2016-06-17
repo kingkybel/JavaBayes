@@ -141,13 +141,11 @@ public final class InferenceGraph
      */
     boolean convertBayesNet()
     {
-        ProbabilityVariable probVar = null;
-        ProbabilityFunction probFunc = null;
 
         for (int i = 0; i < qbn.numberVariables(); i++)
         {
-            probVar = qbn.getProbabilityVariable(i);
-            probFunc = null;
+            ProbabilityVariable probVar = qbn.getProbabilityVariable(i);
+            ProbabilityFunction probFunc = null;
             for (int j = 0; j < qbn.numberProbabilityFunctions(); j++)
             {
                 probFunc = qbn.getProbabilityFunction(j);
@@ -533,13 +531,9 @@ public final class InferenceGraph
      */
     public void printSensitivityAnalysis(PrintStream pstream)
     {
-        // SensitivityAnalysis sa = new SensitivityAnalysis( getBayesNet() );
-        // sa.compute(queriedVariable);
-        // sa.print(pstream);
-        /**
-         * * FOR NOW: **
-         */
-        System.out.print("HEY! Sensitivity analysis not implemented yet!");
+        SensitivityAnalysis sa = new SensitivityAnalysis(getBayesNet());
+        //sa.compute(queriedVariable);
+        sa.print(pstream);
     }
 
     /**

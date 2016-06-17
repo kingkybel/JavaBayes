@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  * http://bayes.cs.ucla.edu/BOOK-2K/d-sep.html
  *
  */
-class DSeparation
+public class DSeparation
 {
 
     private static final String CLASS_NAME = DSeparation.class.getName();
@@ -64,8 +64,10 @@ class DSeparation
 
     /**
      * Constructor for DSeparation object.
+     *
+     * @param bayesNet
      */
-    DSeparation(BayesNet bayesNet)
+    public DSeparation(BayesNet bayesNet)
     {
         this.bayesNet = bayesNet;
     }
@@ -294,7 +296,8 @@ class DSeparation
      * @param connectionType
      * @return
      */
-    private boolean adj(int indexFrom, int indexTo,
+    private boolean adj(int indexFrom,
+                        int indexTo,
                         ConnectionType connectionType)
     {
         ProbabilityFunction probFunc = null;

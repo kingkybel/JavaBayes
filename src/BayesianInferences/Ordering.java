@@ -178,8 +178,8 @@ public class Ordering
             {
                 for (i = 0; i < bayesNet.numberVariables(); i++)
                 {
-                    variablesToOrder.
-                            add(bayesNet.getProbabilityVariable(i));
+                    variablesToOrder.add(
+                            bayesNet.getProbabilityVariable(i));
                 }
             }
             else
