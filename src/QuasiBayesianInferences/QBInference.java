@@ -36,6 +36,7 @@ import CredalSets.EpsilonContaminatedSet;
 import CredalSets.QBProbabilityFunction;
 import CredalSets.TotalVariationSet;
 import CredalSets.VertexSet;
+import QuasiBayesianNetworks.GlobalNeighbourhood;
 import QuasiBayesianNetworks.QuasiBayesNet;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -95,7 +96,7 @@ public class QBInference extends Inference
         {
             isInferenceWithoutLocalNeighborhoods =
             (((QuasiBayesNet) bayesNet).getGlobalNeighborhoodType() !=
-             QuasiBayesNet.NO_CREDAL_SET) ||
+             GlobalNeighbourhood.NO_CREDAL_SET) ||
             (!(((QuasiBayesNet) bayesNet).areLocalCredalSetsPresent()));
         }
         else
@@ -287,11 +288,11 @@ public class QBInference extends Inference
 
         switch (((QuasiBayesNet) bayesNet).getGlobalNeighborhoodType())
         {
-            case QuasiBayesNet.NO_CREDAL_SET:
+            case NO_CREDAL_SET:
                 result = new ProbabilityFunction(unnormalized, bayesNet);
                 result.normalize();
                 break;
-            case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
+            case CONSTANT_DENSITY_RATIO:
                 ProbabilityFunction cdrRes =
                                     new ProbabilityFunction(unnormalized,
                                                             bayesNet);
@@ -301,7 +302,7 @@ public class QBInference extends Inference
                                                                     getGlobalNeighborhoodParameter());
                 result = cdr.posteriorMarginal();
                 break;
-            case QuasiBayesNet.EPSILON_CONTAMINATED:
+            case EPSILON_CONTAMINATED:
                 ProbabilityFunction epsRes =
                                     new ProbabilityFunction(unnormalized,
                                                             bayesNet);
@@ -311,7 +312,7 @@ public class QBInference extends Inference
                                                                   getGlobalNeighborhoodParameter());
                 result = eps.posteriorMarginal();
                 break;
-            case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
+            case CONSTANT_DENSITY_BOUNDED:
                 ProbabilityFunction cdbRes =
                                     new ProbabilityFunction(unnormalized,
                                                             bayesNet);
@@ -321,7 +322,7 @@ public class QBInference extends Inference
                                                                         getGlobalNeighborhoodParameter());
                 result = cdb.posteriorMarginal();
                 break;
-            case QuasiBayesNet.TOTAL_VARIATION:
+            case TOTAL_VARIATION:
                 ProbabilityFunction tvRes =
                                     new ProbabilityFunction(unnormalized,
                                                             bayesNet);

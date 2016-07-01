@@ -216,6 +216,8 @@ public class BayesNet
         probabilityVariables = cbn.getProbabilityVariables(this);
         probabilityFunctions = cbn.getProbabilityFunctions(this);
 
+        cbn.getFunctionsAsTables(this);
+
         // Process BayesNet properties
         processProperties();
 

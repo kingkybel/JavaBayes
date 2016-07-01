@@ -26,6 +26,7 @@
 package JavaBayesInterface;
 
 import BayesianInferences.InferenceGraph;
+import QuasiBayesianNetworks.GlobalNeighbourhood;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Checkbox;
@@ -253,19 +254,19 @@ class EditNetworkDialog extends Dialog
         // Set global neighborhood
         switch (ig.getGlobalNeighborhoodType())
         {
-            case InferenceGraph.NO_CREDAL_SET:
+            case NO_CREDAL_SET:
                 globals.setSelectedCheckbox(noGlobal);
                 break;
-            case InferenceGraph.CONSTANT_DENSITY_RATIO:
+            case CONSTANT_DENSITY_RATIO:
                 globals.setSelectedCheckbox(ratioGlobal);
                 break;
-            case InferenceGraph.EPSILON_CONTAMINATED:
+            case EPSILON_CONTAMINATED:
                 globals.setSelectedCheckbox(epsilonGlobal);
                 break;
-            case InferenceGraph.CONSTANT_DENSITY_BOUNDED:
+            case CONSTANT_DENSITY_BOUNDED:
                 globals.setSelectedCheckbox(boundedGlobal);
                 break;
-            case InferenceGraph.TOTAL_VARIATION:
+            case TOTAL_VARIATION:
                 globals.setSelectedCheckbox(totalGlobal);
                 break;
         }
@@ -335,29 +336,29 @@ class EditNetworkDialog extends Dialog
         Checkbox selectedGlobalNeighborhood = globals.getSelectedCheckbox();
         if (selectedGlobalNeighborhood == noGlobal)
         {
-            ig.setGlobalNeighborhood(InferenceGraph.NO_CREDAL_SET);
+            ig.setGlobalNeighborhood(GlobalNeighbourhood.NO_CREDAL_SET);
         }
         else if (selectedGlobalNeighborhood == epsilonGlobal)
         {
-            ig.setGlobalNeighborhood(InferenceGraph.EPSILON_CONTAMINATED);
+            ig.setGlobalNeighborhood(GlobalNeighbourhood.EPSILON_CONTAMINATED);
         }
         else if (selectedGlobalNeighborhood == ratioGlobal)
         {
-            ig.setGlobalNeighborhood(InferenceGraph.CONSTANT_DENSITY_RATIO);
+            ig.setGlobalNeighborhood(GlobalNeighbourhood.CONSTANT_DENSITY_RATIO);
         }
         else if (selectedGlobalNeighborhood == boundedGlobal)
         {
-            ig.setGlobalNeighborhood(InferenceGraph.CONSTANT_DENSITY_BOUNDED);
+            ig.setGlobalNeighborhood(
+                    GlobalNeighbourhood.CONSTANT_DENSITY_BOUNDED);
         }
         else if (selectedGlobalNeighborhood == totalGlobal)
         {
-            ig.setGlobalNeighborhood(InferenceGraph.TOTAL_VARIATION);
+            ig.setGlobalNeighborhood(GlobalNeighbourhood.TOTAL_VARIATION);
         }
 
         try
         {
-            double par =
-                   (new Double(textGlobalParameter.getText()).doubleValue());
+            double par = new Double(textGlobalParameter.getText());
             if (par <= 0.0)
             {
                 par = 0.0;

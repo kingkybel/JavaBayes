@@ -158,11 +158,11 @@ public class QBExpectation extends Expectation
 
         switch (qbn.getGlobalNeighborhoodType())
         {
-            case QuasiBayesNet.NO_CREDAL_SET:
+            case NO_CREDAL_SET:
                 ProbabilityFunction res = qbInference.getResult();
                 setResults(res.expectedValue(discrFunc));
                 break;
-            case QuasiBayesNet.CONSTANT_DENSITY_RATIO:
+            case CONSTANT_DENSITY_RATIO:
                 ProbabilityFunction cdrRes =
                                     new ProbabilityFunction(qbInference.
                                             getBucketTree().
@@ -173,7 +173,7 @@ public class QBExpectation extends Expectation
                                                                     getGlobalNeighborhoodParameter());
                 setResults(cdr.posteriorExpectedValues(discrFunc));
                 break;
-            case QuasiBayesNet.EPSILON_CONTAMINATED:
+            case EPSILON_CONTAMINATED:
                 ProbabilityFunction epsRes =
                                     new ProbabilityFunction(
                                             qbInference.getBucketTree().
@@ -186,7 +186,7 @@ public class QBExpectation extends Expectation
                                                getGlobalNeighborhoodParameter());
                 setResults(eps.posteriorExpectedValues(discrFunc));
                 break;
-            case QuasiBayesNet.CONSTANT_DENSITY_BOUNDED:
+            case CONSTANT_DENSITY_BOUNDED:
                 ProbabilityFunction cdbRes = new ProbabilityFunction(
                                     qbInference.getBucketTree().
                                     getUnnormalizedResult(),
@@ -196,7 +196,7 @@ public class QBExpectation extends Expectation
                                           qbn.getGlobalNeighborhoodParameter());
                 setResults(cdb.posteriorExpectedValues(discrFunc));
                 break;
-            case QuasiBayesNet.TOTAL_VARIATION:
+            case TOTAL_VARIATION:
                 ProbabilityFunction tvRes =
                                     new ProbabilityFunction(qbInference.
                                             getBucketTree().

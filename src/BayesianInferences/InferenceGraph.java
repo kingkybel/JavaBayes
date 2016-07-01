@@ -31,6 +31,7 @@ import BayesianNetworks.ProbabilityFunction;
 import BayesianNetworks.ProbabilityVariable;
 import QuasiBayesianInferences.QBExpectation;
 import QuasiBayesianInferences.QBInference;
+import QuasiBayesianNetworks.GlobalNeighbourhood;
 import QuasiBayesianNetworks.QuasiBayesNet;
 import java.awt.Point;
 import java.io.PrintStream;
@@ -45,33 +46,6 @@ import java.util.logging.Logger;
 public final class InferenceGraph
 {
 
-    /**
-     *
-     */
-    public final static int NO_CREDAL_SET = QuasiBayesNet.NO_CREDAL_SET;
-
-    /**
-     *
-     */
-    public final static int CONSTANT_DENSITY_RATIO =
-                            QuasiBayesNet.CONSTANT_DENSITY_RATIO;
-
-    /**
-     *
-     */
-    public final static int EPSILON_CONTAMINATED =
-                            QuasiBayesNet.EPSILON_CONTAMINATED;
-
-    /**
-     *
-     */
-    public final static int CONSTANT_DENSITY_BOUNDED =
-                            QuasiBayesNet.CONSTANT_DENSITY_BOUNDED;
-
-    /**
-     *
-     */
-    public final static int TOTAL_VARIATION = QuasiBayesNet.TOTAL_VARIATION;
     private static final String CLASS_NAME = InferenceGraph.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     QuasiBayesNet qbn;
@@ -321,7 +295,7 @@ public final class InferenceGraph
      *
      * @return
      */
-    public int getGlobalNeighborhoodType()
+    public GlobalNeighbourhood getGlobalNeighborhoodType()
     {
         return (qbn.getGlobalNeighborhoodType());
     }
@@ -331,7 +305,7 @@ public final class InferenceGraph
      *
      * @param type
      */
-    public void setGlobalNeighborhood(int type)
+    public void setGlobalNeighborhood(GlobalNeighbourhood type)
     {
         qbn.setGlobalNeighborhoodType(type);
     }

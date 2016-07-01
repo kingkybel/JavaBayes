@@ -31,6 +31,8 @@ import InterchangeFormat.IFProbabilityFunction;
 import InterchangeFormat.IFProbabilityVariable;
 import InterchangeFormat.InterchangeFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -157,6 +159,101 @@ public class ConvertInterchangeFormat
         return (probabilityFunctions);
     }
 
+    private ArrayList<Integer> incrementValueIndex(
+            ArrayList<Integer> currentValueIndex,
+            ArrayList<String[]> valueList)
+    {
+        int index = currentValueIndex.size() - 1;
+        boolean hasOverflow = true; // first one treated as having overflow
+        while (index > -1 && hasOverflow)
+        {
+            int module = valueList.get(index).length;
+            currentValueIndex.set(index,
+                                  (currentValueIndex.get(index) + 1) % module);
+            hasOverflow = currentValueIndex.get(index) == 0;
+            index--;
+
+        }
+        return currentValueIndex;
+    }
+
+    public TreeMap<String, ArrayList<ArrayList<Object>>> getFunctionsAsTables(
+            BayesNet bayesNet)
+    {
+        TreeMap<String, ArrayList<ArrayList<Object>>> reval = new TreeMap<>();
+        IFProbabilityFunction upf;
+        IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
+        if (ifbn == null)
+        {
+            return (null);
+        }
+
+        // now all combinations for all functions need to be added
+        ArrayList upfs = ifbn.getProbabilityFunctions();
+
+        // this is the header done
+        for (Object e : upfs)
+        {
+            ArrayList<ArrayList<Object>> funcTable = new ArrayList<>();
+            upf = (IFProbabilityFunction) (e);
+            ProbabilityFunction pf = getProbabilityFunction(bayesNet, upf);
+            ArrayList<String[]> valueList = new ArrayList<>();
+            ArrayList<Object> record = new ArrayList<>();
+            ArrayList<Integer> currentValueIndex = new ArrayList<>();
+
+            int numRows = 1;
+            for (DiscreteVariable var : pf.variables)
+            {
+                String varName = var.getName();
+                record.add(varName);
+                valueList.add(var.getValues());
+                currentValueIndex.add(0);
+                numRows *= var.getValues().length;
+            }
+            record.add("#PROBABILITY#");
+            funcTable.add(record);
+
+            // now make the records
+            ArrayList<ArrayList<Object>> valuesTable = new ArrayList<>();
+            int row = 0;
+            for (row = 0; row < numRows; row++)
+            {
+                valuesTable.add(new ArrayList<>());
+                Object o[] = new Object[valueList.size() + 1];
+                valuesTable.get(row).addAll(Arrays.asList(o));
+            }
+            int module = 1;
+            row = 0;
+            double probs[] = pf.getValues();
+            for (row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < valueList.size(); col++)
+                {
+                    Object value =
+                           valueList.get(col)[currentValueIndex.get(col)];
+                    valuesTable.get(row).set(col, value);
+                }
+                valuesTable.get(row).set(valuesTable.get(row).size() - 1,
+                                         probs[row]);
+                currentValueIndex = incrementValueIndex(currentValueIndex,
+                                                        valueList);
+            }
+            funcTable.addAll(valuesTable);
+
+            for (int y = 0; y < funcTable.size(); y++)
+            {
+                for (int x = 0; x < funcTable.get(0).size(); x++)
+                {
+                    System.out.print(funcTable.get(y).get(x) + " , ");
+                }
+                System.out.println("");
+            }
+            reval.put(upf.getVariables()[0], funcTable);
+        }
+
+        return (reval);
+    }
+
     /**
      * Create a ProbabilityFunction out of the definition found by the parser
      * and the information contained in the BayesNet.
@@ -277,9 +374,12 @@ public class ConvertInterchangeFormat
     /**
      * Insert default values from the contents of the first specification of
      * defaults in the IFProbabilityFunction.
+     *
+     * @param upf
+     * @param values
+     * @param jump
      */
-    void processDefaults(IFProbabilityFunction upf,
-                         double values[], int jump)
+    void processDefaults(IFProbabilityFunction upf, double values[], int jump)
     {
         int i, j, k;
 
@@ -304,10 +404,17 @@ public class ConvertInterchangeFormat
 
     /**
      * Insert entries specified in the IFProbabilityFunction.
+     *
+     * @param bayesNet
+     * @param upf
+     * @param variables
+     * @param values
+     * @param jump
      */
     void processEntries(BayesNet bayesNet,
                         IFProbabilityFunction upf,
-                        ProbabilityVariable variables[], double values[],
+                        ProbabilityVariable variables[],
+                        double values[],
                         int jump)
     {
         int i, j, k, pos, step;
@@ -354,6 +461,8 @@ public class ConvertInterchangeFormat
 
     /**
      * Perform final calculations in the values.
+     *
+     * @param values
      */
     void finishValues(double values[])
     {
