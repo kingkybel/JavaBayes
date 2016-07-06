@@ -141,7 +141,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Constructor for a Bayesian network from a URL
+     * Constructor for a Bayesian network from a URL.
      *
      * @param url
      * @throws Exception
@@ -159,8 +159,11 @@ public class QuasiBayesNet extends BayesNet
      * BayesianNetworks package can be used. As the InterchangeFormat evolves,
      * probably some of the objects created through extensions will be created
      * directly by the parser as it parses an InterchangeFormat stream. Right
-     * now the extensions involve: 1) Detecting observed variables 2) Detecting
-     * explanation variables
+     * now the extensions involve:
+     * <ol>
+     * <li>Detecting observed variables</li>
+     * <li>Detecting explanation variables</li>
+     * </ol>
      *
      * @param interchangeFmt
      */

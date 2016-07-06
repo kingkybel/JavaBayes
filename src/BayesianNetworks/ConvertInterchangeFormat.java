@@ -239,15 +239,15 @@ public class ConvertInterchangeFormat
                                                         valueList);
             }
             funcTable.addAll(valuesTable);
-
-            for (int y = 0; y < funcTable.size(); y++)
-            {
-                for (int x = 0; x < funcTable.get(0).size(); x++)
-                {
-                    System.out.print(funcTable.get(y).get(x) + " , ");
-                }
-                System.out.println("");
-            }
+//
+//            for (int y = 0; y < funcTable.size(); y++)
+//            {
+//                for (int x = 0; x < funcTable.get(0).size(); x++)
+//                {
+//                    System.out.print(funcTable.get(y).get(x) + " , ");
+//                }
+//                System.out.println("");
+//            }
             reval.put(upf.getVariables()[0], funcTable);
         }
 

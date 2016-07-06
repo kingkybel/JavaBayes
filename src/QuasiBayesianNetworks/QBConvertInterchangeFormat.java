@@ -48,6 +48,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
+     * Constructor.
      *
      * @param interFormat
      */
@@ -57,10 +58,10 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * Method that does all the work involved in creating a *
-     * ProbabilityFunction object out of the definition * found by the parser
-     * and the information contained in * the BayesNet object; the
-     * ProbabilityFunction object may * in fact be a Quasi-Bayesian model.
+     * Method that does all the work involved in creating a ProbabilityFunction
+     * object out of the definition found by the parser and the information
+     * contained in the BayesNet object; the ProbabilityFunction object may in
+     * fact be a Quasi-Bayesian model.
      *
      * @return
      */
@@ -122,7 +123,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * Fill the values with the contents of the tables * in the upf object.
+     * Fill the values with the contents of the tables in the upf object.
      */
     double[][] processExtremeTables(IFProbabilityFunction upf,
                                     double values[])
@@ -248,7 +249,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     /**
-     * Perform final calculations in the values
+     * Perform final calculations in the values.
      */
     void finishValues(double values[], double extremePoints[][])
     {

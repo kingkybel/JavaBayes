@@ -33,15 +33,19 @@ public enum GlobalNeighbourhood
     static public GlobalNeighbourhood fromString(String str)
     {
         String localStr = str.trim().toLowerCase();
-        return "none".equals(localStr) ? NO_CREDAL_SET :
-               "credal-set".equals(localStr) ? CREDAL_SET :
+        return "none".equals(localStr) ?
+               NO_CREDAL_SET :
+               "credal-set".equals(localStr) ?
+               CREDAL_SET :
                "constant-density-ratio".equals(localStr) ?
                CONSTANT_DENSITY_RATIO :
                "epsilon-contaminated".equals(localStr) ?
                EPSILON_CONTAMINATED :
                "constant-density-bounded".equals(localStr) ?
                CONSTANT_DENSITY_BOUNDED :
-               "total-variation".equals(localStr) ? TOTAL_VARIATION :
+               "total-variation".equals(localStr) ?
+               TOTAL_VARIATION :
+               // none - default
                NO_CREDAL_SET;
     }
 

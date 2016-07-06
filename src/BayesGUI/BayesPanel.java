@@ -165,6 +165,7 @@ public class BayesPanel
         DeleteNode,
         AddArc,
         DeleteArc,
+        EditFunction,
         SetObservedNode,
         UnsetObservedNode,
         QueryExpectation,
@@ -180,6 +181,7 @@ public class BayesPanel
                    this == DeleteNode ? "Delete Node" :
                    this == AddArc ? "Add Arc" :
                    this == DeleteArc ? "Delete Arc" :
+                   this == EditFunction ? "Edit Function" :
                    this == SetObservedNode ? "Set observed Node" :
                    this == UnsetObservedNode ? "Unset observed Node" :
                    this == QueryExpectation ? "Query Expectation" :
@@ -190,35 +192,6 @@ public class BayesPanel
                    "<Unknown>";
         }
 
-        public boolean isNodeMenuItem()
-        {
-            return this == AddNode ? true :
-                   this == DeleteNode ? true :
-                   this == AddArc ? false :
-                   this == DeleteArc ? false :
-                   this == SetObservedNode ? true :
-                   this == UnsetObservedNode ? true :
-                   this == QueryExpectation ? true :
-                   this == QueryExplanation ? true :
-                   this == QueryFullExplanation ? true :
-                   this == GetSeparation ? true :
-                   this == SensitivityAnalysis;
-        }
-
-        public boolean isArcMenuItem()
-        {
-            return this == AddNode ? false :
-                   this == DeleteNode ? false :
-                   this == AddArc ? true :
-                   this == DeleteArc ? true :
-                   this == SetObservedNode ? false :
-                   this == UnsetObservedNode ? false :
-                   this == QueryExpectation ? false :
-                   this == QueryExplanation ? false :
-                   this == QueryFullExplanation ? false :
-                   this == GetSeparation ? false :
-                   this != SensitivityAnalysis;
-        }
     }
 
     class NodeMenu extends JPopupMenu
@@ -273,6 +246,12 @@ public class BayesPanel
                                 deleteArc();
                                 arcHeadNode = null;
                                 arcBottomNode = null;
+                            }
+                            break;
+                        case EditFunction:
+                            if (eventNode != null)
+                            {
+                                editFunction(eventNode);
                             }
                             break;
                         case SetObservedNode:
@@ -1038,9 +1017,11 @@ public class BayesPanel
      */
     void editFunction(InferenceGraphNode node)
     {
-//        ig.resetMarginal();
-//        Dialog d = new EditFunctionDialog(frame, ig, node);
-//        d.setVisible(true);
+        inferenceGraph.resetMarginal();
+        Dialog d = new EditProbabilitiesDialog(frame,
+                                               inferenceGraph,
+                                               node);
+        d.setVisible(true);
     }
 
     /**

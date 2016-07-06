@@ -283,6 +283,11 @@ public class BayesNet
         return (null);
     }
 
+    public ProbabilityFunction getFunction(String var)
+    {
+        return getFunction(getProbabilityVariable(var));
+    }
+
     /**
      * Save a BayesNet object in a stream, in the BIF InterchangeFormat.
      *
@@ -845,6 +850,19 @@ public class BayesNet
         {
             return (null);
         }
+    }
+
+    public ProbabilityVariable getProbabilityVariable(String varName)
+    {
+        for (ProbabilityVariable var : probabilityVariables)
+        {
+            if (var.getName() == null ? varName == null :
+                var.getName().equals(varName))
+            {
+                return var;
+            }
+        }
+        return null;
     }
 
     /**
