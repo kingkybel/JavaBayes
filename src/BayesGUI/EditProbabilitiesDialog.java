@@ -7,6 +7,10 @@ package BayesGUI;
 
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -14,6 +18,84 @@ import BayesianInferences.InferenceGraphNode;
  */
 public class EditProbabilitiesDialog extends javax.swing.JDialog
 {
+
+    int numValues = 0;
+
+    class MyTableCellRenderer extends DefaultTableCellRenderer
+    {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table,
+                                                       Object value,
+                                                       boolean isSelected,
+                                                       boolean hasFocus,
+                                                       int row,
+                                                       int column)
+        {
+            Component c = super.getTableCellRendererComponent(table,
+                                                              value,
+                                                              isSelected,
+                                                              hasFocus,
+                                                              row,
+                                                              column);
+            if ((row / numValues) % 2 == 0)
+            {
+                c.setBackground(Color.WHITE);
+                c.setForeground(Color.BLACK);
+                if (column == 0 || column == table.getColumnCount() - 1)
+                {
+                    c.setForeground(Color.BLUE);
+                }
+                if (column == table.getColumnCount() - 1)
+                {
+                    c.setBackground(Color.GREEN);
+                }
+            }
+            else
+            {
+                c.setBackground(Color.GRAY);
+                c.setForeground(Color.WHITE);
+                if (column == 0 || column == table.getColumnCount() - 1)
+                {
+                    c.setForeground(Color.GREEN);
+                }
+                if (column == table.getColumnCount() - 1)
+                {
+                    c.setBackground(Color.BLUE);
+                }
+            }
+            if (column == table.getColumnCount() - 1)
+            {
+                // set the probabilities that do not add up to 1.0 to red
+                int set = row / numValues;
+                double sum = 0.0;
+                for (int setRow = 0; setRow < numValues; setRow++)
+                {
+                    sum += (Double) table.getValueAt(numValues * set + setRow,
+                                                     table.getColumnCount() - 1);
+                }
+                if (sum != 1.0)
+                {
+                    for (int setRow = 0; setRow < numValues; setRow++)
+                    {
+                        Component c1 =
+                                  super.getTableCellRendererComponent(
+                                          table,
+                                          value,
+                                          isSelected,
+                                          hasFocus,
+                                          numValues *
+                                          set +
+                                          setRow,
+                                          table.
+                                          getColumnCount() - 1);
+                        c1.setForeground(Color.RED);
+                    }
+                }
+            }
+            return c;
+        }
+    }
 
     /**
      * Creates new form EditProbabilitiesDialog
@@ -31,6 +113,9 @@ public class EditProbabilitiesDialog extends javax.swing.JDialog
         ProbabilityTableModel model = new ProbabilityTableModel(
                               graph.getBayesNet().getFunction(node.getName()));
         probabilityTable.setModel(model);
+        probabilityTable.setDefaultRenderer(Object.class,
+                                            new MyTableCellRenderer());
+        numValues = model.getNumberOfValues();
     }
 
     /**

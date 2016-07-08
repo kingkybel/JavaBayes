@@ -28,20 +28,21 @@ public class ProbabilityTableModel extends AbstractTableModel
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     ProbabilityFunction function;
     ArrayList<String> variableNames = new ArrayList<>();
+    int numberOfValues = 0;
 
     class Row implements Comparable<Row>
     {
 
-        private final int rowNum;
+        private final int indexInFunctionVariables;
         private Comparable variableValue;
         private final ArrayList<Comparable> conditionalsValues =
                                             new ArrayList<>();
         private double probability;
         private int totalColumnCount = 0;
 
-        Row(int rowNum, ArrayList<Comparable> variables)
+        Row(int index, ArrayList<Comparable> variables)
         {
-            this.rowNum = rowNum;
+            this.indexInFunctionVariables = index;
             if (variables != null && variables.size() > 1)
             {
                 variableValue = variables.get(0);
@@ -63,6 +64,7 @@ public class ProbabilityTableModel extends AbstractTableModel
         void setProbability(Double probability)
         {
             this.probability = probability;
+            function.getValues()[indexInFunctionVariables] = probability;
         }
 
         @Override
@@ -73,7 +75,7 @@ public class ProbabilityTableModel extends AbstractTableModel
                 return false;
             }
             Row other = (Row) obj;
-            if (rowNum == other.rowNum &&
+            if (indexInFunctionVariables == other.indexInFunctionVariables &&
                 (variableValue == null ?
                  other.variableValue == null :
                  variableValue.equals(other.variableValue)))
@@ -114,7 +116,7 @@ public class ProbabilityTableModel extends AbstractTableModel
         public int hashCode()
         {
             int hash = 5;
-            hash = 17 * hash + this.rowNum;
+            hash = 17 * hash + this.indexInFunctionVariables;
             hash = 17 * hash + Objects.hashCode(this.variableValue);
             hash = 17 * hash + Objects.hashCode(this.conditionalsValues);
             return hash;
@@ -186,7 +188,17 @@ public class ProbabilityTableModel extends AbstractTableModel
         TreeSet<Row> sorted = new TreeSet<>();
         int numRows = 1;
         variableNames = new ArrayList<>();
-        for (DiscreteVariable var : function.getVariables())
+        if (function == null)
+        {
+            return;
+        }
+        DiscreteVariable[] variables = function.getVariables();
+        if (variables == null || variables.length == 0)
+        {
+            return;
+        }
+        numberOfValues = variables[0].numberValues();
+        for (DiscreteVariable var : variables)
         {
             String varName = var.getName();
             variableNames.add(varName);
@@ -280,4 +292,8 @@ public class ProbabilityTableModel extends AbstractTableModel
                dataRows.get(rowIndex).conditionalsValues.get(columnIndex - 1);
     }
 
+    public int getNumberOfValues()
+    {
+        return numberOfValues;
+    }
 }

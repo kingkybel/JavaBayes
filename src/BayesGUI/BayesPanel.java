@@ -166,6 +166,7 @@ public class BayesPanel
         AddArc,
         DeleteArc,
         EditFunction,
+        EditVariable,
         SetObservedNode,
         UnsetObservedNode,
         QueryExpectation,
@@ -182,6 +183,7 @@ public class BayesPanel
                    this == AddArc ? "Add Arc" :
                    this == DeleteArc ? "Delete Arc" :
                    this == EditFunction ? "Edit Function" :
+                   this == EditVariable ? "Edit Variable" :
                    this == SetObservedNode ? "Set observed Node" :
                    this == UnsetObservedNode ? "Unset observed Node" :
                    this == QueryExpectation ? "Query Expectation" :
@@ -252,6 +254,12 @@ public class BayesPanel
                             if (eventNode != null)
                             {
                                 editFunction(eventNode);
+                            }
+                            break;
+                        case EditVariable:
+                            if (eventNode != null)
+                            {
+                                editVariable(eventNode);
                             }
                             break;
                         case SetObservedNode:
@@ -888,8 +896,10 @@ public class BayesPanel
     void editVariable(InferenceGraphNode node)
     {
         inferenceGraph.resetMarginal();
-        //       Dialog d = new EditVariableDialog(this, frame, ig, node);
-        //       d.setVisible(true);
+        Dialog d = new EditVariableDialog(frame,
+                                          inferenceGraph,
+                                          node);
+        d.setVisible(true);
     }
 
     /**
