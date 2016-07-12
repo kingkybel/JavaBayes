@@ -88,8 +88,8 @@ public class NetworkPanel extends Canvas
     // Store the mode for events in the panel
     private InferenceGraph ig; // The object with the Bayes net
     // The object with the Bayes net
-    private Point groupStart;
-    private Point groupEnd; // The region that is considered the group
+    private final Point groupStart;
+    private final Point groupEnd; // The region that is considered the group
     // The region that is considered the group
     // Variables that store quantities shared among event handling functions
     boolean newArc = false;

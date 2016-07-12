@@ -48,17 +48,17 @@ class EditCredalSet extends EditFunctionPanel
     private static final String CLASS_NAME = EditCredalSet.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // The graph and node that contain the probability function.
-    private InferenceGraph ig;
-    private InferenceGraphNode node;
+    private final InferenceGraph ig;
+    private final InferenceGraphNode node;
 
     // Variables that hold the relevant information from the node.
-    private String allVariableNames[];
-    private String allVariableValues[][];
+    private final String allVariableNames[];
+    private final String allVariableValues[][];
     private double allProbabilityValues[][];
     private int indexExtremePoint;
 
     // Components used to construct the panel.
-    private FunctionTablePanel probabilityTable;
+    private final FunctionTablePanel probabilityTable;
     private Panel csp, ics, qbpp;
     private Choice credalSetChoice;
     private Label localParameter;
@@ -161,7 +161,7 @@ class EditCredalSet extends EditFunctionPanel
         {
             int oldNumberExtremePoints = allProbabilityValues.length;
             int numberExtremePoints =
-                (new Integer(textLocalParameter.getText())).intValue();
+                (new Integer(textLocalParameter.getText()));
             if (numberExtremePoints != allProbabilityValues.length)
             {
                 node.setLocalCredalSet(numberExtremePoints);

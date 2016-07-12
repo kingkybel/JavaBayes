@@ -36,15 +36,15 @@ class PropertyManager
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // The original properties.
-    private ArrayList originalProperties;
+    private final ArrayList originalProperties;
     // The vector holding a copy of the relevant properties.
-    private ArrayList modifiedProperties;
+    private final ArrayList modifiedProperties;
     // A flag indicating whether the original properties are valid.
     private boolean areOriginalPropertiesStillValid;
     // The index of the displayed property;
     private int displayedPropertyIndex;
     // The text field that displays the property;
-    private TextField textField;
+    private final TextField textField;
 
     /**
      * Default constructor for PropertyManager.

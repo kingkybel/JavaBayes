@@ -100,9 +100,7 @@ class EditProbability extends EditFunctionPanel
             ArrayList parents = node.getParents();
             for (Object e : parents)
             {
-                name.append(" ").
-                        append(((InferenceGraphNode) (e)).
-                                getName()).
+                name.append(" ").append(((InferenceGraphNode) (e)).getName()).
                         append(",");
             }
             name.setCharAt(name.length() - 1, ')');

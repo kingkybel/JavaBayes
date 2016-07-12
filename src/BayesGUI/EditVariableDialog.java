@@ -7,6 +7,10 @@ package BayesGUI;
 
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 /**
  *
@@ -14,6 +18,8 @@ import BayesianInferences.InferenceGraphNode;
  */
 public class EditVariableDialog extends javax.swing.JDialog
 {
+
+    JPopupMenu valueTablePopup;
 
     /**
      * Creates new form EditVariableDialog
@@ -31,6 +37,34 @@ public class EditVariableDialog extends javax.swing.JDialog
         ValueTableModel model = new ValueTableModel(
                         graph.getBayesNet().getFunction(node.getName()));
         valueTable.setModel(model);
+        JMenuItem menuItem;
+        ActionListener action = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String command = e.getActionCommand().toUpperCase();
+                int[] rows = valueTable.getSelectedRows();
+                switch (command)
+                {
+                    case "ADD":
+                        ((ValueTableModel) valueTable.getModel()).add("");
+                        break;
+                    case "REMOVE":
+                        ((ValueTableModel) valueTable.getModel()).remove(rows);
+                        break;
+                }
+            }
+        };
+        valueTablePopup = new JPopupMenu();
+
+        menuItem = new JMenuItem("Add");
+        menuItem.addActionListener(action);
+        valueTablePopup.add(menuItem);
+
+        menuItem = new JMenuItem("Remove");
+        menuItem.addActionListener(action);
+        valueTablePopup.add(menuItem);
     }
 
     /**
@@ -62,12 +96,24 @@ public class EditVariableDialog extends javax.swing.JDialog
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        valueTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                valueTableMouseClicked(evt);
+            }
+        });
         valueTableScrollPane.setViewportView(valueTable);
 
         getContentPane().add(valueTableScrollPane);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void valueTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_valueTableMouseClicked
+    {//GEN-HEADEREND:event_valueTableMouseClicked
+        valueTable.setComponentPopupMenu(valueTablePopup);
+    }//GEN-LAST:event_valueTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable valueTable;
