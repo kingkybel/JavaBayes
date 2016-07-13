@@ -8,6 +8,7 @@ package BayesGUI;
 import BayesianInferences.ExplanationType;
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
+import QuasiBayesianNetworks.GlobalNeighbourhood;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -60,6 +61,26 @@ public class BayesGUI extends javax.swing.JFrame
     boolean isBucketTree()
     {
         return bucketTreeRadioButton.isSelected();
+    }
+
+    void setNetworkNameInput(String name)
+    {
+        networkNameInput.setText(name);
+    }
+
+    void setGlobalNeighbourhood(GlobalNeighbourhood globalNeighborhoodType)
+    {
+        globalNeighbourhoodComboBox.setSelectedItem(globalNeighborhoodType);
+    }
+
+    void setProperties(ArrayList<String> networkProperties)
+    {
+        propertiesTable.setModel(new PropertiesTableModel(networkProperties));
+    }
+
+    void setGlobalParameter(double paramValue)
+    {
+        globalNeighbourhoodParameterSpinner.setValue(paramValue);
     }
 
     // Network editing modes.
@@ -238,6 +259,13 @@ public class BayesGUI extends javax.swing.JFrame
         calculationTypeComboBox = new javax.swing.JComboBox();
         verboseCheckBox = new javax.swing.JCheckBox();
         computeClustersCheckBox = new javax.swing.JCheckBox();
+        networkNameInput = new javax.swing.JTextField();
+        networkNameLabel = new javax.swing.JLabel();
+        globalNeighbourhoodComboBox = new javax.swing.JComboBox();
+        globalNeighbourhoodLabel = new javax.swing.JLabel();
+        globalNeighbourhoodParameterSpinner = new javax.swing.JSpinner();
+        propertiesScrollPane = new javax.swing.JScrollPane();
+        propertiesTable = new javax.swing.JTable();
         textScrollPane = new javax.swing.JScrollPane();
         outputPanel = new javax.swing.JTextPane();
         mainMenuBar = new javax.swing.JMenuBar();
@@ -295,6 +323,44 @@ public class BayesGUI extends javax.swing.JFrame
 
         computeClustersCheckBox.setText("Compute Clusters");
         optionPanel.add(computeClustersCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, -1, -1));
+
+        networkNameInput.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                networkNameInputActionPerformed(evt);
+            }
+        });
+        optionPanel.add(networkNameInput, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 250, -1));
+
+        networkNameLabel.setText("Network Name:");
+        optionPanel.add(networkNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+
+        globalNeighbourhoodComboBox.setModel(new DefaultComboBoxModel(GlobalNeighbourhood.values()));
+        optionPanel.add(globalNeighbourhoodComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 200, -1));
+
+        globalNeighbourhoodLabel.setText("Global Neighbourhood Model:");
+        optionPanel.add(globalNeighbourhoodLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
+
+        globalNeighbourhoodParameterSpinner.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 1.0d, 0.1d));
+        optionPanel.add(globalNeighbourhoodParameterSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, 80, -1));
+
+        propertiesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        propertiesScrollPane.setViewportView(propertiesTable);
+
+        optionPanel.add(propertiesScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 500, 130));
 
         mainTabbedPane.addTab("Options", optionPanel);
 
@@ -406,6 +472,11 @@ public class BayesGUI extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_calculationTypeComboBoxActionPerformed
 
+    private void networkNameInputActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_networkNameInputActionPerformed
+    {//GEN-HEADEREND:event_networkNameInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_networkNameInputActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -461,6 +532,9 @@ public class BayesGUI extends javax.swing.JFrame
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JPopupMenu.Separator fileSeparator;
+    private javax.swing.JComboBox globalNeighbourhoodComboBox;
+    private javax.swing.JLabel globalNeighbourhoodLabel;
+    private javax.swing.JSpinner globalNeighbourhoodParameterSpinner;
     private javax.swing.JScrollPane graphPanel;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuItem jMenuItem6;
@@ -470,8 +544,12 @@ public class BayesGUI extends javax.swing.JFrame
     private javax.swing.JMenuBar mainMenuBar;
     private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JTabbedPane mainTabbedPane;
+    private javax.swing.JTextField networkNameInput;
+    private javax.swing.JLabel networkNameLabel;
     private javax.swing.JPanel optionPanel;
     private javax.swing.JTextPane outputPanel;
+    private javax.swing.JScrollPane propertiesScrollPane;
+    private javax.swing.JTable propertiesTable;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;

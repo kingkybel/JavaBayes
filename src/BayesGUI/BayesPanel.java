@@ -126,6 +126,33 @@ public class BayesPanel
         setComponentPopupMenu(nodeMenu);
         addMouseListener(this);
 
+        setNetworkConfiguration();
+    }
+
+    /**
+     * Fill the values in the dialog area.
+     */
+    private void setNetworkConfiguration()
+    {
+        String values[], allValues = "";
+        ArrayList properties;
+        String property;
+        double par;
+
+        // Synchronize the network if necessary.
+        inferenceGraph.getBayesNet();
+
+        // Fill the name.
+        frame.setNetworkNameInput(inferenceGraph.getName());
+
+        // Fill and store network properties
+        frame.setProperties(inferenceGraph.getNetworkProperties());
+
+        // Set global neighborhood
+        frame.setGlobalNeighbourhood(inferenceGraph.getGlobalNeighborhoodType());
+
+        par = inferenceGraph.getGlobalNeighborhoodParameter();
+        frame.setGlobalParameter(par);
     }
 
     @Override
@@ -241,6 +268,7 @@ public class BayesPanel
                             arcBottomNode = eventNode;
                             newArcHead = new Point(clickLocation.x,
                                                    clickLocation.y);
+                            mode = BayesGUI.EditMode.CREATE;
                             break;
                         case DeleteArc:
                             if (isArcHit(clickLocation.x, clickLocation.y))
@@ -1072,6 +1100,10 @@ public class BayesPanel
             {
                 formMouseDragged(evt);
             }
+            public void mouseMoved(java.awt.event.MouseEvent evt)
+            {
+                formMouseMoved(evt);
+            }
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1095,25 +1127,12 @@ public class BayesPanel
         {
             // handled by popup-menu
         }
-        else if (mouseButton == MouseEvent.BUTTON1 && eventNode != null)
+        else if (mouseButton == MouseEvent.BUTTON1 &&
+                 eventNode != null &&
+                 mode == BayesGUI.EditMode.MOVE)
         {
             movenode = eventNode;
             generateMovingNodes();
-//            else if (mode == BayesGUI.EditMode.CREATE)
-//            { // Create arc
-//                newArc = true;
-//                arcBottomNode = node;
-//                newArcHead = new Point(x, y);
-//            }
-//            else if (mode == BayesGUI.EditMode.EDIT_VARIABLE)
-//            { // Edit variable node
-//                editVariable(node);
-//            }
-//            else if (mode == BayesGUI.EditMode.EDIT_FUNCTION)
-//            { // Edit function node
-//                editFunction(node);
-//            }
-//        }
         }
         else if (mouseButton == MouseEvent.BUTTON1)
         {
@@ -1161,6 +1180,7 @@ public class BayesPanel
             arcBottomNode = null;
             newArcHead = null;
             newArc = false;
+            mode = BayesGUI.EditMode.MOVE;
         }
         else if (modifyGroup == true)
         {
@@ -1190,6 +1210,15 @@ public class BayesPanel
 
         repaint();
     }//GEN-LAST:event_formMouseDragged
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseMoved
+    {//GEN-HEADEREND:event_formMouseMoved
+        if (mode == BayesGUI.EditMode.CREATE && newArc)
+        {
+            newArcHead = new Point(evt.getX(), evt.getY());
+        }
+        repaint();
+    }//GEN-LAST:event_formMouseMoved
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
