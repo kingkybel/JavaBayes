@@ -9,7 +9,6 @@ import BayesianInferences.ExplanationType;
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
 import QuasiBayesianNetworks.GlobalNeighbourhood;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Point;
@@ -20,9 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
@@ -126,6 +123,8 @@ public class BayesGUI extends javax.swing.JFrame
     private final FontMetrics fmetrics = getFontMetrics(roman);
     private final int h = (int) fmetrics.getHeight() / 3;
 
+    OutputPanel outputPanel;
+
     /**
      * Creates new form BayesGUI.
      */
@@ -138,102 +137,38 @@ public class BayesGUI extends javax.swing.JFrame
         algorithmButtonGroup.add(variableEliminationRadioButton);
         algorithmButtonGroup.add(junctionTreeRadioButton);
 
+        outputPanel = new OutputPanel();
+        mainSplitPane.setRightComponent(outputPanel);
         doc = outputPanel.getStyledDocument();
-        metaStyle = addStyle(styleContext,
-                             Color.GRAY,
-                             Color.WHITE,
-                             "courier",
-                             10,
-                             false);
-
-        queryStyle = addStyle(styleContext,
-                              Color.MAGENTA,
-                              Color.WHITE,
-                              "courier",
-                              10,
-                              true);
-
-        resultStyle = addStyle(styleContext,
-                               Color.BLUE,
-                               Color.WHITE,
-                               "courier",
-                               10,
-                               true);
-
-        errorStyle = addStyle(styleContext,
-                              Color.YELLOW,
-                              Color.RED,
-                              "courier",
-                              10,
-                              true);
 
         bayesPanel = new BayesPanel(this);
         graphPanel.add(bayesPanel);
         graphPanel.setViewportView(bayesPanel);
 
-        metaOutput("Started Bayes GUI");
-    }
-
-    static Style addStyle(StyleContext sc,
-                          Color fgColor,
-                          Color bgColor,
-                          String fontFamily,
-                          Integer fontSize,
-                          Boolean bold)
-    {
-        String stylename = fgColor + "_" +
-                           bgColor + "_" +
-                           fontFamily + "_" +
-                           fontSize.toString() + "_" +
-                           (bold ? "bold" : "normal");
-        Style newStyle = sc.addStyle(stylename, null);
-        newStyle.addAttribute(StyleConstants.Foreground, fgColor);
-        newStyle.addAttribute(StyleConstants.Background, bgColor);
-        newStyle.addAttribute(StyleConstants.FontSize, fontSize);
-        newStyle.addAttribute(StyleConstants.FontFamily, fontFamily);
-        newStyle.addAttribute(StyleConstants.Bold, bold);
-
-        return newStyle;
-    }
-
-    /**
-     * Place text in the text area.
-     *
-     * @param text
-     */
-    static void appendToDocument(StyledDocument doc, Style style, String line)
-    {
-        try
-        {
-            doc.insertString(doc.getEndPosition().getOffset(), line, style);
-        }
-        catch (BadLocationException ex)
-        {
-            LOGGER.log(Level.INFO, ex.toString());
-        }
+        outputPanel.writelnMeta("Started Bayes GUI");
     }
 
     final void metaOutput(String message)
     {
         if (verboseCheckBox.isSelected())
         {
-            appendToDocument(doc, metaStyle, "// " + message + "\n");
+            outputPanel.writelnMeta(message);
         }
     }
 
     final void queryOutput(String message)
     {
-        appendToDocument(doc, queryStyle, message);
+        outputPanel.writeln(message);
     }
 
     final void resultOutput(String message)
     {
-        appendToDocument(doc, resultStyle, message);
+        outputPanel.writelnHighlight(message);
     }
 
     final void errorOutput(String message)
     {
-        appendToDocument(doc, errorStyle, "!!! " + message + "!!!\n");
+        outputPanel.writelnError(message);
     }
 
     /**
@@ -266,8 +201,6 @@ public class BayesGUI extends javax.swing.JFrame
         globalNeighbourhoodParameterSpinner = new javax.swing.JSpinner();
         propertiesScrollPane = new javax.swing.JScrollPane();
         propertiesTable = new javax.swing.JTable();
-        textScrollPane = new javax.swing.JScrollPane();
-        outputPanel = new javax.swing.JTextPane();
         mainMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         loadBayesMenuItem = new javax.swing.JMenuItem();
@@ -365,11 +298,6 @@ public class BayesGUI extends javax.swing.JFrame
         mainTabbedPane.addTab("Options", optionPanel);
 
         mainSplitPane.setTopComponent(mainTabbedPane);
-
-        outputPanel.setPreferredSize(new java.awt.Dimension(500, 300));
-        textScrollPane.setViewportView(outputPanel);
-
-        mainSplitPane.setRightComponent(textScrollPane);
 
         getContentPane().add(mainSplitPane);
 
@@ -547,13 +475,11 @@ public class BayesGUI extends javax.swing.JFrame
     private javax.swing.JTextField networkNameInput;
     private javax.swing.JLabel networkNameLabel;
     private javax.swing.JPanel optionPanel;
-    private javax.swing.JTextPane outputPanel;
     private javax.swing.JScrollPane propertiesScrollPane;
     private javax.swing.JTable propertiesTable;
     private javax.swing.JMenuItem quitMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
-    private javax.swing.JScrollPane textScrollPane;
     private javax.swing.JRadioButton variableEliminationRadioButton;
     private javax.swing.JCheckBox verboseCheckBox;
     // End of variables declaration//GEN-END:variables

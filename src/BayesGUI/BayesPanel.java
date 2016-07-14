@@ -257,7 +257,6 @@ public class BayesPanel
                     switch (command)
                     {
                         case AddNode:
-                            //  BayesPanel.this.upButtonActionPerformed(e);
                             createNode(clickLocation.x, clickLocation.y);
                             break;
                         case DeleteNode:
@@ -304,34 +303,29 @@ public class BayesPanel
                                     inferenceGraph,
                                     eventNode.getName(),
                                     ExplanationType.EXPECTATION);
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                         case QueryExplanation:
                             processQuery(
                                     inferenceGraph,
                                     eventNode.getName(),
                                     ExplanationType.SUBSET);
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                         case QueryFullExplanation:
                             processQuery(
                                     inferenceGraph,
                                     eventNode.getName(),
                                     ExplanationType.FULL);
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                         case GetSeparation:
                             doSeparation(
                                     inferenceGraph,
                                     eventNode.getName());
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                         case SensitivityAnalysis:
                             processQuery(
                                     inferenceGraph,
                                     eventNode.getName(),
                                     ExplanationType.SENSITIVITY_ANALYSIS);
-                            //  BayesPanel.this.deleteButtonActionPerformed(e);
                             break;
                     }
                 }
