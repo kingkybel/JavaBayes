@@ -6,10 +6,14 @@
 package BayesGUI;
 
 import java.awt.Color;
-import java.util.TreeMap;
+import java.awt.GraphicsEnvironment;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -27,20 +31,45 @@ public class OutputPanel extends javax.swing.JPanel
 
     public static final String NEWLINE = System.getProperty("line.separator");
 
-    public StyledDocument getStyledDocument()
-    {
-        return textPane.getStyledDocument();
-    }
-
     public enum Styles
     {
 
-        NORMAL, HIGHLIGHT, META, ERROR
+        NORMAL, HIGHLIGHT, META, ERROR;
+
+        @Override
+        public String toString()
+        {
+            return this == NORMAL ? "NORMAL" :
+                   this == HIGHLIGHT ? "HIGHLIGHT" :
+                   this == META ? "META" :
+                   this == ERROR ? "ERROR" : "";
+        }
     }
-    StyleContext styleContext = new StyleContext();
-    StyledDocument doc;
-    TreeMap<Comparable, Style> styles = new TreeMap<>();
+    private StyleContext styleContext = new StyleContext();
+    private StyledDocument doc;
+//    private TreeMap<String, Style> styles = new TreeMap<>();
     private boolean verbose = true;
+    private String defaultFontFamily = (String) fontFamilyModel.getElementAt(0);
+    private Integer defaultFontSize = 10;
+    private Color defaultForeground = Color.BLACK;
+    private Color defaultBackground = Color.WHITE;
+    private boolean defaultBold = false;
+    private boolean defaultItalic = false;
+
+    static DefaultComboBoxModel fontFamilyModel = new DefaultComboBoxModel(
+                                GraphicsEnvironment.
+                                getLocalGraphicsEnvironment().
+                                getAvailableFontFamilyNames());
+
+    /**
+     * Creates new form OutputPanel.
+     */
+    public OutputPanel()
+    {
+        initComponents();
+        reset();
+        resetDocument();
+    }
 
     /**
      * Get the value of verbose.
@@ -59,57 +88,17 @@ public class OutputPanel extends javax.swing.JPanel
      */
     public void setVerbose(boolean verbose)
     {
+        boolean old = this.verbose;
         this.verbose = verbose;
-    }
-
-    private String defaultFontFamily = "courier";
-
-    /**
-     * Get the value of defaultFontFamily
-     *
-     * @return the value of defaultFontFamily
-     */
-    public String getDefaultFontFamily()
-    {
-        return defaultFontFamily;
+        if (old != this.verbose)
+        {
+            firePropertyChange("verbose", old, this.verbose);
+        }
+        reset();
     }
 
     /**
-     * Set the value of defaultFontFamily
-     *
-     * @param defaultFontFamily new value of defaultFontFamily
-     */
-    public void setDefaultFontFamily(String defaultFontFamily)
-    {
-        this.defaultFontFamily = defaultFontFamily;
-    }
-
-    private int defaultFontSize = 10;
-
-    /**
-     * Get the value of defaultFontSize
-     *
-     * @return the value of defaultFontSize
-     */
-    public int getDefaultFontSize()
-    {
-        return defaultFontSize;
-    }
-
-    /**
-     * Set the value of defaultFontSize
-     *
-     * @param defaultFontSize new value of defaultFontSize
-     */
-    public void setDefaultFontSize(int defaultFontSize)
-    {
-        this.defaultFontSize = defaultFontSize;
-    }
-
-    private Color defaultForeground;
-
-    /**
-     * Get the value of defaultForeground
+     * Get the value of defaultForeground.
      *
      * @return the value of defaultForeground
      */
@@ -119,19 +108,25 @@ public class OutputPanel extends javax.swing.JPanel
     }
 
     /**
-     * Set the value of defaultForeground
+     * Set the value of defaultForeground.
      *
      * @param defaultForeground new value of defaultForeground
      */
     public void setDefaultForeground(Color defaultForeground)
     {
+        Color old = this.defaultForeground;
         this.defaultForeground = defaultForeground;
+        if ((old == null) != (defaultForeground == null) ||
+            old != null && !old.equals(this.defaultForeground))
+        {
+            firePropertyChange("defaultForeground", old, this.defaultForeground);
+        }
+        textPane.setForeground(defaultForeground);
+        reset();
     }
 
-    private Color defaultBackground;
-
     /**
-     * Get the value of defaultBackground
+     * Get the value of defaultBackground.
      *
      * @return the value of defaultBackground
      */
@@ -141,66 +136,152 @@ public class OutputPanel extends javax.swing.JPanel
     }
 
     /**
-     * Set the value of defaultBackground
+     * Set the value of defaultBackground.
      *
      * @param defaultBackground new value of defaultBackground
      */
     public void setDefaultBackground(Color defaultBackground)
     {
+        Color old = this.defaultBackground;
         this.defaultBackground = defaultBackground;
+        if ((old == null) != (defaultBackground == null) ||
+            old != null && !old.equals(this.defaultBackground))
+        {
+            firePropertyChange("defaultBackground", old, this.defaultBackground);
+        }
+        textPane.setBackground(defaultBackground);
+        reset();
     }
 
-    private boolean defaultBold;
+    /**
+     * Get the value of defaultFontSize.
+     *
+     * @return the value of defaultFontSize
+     */
+    public Integer getDefaultFontSize()
+    {
+        return defaultFontSize;
+    }
 
     /**
-     * Get the value of defaultBold
+     * Set the value of defaultFontSize.
+     *
+     * @param defaultFontSize new value of defaultFontSize
+     */
+    public void setDefaultFontSize(Integer defaultFontSize)
+    {
+        Integer old = this.defaultFontSize;
+        this.defaultFontSize = defaultFontSize;
+        if ((old == null) != (defaultFontSize == null) ||
+            old != null && !old.equals(this.defaultFontSize))
+        {
+            firePropertyChange("defaultFontSize", old, this.defaultFontSize);
+        }
+        reset();
+    }
+
+    /**
+     * Get the value of defaultFontFamily.
+     *
+     * @return the value of defaultFontFamily
+     */
+    public String getDefaultFontFamily()
+    {
+        return defaultFontFamily;
+    }
+
+    /**
+     * Set the value of defaultFontFamily.
+     *
+     * @param defaultFontFamily new value of defaultFontFamily
+     */
+    public void setDefaultFontFamily(String defaultFontFamily)
+    {
+        if (fontFamilyModel.getIndexOf(defaultFontFamily) == -1)
+        {
+            LOGGER.log(Level.INFO,
+                       "FontFamily '" + defaultFontFamily + "' not found.");
+            boolean found = false;
+            for (int i = 0; i < fontFamilyModel.getSize() && !found; i++)
+            {
+                String localFF = defaultFontFamily.replaceAll(" ", "").
+                       toLowerCase();
+                String ff_i = ((String) fontFamilyModel.getElementAt(i)).
+                       toLowerCase().replaceAll(" ", "");
+                if (localFF.equals(ff_i))
+                {
+                    defaultFontFamily = (String) fontFamilyModel.getElementAt(i);
+                    LOGGER.log(Level.INFO,
+                               "\nFontFamily set to '" +
+                               defaultFontFamily +
+                               "'.");
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                defaultFontFamily = (String) fontFamilyModel.getElementAt(0);
+                LOGGER.log(Level.INFO,
+                           "\nFontFamily set to '" +
+                           defaultFontFamily +
+                           "'.");
+            }
+
+        }
+        this.defaultFontFamily = defaultFontFamily;
+        reset();
+    }
+
+    /**
+     * Get the value of defaultBold.
      *
      * @return the value of defaultBold
      */
-    public boolean isDefaultBold()
+    public Boolean isDefaultBold()
     {
         return defaultBold;
     }
 
     /**
-     * Set the value of defaultBold
+     * Set the value of defaultBold.
      *
-     * @param bold new value of defaultBold
+     * @param defaultBold new value of defaultBold
      */
-    public void setDefaultBold(boolean bold)
+    public void setDefaultBold(Boolean defaultBold)
     {
-        this.defaultBold = bold;
+        this.defaultBold = defaultBold;
+        reset();
     }
 
-    private boolean defaultItalic;
-
     /**
-     * Get the value of defaultItalic
+     * Get the value of defaultItalic.
      *
      * @return the value of defaultItalic
      */
-    public boolean isDefaultItalic()
+    public Boolean isDefaultItalic()
     {
         return defaultItalic;
     }
 
     /**
-     * Set the value of defaultItalic
+     * Set the value of defaultItalic.
      *
      * @param defaultItalic new value of defaultItalic
      */
-    public void setDefaultItalic(boolean defaultItalic)
+    public void setDefaultItalic(Boolean defaultItalic)
     {
         this.defaultItalic = defaultItalic;
+        reset();
     }
 
     /**
-     * Creates new form OutputPanel.
+     * Retrieve the document from the panel.
+     *
+     * @return the styled document
      */
-    public OutputPanel()
+    public StyledDocument getStyledDocument()
     {
-        initComponents();
-        reset();
+        return textPane.getStyledDocument();
     }
 
     /**
@@ -253,12 +334,7 @@ public class OutputPanel extends javax.swing.JPanel
         {
             italic = isDefaultItalic();
         }
-        String stylename = fgColor + "_" +
-                           bgColor + "_" +
-                           fontFamily + "_" +
-                           fontSize.toString() + "_" +
-                           (bold ? "bold" : "normal") + "_" +
-                           (italic ? "italic" : "roman");
+        String stylename = key.toString();
         Style newStyle = styleContext.addStyle(stylename, null);
         newStyle.addAttribute(StyleConstants.Foreground, fgColor);
         newStyle.addAttribute(StyleConstants.Background, bgColor);
@@ -266,53 +342,74 @@ public class OutputPanel extends javax.swing.JPanel
         newStyle.addAttribute(StyleConstants.FontFamily, fontFamily);
         newStyle.addAttribute(StyleConstants.Bold, bold);
         newStyle.addAttribute(StyleConstants.Italic, italic);
-        styles.put(key, newStyle);
 
         return newStyle;
     }
 
-    public final void reset()
+    public final void resetDocument()
     {
-        reset("courier", 10);
+        doc = textPane.getStyledDocument();
+        try
+        {
+            doc.remove(0, doc.getLength());
+        }
+        catch (BadLocationException ex)
+        {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void reset(String fontFamily, int fontSize)
+    /**
+     * Reset the styles of the document using new basic characteristics.
+     */
+    public final void reset(/*String fontFamily, Integer fontSize*/)
     {
         try
         {
             doc = textPane.getStyledDocument();
 
-            doc.remove(0, doc.getLength());
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            StyleConstants.setForeground(attrs, getDefaultForeground());
+            StyleConstants.setBackground(attrs, getDefaultBackground());
+            doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
+            UIDefaults defaults = new UIDefaults();
+            defaults.put("TextPane[Enabled].backgroundPainter",
+                         getDefaultBackground());
+            textPane.putClientProperty("Nimbus.Overrides", defaults);
+            textPane.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
+            textPane.setBackground(getDefaultBackground());
+            textPane.setForeground(getDefaultForeground());
 
-            styles = new TreeMap<>();
+            SwingUtilities.updateComponentTreeUI(this);
+            textPane.setDocument(doc);
             styleContext = new StyleContext();
 
             addStyle(Styles.NORMAL,
-                     Color.MAGENTA,
-                     Color.WHITE,
-                     fontFamily,
-                     fontSize,
-                     true,
+                     getDefaultForeground(),
+                     getDefaultBackground(),
+                     defaultFontFamily,
+                     defaultFontSize,
+                     false,
                      false);
             addStyle(Styles.HIGHLIGHT,
-                     Color.BLUE,
-                     Color.WHITE,
-                     fontFamily,
-                     fontSize,
+                     getDefaultBackground(),
+                     getDefaultForeground(),
+                     defaultFontFamily,
+                     defaultFontSize,
                      true,
                      false);
             addStyle(Styles.META,
                      Color.GRAY,
-                     Color.WHITE,
-                     fontFamily,
-                     fontSize,
+                     getDefaultBackground(),
+                     defaultFontFamily,
+                     defaultFontSize,
                      false,
-                     false);
+                     true);
             addStyle(Styles.ERROR,
                      Color.YELLOW,
                      Color.RED,
-                     fontFamily,
-                     fontSize,
+                     defaultFontFamily,
+                     defaultFontSize,
                      true,
                      false);
 
@@ -324,16 +421,21 @@ public class OutputPanel extends javax.swing.JPanel
 
     }
 
+    private void appendToDocument(Styles styleKey, String text)
+    {
+        appendToDocument(styleContext.getStyle(styleKey.toString()), text);
+    }
+
     /**
      * Place text in the text area.
      *
-     * @param text
+     * @param text the text to append
      */
-    void appendToDocument(Style style, String line)
+    void appendToDocument(Style style, String text)
     {
         try
         {
-            doc.insertString(doc.getEndPosition().getOffset(), line, style);
+            doc.insertString(doc.getEndPosition().getOffset(), text, style);
         }
         catch (BadLocationException ex)
         {
@@ -342,101 +444,134 @@ public class OutputPanel extends javax.swing.JPanel
     }
 
     /**
+     * Append the text to the end of the document in the meta/comment style. Do
+     * add a line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void writelnMeta(String message)
+    public final void writelnMeta(String text)
     {
         if (isVerbose())
         {
-            appendToDocument(styles.get(Styles.META), "// " + message + NEWLINE);
+            appendToDocument(Styles.META, "// " + text + NEWLINE);
         }
     }
 
     /**
+     * Append the text to the end of the document using the given style. Do NOT
+     * add a line-break at the end.
      *
-     * @param style
-     * @param message
+     * @param style the text style
+     * @param text  the text to append
      */
-    public final void write(Style style, String message)
+    public final void write(Style style, String text)
     {
-        appendToDocument(style, message);
+        appendToDocument(style, text);
     }
 
     /**
+     * Append the text to the end of the document using the given style. Do add
+     * a line-break at the end.
      *
-     * @param style
-     * @param message
+     * @param style the text style
+     * @param text  the text to append
      */
-    public final void writeln(Style style, String message)
+    public final void writeln(Style style, String text)
     {
-        appendToDocument(styles.get(Styles.NORMAL), message + NEWLINE);
+        appendToDocument(style, text + NEWLINE);
     }
 
     /**
+     * Append the text to the end of the document using the style identified by
+     * its key. Do NOT add a line-break at the end.
      *
-     * @param styleKey
-     * @param message
+     * @param styleKey key identifying the text style
+     * @param text     the text to append
      */
-    public final void write(Comparable styleKey, String message)
+    public final void write(Comparable styleKey, String text)
     {
-        appendToDocument(styles.get(styleKey), message);
+        appendToDocument(styleContext.getStyle(styleKey.toString()), text);
     }
 
     /**
+     * Append the text to the end of the document using the style identified by
+     * its key. Do add a line-break at the end.
      *
-     * @param styleKey
-     * @param message
+     * @param styleKey key identifying the text style
+     * @param text     the text to append
      */
-    public final void writeln(Comparable styleKey, String message)
+    public final void writeln(Comparable styleKey, String text)
     {
-        appendToDocument(styles.get(styleKey), message + NEWLINE);
+        appendToDocument(styleContext.getStyle(styleKey.toString()),
+                         text + NEWLINE);
     }
 
     /**
+     * Append the text to the end of the document in the default style. Do NOT
+     * add a line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void write(String message)
+    public final void write(String text)
     {
-        appendToDocument(styles.get(Styles.NORMAL), message);
+        appendToDocument(styleContext.getStyle(Styles.NORMAL.toString()), text);
     }
 
     /**
+     * Append the text to the end of the document in the default style. Do NOT
+     * add a line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void writeln(String message)
+    public final void writeln(String text)
     {
-        appendToDocument(styles.get(Styles.NORMAL), message + NEWLINE);
+        appendToDocument(styleContext.getStyle(Styles.NORMAL.toString()),
+                         text + NEWLINE);
     }
 
     /**
+     * Append the text to the end of the document in the highlight style. Do NOT
+     * add a line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void writeHighlight(String message)
+    public final void writeHighlight(String text)
     {
-        appendToDocument(styles.get(Styles.HIGHLIGHT), message);
+        appendToDocument(styleContext.getStyle(Styles.HIGHLIGHT.toString()),
+                         text);
     }
 
     /**
+     * Append the text to the end of the document in the highlight style. Do add
+     * a line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void writelnHighlight(String message)
+    public final void writelnHighlight(String text)
     {
-        appendToDocument(styles.get(Styles.HIGHLIGHT), message + NEWLINE);
+        appendToDocument(styleContext.getStyle(Styles.HIGHLIGHT.toString()),
+                         text + NEWLINE);
     }
 
     /**
+     * Append the text to the end of the document in the error style. Do add a
+     * line-break at the end.
      *
-     * @param message
+     * @param text the text to append
      */
-    public final void writelnError(String message)
+    public final void writelnError(String text)
     {
-        appendToDocument(styles.get(Styles.ERROR),
-                         "!!! " + message + "!!!" + NEWLINE);
+        appendToDocument(styleContext.getStyle(Styles.ERROR.toString()),
+                         "!!! " + text + "!!!" + NEWLINE);
+    }
+
+    void showStyleSamples()
+    {
+        while (styleContext.getStyleNames().hasMoreElements())
+        {
+            String name = (String) styleContext.getStyleNames().nextElement();
+            writeln(name, name);
+        }
     }
 
     /**
@@ -449,18 +584,18 @@ public class OutputPanel extends javax.swing.JPanel
     private void initComponents()
     {
 
-        scrollPane = new javax.swing.JScrollPane();
+        textScrollPane = new javax.swing.JScrollPane();
         textPane = new javax.swing.JTextPane();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
-        scrollPane.setViewportView(textPane);
+        textScrollPane.setViewportView(textPane);
 
-        add(scrollPane);
+        add(textScrollPane);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTextPane textPane;
+    private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 }

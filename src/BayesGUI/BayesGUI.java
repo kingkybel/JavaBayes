@@ -9,15 +9,21 @@ import BayesianInferences.ExplanationType;
 import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
 import QuasiBayesianNetworks.GlobalNeighbourhood;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.HeadlessException;
 import java.awt.Point;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
@@ -33,12 +39,15 @@ public class BayesGUI extends javax.swing.JFrame
     private static final String CLASS_NAME = BayesGUI.class.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    private static final String RESULT = "result";
+    private static final String QUERY = "query";
     Style metaStyle;
     Style queryStyle;
     Style resultStyle;
     Style errorStyle;
     StyleContext styleContext = new StyleContext();
     StyledDocument doc;
+    String bayesNetModelFile = "";
 
     ExplanationType getCalculationType()
     {
@@ -137,6 +146,7 @@ public class BayesGUI extends javax.swing.JFrame
         algorithmButtonGroup.add(variableEliminationRadioButton);
         algorithmButtonGroup.add(junctionTreeRadioButton);
 
+        addWindowListener(new CloseListener());
         outputPanel = new OutputPanel();
         mainSplitPane.setRightComponent(outputPanel);
         doc = outputPanel.getStyledDocument();
@@ -144,6 +154,28 @@ public class BayesGUI extends javax.swing.JFrame
         bayesPanel = new BayesPanel(this);
         graphPanel.add(bayesPanel);
         graphPanel.setViewportView(bayesPanel);
+
+        try
+        {
+            outputPanel.addStyle(QUERY,
+                                 Color.MAGENTA,
+                                 null,
+                                 null,
+                                 10,
+                                 true,
+                                 false);
+            outputPanel.addStyle(RESULT,
+                                 Color.BLUE,
+                                 null,
+                                 null,
+                                 10,
+                                 true,
+                                 false);
+        }
+        catch (Exception ex)
+        {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
 
         outputPanel.writelnMeta("Started Bayes GUI");
     }
@@ -158,12 +190,12 @@ public class BayesGUI extends javax.swing.JFrame
 
     final void queryOutput(String message)
     {
-        outputPanel.writeln(message);
+        outputPanel.writeln(QUERY, message);
     }
 
     final void resultOutput(String message)
     {
-        outputPanel.writelnHighlight(message);
+        outputPanel.writeln(RESULT, message);
     }
 
     final void errorOutput(String message)
@@ -209,12 +241,13 @@ public class BayesGUI extends javax.swing.JFrame
         saveAsMenuItem = new javax.swing.JMenuItem();
         dumpConsoleMenuItem = new javax.swing.JMenuItem();
         fileSeparator = new javax.swing.JPopupMenu.Separator();
-        quitMenuItem = new javax.swing.JMenuItem();
+        quitMenuItem = new javax.swing.JMenuItem(new ExitAction());
         editMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bayes GUI");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         mainSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -225,10 +258,10 @@ public class BayesGUI extends javax.swing.JFrame
         optionPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         optionPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        bucketTreeRadioButton.setSelected(true);
         bucketTreeRadioButton.setText("Bucket Tree");
         optionPanel.add(bucketTreeRadioButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 24, -1, -1));
 
-        bayesNetRadioButton.setSelected(true);
         bayesNetRadioButton.setText("Bayes Net");
         optionPanel.add(bayesNetRadioButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, -1, -1));
 
@@ -327,6 +360,13 @@ public class BayesGUI extends javax.swing.JFrame
         fileMenu.add(saveMenuItem);
 
         saveAsMenuItem.setText("Save As...");
+        saveAsMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                saveAsMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveAsMenuItem);
 
         dumpConsoleMenuItem.setText("Dump Console...");
@@ -355,7 +395,6 @@ public class BayesGUI extends javax.swing.JFrame
 
     private void loadBayesMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_loadBayesMenuItemActionPerformed
     {//GEN-HEADEREND:event_loadBayesMenuItemActionPerformed
-        String bayesNetModelFile = "";
         final JFileChooser fc = new JFileChooser(bayesNetModelFile);
         fc.setCurrentDirectory(
                 new File(
@@ -392,8 +431,95 @@ public class BayesGUI extends javax.swing.JFrame
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_saveMenuItemActionPerformed
     {//GEN-HEADEREND:event_saveMenuItemActionPerformed
-        // TODO add your handling code here:
+        doSave(false);
     }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void doSave(boolean saveAs) throws HeadlessException
+    {
+        InferenceGraph inferenceGraphToSave = bayesPanel.getInferenceGraph();
+        if (inferenceGraphToSave == null)
+        {
+            errorOutput("No Bayesian network to be saved.");
+            return;
+        }
+        String[] validSaveExtensions = new String[]
+         {
+             "bif", "bugs", "xml03"
+        };
+        String typeStr = validSaveExtensions[0];
+        if (saveAs || bayesNetModelFile == null || bayesNetModelFile.isEmpty())
+        {
+            if (!bayesNetModelFile.isEmpty() && bayesNetModelFile.contains("."))
+            {
+                typeStr = bayesNetModelFile.substring(
+                bayesNetModelFile.indexOf(".") + 1);
+            }
+            final JFileChooser fc = new JFileChooser(bayesNetModelFile);
+            fc.setCurrentDirectory(
+                    new File(
+                            "/home/kybelksd/NetBeansProjects/JavaBayes2/src/Examples"));
+            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            for (String ext : validSaveExtensions)
+            {
+                FileFilter ff = new FileNameExtensionFilter("*." + ext,
+                                                            ext.toUpperCase());
+                fc.addChoosableFileFilter(ff);
+                if (typeStr.equals(ext))
+                {
+                    fc.setFileFilter(ff);
+                }
+
+            }
+            fc.setAcceptAllFileFilterUsed(false);
+            int reval = fc.showSaveDialog(null);
+            if (reval == JFileChooser.APPROVE_OPTION)
+            {
+                File file = fc.getSelectedFile();
+                bayesNetModelFile = file.getAbsolutePath();
+            }
+            else
+            {
+                return;
+            }
+            typeStr = fc.getFileFilter().getDescription();
+        }
+        typeStr = typeStr.substring(typeStr.lastIndexOf('.') + 1);
+        if (bayesNetModelFile.contains(".") &&
+            !bayesNetModelFile.endsWith("." + typeStr))
+        {
+            bayesNetModelFile =
+            bayesNetModelFile.substring(0,
+                                        bayesNetModelFile.
+                                        lastIndexOf(".") + 1) + typeStr;
+        }
+        if (!bayesNetModelFile.endsWith("." + typeStr))
+        {
+            bayesNetModelFile += "." + typeStr;
+        }
+        try (
+                FileOutputStream fileout = new FileOutputStream(
+                                         bayesNetModelFile);
+                PrintStream out = new PrintStream(fileout))
+        {
+            switch (typeStr)
+            {
+                case "bif":
+                    inferenceGraphToSave.saveBif(out);
+                    break;
+                case "xml03":
+                    inferenceGraphToSave.saveXml(out);
+                    break;
+                case "bugs":
+                    inferenceGraphToSave.saveBugs(out);
+                    break;
+            }
+            metaOutput("Saved Bayes net to file '" + bayesNetModelFile + "'");
+        }
+        catch (IOException e)
+        {
+            errorOutput("Exception: " + e + "\n");
+        }
+    }
 
     private void calculationTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_calculationTypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_calculationTypeComboBoxActionPerformed
@@ -404,6 +530,11 @@ public class BayesGUI extends javax.swing.JFrame
     {//GEN-HEADEREND:event_networkNameInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_networkNameInputActionPerformed
+
+    private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_saveAsMenuItemActionPerformed
+    {//GEN-HEADEREND:event_saveAsMenuItemActionPerformed
+        doSave(true);
+    }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     /**
      * @param args the command line arguments

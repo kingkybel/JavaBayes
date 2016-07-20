@@ -38,6 +38,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save As..."/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveAsMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="dumpConsoleMenuItem">
               <Properties>
@@ -50,6 +53,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Quit"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JMenuItem(new ExitAction())"/>
+              </AuxValues>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -75,6 +81,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Bayes GUI"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="mainMenuBar"/>
@@ -150,6 +157,7 @@
               <SubComponents>
                 <Component class="javax.swing.JRadioButton" name="bucketTreeRadioButton">
                   <Properties>
+                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Bucket Tree"/>
                   </Properties>
                   <Constraints>
@@ -160,7 +168,6 @@
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="bayesNetRadioButton">
                   <Properties>
-                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Bayes Net"/>
                   </Properties>
                   <Constraints>
