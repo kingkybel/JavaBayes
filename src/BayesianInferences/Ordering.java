@@ -38,7 +38,8 @@ import java.util.logging.Logger;
 public class Ordering
 {
 
-    private static final String CLASS_NAME = Ordering.class.getName();
+    private static final Class CLAZZ = Ordering.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     public enum Type

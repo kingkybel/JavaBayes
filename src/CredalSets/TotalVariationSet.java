@@ -36,7 +36,8 @@ public class TotalVariationSet
         extends TwoMonotoneCapacity
 {
 
-    private static final String CLASS_NAME = TotalVariationSet.class.getName();
+    private static final Class CLAZZ = TotalVariationSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private double epsilon;
@@ -58,38 +59,18 @@ public class TotalVariationSet
         }
     }
 
-    /**
-     * Obtain the lower probability of an event given the base probability for
-     * the event.
-     *
-     * @param p
-     * @return
-     */
     @Override
     public double getLowerProbabilityFromBase(double p)
     {
         return (Math.max(p - epsilon, 0.0));
     }
 
-    /**
-     * Obtain the upper probability of an event given the base probability for
-     * the event.
-     *
-     * @param p
-     * @return
-     */
     @Override
     public double getUpperProbabilityFromBase(double p)
     {
         return (Math.min(p + epsilon, 1.0));
     }
 
-    /**
-     * Get a base probability value for an atom.
-     *
-     * @param index
-     * @return
-     */
     @Override
     public double getAtomProbability(int index)
     {

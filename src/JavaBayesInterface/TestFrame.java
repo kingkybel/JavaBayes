@@ -6,6 +6,7 @@
 package JavaBayesInterface;
 
 import BayesianInferences.InferenceGraph;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,6 +14,10 @@ import BayesianInferences.InferenceGraph;
  */
 public class TestFrame extends javax.swing.JFrame
 {
+
+    private static final Class CLAZZ = TestFrame.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      * Creates new form TestFrame

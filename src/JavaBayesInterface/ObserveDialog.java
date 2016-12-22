@@ -42,7 +42,8 @@ import java.util.logging.Logger;
 class ObserveDialog extends Dialog
 {
 
-    private static final String CLASS_NAME = ObserveDialog.class.getName();
+    private static final Class CLAZZ = ObserveDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     NetworkPanel npan;

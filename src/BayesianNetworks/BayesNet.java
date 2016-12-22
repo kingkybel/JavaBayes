@@ -40,13 +40,15 @@ import java.util.logging.Logger;
 public class BayesNet
 {
 
+    private static final Class CLAZZ = BayesNet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     /**
-     *
+     * Constant for invalid indices. Used for example in cases when values are
+     * not in a collection.
      */
     public static final int INVALID_INDEX = -1;
-
-    private static final String CLASS_NAME = BayesNet.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private String name;
     private ArrayList<String> properties = new ArrayList<>();
@@ -80,7 +82,7 @@ public class BayesNet
      * Simple constructor for a BayesNet.
      *
      * @param name       Name of network.
-     * @param properties Properties of the network.
+     * @param properties list of properties Properties of the network.
      */
     public BayesNet(String name, ArrayList properties)
     {
@@ -747,7 +749,7 @@ public class BayesNet
     /**
      * Set the properties.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setProperties(ArrayList properties)
     {
@@ -899,7 +901,7 @@ public class BayesNet
      * Set a probability variable given its constituents.
      *
      * @param index
-     * @param properties
+     * @param properties list of properties
      * @param name
      * @param values
      */
@@ -924,7 +926,7 @@ public class BayesNet
      * @param index
      * @param variables
      * @param values
-     * @param properties
+     * @param properties list of properties
      */
     public void setProbabilityFunction(int index,
                                        ProbabilityVariable[] variables,

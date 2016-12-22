@@ -40,7 +40,8 @@ public final class VertexSet
         extends FinitelyGeneratedSet
 {
 
-    private static final String CLASS_NAME = VertexSet.class.getName();
+    private static final Class CLAZZ = VertexSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Variable that indicates which extreme point is active
@@ -55,7 +56,7 @@ public final class VertexSet
      * Default constructor for a VertexQBProbabilityFunction.
      *
      * @param bayesNet      the underlying Bayesian network
-     * @param properties
+     * @param properties list of properties
      * @param variables
      * @param extremePoints
      */
@@ -82,8 +83,8 @@ public final class VertexSet
      *
      * @param bayesNet      the underlying Bayesian network
      * @param extremePoints
-     * @param probVar       a probability variables
-     * @param properties
+     * @param probVars      probability variables
+     * @param properties list of properties
      * @param values
      */
     public VertexSet(BayesNet bayesNet,
@@ -194,6 +195,10 @@ public final class VertexSet
 
     /**
      * Create a new array of values that combines extreme points.
+     *
+     * @param transformedBn *unused*
+     *
+     * @return the new array of doubles
      */
     private double[] createNewValues(BayesNet transformedBn)
     {
@@ -213,12 +218,12 @@ public final class VertexSet
     }
 
     /**
-     * Create an auxiliar variable to indicate the vertices.
+     * Create an auxiliary variable to indicate the vertices.
      */
     private ProbabilityVariable
             createAuxiliaryVariable(BayesNet transformedBn)
     {
-        int i, j;
+        int i;
 
         // Compose the name of the auxiliary variable
         StringBuffer bufferAuxiliaryVariableName =

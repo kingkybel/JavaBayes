@@ -42,12 +42,15 @@ import java.util.logging.Logger;
 public class QuasiBayesNet extends BayesNet
 {
 
-    private static final String CLASS_NAME = QuasiBayesNet.class.getName();
+    private static final Class CLAZZ = QuasiBayesNet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    GlobalNeighbourhood globalNeighborhoodType; // do not set this here; set by translate()
+
     // do not set this here; set by translate()
-    double globalNeighborhoodParameter; // do not set this here; set by translate()
+    GlobalNeighbourhood globalNeighborhoodType =
+                        GlobalNeighbourhood.NO_CREDAL_SET;
     // do not set this here; set by translate()
+    double globalNeighborhoodParameter = 0.0;
 
     /**
      * Default constructor for a QuasiBayesian network.
@@ -64,12 +67,12 @@ public class QuasiBayesNet extends BayesNet
      * of variables/functions and the name of the network.
      *
      * @param name
-     * @param nF
-     * @param nV
+     * @param numberOfFuncs
+     * @param numberOfVars  number of variables
      */
-    public QuasiBayesNet(String name, int nV, int nF)
+    public QuasiBayesNet(String name, int numberOfVars, int numberOfFuncs)
     {
-        super(name, nV, nF);
+        super(name, numberOfVars, numberOfFuncs);
         globalNeighborhoodType = GlobalNeighbourhood.NO_CREDAL_SET;
         globalNeighborhoodParameter = 0.0;
     }
@@ -79,7 +82,7 @@ public class QuasiBayesNet extends BayesNet
      * network and properties.
      *
      * @param name
-     * @param properties
+     * @param properties list of properties
      */
     public QuasiBayesNet(String name, ArrayList properties)
     {
@@ -107,18 +110,18 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Constructor for a Quasi-Bayesian network from a string
+     * Constructor for a Quasi-Bayesian network from a string.
      *
-     * @param s
+     * @param networkDescription
      * @throws Exception
      */
-    public QuasiBayesNet(String s) throws Exception
+    public QuasiBayesNet(String networkDescription) throws Exception
     {
-        super(s);
+        super(networkDescription);
     }
 
     /**
-     * Constructor for a Bayesian network from an input stream
+     * Constructor for a Bayesian network from an input stream.
      *
      * @param istream
      * @throws Exception
@@ -129,7 +132,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Constructor for a Bayesian network from a URL
+     * Constructor for a Bayesian network from a URL.
      *
      * @param context
      * @param spec

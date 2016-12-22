@@ -35,8 +35,8 @@ public class ConstantDensityBoundedSet
         extends TwoMonotoneCapacity
 {
 
-    private static final String CLASS_NAME =
-                                ConstantDensityBoundedSet.class.getName();
+    private static final Class CLAZZ = ConstantDensityBoundedSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
@@ -72,13 +72,13 @@ public class ConstantDensityBoundedSet
      * Obtain the lower probability of an event given the base probability for
      * the event.
      *
-     * @param p
-     * @return
+     * @param p base probability
+     * @return the lower probability for the base
      */
     @Override
     public double getLowerProbabilityFromBase(double p)
     {
-        return (Math.max(p / k, 1 - k * (1 - p)));
+        return (Math.max(p / k, 1.0 - k * (1.0 - p)));
     }
 
     /**
@@ -91,7 +91,7 @@ public class ConstantDensityBoundedSet
     @Override
     public double getUpperProbabilityFromBase(double p)
     {
-        return (Math.min(k * p, 1 - (1 - p) / k));
+        return (Math.min(k * p, 1.0 - (1.0 - p) / k));
     }
 
     /**

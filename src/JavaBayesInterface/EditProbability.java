@@ -35,7 +35,8 @@ import java.util.logging.Logger;
 class EditProbability extends EditFunctionPanel
 {
 
-    private static final String CLASS_NAME = EditProbability.class.getName();
+    private static final Class CLAZZ = EditProbability.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     EditFunctionDialog parentDialog;

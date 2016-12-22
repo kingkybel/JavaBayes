@@ -34,7 +34,8 @@ import java.util.logging.Logger;
 public class DiscreteFunction
 {
 
-    private static final String CLASS_NAME = DiscreteFunction.class.getName();
+    private static final Class CLAZZ = DiscreteFunction.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

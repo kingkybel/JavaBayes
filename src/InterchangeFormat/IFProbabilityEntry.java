@@ -33,7 +33,8 @@ import java.util.logging.Logger;
 public class IFProbabilityEntry
 {
 
-    private static final String CLASS_NAME = IFProbabilityEntry.class.getName();
+    private static final Class CLAZZ = IFProbabilityEntry.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String values[];

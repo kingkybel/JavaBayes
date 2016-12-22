@@ -1,6 +1,22 @@
 /*
+ * Copyright (C) 2015 Dieter J Kybelksties
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
  * @author  Dieter J Kybelksties
- * @date Jun 13, 2016
+ * @date May 11, 2016
  *
  */
 package BayesGUI;
@@ -67,14 +83,19 @@ public class BayesPanel
     private static final Color arcColor = Color.gray;
     private static final Color backgroundColor = Color.white;
 
-    private final BayesGUI frame; // Used for changing mouse cursor
+    private final BayesGUI frame;
+
+    // Store the mode for events in the panel
     // Used for changing mouse cursor
-    BayesGUI.EditMode mode = BayesGUI.EditMode.MOVE; // Store the mode for events in the panel
-    private InferenceGraph inferenceGraph; // The object with the Bayes net
+    BayesGUI.EditMode mode = BayesGUI.EditMode.MOVE;
+
     // The object with the Bayes net
-    private final Point groupStart;
-    private final Point groupEnd; // The region that is considered the group
+    private InferenceGraph inferenceGraph;
+
     // The region that is considered the group
+    private final Point groupStart;
+    private final Point groupEnd;
+
     // Variables that store quantities shared among event handling functions
     boolean newArc = false;
     Point newArcHead = null;
@@ -101,7 +122,7 @@ public class BayesPanel
     /**
      * Creates new form BayesPanel.
      *
-     * @param frame
+     * @param frame back-pointer to the frame
      */
     public BayesPanel(BayesGUI frame)
     {
@@ -134,10 +155,7 @@ public class BayesPanel
      */
     private void setNetworkConfiguration()
     {
-        String values[], allValues = "";
-        ArrayList properties;
-        String property;
-        double par;
+        double globalNeighbouhoodPar;
 
         // Synchronize the network if necessary.
         inferenceGraph.getBayesNet();
@@ -151,8 +169,8 @@ public class BayesPanel
         // Set global neighborhood
         frame.setGlobalNeighbourhood(inferenceGraph.getGlobalNeighborhoodType());
 
-        par = inferenceGraph.getGlobalNeighborhoodParameter();
-        frame.setGlobalParameter(par);
+        globalNeighbouhoodPar = inferenceGraph.getGlobalNeighborhoodParameter();
+        frame.setGlobalParameter(globalNeighbouhoodPar);
     }
 
     @Override
@@ -372,7 +390,7 @@ public class BayesPanel
      *
      * @param x X-coordinate
      * @param y Y-coordinate
-     * @return
+     * @return true if an arc was hit, false otherwise
      */
     boolean isArcHit(int x, int y)
     {
@@ -394,14 +412,7 @@ public class BayesPanel
                 }
             }
         }
-        if ((arcHeadNode != null) && (arcBottomNode != null))
-        {
-            return true;
-        }
-        else
-        {
-            return (false);
-        }
+        return arcHeadNode != null && arcBottomNode != null;
     }
 
     /**
@@ -458,7 +469,7 @@ public class BayesPanel
     /**
      * Update the screen with the network.
      *
-     * @param g
+     * @param g graphics object
      */
     @Override
     public void update(Graphics g)
@@ -644,9 +655,9 @@ public class BayesPanel
     /**
      * Auxiliary function that draws an arc.
      *
-     * @param g
-     * @param node
-     * @param parent
+     * @param g      graphics object
+     * @param node   graph node
+     * @param parent parent node
      */
     private void drawArc(Graphics g,
                          InferenceGraphNode node,
@@ -703,11 +714,11 @@ public class BayesPanel
     /**
      * Return the QuasiBayesNet object displayed int the NetworkPanel.
      *
-     * @return
+     * @return the QuasiBayesNet
      */
     InferenceGraph getInferenceGraph()
     {
-        return (inferenceGraph);
+        return inferenceGraph;
     }
 
     /**
@@ -925,9 +936,11 @@ public class BayesPanel
     }
 
     /**
+     * d-separation display routine.
      *
-     * @param inferenceGraph
-     * @param queriedVariable
+     * @param inferenceGraph  the inference graph on which to base the
+     *                        separation
+     * @param queriedVariable name of the queried variable
      */
     public void doSeparation(InferenceGraph inferenceGraph,
                              String queriedVariable)

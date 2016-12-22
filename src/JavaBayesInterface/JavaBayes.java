@@ -34,7 +34,8 @@ import java.util.logging.Logger;
 public class JavaBayes extends Applet
 {
 
-    private static final String CLASS_NAME = JavaBayes.class.getName();
+    private static final Class CLAZZ = JavaBayes.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

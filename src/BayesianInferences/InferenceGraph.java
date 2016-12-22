@@ -46,8 +46,10 @@ import java.util.logging.Logger;
 public final class InferenceGraph
 {
 
-    private static final String CLASS_NAME = InferenceGraph.class.getName();
+    private static final Class CLAZZ = InferenceGraph.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     QuasiBayesNet qbn;
     QBInference qbi;
     QBExpectation qbe;
@@ -283,7 +285,7 @@ public final class InferenceGraph
     /**
      * Set the properties of the network.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setNetworkProperties(ArrayList properties)
     {
@@ -440,17 +442,18 @@ public final class InferenceGraph
      *
      * @param pstream
      * @param queriedVariable   indicates the variable of interest.
+     * @param doComputeClusters
      * @param showBucketTree    determines whether or not to present a
      *                          description of the BucketTree.
-     * @param doComputeClusters
      */
     public void printExpectation(PrintStream pstream,
                                  String queriedVariable,
                                  boolean doComputeClusters,
                                  boolean showBucketTree)
     {
-        if ((doComputeClusters == false) || (qbe == null) ||
-            (qbi.areClustersProduced() == false))
+        if ((doComputeClusters == false) ||
+            (qbe == null) /*|| // *** Removed as it does not seem to make sense here
+                 (qbi.areClustersProduced() == false)*/)
         {
             qbe = new QBExpectation(getBayesNet(), doComputeClusters);
         }

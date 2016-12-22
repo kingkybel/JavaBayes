@@ -50,7 +50,8 @@ import java.util.logging.Logger;
 public class DSeparation
 {
 
-    private static final String CLASS_NAME = DSeparation.class.getName();
+    private static final Class CLAZZ = DSeparation.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     public enum ConnectionType

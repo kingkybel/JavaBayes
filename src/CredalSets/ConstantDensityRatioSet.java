@@ -38,13 +38,11 @@ public class ConstantDensityRatioSet
         implements MappingDouble
 {
 
-    private final static int LOWER_EXPECTATION_BRACKET = 0;
-    private final static int UPPER_EXPECTATION_BRACKET = 1;
+    private static final Class CLAZZ = ConstantDensityRatioSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private final static double ACCURACY = 10E-8;
-    private static final String CLASS_NAME =
-                                ConstantDensityRatioSet.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private double k;
     // Auxiliary variable that holds a discrete function for bracketing.
     private DiscreteFunction temporaryDiscreteFunction;
@@ -75,7 +73,7 @@ public class ConstantDensityRatioSet
 
     /**
      * Perform calculation of marginal posterior distributions for a density
-     * ratio global neighborhood.
+     * ratio global neighbourhood.
      *
      * @return
      */
@@ -164,13 +162,19 @@ public class ConstantDensityRatioSet
 
         // Bracket the lower expectation
         double lowerExpectation =
-               bracket.perform(this, LOWER_EXPECTATION_BRACKET,
-                               minDfValue, maxDfValue, ACCURACY);
+               bracket.perform(this,
+                               MappingDouble.Type.LOWER_EXPECTATION_BRACKET,
+                               minDfValue,
+                               maxDfValue,
+                               ACCURACY);
 
         // Bracket the upper expectation
         double upperExpectation =
-               bracket.perform(this, UPPER_EXPECTATION_BRACKET,
-                               minDfValue, maxDfValue, ACCURACY);
+               bracket.perform(this,
+                               MappingDouble.Type.UPPER_EXPECTATION_BRACKET,
+                               minDfValue,
+                               maxDfValue,
+                               ACCURACY);
 
         // Calculate the values
         results[0] = lowerExpectation;
@@ -181,7 +185,7 @@ public class ConstantDensityRatioSet
 
     /**
      * Perform calculation of posterior expected value. Assumes that the
-     * probability values are not normalized; probability values are p(x, e)
+     * probability values are not normalised; probability values are p(x, e)
      * where e is the fixed evidence
      *
      * @param discrFunc
@@ -192,12 +196,8 @@ public class ConstantDensityRatioSet
         return (expectedValues(discrFunc));
     }
 
-    /**
-     * To conform to the Mapping interface demanded by the Bracketing class, the
-     * method map() must be present.
-     */
     @Override
-    public double map(int mapType, double mapInput)
+    public double map(MappingDouble.Type mapType, double mapInput)
     {
         int i;
         double aux;

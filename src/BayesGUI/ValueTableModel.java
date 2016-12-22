@@ -1,7 +1,22 @@
-
 /*
+ * Copyright (C) 2015 Dieter J Kybelksties
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
  * @author  Dieter J Kybelksties
- * @date Jul 1, 2016
+ * @date May 11, 2016
  *
  */
 package BayesGUI;
@@ -24,8 +39,10 @@ public class ValueTableModel
         implements ListModel<Object>
 {
 
-    private static final String CLASS_NAME = ValueTableModel.class.getName();
+    private static final Class<ValueTableModel> CLAZZ = ValueTableModel.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     ProbabilityFunction function;
     ArrayList<String> valueList = new ArrayList<>();
     ArrayList<String> commentList = new ArrayList<>();
@@ -37,8 +54,9 @@ public class ValueTableModel
     };
 
     /**
+     * Construct the ValueTableModel.
      *
-     * @param function
+     * @param function a probability function
      */
     public ValueTableModel(ProbabilityFunction function)
     {
@@ -52,26 +70,33 @@ public class ValueTableModel
     }
 
     /**
+     * Add a new value to the list.
      *
-     * @param newValue
-     * @param comment
+     * @param newValue the new value
+     * @param comments optional comments
      */
-    public void add(String newValue, String... comment)
+    public void add(String newValue, String... comments)
     {
         if (newValue != null)
         {
             valueList.add(newValue);
-            commentList.add((comment != null && comment.length > 0) ?
-                            comment[0] :
-                            "");
+            if (comments != null && comments.length > 0)
+            {
+                commentList.addAll(Arrays.asList(comments));
+            }
+            else
+            {
+                commentList.add("");
+            }
             listModel.addElement(newValue);
             fireTableDataChanged();
         }
     }
 
     /**
+     * Remove a row from the model.
      *
-     * @param row
+     * @param row row-index
      */
     public void remove(int row)
     {
@@ -85,8 +110,9 @@ public class ValueTableModel
     }
 
     /**
+     * Remove some rows from the model.
      *
-     * @param rows
+     * @param rows row-indices
      */
     public void remove(int[] rows)
     {
@@ -97,12 +123,21 @@ public class ValueTableModel
     }
 
     /**
+     * Remove a value from the list.
      *
-     * @param value
+     * @param value the value to remove
      */
     public void remove(String value)
     {
+        if (value == null)
+        {
+            return;
+        }
         int row = valueList.indexOf(value);
+        if (row == -1)
+        {
+            return;
+        }
         remove(row);
     }
 

@@ -35,10 +35,12 @@ import java.util.logging.Logger;
 public class InterchangeFormat
 {
 
+    private static final Class CLAZZ = InterchangeFormat.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Size of the buffer for reading and resetting streams
     private static final int MARK_READ_LIMIT = 10000;
-    private static final String CLASS_NAME = InterchangeFormat.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     InputStream istream;
     Parsers.XMLBIFv03.XMLBIFv03 xmlBif03;
     Parsers.XMLBIFv02.XMLBIFv02 xmlBif02;

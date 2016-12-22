@@ -41,7 +41,8 @@ import java.util.logging.Logger;
 public class OpenURLDialog extends Dialog
 {
 
-    private static final String CLASS_NAME = OpenURLDialog.class.getName();
+    private static final Class CLAZZ = OpenURLDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     JavaBayes jb;

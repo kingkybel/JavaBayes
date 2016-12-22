@@ -1,6 +1,22 @@
 /*
+ * Copyright (C) 2015 Dieter J Kybelksties
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
  * @author  Dieter J Kybelksties
- * @date Jul 14, 2016
+ * @date May 11, 2016
  *
  */
 package BayesGUI;
@@ -10,6 +26,7 @@ import java.awt.GraphicsEnvironment;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.text.BadLocationException;
@@ -55,11 +72,11 @@ public class OutputPanel extends javax.swing.JPanel
     private Color defaultBackground = Color.WHITE;
     private boolean defaultBold = false;
     private boolean defaultItalic = false;
-
     static DefaultComboBoxModel fontFamilyModel = new DefaultComboBoxModel(
                                 GraphicsEnvironment.
                                 getLocalGraphicsEnvironment().
                                 getAvailableFontFamilyNames());
+    JScrollBar verticalScroll;
 
     /**
      * Creates new form OutputPanel.
@@ -69,6 +86,8 @@ public class OutputPanel extends javax.swing.JPanel
         initComponents();
         reset();
         resetDocument();
+        verticalScroll = textScrollPane.getVerticalScrollBar();
+        verticalScroll.setValue(verticalScroll.getMaximum());
     }
 
     /**
@@ -199,8 +218,6 @@ public class OutputPanel extends javax.swing.JPanel
     {
         if (fontFamilyModel.getIndexOf(defaultFontFamily) == -1)
         {
-            LOGGER.log(Level.INFO,
-                       "FontFamily '" + defaultFontFamily + "' not found.");
             boolean found = false;
             for (int i = 0; i < fontFamilyModel.getSize() && !found; i++)
             {
@@ -211,20 +228,12 @@ public class OutputPanel extends javax.swing.JPanel
                 if (localFF.equals(ff_i))
                 {
                     defaultFontFamily = (String) fontFamilyModel.getElementAt(i);
-                    LOGGER.log(Level.INFO,
-                               "\nFontFamily set to '" +
-                               defaultFontFamily +
-                               "'.");
                     found = true;
                 }
             }
             if (!found)
             {
                 defaultFontFamily = (String) fontFamilyModel.getElementAt(0);
-                LOGGER.log(Level.INFO,
-                           "\nFontFamily set to '" +
-                           defaultFontFamily +
-                           "'.");
             }
 
         }
@@ -362,7 +371,7 @@ public class OutputPanel extends javax.swing.JPanel
     /**
      * Reset the styles of the document using new basic characteristics.
      */
-    public final void reset(/*String fontFamily, Integer fontSize*/)
+    public final void reset()
     {
         try
         {
@@ -436,6 +445,7 @@ public class OutputPanel extends javax.swing.JPanel
         try
         {
             doc.insertString(doc.getEndPosition().getOffset(), text, style);
+            verticalScroll.setValue(verticalScroll.getMaximum());
         }
         catch (BadLocationException ex)
         {

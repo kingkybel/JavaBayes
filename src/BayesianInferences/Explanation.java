@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * that are observed.
  *
  * In EXPLANATION only variables that are marked as explanation variables are
- * used in the maximization; an observed variable is not used, even if it is
+ * used in the maximisation; an observed variable is not used, even if it is
  * marked as explanation variable. Note that in EXPLANATION mode, if there are
  * no variables marked as explanation variables, the final result is the
  * posterior marginal.
@@ -47,7 +47,8 @@ import java.util.logging.Logger;
 public class Explanation
 {
 
-    private static final String CLASS_NAME = Explanation.class.getName();
+    private static final Class CLAZZ = Explanation.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     BayesNet bayesNet;

@@ -44,7 +44,8 @@ import java.util.logging.Logger;
 public class SaveBugs
 {
 
-    private static final String CLASS_NAME = SaveBugs.class.getName();
+    private static final Class CLAZZ = SaveBugs.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     BayesNet bayesNet;

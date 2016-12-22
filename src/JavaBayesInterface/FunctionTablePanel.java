@@ -41,10 +41,12 @@ import java.util.logging.Logger;
 public final class FunctionTablePanel extends Panel
 {
 
+    private static final Class CLAZZ = FunctionTablePanel.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     private static final Color colorParents = Color.red;
     private static final String parentsAnnounceLabel = "Values for parents:";
-    private static final String CLASS_NAME = FunctionTablePanel.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final String allVariableNames[];
     private final String allVariableValues[][];
     private double tableValues[];

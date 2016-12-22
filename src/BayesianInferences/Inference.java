@@ -37,7 +37,8 @@ import java.util.logging.Logger;
 public class Inference
 {
 
-    private static final String CLASS_NAME = Inference.class.getName();
+    private static final Class<Inference> CLAZZ = Inference.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     protected BayesNet bayesNet;
@@ -269,7 +270,7 @@ public class Inference
      */
     public BucketTree getBucketTree()
     {
-        return (bucketTree);
+        return bucketTree;
     }
 
     /**
@@ -279,7 +280,7 @@ public class Inference
      */
     public BayesNet getBayesNet()
     {
-        return (bayesNet);
+        return bayesNet;
     }
 
     /**
@@ -289,7 +290,7 @@ public class Inference
      */
     public ProbabilityFunction getResult()
     {
-        return (result);
+        return result;
     }
 
     /**
@@ -299,6 +300,6 @@ public class Inference
      */
     public boolean areClustersProduced()
     {
-        return (isProducingClusters);
+        return isProducingClusters;
     }
 }

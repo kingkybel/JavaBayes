@@ -34,7 +34,8 @@ import java.util.logging.Logger;
 public class IFBayesNet
 {
 
-    private static final String CLASS_NAME = IFBayesNet.class.getName();
+    private static final Class CLAZZ = IFBayesNet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String name;
@@ -46,7 +47,7 @@ public class IFBayesNet
      * Basic constructor.
      *
      * @param name
-     * @param properties
+     * @param properties list of properties
      */
     public IFBayesNet(String name, ArrayList properties)
     {

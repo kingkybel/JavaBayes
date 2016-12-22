@@ -35,6 +35,9 @@ import java.util.logging.Logger;
 public class ProbabilityVariable extends DiscreteVariable
 {
 
+    private static final Class CLAZZ = ProbabilityVariable.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     /**
      *
      */
@@ -46,8 +49,6 @@ public class ProbabilityVariable extends DiscreteVariable
     public static final int TRANSPARENT = 1;
     static final String observedPropertyName = "observed";
     static final String explanationPropertyName = "explanation";
-    private static final String CLASS_NAME = ProbabilityVariable.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      *
@@ -86,7 +87,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Constructor for ProbabilityVariable.
      *
      * @param bayesNet   the underlying Bayesian network
-     * @param properties
+     * @param properties list of properties
      * @param name
      */
     public ProbabilityVariable(BayesNet bayesNet,
@@ -102,7 +103,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Constructor for ProbabilityVariable.
      *
      * @param bayesNet   the underlying Bayesian network
-     * @param properties
+     * @param properties list of properties
      * @param name
      * @param values
      * @param index
@@ -484,7 +485,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the properties.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setProperties(ArrayList properties)
     {

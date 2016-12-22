@@ -30,28 +30,27 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- * Use Walley generalization of the Choquet lower and upper integrals to obtain
+ * Use Walley generalisation of the Choquet lower and upper integrals to obtain
  * the lower and upper expectations of 2-monotone capacities.
  */
 public class GeneralizedChoquetIntegral
 {
 
-    private static final String CLASS_NAME =
-                                GeneralizedChoquetIntegral.class.getName();
+    private static final Class CLAZZ = GeneralizedChoquetIntegral.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double results[];
 
     /**
      * Calculate the lower and upper Choquet integrals using Walley's
-     * generalization, for a total variation neighborhood.
+     * generalisation, for a total variation neighbourhood.
      *
      * @param twoMonotoneCapacity
      * @param discrFunc
      */
     public GeneralizedChoquetIntegral(TwoMonotoneCapacity twoMonotoneCapacity,
-                                      DiscreteFunction discrFunc
-    )
+                                      DiscreteFunction discrFunc)
     {
         int i;
         double positiveSide, negativeSide;

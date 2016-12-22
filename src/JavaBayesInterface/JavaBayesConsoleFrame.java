@@ -46,6 +46,10 @@ import java.util.logging.Logger;
 public final class JavaBayesConsoleFrame extends Frame
 {
 
+    private static final Class CLAZZ = JavaBayesConsoleFrame.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     static final String appletInvalidOperation =
                         "This operation is not allowed in an applet!";
     // Labels
@@ -79,9 +83,6 @@ public final class JavaBayesConsoleFrame extends Frame
     final static String sensitivityAnalysisTitle = "Sensitivity analysis";
     final static String helpTitle = "Help";
     final static String aboutTitle = "About";
-    private static final String CLASS_NAME =
-                                JavaBayesConsoleFrame.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private JavaBayes jb;
     // Declare controls
     FileDialog OpenFileDialog;

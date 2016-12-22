@@ -38,7 +38,8 @@ import java.util.logging.Logger;
 public class ClearDialog extends Dialog
 {
 
-    private static final String CLASS_NAME = ClearDialog.class.getName();
+    private static final Class CLAZZ = ClearDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     JavaBayes jb;

@@ -47,7 +47,8 @@ import java.util.logging.Logger;
 public final class InferenceGraphNode
 {
 
-    private static final String CLASS_NAME = InferenceGraphNode.class.getName();
+    private static final Class CLAZZ = InferenceGraphNode.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     InferenceGraph inferenceGraph;
@@ -602,7 +603,7 @@ public final class InferenceGraphNode
     /**
      * Set the variable properties.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setVariableProperties(ArrayList properties)
     {
@@ -622,7 +623,7 @@ public final class InferenceGraphNode
     /**
      * Set the function properties.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setFunctionProperties(ArrayList properties)
     {

@@ -39,14 +39,16 @@ import java.util.logging.Logger;
 class EditCredalSet extends EditFunctionPanel
 {
 
+    private static final Class CLAZZ = EditCredalSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Constants used to construct the panel.
     private static final String credalSetSpecification =
                                 "Credal set specification";
     private static final String credalSet = "Index of extreme distribution:";
     private static final String numberExtremePointsLabel =
                                 "Number of extreme points:";
-    private static final String CLASS_NAME = EditCredalSet.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // The graph and node that contain the probability function.
     private final InferenceGraph ig;
     private final InferenceGraphNode node;

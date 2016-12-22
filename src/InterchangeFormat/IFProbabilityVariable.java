@@ -35,8 +35,8 @@ import java.util.logging.Logger;
 public class IFProbabilityVariable
 {
 
-    private static final String CLASS_NAME =
-                                IFProbabilityVariable.class.getName();
+    private static final Class CLAZZ = IFProbabilityVariable.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String name;
@@ -54,7 +54,7 @@ public class IFProbabilityVariable
 
     /**
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setProperties(ArrayList properties)
     {

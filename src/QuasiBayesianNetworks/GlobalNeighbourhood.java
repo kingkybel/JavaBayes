@@ -5,6 +5,8 @@
  */
 package QuasiBayesianNetworks;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Dieter J Kybelksties
@@ -18,6 +20,10 @@ public enum GlobalNeighbourhood
     EPSILON_CONTAMINATED,
     CONSTANT_DENSITY_BOUNDED,
     TOTAL_VARIATION;
+
+    private static final Class CLAZZ = GlobalNeighbourhood.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     @Override
     public String toString()

@@ -37,8 +37,8 @@ public class EpsilonContaminatedSet
         extends FinitelyGeneratedSet
 {
 
-    private static final String CLASS_NAME =
-                                EpsilonContaminatedSet.class.getName();
+    private static final Class CLAZZ = EpsilonContaminatedSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double epsilon;
@@ -62,7 +62,7 @@ public class EpsilonContaminatedSet
 
     /**
      * Perform calculation of marginal posterior distributions for an
-     * epsilon-contaminated global neighborhood The method assumes that the
+     * epsilon-contaminated global neighbourhood The method assumes that the
      * values in the EpsilonContaminated are actually unnormalized --- if not,
      * incorrect results are produced.
      *

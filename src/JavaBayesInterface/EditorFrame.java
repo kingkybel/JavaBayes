@@ -50,6 +50,10 @@ import java.util.logging.Logger;
 public class EditorFrame extends Frame
 {
 
+    private static final Class CLAZZ = EditorFrame.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Constants
     /**
      *
@@ -116,8 +120,6 @@ public class EditorFrame extends Frame
      *
      */
     public static final String editNetworkLabel = "Edit Network";
-    private static final String CLASS_NAME = EditorFrame.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     JavaBayes jb;
     Panel cmdPanel;
     Panel editPanel;

@@ -30,15 +30,22 @@ import java.util.logging.Logger;
 class Bracketing
 {
 
+    private static final Class CLAZZ = Bracketing.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     private final static int MAXIMUM_ITERATIONS = 40;
 
-    private final static int ERROR = -1;
-    private final static int TOO_MANY_BISECTIONS = 0;
-    private final static int EXACT_ROOT_FOUND = 1;
-    private final static int APPROXIMATE_ROOT_FOUND = 2;
-    private static final String CLASS_NAME = Bracketing.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    int status;
+    private enum Status
+    {
+
+        ERROR,
+        TOO_MANY_BISECTIONS,
+        EXACT_ROOT_FOUND,
+        APPROXIMATE_ROOT_FOUND
+    }
+
+    Status status;
 
     /**
      * Perform bisection.
@@ -48,14 +55,18 @@ class Bracketing
                    double x2,
                    double xAccuracy)
     {
-        return (perform(function, 0, x1, x2, xAccuracy));
+        return (perform(function,
+                        MappingDouble.Type.LOWER_EXPECTATION_BRACKET,
+                        x1,
+                        x2,
+                        xAccuracy));
     }
 
     /**
      * Perform bisection.
      */
     double perform(MappingDouble function,
-                   int functionType,
+                   MappingDouble.Type functionType,
                    double x1,
                    double x2,
                    double xAccuracy)
@@ -71,20 +82,20 @@ class Bracketing
         // Check whether endpoints are solution
         if (f1 == 0.0)
         {
-            status = EXACT_ROOT_FOUND;
+            status = Status.EXACT_ROOT_FOUND;
             return (x1);
         }
 
         if (f2 == 0.0)
         {
-            status = EXACT_ROOT_FOUND;
+            status = Status.EXACT_ROOT_FOUND;
             return (x2);
         }
 
         // Error: both endpoints have same sign
         if ((f1 * f2) > 0.0)
         {
-            status = ERROR;
+            status = Status.ERROR;
             return (0.0);
         }
 
@@ -113,17 +124,17 @@ class Bracketing
             // Check whether stop conditions are met
             if (f2 == 0.0)
             {
-                status = EXACT_ROOT_FOUND;
+                status = Status.EXACT_ROOT_FOUND;
                 return (currentSolutionPoint);
             }
             if (Math.abs(dx) < xAccuracy)
             {
-                status = APPROXIMATE_ROOT_FOUND;
+                status = Status.APPROXIMATE_ROOT_FOUND;
                 return (currentSolutionPoint);
             }
         }
 
-        status = TOO_MANY_BISECTIONS;
+        status = Status.TOO_MANY_BISECTIONS;
         return (0.0);
     }
 }

@@ -34,13 +34,15 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
+ * Quasi-Bayes-probability function.
+ *
  * @author Fabio G. Cozman
  */
 public class QBProbabilityFunction extends ProbabilityFunction
 {
 
-    private static final String CLASS_NAME =
-                                QBProbabilityFunction.class.getName();
+    private static final Class CLAZZ = QBProbabilityFunction.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     double lowerEnvelope[];
@@ -57,9 +59,9 @@ public class QBProbabilityFunction extends ProbabilityFunction
      * Constructor for QBProbabilityFunction.
      *
      * @param bayesNet       the underlying Bayesian network
-     * @param properties
-     * @param numberOfVars
-     * @param numberOfValues
+     * @param numberOfVars   number of variables
+     * @param numberOfValues number of values
+     * @param properties     list of properties
      */
     public QBProbabilityFunction(BayesNet bayesNet,
                                  int numberOfVars,
@@ -75,7 +77,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
      * Constructor for ProbabilityFunction.
      *
      * @param bayesNet      the underlying Bayesian network
-     * @param properties
+     * @param properties    list of properties
      * @param variables
      * @param upperEnvelope
      * @param values

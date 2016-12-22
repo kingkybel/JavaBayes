@@ -52,7 +52,8 @@ import java.util.logging.Logger;
 public class QBExpectation extends Expectation
 {
 
-    private static final String CLASS_NAME = QBExpectation.class.getName();
+    private static final Class CLAZZ = QBExpectation.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
@@ -64,6 +65,7 @@ public class QBExpectation extends Expectation
     public QBExpectation(BayesNet bayesNet, boolean isProducingClusters)
     {
         super(bayesNet, isProducingClusters);
+        initializeInference();
     }
 
     /**

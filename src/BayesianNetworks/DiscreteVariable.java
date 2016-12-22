@@ -34,7 +34,8 @@ import java.util.logging.Logger;
 public class DiscreteVariable
 {
 
-    private static final String CLASS_NAME = DiscreteVariable.class.getName();
+    private static final Class CLAZZ = DiscreteVariable.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

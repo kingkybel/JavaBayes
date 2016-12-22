@@ -5,6 +5,8 @@
  */
 package BayesianInferences;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Dieter J Kybelksties
@@ -18,6 +20,10 @@ public enum ExplanationType
     MARGINAL_POSTERIOR,
     EXPECTATION,
     SENSITIVITY_ANALYSIS;
+
+    private static final Class CLAZZ = ExplanationType.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     public boolean isIgnore()
     {

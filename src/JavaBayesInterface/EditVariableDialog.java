@@ -48,6 +48,10 @@ import java.util.logging.Logger;
 class EditVariableDialog extends Dialog
 {
 
+    private static final Class CLAZZ = EditVariableDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Constants used to construct the dialog.
     private final static int TOP_INSET = 5;
     private final static int LEFT_INSET = 10;
@@ -73,8 +77,6 @@ class EditVariableDialog extends Dialog
     private final static String editFunctionLabel = "Edit function";
     private final static String okLabel = "Apply";
     private final static String dismissLabel = "Dismiss";
-    private static final String CLASS_NAME = EditVariableDialog.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // Network panel, used to repaint screen and access dialogs.
     NetworkPanel npan;
     // The InferenceGraph and InferenceGraphNode objects

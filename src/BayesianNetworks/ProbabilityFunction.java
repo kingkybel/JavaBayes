@@ -35,7 +35,8 @@ import java.util.logging.Logger;
 public class ProbabilityFunction extends DiscreteFunction
 {
 
-    private static final String CLASS_NAME = ProbabilityFunction.class.getName();
+    private static final Class CLAZZ = ProbabilityFunction.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
@@ -59,9 +60,9 @@ public class ProbabilityFunction extends DiscreteFunction
      * Constructor for ProbabilityFunction.
      *
      * @param bayesNet       the underlying Bayesian network
-     * @param properties
-     * @param numberOfVars
-     * @param numberOfValues
+     * @param properties     list of properties
+     * @param numberOfVars   number of variables
+     * @param numberOfValues number of values
      */
     public ProbabilityFunction(BayesNet bayesNet,
                                int numberOfVars,
@@ -77,7 +78,7 @@ public class ProbabilityFunction extends DiscreteFunction
      * Constructor for ProbabilityFunction.
      *
      * @param bayesNet   the underlying Bayesian network
-     * @param properties
+     * @param properties list of properties
      * @param variables
      * @param values
      */
@@ -449,7 +450,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Set the properties.
      *
-     * @param properties
+     * @param properties list of properties
      */
     public void setProperties(ArrayList properties)
     {

@@ -51,6 +51,10 @@ import java.util.logging.Logger;
 public class NetworkPanel extends Canvas
 {
 
+    private static final Class CLAZZ = NetworkPanel.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Constants for drawing entities.
     private static final int NODE_SIZE = 26;
     private static final int NODE_RADIUS = 13;
@@ -78,8 +82,6 @@ public class NetworkPanel extends Canvas
     private static final int EDIT_VARIABLE_MODE = 6;
     private static final int EDIT_FUNCTION_MODE = 7;
     private static final int EDIT_NETWORK_MODE = 8;
-    private static final String CLASS_NAME = NetworkPanel.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private EditorFrame frame; // Used for changing mouse cursor
     // Used for changing mouse cursor
     private ScrollingPanel scrollPanel; // Used to control scrolling

@@ -29,10 +29,15 @@ import BayesianNetworks.BayesNet;
 import BayesianNetworks.DiscreteFunction;
 import BayesianNetworks.DiscreteVariable;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 abstract class FinitelyGeneratedSet
         extends QBProbabilityFunction
 {
+
+    private static final Class CLAZZ = FinitelyGeneratedSet.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      * Default constructor for a FinitelyGeneratedSet.

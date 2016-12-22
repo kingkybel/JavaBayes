@@ -28,6 +28,7 @@ package CredalSets;
 import BayesianNetworks.DiscreteFunction;
 import BayesianNetworks.ProbabilityFunction;
 import BayesianNetworks.ProbabilityVariable;
+import java.util.logging.Logger;
 
 /**
  * This abstract class provides the infra-structure for calculation of posterior
@@ -40,8 +41,9 @@ public abstract class TwoMonotoneCapacity
         implements MappingDouble
 {
 
-    private final static int LOWER_EXPECTATION_BRACKET = 0;
-    private final static int UPPER_EXPECTATION_BRACKET = 1;
+    private static final Class CLAZZ = TwoMonotoneCapacity.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private final static double ACCURACY = 10E-8;
     // Auxiliary variable that holds a discrete function for bracketing
@@ -85,7 +87,7 @@ public abstract class TwoMonotoneCapacity
 
     /**
      * Perform calculation of marginal posterior distributions for a total
-     * variation global neighborhood
+     * variation global neighbourhood
      *
      * @return
      */
@@ -167,7 +169,7 @@ public abstract class TwoMonotoneCapacity
 
     /**
      * Perform calculation of posterior expected value. Assumes that the
-     * probability values are not normalized; probability values are p(x, e)
+     * probability values are not normalised; probability values are p(x, e)
      * where e is the fixed evidence .
      *
      * @param discrFunc
@@ -212,14 +214,14 @@ public abstract class TwoMonotoneCapacity
 
         // Bracket the lower expectation
         double lowerExpectation = bracket.perform(this,
-                                                  LOWER_EXPECTATION_BRACKET,
+                                                  MappingDouble.Type.LOWER_EXPECTATION_BRACKET,
                                                   minDfValue,
                                                   maxDfValue,
                                                   ACCURACY);
 
         // Bracket the upper expectation
         double upperExpectation = bracket.perform(this,
-                                                  UPPER_EXPECTATION_BRACKET,
+                                                  MappingDouble.Type.UPPER_EXPECTATION_BRACKET,
                                                   minDfValue,
                                                   maxDfValue,
                                                   ACCURACY);
@@ -236,7 +238,7 @@ public abstract class TwoMonotoneCapacity
      * class, the method map() must be present.
      */
     @Override
-    public double map(int mapType, double mapInput)
+    public double map(MappingDouble.Type mapType, double mapInput)
     {
         // Get temporaryDiscreteFunction
         DiscreteFunction tdf = temporaryDiscreteFunction;
@@ -254,7 +256,7 @@ public abstract class TwoMonotoneCapacity
         GeneralizedChoquetIntegral gci = new GeneralizedChoquetIntegral(this,
                                                                         mtdf);
 
-        if (mapType == LOWER_EXPECTATION_BRACKET)
+        if (mapType == MappingDouble.Type.LOWER_EXPECTATION_BRACKET)
         {
             return (gci.results[0]); // LOWER_EXPECTATION_BRACKET
         }

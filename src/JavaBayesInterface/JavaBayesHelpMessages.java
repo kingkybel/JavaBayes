@@ -33,6 +33,10 @@ import java.util.logging.Logger;
 public class JavaBayesHelpMessages
 {
 
+    private static final Class CLAZZ = JavaBayesHelpMessages.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Static JavaBayes object; there must be a single JavaBayesHelpMessages
     static JavaBayes jb;
 
@@ -125,9 +129,6 @@ public class JavaBayesHelpMessages
 
     public static final String circular =
                                "Circular parent relations not allowed.\n\n";
-    private static final String CLASS_NAME =
-                                JavaBayesHelpMessages.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
      * Constructor

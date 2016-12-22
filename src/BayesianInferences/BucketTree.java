@@ -40,7 +40,8 @@ import java.util.logging.Logger;
 public class BucketTree
 {
 
-    private static final String CLASS_NAME = BucketTree.class.getName();
+    private static final Class CLAZZ = BucketTree.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Array of Bucket objects.

@@ -41,6 +41,10 @@ import java.util.logging.Logger;
 class EditFunctionDialog extends Dialog
 {
 
+    private static final Class CLAZZ = EditFunctionDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     // Constants used to construct the dialog.
     private final static int TOP_INSET = 5;
     private final static int LEFT_INSET = 10;
@@ -51,8 +55,6 @@ class EditFunctionDialog extends Dialog
     private final static String okLabel = "Apply";
     private final static String dialogTitle = "Edit Function";
     private final static String dismissLabel = "Dismiss";
-    private static final String CLASS_NAME = EditFunctionDialog.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     // Variables used to construct the dialog.
     Frame parent;
     EditFunctionPanel efp;

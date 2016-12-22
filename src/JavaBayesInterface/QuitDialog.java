@@ -38,7 +38,8 @@ import java.util.logging.Logger;
 public class QuitDialog extends Dialog
 {
 
-    private static final String CLASS_NAME = QuitDialog.class.getName();
+    private static final Class CLAZZ = QuitDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Variables

@@ -62,7 +62,8 @@ import java.util.logging.Logger;
 public class QBInference extends Inference
 {
 
-    private static final String CLASS_NAME = QBInference.class.getName();
+    private static final Class CLAZZ = QBInference.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     BayesNet originalBn;

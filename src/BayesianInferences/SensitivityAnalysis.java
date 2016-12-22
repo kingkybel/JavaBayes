@@ -35,7 +35,8 @@ import java.util.logging.Logger;
 public class SensitivityAnalysis
 {
 
-    private static final String CLASS_NAME = SensitivityAnalysis.class.getName();
+    private static final Class CLAZZ = SensitivityAnalysis.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

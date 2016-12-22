@@ -43,8 +43,8 @@ import java.util.logging.Logger;
 public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
 {
 
-    private static final String CLASS_NAME =
-                                QBConvertInterchangeFormat.class.getName();
+    private static final Class CLAZZ = QBConvertInterchangeFormat.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**

@@ -36,14 +36,15 @@ import java.util.logging.Logger;
 class Bucket
 {
 
+    private static final Class CLAZZ = Bucket.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     public enum Type
     {
 
         EMPTY, REDUCED, DISTRIBUTED;
     }
-    private static final String CLASS_NAME = Bucket.class.getName();
-    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-
     // BucketTree that holds the Bucket.
     BucketTree bucketTree;
 
@@ -190,7 +191,7 @@ class Bucket
     }
 
     /**
-     * Reduce the Bucket, either by summation or maximization. The final result
+     * Reduce the Bucket, either by summation or maximisation. The final result
      * is in the Bucket's separator. Notice that if all functions in a bucket
      * have a single probVar, then the separator is null.
      */
@@ -431,7 +432,7 @@ class Bucket
             variableMarkers[probVar.getIndex()] = false;
         }
 
-        // If the only probVar is the bucket probVar, then ignore
+        // If the only variable is the bucket variable, then ignore
         if (n == 0)
         {
             return (null);
@@ -464,15 +465,16 @@ class Bucket
      * Construct an array of variables that contains the variables in a new
      * function; if the bucket variable is present, it is the first variable.
      *
-     * @param v
+     * @param numberOfValues
      * @param joinedIndexes
      * @param isBucketVariableIncluded
      */
-    private DiscreteFunction buildNewVariables(int v,
+    private DiscreteFunction buildNewVariables(int numberOfValues,
                                                int joinedIndexes[],
                                                boolean isBucketVariableIncluded)
     {
-        DiscreteFunction newDf = new DiscreteFunction(joinedIndexes.length, v);
+        DiscreteFunction newDf = new DiscreteFunction(joinedIndexes.length,
+                                                      numberOfValues);
         // Bucket probVar comes first if present
         if (isBucketVariableIncluded == true)
         {
@@ -585,7 +587,7 @@ class Bucket
     }
 
     /**
-     * Obtain the values for the reducedFunction through maximization.
+     * Obtain the values for the reducedFunction through maximisation.
      * Attention: the array orderedDfs is supposed to be ready!
      *
      * @param newDf new function
@@ -657,7 +659,7 @@ class Bucket
     }
 
     /**
-     * Allocate and initialize the backwardPointers in the Bucket.
+     * Allocate and initialise the backwardPointers in the Bucket.
      *
      * @param newDf new function
      */
