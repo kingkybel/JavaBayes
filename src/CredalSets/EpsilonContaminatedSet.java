@@ -44,20 +44,16 @@ public class EpsilonContaminatedSet
     double epsilon;
 
     /**
-     * Constructor for an EpsilonContaminatedSet ProbabilityFunction object and
+     * Construct an EpsilonContaminatedSet with ProbabilityFunction object and
      * given epsilon.
      *
-     * @param probFunc
-     * @param eps
+     * @param probFunc probability function
+     * @param epsilon
      */
-    public EpsilonContaminatedSet(ProbabilityFunction probFunc, double eps)
+    public EpsilonContaminatedSet(ProbabilityFunction probFunc, double epsilon)
     {
         super(probFunc, probFunc.getValues());
-        epsilon = eps;
-        if ((epsilon < 0.0) || (epsilon > 1.0))
-        {
-            epsilon = 0.0;
-        }
+        this.epsilon = ((epsilon < 0.0) || (epsilon > 1.0)) ? 0.0 : epsilon;
     }
 
     /**
@@ -107,8 +103,12 @@ public class EpsilonContaminatedSet
             }
         }
 
-        return (new QBProbabilityFunction(bayesNet, variables, values,
-                                          lowerValues, upperValues, properties));
+        return (new QBProbabilityFunction(bayesNet,
+                                          variables,
+                                          values,
+                                          lowerValues,
+                                          upperValues,
+                                          properties));
     }
 
     /**
@@ -128,8 +128,8 @@ public class EpsilonContaminatedSet
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            discrFunc.getValue(((ProbabilityVariable) variables[0]).
-                    getObservedIndex());
+            discrFunc.getValue(
+                    ((ProbabilityVariable) variables[0]).getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else
@@ -164,7 +164,7 @@ public class EpsilonContaminatedSet
 
     /**
      * Perform calculation of posterior expected value. Assumes that the
-     * probability values are not normalized; probability values are p(x, e)
+     * probability values are not normalised; probability values are p(x, e)
      * where e is the fixed evidence.
      *
      * @param discrFunc
@@ -181,8 +181,8 @@ public class EpsilonContaminatedSet
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
             results[0] =
-            discrFunc.getValue(((ProbabilityVariable) variables[0]).
-                    getObservedIndex());
+            discrFunc.getValue(
+                    ((ProbabilityVariable) variables[0]).getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else

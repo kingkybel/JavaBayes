@@ -48,6 +48,11 @@ abstract class FinitelyGeneratedSet
 
     /**
      * Constructor for FinitelyGeneratedSet.
+     *
+     * @param bayesNet
+     * @param numberOfVars
+     * @param numberOfValues
+     * @param properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          int numberOfVars,
@@ -59,6 +64,13 @@ abstract class FinitelyGeneratedSet
 
     /**
      * Constructor for FinitelyGeneratedSet.
+     *
+     * @param bayesNet
+     * @param variables
+     * @param values
+     * @param lowerEnvelope
+     * @param upperEnvelope
+     * @param properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          DiscreteVariable variables[],
@@ -77,6 +89,11 @@ abstract class FinitelyGeneratedSet
 
     /**
      * Constructor for FinitelyGeneratedSet.
+     *
+     * @param bayesNet
+     * @param variables
+     * @param values
+     * @param properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          DiscreteVariable variables[],
@@ -93,6 +110,11 @@ abstract class FinitelyGeneratedSet
 
     /**
      * Constructor for FinitelyGeneratedSet.
+     *
+     * @param discrFunc
+     * @param values
+     * @param lowerEnvelope
+     * @param upperEnvelope
      */
     FinitelyGeneratedSet(DiscreteFunction discrFunc,
                          double values[],
@@ -104,6 +126,9 @@ abstract class FinitelyGeneratedSet
 
     /**
      * Constructor for FinitelyGeneratedSet.
+     *
+     * @param discrFunc
+     * @param values
      */
     FinitelyGeneratedSet(DiscreteFunction discrFunc, double values[])
     {

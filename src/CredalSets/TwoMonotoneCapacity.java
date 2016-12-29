@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 /**
  * This abstract class provides the infra-structure for calculation of posterior
- * marginals, generalized Choquet integrals and posterior expectations for
+ * marginals, generalised Choquet integrals and posterior expectations for
  * two-monotone capacities. Particular classes of capacities must provide
  * implementations for the abstract methods in this class.
  */
@@ -53,7 +53,7 @@ public abstract class TwoMonotoneCapacity
      * Constructor for an TwoMonotoneCapacity ProbabilityFunction object and
      * given epsilon.
      *
-     * @param probFunc
+     * @param probFunc probability function
      */
     public TwoMonotoneCapacity(ProbabilityFunction probFunc)
     {
@@ -64,15 +64,15 @@ public abstract class TwoMonotoneCapacity
      * Obtain the lower probability of an event given the base probability for
      * the event.
      *
-     * @param p
-     * @return
+     * @param p probability value
+     * @return the lower probability
      */
     public abstract double getLowerProbabilityFromBase(double p);
 
     /**
      * Obtain the upper probability of an event given the base
      *
-     * @param p
+     * @param p probability value
      * @return
      */
     public abstract double getUpperProbabilityFromBase(double p);
@@ -233,10 +233,6 @@ public abstract class TwoMonotoneCapacity
         return (results);
     }
 
-    /**
-     * To conform to the MappingDouble interface demanded by the Bracketing
-     * class, the method map() must be present.
-     */
     @Override
     public double map(MappingDouble.Type mapType, double mapInput)
     {

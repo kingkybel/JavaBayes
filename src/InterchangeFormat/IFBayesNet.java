@@ -39,7 +39,7 @@ public class IFBayesNet
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String name;
-    ArrayList properties;
+    ArrayList<String> properties;
     ArrayList<IFProbabilityVariable> probVars;
     ArrayList<IFProbabilityFunction> probFuncs;
 
@@ -49,12 +49,12 @@ public class IFBayesNet
      * @param name
      * @param properties list of properties
      */
-    public IFBayesNet(String name, ArrayList properties)
+    public IFBayesNet(String name, ArrayList<String> properties)
     {
         this.name = name;
         this.properties = properties;
-        probVars = new ArrayList<>();
-        probFuncs = new ArrayList<>();
+        this.probVars = new ArrayList<>();
+        this.probFuncs = new ArrayList<>();
     }
 
     /**
@@ -63,34 +63,35 @@ public class IFBayesNet
      */
     public String getName()
     {
-        return (name);
+        return name;
+    }
+
+    /**
+     * Retrieve the properties as String list.
+     *
+     * @return
+     */
+    public ArrayList<String> getProperties()
+    {
+        return properties;
     }
 
     /**
      *
      * @return
      */
-    public ArrayList getProperties()
+    public ArrayList<IFProbabilityVariable> getProbabilityVariables()
     {
-        return (properties);
+        return probVars;
     }
 
     /**
      *
      * @return
      */
-    public ArrayList getProbabilityVariables()
+    public ArrayList<IFProbabilityFunction> getProbabilityFunctions()
     {
-        return (probVars);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArrayList getProbabilityFunctions()
-    {
-        return (probFuncs);
+        return probFuncs;
     }
 
     /**
@@ -107,7 +108,7 @@ public class IFBayesNet
      * Method that adds a IFProbabilityFunction object to the vector of
      * functions.
      *
-     * @param probFunc
+     * @param probFunc probability function
      */
     public void add(IFProbabilityFunction probFunc)
     {

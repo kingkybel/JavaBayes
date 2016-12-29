@@ -48,7 +48,7 @@ public class ConstantDensityBoundedSet
      * Constructor for a ConstantDensityBoundedSet given a ProbabilityFunction
      * object and given constant.
      *
-     * @param probFunc
+     * @param probFunc probability function
      * @param kk
      */
     public ConstantDensityBoundedSet(ProbabilityFunction probFunc, double kk)

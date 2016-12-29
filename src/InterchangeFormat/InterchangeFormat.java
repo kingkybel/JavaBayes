@@ -48,15 +48,16 @@ public class InterchangeFormat
     Parsers.BIFv01.BIFv01 bif01;
 
     /**
-     *
+     * Default constructor.
      */
     public InterchangeFormat()
     {
     }
 
     /**
+     * Copy constructor.
      *
-     * @param rhs
+     * @param rhs right hand side object
      */
     public InterchangeFormat(InterchangeFormat rhs)
     {
@@ -67,8 +68,9 @@ public class InterchangeFormat
     }
 
     /**
+     * Construct by reading from an input stream.
      *
-     * @param is
+     * @param is the input stream to read from
      */
     public InterchangeFormat(InputStream is)
     {
@@ -76,8 +78,9 @@ public class InterchangeFormat
     }
 
     /**
+     * Set a new input stream.
      *
-     * @param is
+     * @param is the new input stream
      */
     public final void setStream(InputStream is)
     {
@@ -85,8 +88,10 @@ public class InterchangeFormat
     }
 
     /**
+     * Starting point of a parse. Call this to parse the input stream into a
+     * Bayes net in interchange format.
      *
-     * @throws IFException
+     * @throws Exception
      */
     public void CompilationUnit() throws Exception
     {
@@ -183,8 +188,9 @@ public class InterchangeFormat
     }
 
     /**
+     * Retrieve the Bayes net in interchange format.
      *
-     * @return
+     * @return the Bayes net
      */
     public IFBayesNet getBayesNetFromInterchangeFmt()
     {
@@ -204,6 +210,6 @@ public class InterchangeFormat
         {
             return bif01.getBayesNetFromInterchangeFmt();
         }
-        return (null);
+        return null;
     }
 }

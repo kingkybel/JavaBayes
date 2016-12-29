@@ -64,9 +64,16 @@ class Bracketing
 
     /**
      * Perform bisection.
+     *
+     * @param function
+     * @param mappingType
+     * @param x1
+     * @param x2
+     * @param xAccuracy
+     * @return
      */
     double perform(MappingDouble function,
-                   MappingDouble.Type functionType,
+                   MappingDouble.Type mappingType,
                    double x1,
                    double x2,
                    double xAccuracy)
@@ -76,8 +83,8 @@ class Bracketing
         double dx, xMiddle, currentSolutionPoint;
 
         // Initialize variables with the function values at endpoints
-        f1 = function.map(functionType, x1);
-        f2 = function.map(functionType, x2);
+        f1 = function.map(mappingType, x1);
+        f2 = function.map(mappingType, x2);
 
         // Check whether endpoints are solution
         if (f1 == 0.0)
@@ -116,7 +123,7 @@ class Bracketing
         {
             dx *= 0.5;
             xMiddle = currentSolutionPoint + dx;
-            f2 = function.map(functionType, xMiddle);
+            f2 = function.map(mappingType, xMiddle);
             if (f2 <= 0.0)
             {
                 currentSolutionPoint = xMiddle;

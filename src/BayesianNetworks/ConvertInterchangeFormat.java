@@ -255,11 +255,14 @@ public class ConvertInterchangeFormat
     }
 
     /**
-     * Create a ProbabilityFunction out of the definition found by the parser
-     * and the information contained in the BayesNet.
+     * Method that does all the work involved in creating a ProbabilityFunction
+     * object out of the definition found by the parser and the information
+     * contained in the BayesNet object; the ProbabilityFunction object may in
+     * fact be a Quasi-Bayesian model.
      *
      * @param bayesNet the underlying Bayesian network
-     * @param upf
+     * @param upf      interchange format probability function
+     *
      * @return
      */
     protected ProbabilityFunction getProbabilityFunction(BayesNet bayesNet,

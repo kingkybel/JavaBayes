@@ -132,6 +132,9 @@ public class GeneralizedChoquetIntegral
     /**
      * Collect the positive values in discrFunc and sort them in increasing
      * order (first value is assumed zero).
+     *
+     * @param discrFunc
+     * @return
      */
     private ArrayList sortPositive(DiscreteFunction discrFunc)
     {
@@ -167,6 +170,9 @@ public class GeneralizedChoquetIntegral
     /**
      * Collect the negative values in discrFunc and sort them in decreasing
      * order (first value is assumed zero).
+     *
+     * @param discrFunc
+     * @return
      */
     private ArrayList sortNegative(DiscreteFunction discrFunc)
     {
@@ -202,6 +208,12 @@ public class GeneralizedChoquetIntegral
     /**
      * Obtain the lower and upper probability for the event { df(x) >
      * sortedValue[i] }.
+     *
+     * @param tmc
+     * @param discrFunc
+     * @param sortedValues
+     * @param lps          lower probabilities
+     * @param ups          upper probabilities
      */
     private void boundPositive(TwoMonotoneCapacity tmc,
                                DiscreteFunction discrFunc,
@@ -237,7 +249,13 @@ public class GeneralizedChoquetIntegral
 
     /**
      * Obtain the lower and upper probability for the event { discrFunc(x) &lt;
-     * sortedValue[i] }
+     * sortedValue[i] }.
+     *
+     * @param twoMonotoneCapacity
+     * @param discrFunc
+     * @param sortedValues
+     * @param lps                 lower probabilities
+     * @param ups                 upper probabilities
      */
     private void boundNegative(TwoMonotoneCapacity twoMonotoneCapacity,
                                DiscreteFunction discrFunc,

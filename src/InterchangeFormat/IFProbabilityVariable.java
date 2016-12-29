@@ -40,12 +40,13 @@ public class IFProbabilityVariable
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     String name;
-    ArrayList properties;
+    ArrayList<String> properties;
     String values[];
 
     /**
+     * Set the network name.
      *
-     * @param name
+     * @param name the new name
      */
     public void setName(String name)
     {
@@ -53,17 +54,19 @@ public class IFProbabilityVariable
     }
 
     /**
+     * Set the properties.
      *
-     * @param properties list of properties
+     * @param properties new String list of properties
      */
-    public void setProperties(ArrayList properties)
+    public void setProperties(ArrayList<String> properties)
     {
         this.properties = properties;
     }
 
     /**
+     * Set the values.
      *
-     * values vs
+     * @param values the ne values
      */
     public void setValues(String values[])
     {
@@ -71,29 +74,32 @@ public class IFProbabilityVariable
     }
 
     /**
+     * Retrieve the network name.
      *
-     * @return
+     * @return the name
      */
     public String getName()
     {
-        return (name);
+        return name;
     }
 
     /**
+     * Retrieve the properties of the network.
      *
-     * @return
+     * @return the properties
      */
     public ArrayList getProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
+     * Retrieve the values.
      *
-     * @return
+     * @return the values as String-array
      */
     public String[] getValues()
     {
-        return (values);
+        return values;
     }
 }

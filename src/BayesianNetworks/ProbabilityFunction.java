@@ -42,7 +42,7 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      *
      */
-    protected ArrayList properties;
+    protected ArrayList<String> properties;
 
     /**
      *
@@ -67,7 +67,7 @@ public class ProbabilityFunction extends DiscreteFunction
     public ProbabilityFunction(BayesNet bayesNet,
                                int numberOfVars,
                                int numberOfValues,
-                               ArrayList properties)
+                               ArrayList<String> properties)
     {
         super(numberOfVars, numberOfValues);
         this.properties = properties;
@@ -85,7 +85,7 @@ public class ProbabilityFunction extends DiscreteFunction
     public ProbabilityFunction(BayesNet bayesNet,
                                DiscreteVariable variables[],
                                double values[],
-                               ArrayList properties)
+                               ArrayList<String> properties)
     {
         super(variables, values);
         this.properties = properties;
@@ -284,7 +284,6 @@ public class ProbabilityFunction extends DiscreteFunction
     public void saveXml_0_3(PrintStream out)
     {
         int i, j, sizeOfFirst = 0, sizeOfOthers = 1;
-        String property;
 
         out.println("<DEFINITION>");
 
@@ -327,9 +326,8 @@ public class ProbabilityFunction extends DiscreteFunction
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -344,7 +342,6 @@ public class ProbabilityFunction extends DiscreteFunction
     public void saveXml(PrintStream out)
     {
         int j;
-        String property;
 
         out.println("<PROBABILITY>");
 
@@ -366,9 +363,8 @@ public class ProbabilityFunction extends DiscreteFunction
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -384,7 +380,6 @@ public class ProbabilityFunction extends DiscreteFunction
     public void print(PrintStream out)
     {
         int j;
-        String property;
 
         if (variables != null)
         {
@@ -428,9 +423,8 @@ public class ProbabilityFunction extends DiscreteFunction
         out.println();
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -442,9 +436,9 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @return
      */
-    public ArrayList getProperties()
+    public ArrayList<String> getProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
@@ -452,7 +446,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param properties list of properties
      */
-    public void setProperties(ArrayList properties)
+    public void setProperties(ArrayList<String> properties)
     {
         this.properties = properties;
     }
@@ -462,9 +456,9 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @return
      */
-    public ArrayList getEnumeratedProperties()
+    public ArrayList<String> getEnumeratedProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
@@ -476,7 +470,7 @@ public class ProbabilityFunction extends DiscreteFunction
     {
         if (properties == null)
         {
-            properties = new ArrayList();
+            properties = new ArrayList<>();
         }
         properties.add(property);
     }

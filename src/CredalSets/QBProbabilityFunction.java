@@ -88,7 +88,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
                                  double values[],
                                  double lowerEnvelope[],
                                  double upperEnvelope[],
-                                 ArrayList properties)
+                                 ArrayList<String> properties)
     {
         super(bayesNet, variables, values, properties);
         this.lowerEnvelope = lowerEnvelope;
@@ -123,7 +123,6 @@ public class QBProbabilityFunction extends ProbabilityFunction
     public void print(PrintStream out)
     {
         int j;
-        String property;
 
         if (variables != null)
         {
@@ -159,9 +158,8 @@ public class QBProbabilityFunction extends ProbabilityFunction
         out.println();
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -175,7 +173,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
      */
     public double[] getLowerEnvelope()
     {
-        return (lowerEnvelope);
+        return lowerEnvelope;
     }
 
     /**
@@ -185,6 +183,6 @@ public class QBProbabilityFunction extends ProbabilityFunction
      */
     public double[] getUpperEnvelope()
     {
-        return (upperEnvelope);
+        return upperEnvelope;
     }
 }

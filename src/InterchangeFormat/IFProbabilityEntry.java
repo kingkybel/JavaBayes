@@ -53,20 +53,22 @@ public class IFProbabilityEntry
     }
 
     /**
+     * Retrieve the values.
      *
-     * @return
+     * @return the values as array
      */
     public String[] getValues()
     {
-        return (values);
+        return values;
     }
 
     /**
+     * Retrieve the entries.
      *
-     * @return
+     * @return the entries as array
      */
     public double[] getEntries()
     {
-        return (entries);
+        return entries;
     }
 }

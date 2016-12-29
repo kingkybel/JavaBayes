@@ -203,8 +203,8 @@ public class BayesNet
      * parser as it parses an InterchangeFormat stream. Right now the extensions
      * involve:
      * <ol>
-     * <li> Detecting observed variables.<li>
-     * <li> Detecting explanation variables.<li>
+     * <li> Detecting observed variables.</li>
+     * <li> Detecting explanation variables.</li>
      * </ol>
      *
      * @param interchangeFmt
@@ -237,7 +237,8 @@ public class BayesNet
     }
 
     /**
-     * Make modifications to a BayesNet based on the properties of the BayesNet.
+     * Method that makes modifications to the QuasiBayesNet based on its
+     * properties (works by overriding method in BayesNet).
      */
     protected void processProperties()
     {
@@ -285,6 +286,11 @@ public class BayesNet
         return (null);
     }
 
+    /**
+     *
+     * @param var
+     * @return
+     */
     public ProbabilityFunction getFunction(String var)
     {
         return getFunction(getProbabilityVariable(var));
@@ -957,7 +963,7 @@ public class BayesNet
      * Set a probability variable given its index.
      *
      * @param index
-     * @param probFunc
+     * @param probFunc probability function
      */
     public void setProbabilityFunction(int index, ProbabilityFunction probFunc)
     {
@@ -978,7 +984,7 @@ public class BayesNet
     /**
      * Set the vector of probability functions.
      *
-     * @param probFuncs
+     * @param probFunc probability functions
      */
     public void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {

@@ -46,10 +46,10 @@ public class IFProbabilityFunction
 
     String sVariables[];
     int conditionalIndex;
-    ArrayList properties;
-    ArrayList defaults;
-    ArrayList tables;
-    ArrayList entries;
+    ArrayList<String> properties;
+    ArrayList<double[]> defaults;
+    ArrayList<double[]> tables;
+    ArrayList<IFProbabilityEntry> entries;
 
     /**
      *
@@ -64,7 +64,7 @@ public class IFProbabilityFunction
      *
      * @param properties list of properties
      */
-    public void setProperties(ArrayList properties)
+    public void setProperties(ArrayList<String> properties)
     {
         this.properties = properties;
     }
@@ -73,7 +73,7 @@ public class IFProbabilityFunction
      *
      * @param defaults
      */
-    public void setDefaults(ArrayList defaults)
+    public void setDefaults(ArrayList<double[]> defaults)
     {
         this.defaults = defaults;
     }
@@ -91,7 +91,7 @@ public class IFProbabilityFunction
      *
      * @param entries
      */
-    public void setEntries(ArrayList entries)
+    public void setEntries(ArrayList<IFProbabilityEntry> entries)
     {
         this.entries = entries;
     }
@@ -111,35 +111,35 @@ public class IFProbabilityFunction
      */
     public String[] getVariables()
     {
-        return (sVariables);
+        return sVariables;
     }
 
     /**
      *
      * @return
      */
-    public ArrayList getProperties()
+    public ArrayList<String> getProperties()
     {
-        return (properties);
-    } // ArrayList of String
+        return properties;
+    }
 
     /**
      *
      * @return
      */
-    public ArrayList getDefaults()
+    public ArrayList<double[]> getDefaults()
     {
-        return (defaults);
-    } // ArrayList of double[]
+        return defaults;
+    }
 
     /**
      *
      * @return
      */
-    public ArrayList getTables()
+    public ArrayList<double[]> getTables()
     {
-        return (tables);
-    } // ArrayList of double[]
+        return tables;
+    }
 
     /**
      *
@@ -147,8 +147,8 @@ public class IFProbabilityFunction
      */
     public ArrayList getEntries()
     {
-        return (entries);
-    } // ArrayList of IFProbabilityFunctionEntry
+        return entries;
+    }
 
     /**
      *
@@ -156,7 +156,7 @@ public class IFProbabilityFunction
      */
     public int getConditionalIndex()
     {
-        return (conditionalIndex);
+        return conditionalIndex;
     }
 
     /**
@@ -165,30 +165,28 @@ public class IFProbabilityFunction
      * indexes in the tables. * At this point it assumes that there is only one
      * FOR variable in the ProbabilityFunction object.
      *
-     * @param ifBayesNet
+     * @param ifBayesNet Bayes net in interchange format
      */
     public void invertTables(IFBayesNet ifBayesNet)
     {
-        IFProbabilityVariable probVar;
-        ArrayList newTables;
-        String runningName;
-        double t[], newTable[];
-        int i, j;
-        int sizeOfFirst = 0, sizeOfOthers = 1;
 
         if (sVariables.length > 1)
         { // No need to do anything if only one variable.
             // Go through all the tables.
-            newTables = new ArrayList(); // Initialize a ArrayList for the new tables.
+            ArrayList<double[]> newTables = new ArrayList<>();
+            String runningName;
+            double t[], newTable[];
+            int i, j;
+            int sizeOfFirst = 0, sizeOfOthers = 1;
+
             for (Object e : tables)
             {
                 sizeOfFirst = 0;
                 sizeOfOthers = 1;
                 t = (double[]) (e); // Get the table.
                 // Now get the first variable.
-                for (Object ee : ifBayesNet.probVars)
+                for (IFProbabilityVariable probVar : ifBayesNet.probVars)
                 {
-                    probVar = (IFProbabilityVariable) (ee);
                     runningName = probVar.getName();
                     if (runningName.equals(sVariables[0]))
                     { // Found the first variable.
@@ -199,9 +197,8 @@ public class IFProbabilityFunction
                 // Get the size of all other variables;
                 for (j = 1; j < sVariables.length; j++)
                 {
-                    for (Object ee : ifBayesNet.probVars)
+                    for (IFProbabilityVariable probVar : ifBayesNet.probVars)
                     {
-                        probVar = (IFProbabilityVariable) (ee);
                         runningName = probVar.getName();
                         if (runningName.equals(sVariables[j]))
                         { // Found the variable.

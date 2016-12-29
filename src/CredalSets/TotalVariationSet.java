@@ -46,7 +46,7 @@ public class TotalVariationSet
      * Constructor for an TotalVariationQBProbabilityFunction
      * ProbabilityFunction object and given epsilon.
      *
-     * @param probFunc
+     * @param probFunc probability function
      * @param epsilon
      */
     public TotalVariationSet(ProbabilityFunction probFunc, double epsilon)
@@ -62,18 +62,18 @@ public class TotalVariationSet
     @Override
     public double getLowerProbabilityFromBase(double p)
     {
-        return (Math.max(p - epsilon, 0.0));
+        return Math.max(p - epsilon, 0.0);
     }
 
     @Override
     public double getUpperProbabilityFromBase(double p)
     {
-        return (Math.min(p + epsilon, 1.0));
+        return Math.min(p + epsilon, 1.0);
     }
 
     @Override
     public double getAtomProbability(int index)
     {
-        return (values[index]);
+        return values[index];
     }
 }

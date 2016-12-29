@@ -51,12 +51,12 @@ import java.util.logging.Logger;
  * local credal sets off without necessarily deleting them.
  *
  * Rule: LOCAL dominates NONE; GLOBAL dominates LOCAL.
- * <ul>
- * <li> -> When there is a local credal set, compute with the local credal
+ * <ol>
+ * <li> When there is a local credal set, compute with the local credal
  * set.</li>
- * <li> -> When there is a global credal set specification, compute with that
+ * <li> When there is a global credal set specification, compute with that
  * (ignore local credal sets).</li>
- * </ul>
+ * </ol>
  *
  */
 public class QBInference extends Inference
@@ -87,8 +87,8 @@ public class QBInference extends Inference
     /**
      * Code for basic transformation. Create all the values and transparent
      * variables for the credal sets, but do not include the transparent
-     * variables in the probabilityVariables array. Local neighborhoods are only
-     * used if there are local credal sets and no global credal set.
+     * variables in the probabilityVariables array. Local neighbourhoods are
+     * only used if there are local credal sets and no global credal set.
      */
     private void transformNetwork()
     {
@@ -122,12 +122,14 @@ public class QBInference extends Inference
 
     /**
      * Create all the values and transparent variables for the credal sets.
+     *
+     * @return
      */
-    private ArrayList transformProbabilityFunctionsArray()
+    private ArrayList<ProbabilityVariable> transformProbabilityFunctionsArray()
     {
         VertexSet qbpf, newQbpf;
         ProbabilityFunction probFunc, newProbabilityFunction;
-        ArrayList auxiliaryVariables = new ArrayList();
+        ArrayList<ProbabilityVariable> auxiliaryVariables = new ArrayList<>();
 
         // Process every ProbabilityFunction
         for (int i = 0; i < bayesNet.numberProbabilityFunctions(); i++)
@@ -148,7 +150,7 @@ public class QBInference extends Inference
                 bayesNet.setProbabilityFunction(i, newProbabilityFunction);
             }
         }
-        return (auxiliaryVariables);
+        return auxiliaryVariables;
     }
 
     /**
@@ -189,9 +191,6 @@ public class QBInference extends Inference
         bayesNet.setProbabilityVariables(newProbabilityVariables);
     }
 
-    /**
-     * Calculation of Inference.
-     */
     @Override
     public void inference(String queriedVariableName)
     {
@@ -199,11 +198,6 @@ public class QBInference extends Inference
         doQuasiBayesianInference();
     }
 
-    /**
-     * Calculation of marginal posterior envelope using a given ordering.
-     *
-     * @param order
-     */
     @Override
     public void inference(String order[])
     {
@@ -230,7 +224,7 @@ public class QBInference extends Inference
 
     /**
      * Perform calculation of marginal posterior distributions when local
-     * neighborhoods are present. Note that the distributions for the queried
+     * neighbourhoods are present. Note that the distributions for the queried
      * variable, for all transparent variables, is stored at results.
      */
     private void inferenceWithLocalNeighborhoods()
@@ -275,13 +269,15 @@ public class QBInference extends Inference
         }
         // Construct results
         result = new QBProbabilityFunction(normalizedResults,
-                                           (double[]) null, min, max);
+                                           (double[]) null,
+                                           min,
+                                           max);
         listOfLocalNeighborhoodResults = normalizedResults;
     }
 
     /**
      * Perform calculation of marginal posterior distributions when local
-     * neighborhoods are absent; handles global neighborhoods if necessary.
+     * neighbourhoods are absent; handles global neighbourhoods if necessary.
      */
     private void inferenceWithoutLocalNeighborhoods()
     {

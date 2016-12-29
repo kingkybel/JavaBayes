@@ -53,12 +53,12 @@ public final class VertexSet
     double extremePoints[][];
 
     /**
-     * Default constructor for a VertexQBProbabilityFunction.
+     * Default constructor for a VertexSet.
      *
      * @param bayesNet      the underlying Bayesian network
-     * @param properties list of properties
-     * @param variables
-     * @param extremePoints
+     * @param properties    list of properties
+     * @param variables     probability variable array
+     * @param extremePoints matrix-array of extreme points
      */
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable variables[],
@@ -79,13 +79,13 @@ public final class VertexSet
     }
 
     /**
-     * Constructor for a VertexQBProbabilityFunction.
+     * Constructor for a VertexSet.
      *
      * @param bayesNet      the underlying Bayesian network
-     * @param extremePoints
      * @param probVars      probability variables
-     * @param properties list of properties
-     * @param values
+     * @param values        array of probability values
+     * @param properties    list of properties
+     * @param extremePoints matrix-array of extreme points
      */
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable probVars[],
@@ -96,16 +96,16 @@ public final class VertexSet
         super(bayesNet,
               probVars,
               values,
-              (double[]) null,
-              (double[]) null,
+              (double[]) null, // no lower envelope
+              (double[]) null, // no upper envelope
               properties);
         this.extremePoints = extremePoints;
     }
 
     /**
-     * Constructor for a VertexQBProbabilityFunction.
+     * Constructor for a VertexSet.
      *
-     * @param probFunc
+     * @param probFunc probability function
      */
     public VertexSet(ProbabilityFunction probFunc)
     {
@@ -122,11 +122,11 @@ public final class VertexSet
     }
 
     /**
-     * Constructor for a VertexQBProbabilityFunction from a ProbabilityFunction
-     * object and new values.
+     * Constructor for a VertexSet from a ProbabilityFunction object and new
+     * values.
      *
-     * @param probFunc
-     * @param values
+     * @param probFunc probability function
+     * @param values   array of probability values
      */
     public VertexSet(ProbabilityFunction probFunc, double values[])
     {
@@ -219,9 +219,11 @@ public final class VertexSet
 
     /**
      * Create an auxiliary variable to indicate the vertices.
+     *
+     * @param transformedBn
+     * @return
      */
-    private ProbabilityVariable
-            createAuxiliaryVariable(BayesNet transformedBn)
+    private ProbabilityVariable createAuxiliaryVariable(BayesNet transformedBn)
     {
         int i;
 
@@ -291,8 +293,8 @@ public final class VertexSet
      * Set a single value of the probability function.
      *
      * @param variableValuePairs
-     * @param indexExtremePoint
      * @param value
+     * @param indexExtremePoint
      */
     public void setValue(String variableValuePairs[][],
                          double value,
@@ -329,7 +331,6 @@ public final class VertexSet
     public void print(PrintStream out)
     {
         int i, j;
-        String property;
 
         if (variables != null)
         {
@@ -364,9 +365,8 @@ public final class VertexSet
         out.println();
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -485,7 +485,7 @@ public final class VertexSet
      */
     public ProbabilityVariable getAuxiliaryVariable()
     {
-        return (auxiliaryVariable);
+        return auxiliaryVariable;
     }
 
     /**
@@ -495,6 +495,6 @@ public final class VertexSet
      */
     public double[][] getExtremePoints()
     {
-        return (extremePoints);
+        return extremePoints;
     }
 }

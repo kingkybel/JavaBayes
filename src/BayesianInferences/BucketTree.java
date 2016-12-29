@@ -178,7 +178,7 @@ public class BucketTree
      * Eliminates all variables defined as evidence. The order of the variables
      * that are not eliminated is the same order in the original function.
      *
-     * @param probFunc
+     * @param probFunc probability function
      * @return
      */
     private ProbabilityFunction checkEvidence(ProbabilityFunction probFunc)
@@ -233,7 +233,7 @@ public class BucketTree
      * observed. Even explanatory variables can be observed and taken as
      * evidence.
      *
-     * @param probFunc
+     * @param probFunc probability function
      * @param markers
      * @return
      */
@@ -275,7 +275,7 @@ public class BucketTree
      * Obtain the values for the evidence plus function.
      *
      * @param newProbFunc
-     * @param probFunc
+     * @param probFunc probability function
      */
     private void checkEvidenceLoop(ProbabilityFunction newProbFunc,
                                    ProbabilityFunction probFunc)

@@ -51,7 +51,7 @@ public class ConstantDensityRatioSet
      * Constructor for an ConstantDensityRatioSet ProbabilityFunction object and
      * given constant.
      *
-     * @param probFunc
+     * @param probFunc probability function
      * @param kk
      */
     public ConstantDensityRatioSet(ProbabilityFunction probFunc, double kk)
@@ -114,8 +114,12 @@ public class ConstantDensityRatioSet
             }
         }
 
-        return (new QBProbabilityFunction(bayesNet, variables, values,
-                                          lowerValues, upperValues, properties));
+        return (new QBProbabilityFunction(bayesNet,
+                                          variables,
+                                          values,
+                                          lowerValues,
+                                          upperValues,
+                                          properties));
     }
 
     /**

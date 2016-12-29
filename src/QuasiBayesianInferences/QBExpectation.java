@@ -41,12 +41,12 @@ import java.util.logging.Logger;
  * expectations.
  *
  * Rule: LOCAL dominates NONE; GLOBAL dominates LOCAL.
- * <ul>
- * <li> -> When there is a local credal set, compute with the local credal
+ * <ol>
+ * <li> When there is a local credal set, compute with the local credal
  * set.</li>
- * <li> -> When there is a global credal set specification, compute with that
+ * <li> When there is a global credal set specification, compute with that
  * (ignore local credal sets).</li>
- * </ul>
+ * </ol>
  *
  */
 public class QBExpectation extends Expectation

@@ -66,8 +66,8 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it the number
      * of variables/functions and the name of the network.
      *
-     * @param name
-     * @param numberOfFuncs
+     * @param name          network name
+     * @param numberOfFuncs number of functions
      * @param numberOfVars  number of variables
      */
     public QuasiBayesNet(String name, int numberOfVars, int numberOfFuncs)
@@ -81,7 +81,7 @@ public class QuasiBayesNet extends BayesNet
      * Simple constructor for a Quasi-Bayesian network: just give it the name of
      * network and properties.
      *
-     * @param name
+     * @param name       network name
      * @param properties list of properties
      */
     public QuasiBayesNet(String name, ArrayList properties)
@@ -163,10 +163,10 @@ public class QuasiBayesNet extends BayesNet
      * probably some of the objects created through extensions will be created
      * directly by the parser as it parses an InterchangeFormat stream. Right
      * now the extensions involve:
-     * <ol>
+     * <ul>
      * <li>Detecting observed variables</li>
      * <li>Detecting explanation variables</li>
-     * </ol>
+     * </ul>
      *
      * @param interchangeFmt
      */
@@ -198,10 +198,6 @@ public class QuasiBayesNet extends BayesNet
         }
     }
 
-    /**
-     * Method that makes modifications to the QuasiBayesNet based on its
-     * properties (works by overriding method in BayesNet).
-     */
     @Override
     protected void processProperties()
     {
@@ -277,11 +273,6 @@ public class QuasiBayesNet extends BayesNet
         return (false);
     }
 
-    /**
-     * Print method for a QuasiBayesNet object.
-     *
-     * @param out output print stream
-     */
     @Override
     public void print(PrintStream out)
     {
@@ -349,7 +340,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Get the type of global neighborhood.
+     * Get the type of global neighbourhood.
      *
      * @return
      */
@@ -359,7 +350,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Set the type of global neighborhood.
+     * Set the type of global neighbourhood.
      *
      * @param type
      */
@@ -369,7 +360,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Get the parameter for the global neighborhood modeled by the network.
+     * Get the parameter for the global neighbourhood modeled by the network.
      *
      * @return
      */
@@ -379,7 +370,7 @@ public class QuasiBayesNet extends BayesNet
     }
 
     /**
-     * Set the parameter for the global neighborhood modeled by the network.
+     * Set the parameter for the global neighbourhood modeled by the network.
      *
      * @param p
      */
