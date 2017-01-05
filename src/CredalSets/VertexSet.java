@@ -63,7 +63,7 @@ public final class VertexSet
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable variables[],
                      double extremePoints[][],
-                     ArrayList properties)
+                     ArrayList<String> properties)
     {
         // Call the super constructor with extremePoints[0].
         super(bayesNet, variables, extremePoints[0], properties);

@@ -194,12 +194,12 @@ TOKEN: /* Ordinary data in strings; token used to consume strings */
  * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
- * in the vectors ifbn.pvs and ifbn.upfs.
+ * in the vectors ifbn.pvs and ifbn.ifProbFuncs.
  */
 void CompilationUnit() :
 {
     IFProbabilityVariable pv;
-    IFProbabilityFunction upf;
+    IFProbabilityFunction ifProbFunc;
 }
 {
     OpenTag()
@@ -210,7 +210,7 @@ void CompilationUnit() :
     NetworkDeclaration()
     ( <SOT>
     ( pv=VariableDeclaration() { ifbn.add(pv); }
-    | upf=ProbabilityDeclaration() { ifbn.add(upf); } ) )*
+    | ifProbFunc=ProbabilityDeclaration() { ifbn.add(ifProbFunc); } ) )*
     <EOT> <NETWORK> <CT>
     ( ( <EOT> <BIF> <CT> ) | <EOF> )
 }
@@ -314,14 +314,14 @@ String VariableValue() :
 IFProbabilityFunction ProbabilityDeclaration() :
 {
     String vs[];
-    IFProbabilityFunction upf = new IFProbabilityFunction();
+    IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
 }
 {
-    <PROBABILITY> <CT> ProbabilityContent(upf) <EOT> <PROBABILITY> <CT>
-    { return(upf); }
+    <PROBABILITY> <CT> ProbabilityContent(ifProbFunc) <EOT> <PROBABILITY> <CT>
+    { return(ifProbFunc); }
 }
 
-void ProbabilityContent(IFProbabilityFunction upf) :
+void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
     int i, j;
     double def[] = null;
@@ -346,11 +346,11 @@ void ProbabilityContent(IFProbabilityFunction upf) :
     | entry=ProbabilityEntry() { entries.add(entry); }
     | tab=ProbabilityTable() { tables.add(tab); } ) )*
         {
-            upf.setProperties(properties);
-            upf.setDefaults(defaults);
-            upf.setEntries(entries);
-            upf.setTables(tables);
-            upf.setConditionalIndex(fors.size());
+            ifProbFunc.setProperties(properties);
+            ifProbFunc.setDefaults(defaults);
+            ifProbFunc.setEntries(entries);
+            ifProbFunc.setTables(tables);
+            ifProbFunc.setConditionalIndex(fors.size());
             vs = new String[ fors.size() + givens.size() ];
             for (e = fors.iterator(), i = 0; e.hasNext(); i++)
             {
@@ -360,7 +360,7 @@ void ProbabilityContent(IFProbabilityFunction upf) :
             {
                 vs[j] = (String)(e.next());
             }
-            upf.setVariables(vs);
+            ifProbFunc.setVariables(vs);
         }
 }
 

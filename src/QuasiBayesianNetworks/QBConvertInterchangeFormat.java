@@ -58,16 +58,16 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     }
 
     @Override
-    protected ProbabilityFunction getProbabilityFunction(BayesNet bayesNet,
-                                                         IFProbabilityFunction upf)
+    protected ProbabilityFunction getProbabilityFunction(
+            BayesNet bayesNet,
+            IFProbabilityFunction ifProbFunc)
     {
         int i, jump, numberOfValues;
         double values[];
-        double extremePoints[][] = null;
         ProbabilityVariable probVar, variables[];
 
         // Check and insert the probability variable indexes
-        variables = createVariables(bayesNet, upf);
+        variables = createVariables(bayesNet, ifProbFunc);
 
         // Calculate the jump, i.e., the number of values
         // in the conditional distribution table for each value
@@ -86,17 +86,18 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         values = new double[numberOfValues];
         for (i = 0; i < values.length; i++)
         {
-            values[i] = -1.0;
+            values[i] = ConvertInterchangeFormat.INVALID_VALUE;
         }
 
         // Process tables
-        extremePoints = processExtremeTables(upf, values);
+        double extremePoints[][] = processExtremeTables(ifProbFunc, values);
 
         // Process defaults
-        processDefaults(upf, values, extremePoints, jump);
+        processDefaults(ifProbFunc, values, extremePoints, jump);
 
         // Process entries
-        processEntries(bayesNet, upf, variables, values, extremePoints, jump);
+        processEntries(bayesNet, ifProbFunc, variables, values, extremePoints,
+                       jump);
 
         // Finish calculating the values
         finishValues(values, extremePoints);
@@ -104,17 +105,17 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         // Insert the data
         if (extremePoints == null)
         {
-            return (new ProbabilityFunction(bayesNet,
-                                            variables,
-                                            values,
-                                            upf.getProperties()));
+            return new ProbabilityFunction(bayesNet,
+                                           variables,
+                                           values,
+                                           ifProbFunc.getProperties());
         }
         else
         {
-            return (new VertexSet(bayesNet,
-                                  variables,
-                                  extremePoints,
-                                  upf.getProperties()));
+            return new VertexSet(bayesNet,
+                                 variables,
+                                 extremePoints,
+                                 ifProbFunc.getProperties());
         }
     }
 
@@ -122,23 +123,23 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Fill the values with the contents of the tables in the
      * IFProbabilityFunction object.
      *
-     * @param upf    interchange format probability function
+     * @param ifProbFunc    interchange format probability function
      * @param values an array of double values
      * @return extreme points
      */
-    double[][] processExtremeTables(IFProbabilityFunction upf, double values[])
+    double[][] processExtremeTables(IFProbabilityFunction ifProbFunc, double values[])
     {
         int i, j;
         double table[], extremePoints[][];
 
         // Put the table values
-        ArrayList tables = upf.getTables();
+        ArrayList tables = ifProbFunc.getTables();
         int n = tables.size();
 
         // If there are no available tables
         if (n == 0)
         {
-            return (null);
+            return null;
         }
 
         // If there is a single table, no extremePoints are created
@@ -157,7 +158,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
             extremePoints[i] = new double[values.length];
             for (j = 0; j < extremePoints[i].length; j++)
             {
-                extremePoints[i][j] = -1.0;
+                extremePoints[i][j] = ConvertInterchangeFormat.INVALID_VALUE;
             }
         }
         i = 0;
@@ -174,12 +175,12 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Insert default values from the contents of the first specification of
      * defaults in the IFProbabilityFunction object.
      *
-     * @param upf           interchange format probability function
+     * @param ifProbFunc           interchange format probability function
      * @param values        an array of double values
      * @param extremePoints matrix of extreme points
      * @param jump
      */
-    void processDefaults(IFProbabilityFunction upf,
+    void processDefaults(IFProbabilityFunction ifProbFunc,
                          double values[],
                          double extremePoints[][],
                          int jump)
@@ -187,7 +188,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         int i, j, k;
 
         // Process the default values
-        ArrayList ddefaultss = upf.getDefaults();
+        ArrayList ddefaultss = ifProbFunc.getDefaults();
         if (ddefaultss.size() > 0)
         {
             double ddefaults[] = (double[]) (ddefaultss.get(0));
@@ -196,7 +197,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
                 for (j = 0; j < jump; j++)
                 {
                     k = i * jump + j;
-                    if (values[k] == -1.0)
+                    if (values[k] == ConvertInterchangeFormat.INVALID_VALUE)
                     {
                         values[k] = ddefaults[i];
                     }
@@ -209,14 +210,14 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Insert entries specified in the IFProbabilityFunction object.
      *
      * @param bayesNet      the underlying Bayes net
-     * @param upf           interchange format probability function
+     * @param ifProbFunc           interchange format probability function
      * @param variables     array of probability variables
      * @param values        an array of double values
      * @param extremePoints matrix of extreme points
      * @param jump
      */
     void processEntries(BayesNet bayesNet,
-                        IFProbabilityFunction upf,
+                        IFProbabilityFunction ifProbFunc,
                         ProbabilityVariable variables[],
                         double values[],
                         double extremePoints[][],
@@ -230,7 +231,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         IFProbabilityEntry entry;
 
         // Process the entries
-        ArrayList eentries = upf.getEntries();
+        ArrayList eentries = ifProbFunc.getEntries();
         if ((eentries != null) && (eentries.size() > 0))
         {
             for (Object e : eentries)
@@ -282,7 +283,8 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
             {
                 for (i = 0; i < extremePoints[j].length; i++)
                 {
-                    if (extremePoints[j][i] == -1.0)
+                    if (extremePoints[j][i] ==
+                        ConvertInterchangeFormat.INVALID_VALUE)
                     {
                         extremePoints[j][i] = 0.0;
                     }
@@ -293,7 +295,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         { // Second case: single distribution; just fill zeros where needed
             for (i = 0; i < values.length; i++)
             {
-                if (values[i] == -1.0)
+                if (values[i] == ConvertInterchangeFormat.INVALID_VALUE)
                 {
                     values[i] = 0.0;
                 }

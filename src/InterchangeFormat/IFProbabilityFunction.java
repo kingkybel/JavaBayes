@@ -145,7 +145,7 @@ public class IFProbabilityFunction
      *
      * @return
      */
-    public ArrayList getEntries()
+    public ArrayList<IFProbabilityEntry> getEntries()
     {
         return entries;
     }

@@ -159,12 +159,12 @@ TOKEN : /* Definition of a string */
  * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
- * in the vectors ifbn.pvs and ifbn.upfs.
+ * in the vectors ifbn.pvs and ifbn.ifProbFuncs.
  */
 void CompilationUnit() :
 {
     IFProbabilityVariable pv;
-    IFProbabilityFunction upf;
+    IFProbabilityFunction ifProbFunc;
 }
 {
 	{
@@ -180,9 +180,9 @@ void CompilationUnit() :
             globUndefinedText();
         }
   |
-    upf=ProbabilityDeclaration()
+    ifProbFunc=ProbabilityDeclaration()
 	{
-            ifbn.add(upf);
+            ifbn.add(ifProbFunc);
             globUndefinedText();
         }
   )*
@@ -330,19 +330,19 @@ String ProbabilityVariableValue() :
 IFProbabilityFunction ProbabilityDeclaration() :
 {
     String vs[];
-    IFProbabilityFunction upf = new IFProbabilityFunction();
+    IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
 }
 {
-  <PROBABILITY> ProbabilityVariablesList(upf) ProbabilityContent(upf)
+  <PROBABILITY> ProbabilityVariablesList(ifProbFunc) ProbabilityContent(ifProbFunc)
 	{
-            return(upf);
+            return(ifProbFunc);
         }
 }
 
 /**
  * Parse the list of Probability variables.
  */
-void ProbabilityVariablesList(IFProbabilityFunction upf) :
+void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) :
 {
     int i;
     Iterator e;
@@ -370,12 +370,12 @@ void ProbabilityVariablesList(IFProbabilityFunction upf) :
             {
 		vs[i] = (String)(e.next());
             }
-            upf.setVariables(vs);
+            ifProbFunc.setVariables(vs);
             if (cond == -1)
             {
                 cond = 1;
             }
-            upf.setConditionalIndex(cond);
+            ifProbFunc.setConditionalIndex(cond);
         }
 }
 
@@ -409,7 +409,7 @@ String ProbabilityVariableName() :
 /**
  * Fill a Probability list of properties.
  */
-void ProbabilityContent(IFProbabilityFunction upf) :
+void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
     String s = null;
     ArrayList properties = new ArrayList();
@@ -442,10 +442,10 @@ void ProbabilityContent(IFProbabilityFunction upf) :
         }
       )* "}"
 	{
-            upf.setProperties(properties);
-            upf.setDefaults(defs);
-            upf.setEntries(entries);
-            upf.setTables(tabs);
+            ifProbFunc.setProperties(properties);
+            ifProbFunc.setDefaults(defs);
+            ifProbFunc.setEntries(entries);
+            ifProbFunc.setTables(tabs);
         }
 }
 

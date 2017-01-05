@@ -56,10 +56,10 @@ public class BIFv015 extends InterchangeFormat implements BIFv015Constants {
  * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
- * in the vectors ifbn.pvs and ifbn.upfs.
+ * in the vectors ifbn.pvs and ifbn.ifProbFuncs.
  */
   final public void CompilationUnit() throws ParseException {IFProbabilityVariable pv;
-    IFProbabilityFunction upf;
+    IFProbabilityFunction ifProbFunc;
 globUndefinedText();
     NetworkDeclaration();
 globUndefinedText();
@@ -83,8 +83,8 @@ ifbn.add(pv);
         break;
         }
       case PROBABILITY:{
-        upf = ProbabilityDeclaration();
-ifbn.add(upf);
+        ifProbFunc = ProbabilityDeclaration();
+ifbn.add(ifProbFunc);
             globUndefinedText();
         break;
         }
@@ -252,18 +252,18 @@ values = new String[v.size()];
  * Detect a probability declaration.
  */
   final public IFProbabilityFunction ProbabilityDeclaration() throws ParseException {String vs[];
-    IFProbabilityFunction upf = new IFProbabilityFunction();
+    IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
     jj_consume_token(PROBABILITY);
-    ProbabilityVariablesList(upf);
-    ProbabilityContent(upf);
-{if ("" != null) return(upf);}
+    ProbabilityVariablesList(ifProbFunc);
+    ProbabilityContent(ifProbFunc);
+{if ("" != null) return(ifProbFunc);}
     throw new Error("Missing return statement in function");
   }
 
 /**
  * Parse the list of Probability variables.
  */
-  final public void ProbabilityVariablesList(IFProbabilityFunction upf) throws ParseException {int i;
+  final public void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) throws ParseException {int i;
     Iterator e;
     String variable_name;
     int cond = -1;
@@ -310,12 +310,12 @@ vs = new String[v_list.size()];
             {
                 vs[i] = (String)(e.next());
             }
-            upf.setVariables(vs);
+            ifProbFunc.setVariables(vs);
             if (cond == -1)
             {
                 cond = 1;
             }
-            upf.setConditionalIndex(cond);
+            ifProbFunc.setConditionalIndex(cond);
   }
 
 /**
@@ -339,7 +339,7 @@ vs = new String[v_list.size()];
 /**
  * Fill a Probability list of properties.
  */
-  final public void ProbabilityContent(IFProbabilityFunction upf) throws ParseException {String s = null;
+  final public void ProbabilityContent(IFProbabilityFunction ifProbFunc) throws ParseException {String s = null;
     ArrayList properties = new ArrayList();
     IFProbabilityEntry e = null;
     ArrayList entries = new ArrayList();
@@ -390,10 +390,10 @@ tabs.add(tab);
       }
     }
     jj_consume_token(22);
-upf.setProperties(properties);
-            upf.setDefaults(defs);
-            upf.setEntries(entries);
-            upf.setTables(tabs);
+ifProbFunc.setProperties(properties);
+            ifProbFunc.setDefaults(defs);
+            ifProbFunc.setEntries(entries);
+            ifProbFunc.setTables(tabs);
   }
 
   final public IFProbabilityEntry ProbabilityEntry() throws ParseException {String s[];

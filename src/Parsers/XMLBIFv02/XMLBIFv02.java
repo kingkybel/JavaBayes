@@ -89,10 +89,10 @@ public class XMLBIFv02 extends InterchangeFormat implements XMLBIFv02Constants {
  * Basic parsing function. First looks for a Network Declaration,
  * then looks for an arbitrary number of VariableDeclaration or
  * ProbabilityDeclaration non-terminals. The objects are
- * in the vectors ifbn.pvs and ifbn.upfs.
+ * in the vectors ifbn.pvs and ifbn.ifProbFuncs.
  */
   final public void CompilationUnit() throws ParseException {IFProbabilityVariable pv;
-    IFProbabilityFunction upf;
+    IFProbabilityFunction ifProbFunc;
     OpenTag();
 globHeading();
     NetworkDeclaration();
@@ -115,8 +115,8 @@ ifbn.add(pv);
         break;
         }
       case PROBABILITY:{
-        upf = ProbabilityDeclaration();
-ifbn.add(upf);
+        ifProbFunc = ProbabilityDeclaration();
+ifbn.add(ifProbFunc);
         break;
         }
       default:
@@ -276,18 +276,18 @@ pv.setName(name);
  * Detect a probability declaration.
  */
   final public IFProbabilityFunction ProbabilityDeclaration() throws ParseException {String vs[];
-    IFProbabilityFunction upf = new IFProbabilityFunction();
+    IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
     jj_consume_token(PROBABILITY);
     jj_consume_token(CT);
-    ProbabilityContent(upf);
+    ProbabilityContent(ifProbFunc);
     jj_consume_token(EOT);
     jj_consume_token(PROBABILITY);
     jj_consume_token(CT);
-{if ("" != null) return(upf);}
+{if ("" != null) return(ifProbFunc);}
     throw new Error("Missing return statement in function");
   }
 
-  final public void ProbabilityContent(IFProbabilityFunction upf) throws ParseException {int i, j;
+  final public void ProbabilityContent(IFProbabilityFunction ifProbFunc) throws ParseException {int i, j;
     double def[] = null;
     double tab[] = null;
     String s, vs[];
@@ -349,11 +349,11 @@ tables.add(tab);
         throw new ParseException();
       }
     }
-upf.setProperties(properties);
-            upf.setDefaults(defaults);
-            upf.setEntries(entries);
-            upf.setTables(tables);
-            upf.setConditionalIndex(fors.size());
+ifProbFunc.setProperties(properties);
+            ifProbFunc.setDefaults(defaults);
+            ifProbFunc.setEntries(entries);
+            ifProbFunc.setTables(tables);
+            ifProbFunc.setConditionalIndex(fors.size());
             vs = new String[ fors.size() + givens.size() ];
             for (e = fors.iterator(), i = 0; e.hasNext(); i++)
             {
@@ -363,7 +363,7 @@ upf.setProperties(properties);
             {
                 vs[j] = (String)(e.next());
             }
-            upf.setVariables(vs);
+            ifProbFunc.setVariables(vs);
   }
 
   final public String ProbabilityFor() throws ParseException {String s;

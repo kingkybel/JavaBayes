@@ -66,29 +66,29 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param name          Name of the network.
-     * @param numberOfVars  Number of variables in the network.
-     * @param numberOfFuncs Number of probability distributions in the network.
+     * @param name          name of the network.
+     * @param numberOfVars  number of variables in the network.
+     * @param numberOfFuncs number of probability distributions in the network.
      */
     public BayesNet(String name, int numberOfVars, int numberOfFuncs)
     {
         this();
-        this.name = name;
-        probabilityVariables = new ProbabilityVariable[numberOfVars];
-        probabilityFunctions = new ProbabilityFunction[numberOfFuncs];
+        setName(name);
+        setProbabilityVariables(new ProbabilityVariable[numberOfVars]);
+        setProbabilityFunctions(new ProbabilityFunction[numberOfFuncs]);
     }
 
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param name       Name of network.
-     * @param properties list of properties Properties of the network.
+     * @param name       name of the network
+     * @param properties list of properties properties of the network
      */
-    public BayesNet(String name, ArrayList properties)
+    public BayesNet(String name, ArrayList<String> properties)
     {
         this();
-        this.name = name;
-        this.properties = properties;
+        setName(name);
+        setProperties(properties);
     }
 
     /**
@@ -213,10 +213,10 @@ public class BayesNet
     {
         ConvertInterchangeFormat cbn = new ConvertInterchangeFormat(
                                  interchangeFmt);
-        name = cbn.getName();
-        properties = cbn.getProperties();
-        probabilityVariables = cbn.getProbabilityVariables(this);
-        probabilityFunctions = cbn.getProbabilityFunctions(this);
+        setName(cbn.getName());
+        setProperties(cbn.getProperties());
+        setProbabilityVariables(cbn.getProbabilityVariables(this));
+        setProbabilityFunctions(cbn.getProbabilityFunctions(this));
 
         cbn.getFunctionsAsTables(this);
 
@@ -283,13 +283,14 @@ public class BayesNet
             }
         }
 
-        return (null);
+        return null;
     }
 
     /**
+     * Retrieve the probability function for a variable.
      *
-     * @param var
-     * @return
+     * @param var the variable identified by its name
+     * @return the probability function
      */
     public ProbabilityFunction getFunction(String var)
     {
@@ -448,60 +449,60 @@ public class BayesNet
      * Save a BayesNet object in a stream, in the XMLBIF format version 0.3
      * (most recent version).
      *
-     * @param pstream
+     * @param out output print stream
      */
-    public void saveXml(PrintStream pstream)
+    public void saveXml(PrintStream out)
     {
         int i;
         String property;
 
         // Heading for the file
-        pstream.println("<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\n\n");
-        pstream.println("<!--");
-        pstream.println(
+        out.println("<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\n\n");
+        out.println("<!--");
+        out.println(
                 "\tBayesian network in XMLBIF v0.3 (BayesNet Interchange Format)");
-        pstream.println(
+        out.println(
                 "\tProduced by JavaBayes (http://www.cs.cmu.edu/~javabayes/");
-        pstream.println("\tOutput created " + (new Date()));
-        pstream.println("-->\n\n\n");
+        out.println("\tOutput created " + (new Date()));
+        out.println("-->\n\n\n");
 
-        pstream.println("<!-- DTD for the XMLBIF 0.3 format -->");
-        pstream.println("<!DOCTYPE BIF [\n" +
-                        "\t<!ELEMENT BIF ( NETWORK )*>\n" +
-                        "\t      <!ATTLIST BIF VERSION CDATA #REQUIRED>\n" +
-                        "\t<!ELEMENT NETWORK ( NAME, ( PROPERTY | VARIABLE | DEFINITION )* )>\n" +
-                        "\t<!ELEMENT NAME (#PCDATA)>\n" +
-                        "\t<!ELEMENT VARIABLE ( NAME, ( OUTCOME |  PROPERTY )* ) >\n" +
-                        "\t      <!ATTLIST VARIABLE TYPE (nature|decision|utility) \"nature\">\n" +
-                        "\t<!ELEMENT OUTCOME (#PCDATA)>\n" +
-                        "\t<!ELEMENT DEFINITION ( FOR | GIVEN | TABLE | PROPERTY )* >\n" +
-                        "\t<!ELEMENT FOR (#PCDATA)>\n" +
-                        "\t<!ELEMENT GIVEN (#PCDATA)>\n" +
-                        "\t<!ELEMENT TABLE (#PCDATA)>\n" +
-                        "\t<!ELEMENT PROPERTY (#PCDATA)>\n" +
-                        "]>\n\n");
+        out.println("<!-- DTD for the XMLBIF 0.3 format -->");
+        out.println("<!DOCTYPE BIF [\n" +
+                    "\t<!ELEMENT BIF ( NETWORK )*>\n" +
+                    "\t      <!ATTLIST BIF VERSION CDATA #REQUIRED>\n" +
+                    "\t<!ELEMENT NETWORK ( NAME, ( PROPERTY | VARIABLE | DEFINITION )* )>\n" +
+                    "\t<!ELEMENT NAME (#PCDATA)>\n" +
+                    "\t<!ELEMENT VARIABLE ( NAME, ( OUTCOME |  PROPERTY )* ) >\n" +
+                    "\t      <!ATTLIST VARIABLE TYPE (nature|decision|utility) \"nature\">\n" +
+                    "\t<!ELEMENT OUTCOME (#PCDATA)>\n" +
+                    "\t<!ELEMENT DEFINITION ( FOR | GIVEN | TABLE | PROPERTY )* >\n" +
+                    "\t<!ELEMENT FOR (#PCDATA)>\n" +
+                    "\t<!ELEMENT GIVEN (#PCDATA)>\n" +
+                    "\t<!ELEMENT TABLE (#PCDATA)>\n" +
+                    "\t<!ELEMENT PROPERTY (#PCDATA)>\n" +
+                    "]>\n\n");
 
         // Start of Bayes net
-        pstream.println("<BIF VERSION=\"0.3\">");
+        out.println("<BIF VERSION=\"0.3\">");
 
         // Bayes net description
-        pstream.println("<NETWORK>");
+        out.println("<NETWORK>");
         if (name != null)
         {
-            pstream.println("<NAME>" + name + "</NAME>");
+            out.println("<NAME>" + name + "</NAME>");
         }
         if ((properties != null) && (properties.size() > 0))
         {
             for (Object e : properties)
             {
                 property = (String) (e);
-                pstream.println("\t<PROPERTY>" + property + "</PROPERTY>");
+                out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
-        pstream.println();
+        out.println();
 
         // Variables
-        pstream.println("<!-- Variables -->");
+        out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
             for (i = 0; i < probabilityVariables.length;
@@ -509,14 +510,14 @@ public class BayesNet
             {
                 if (probabilityVariables[i] != null)
                 {
-                    probabilityVariables[i].saveXml_0_3(pstream);
+                    probabilityVariables[i].saveXml_0_3(out);
                 }
             }
         }
-        pstream.println();
+        out.println();
 
         // Probability distributions.
-        pstream.println("<!-- Probability distributions -->");
+        out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
             for (i = 0; i < probabilityFunctions.length;
@@ -524,79 +525,79 @@ public class BayesNet
             {
                 if (probabilityFunctions[i] != null)
                 {
-                    probabilityFunctions[i].saveXml_0_3(pstream);
+                    probabilityFunctions[i].saveXml_0_3(out);
                 }
             }
         }
-        pstream.println();
+        out.println();
 
         // End of Bayes net description.
-        pstream.println("</NETWORK>");
+        out.println("</NETWORK>");
 
         // End of Bayes net.
-        pstream.println("</BIF>");
+        out.println("</BIF>");
     }
 
     /**
      * Save a BayesNet object in a stream, in the XMLBIF format version 0.2.
      *
-     * @param pstream
+     * @param out output print stream
      */
-    public void saveXml_0_2(PrintStream pstream)
+    public void saveXml_0_2(PrintStream out)
     {
         int i;
         String property;
 
         // Heading for the file
-        pstream.println("<?XML VERSION=\"1.0\"?>\n\n");
-        pstream.println("<!--");
-        pstream.println(
+        out.println("<?XML VERSION=\"1.0\"?>\n\n");
+        out.println("<!--");
+        out.println(
                 "\tBayesian network in BIF (BayesNet Interchange Format)");
-        pstream.println(
+        out.println(
                 "\tProduced by JavaBayes (http://www.cs.cmu.edu/~javabayes/");
-        pstream.println("\tOutput created " + (new Date()));
-        pstream.println("-->\n\n\n");
+        out.println("\tOutput created " + (new Date()));
+        out.println("-->\n\n\n");
 
-        pstream.println("<!-- DTD for the BIF format -->");
-        pstream.println("<!DOCTYPE BIF [\n" +
-                        "\t<!ELEMENT BIF ( NETWORK )*>\n" +
-                        "\t<!ELEMENT PROPERTY (#PCDATA)>\n" +
-                        "\t<!ELEMENT TYPE (#PCDATA)>\n" +
-                        "\t<!ELEMENT VALUE (#PCDATA)>\n" +
-                        "\t<!ELEMENT NAME (#PCDATA)>\n" +
-                        "\t<!ELEMENT NETWORK\n" +
-                        "\t    ( NAME, ( PROPERTY | VARIABLE | PROBABILITY )* )>\n" +
-                        "\t<!ELEMENT VARIABLE ( NAME, TYPE, ( VALUE |  PROPERTY )* ) >\n" +
-                        "\t<!ELEMENT PROBABILITY\n" +
-                        "\t    ( FOR | GIVEN | TABLE | ENTRY | DEFAULT | PROPERTY )* >\n" +
-                        "\t<!ELEMENT FOR (#PCDATA)>\n" +
-                        "\t<!ELEMENT GIVEN (#PCDATA)>\n" +
-                        "\t<!ELEMENT TABLE (#PCDATA)>\n" +
-                        "\t<!ELEMENT DEFAULT (TABLE)>\n" +
-                        "\t<!ELEMENT ENTRY ( VALUE* , TABLE )>\n" +
-                        "]>\n\n");
+        out.println("<!-- DTD for the BIF format -->");
+        out.println("<!DOCTYPE BIF [\n" +
+                    "\t<!ELEMENT BIF ( NETWORK )*>\n" +
+                    "\t<!ELEMENT PROPERTY (#PCDATA)>\n" +
+                    "\t<!ELEMENT TYPE (#PCDATA)>\n" +
+                    "\t<!ELEMENT VALUE (#PCDATA)>\n" +
+                    "\t<!ELEMENT NAME (#PCDATA)>\n" +
+                    "\t<!ELEMENT NETWORK\n" +
+                    "\t    ( NAME, ( PROPERTY | VARIABLE | PROBABILITY )* )>\n" +
+                    "\t<!ELEMENT VARIABLE ( NAME, TYPE, ( VALUE |  PROPERTY )* ) >\n" +
+                    "\t<!ELEMENT PROBABILITY\n" +
+                    "\t    ( FOR | GIVEN | TABLE | ENTRY | DEFAULT | PROPERTY )* >\n" +
+                    "\t<!ELEMENT FOR (#PCDATA)>\n" +
+                    "\t<!ELEMENT GIVEN (#PCDATA)>\n" +
+                    "\t<!ELEMENT TABLE (#PCDATA)>\n" +
+                    "\t<!ELEMENT DEFAULT (TABLE)>\n" +
+                    "\t<!ELEMENT ENTRY ( VALUE* , TABLE )>\n" +
+                    "]>\n\n");
 
         // Start of Bayes net
-        pstream.println("<BIF>");
+        out.println("<BIF>");
 
         // Bayes net description
-        pstream.println("<NETWORK>");
+        out.println("<NETWORK>");
         if (name != null)
         {
-            pstream.println("<NAME>" + name + "</NAME>");
+            out.println("<NAME>" + name + "</NAME>");
         }
         if ((properties != null) && (properties.size() > 0))
         {
             for (Object e : properties)
             {
                 property = (String) (e);
-                pstream.println("\t<PROPERTY>" + property + "</PROPERTY>");
+                out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
-        pstream.println();
+        out.println();
 
         // Variables
-        pstream.println("<!-- Variables -->");
+        out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
             for (i = 0; i < probabilityVariables.length;
@@ -604,14 +605,14 @@ public class BayesNet
             {
                 if (probabilityVariables[i] != null)
                 {
-                    probabilityVariables[i].saveXml(pstream);
+                    probabilityVariables[i].saveXml(out);
                 }
             }
         }
-        pstream.println();
+        out.println();
 
         // Probability distributions.
-        pstream.println("<!-- Probability distributions -->");
+        out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
             for (i = 0; i < probabilityFunctions.length;
@@ -619,28 +620,28 @@ public class BayesNet
             {
                 if (probabilityFunctions[i] != null)
                 {
-                    probabilityFunctions[i].saveXml(pstream);
+                    probabilityFunctions[i].saveXml(out);
                 }
             }
         }
-        pstream.println();
+        out.println();
 
         // End of Bayes net description.
-        pstream.println("</NETWORK>");
+        out.println("</NETWORK>");
 
         // End of Bayes net.
-        pstream.println("</BIF>");
+        out.println("</BIF>");
     }
 
     /**
      * Save a BayesNet object into a stream, in the BUGS format.
      *
-     * @param pstream
+     * @param out output print stream
      */
-    public void saveBugs(PrintStream pstream)
+    public void saveBugs(PrintStream out)
     {
         SaveBugs sb = new SaveBugs(this);
-        sb.save(pstream);
+        sb.save(out);
     }
 
     /**
@@ -652,8 +653,7 @@ public class BayesNet
     {
         int i, j, aux;
         ProbabilityVariable probVar;
-        ArrayList evs = new ArrayList();
-        String allEvs[][] = null;
+        ArrayList<ProbabilityVariable> evs = new ArrayList<>();
 
         for (i = 0; i < probabilityVariables.length; i++)
         {
@@ -664,7 +664,7 @@ public class BayesNet
             }
         }
 
-        allEvs = new String[evs.size()][];
+        String allEvs[][] = new String[evs.size()][];
         for (i = 0; i < allEvs.length; i++)
         {
             allEvs[i] = new String[2];
@@ -679,26 +679,27 @@ public class BayesNet
             allEvs[j][1] = probVar.values[aux];
         }
 
-        return (allEvs);
+        return allEvs;
     }
 
     /**
      * Determine the position of a variable given its name.
      *
-     * @param nVb
-     * @return
+     * @param searchName name of the variable
+     * @return index of the variable if it exists in the network, INVALID_INDEX
+     *         else
      */
-    public int indexOfVariable(String nVb)
+    public int indexOfVariable(String searchName)
     {
         int i;
         for (i = 0; i < probabilityVariables.length; i++)
         {
-            if (probabilityVariables[i].name.equals(nVb))
+            if (probabilityVariables[i].name.equals(searchName))
             {
-                return (i);
+                return i;
             }
         }
-        return (-1); // Returns -1 if name is not valid!
+        return INVALID_INDEX;
     }
 
     /**
@@ -729,7 +730,7 @@ public class BayesNet
      */
     public String getName()
     {
-        return (name);
+        return name;
     }
 
     /**
@@ -737,7 +738,7 @@ public class BayesNet
      *
      * @param name
      */
-    public void setName(String name)
+    public final void setName(String name)
     {
         this.name = name;
     }
@@ -747,9 +748,9 @@ public class BayesNet
      *
      * @return
      */
-    public ArrayList getProperties()
+    public ArrayList<String> getProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
@@ -757,7 +758,7 @@ public class BayesNet
      *
      * @param properties list of properties
      */
-    public void setProperties(ArrayList properties)
+    public final void setProperties(ArrayList<String> properties)
     {
         this.properties = properties;
     }
@@ -771,7 +772,7 @@ public class BayesNet
     {
         if (properties == null)
         {
-            properties = new ArrayList();
+            properties = new ArrayList<>();
         }
         properties.add(property);
     }
@@ -779,7 +780,7 @@ public class BayesNet
     /**
      * Remove a property.
      *
-     * @param property
+     * @param property the property to remove
      */
     public void removeProperty(String property)
     {
@@ -787,9 +788,9 @@ public class BayesNet
     }
 
     /**
-     * Remove a property.
+     * Remove a property by its index.
      *
-     * @param index
+     * @param index the index to remove
      */
     public void removeProperty(int index)
     {
@@ -799,67 +800,75 @@ public class BayesNet
     /**
      * Get the number of variables in the network.
      *
-     * @return
+     * @return the cardinality of variables if the variables are initialised
+     *         (can be 0) or INVALID_INDEX else
      */
     public int numberVariables()
     {
         if (probabilityVariables == null)
         {
-            return (BayesNet.INVALID_INDEX);
+            return BayesNet.INVALID_INDEX;
         }
-        return (probabilityVariables.length);
+        return probabilityVariables.length;
     }
 
     /**
      * Get the number of distributions in the network.
      *
-     * @return
+     * @return the cardinality of functions if the functions are initialised
+     *         (can be 0) or INVALID_INDEX else
      */
     public int numberProbabilityFunctions()
     {
         if (probabilityFunctions == null)
         {
-            return (BayesNet.INVALID_INDEX);
+            return BayesNet.INVALID_INDEX;
         }
-        return (probabilityFunctions.length);
+        return probabilityFunctions.length;
     }
 
     /**
      * Get the probability variable at a given index.
      *
-     * @param index
-     * @return
+     * @param index the index to look for
+     * @return the probability variable at index if found or null otherwise
      */
     public ProbabilityVariable getProbabilityVariable(int index)
     {
         if (index <= probabilityVariables.length)
         {
-            return (probabilityVariables[index]);
+            return probabilityVariables[index];
         }
         else
         {
-            return (null);
+            return null;
         }
     }
 
     /**
      * Get the probability function at a given index.
      *
-     * @param index
-     * @return
+     * @param index the index to look for
+     * @return the probability function at index if found or null otherwise
      */
     public ProbabilityFunction getProbabilityFunction(int index)
     {
         if (index <= probabilityFunctions.length)
         {
-            return (probabilityFunctions[index]);
+            return probabilityFunctions[index];
         }
         else
         {
-            return (null);
+            return null;
         }
     }
 
+    /**
+     * Retrieve a variable by name.
+     *
+     * @param varName the name to search for
+     * @return the variable with this name if it exists, null otherwise
+     */
     public ProbabilityVariable getProbabilityVariable(String varName)
     {
         for (ProbabilityVariable var : probabilityVariables)
@@ -876,53 +885,62 @@ public class BayesNet
     /**
      * Get the probability variables.
      *
-     * @return
+     * @return the probability variables as array, could be null
      */
     public ProbabilityVariable[] getProbabilityVariables()
     {
-        return (probabilityVariables);
+        return probabilityVariables;
     }
 
     /**
      * Get the probability functions.
      *
-     * @return
+     * @return the probability functions as array, could be null
      */
     public ProbabilityFunction[] getProbabilityFunctions()
     {
-        return (probabilityFunctions);
+        return probabilityFunctions;
     }
 
     /**
      * Get the utility function.
      *
-     * @return
+     * @return the utility function, could be null
      */
     public DiscreteFunction getUtilityFunction()
     {
-        return (utilityFunction);
+        return utilityFunction;
     }
 
     /**
      * Set a probability variable given its constituents.
      *
-     * @param index
+     * @param index      index of the variable to set
+     * @param name       new name
+     * @param values     array of values
      * @param properties list of properties
-     * @param name
-     * @param values
+     * @throws java.lang.Exception if index is out of range
      */
     public void setProbabilityVariable(int index,
                                        String name,
                                        String values[],
-                                       ArrayList properties)
+                                       ArrayList<String> properties)
+            throws Exception
     {
-        if (index <= probabilityVariables.length)
+        if (index > 0 && index < probabilityVariables.length)
         {
             probabilityVariables[index] = new ProbabilityVariable(this,
                                                                   name,
                                                                   index,
                                                                   values,
                                                                   properties);
+        }
+        else
+        {
+            throw new Exception("Attempt to set variable at index " +
+                                index +
+                                ": illegal index. Range=[0.." +
+                                probabilityVariables.length);
         }
     }
 
@@ -933,36 +951,45 @@ public class BayesNet
      * @param variables
      * @param values
      * @param properties list of properties
+     * @throws java.lang.Exception if index is out of range
      */
     public void setProbabilityFunction(int index,
                                        ProbabilityVariable[] variables,
                                        double values[],
-                                       ArrayList properties)
+                                       ArrayList<String> properties) throws
+            Exception
     {
-        if (index <= probabilityFunctions.length)
+        if (index > 0 && index < probabilityFunctions.length)
         {
             probabilityFunctions[index] =
             new ProbabilityFunction(this, variables, values, properties);
+        }
+        else
+        {
+            throw new Exception("Attempt to set function at index " +
+                                index +
+                                ": illegal index. Range=[0.." +
+                                probabilityFunctions.length);
         }
     }
 
     /**
      * Set a probability variable given its index.
      *
-     * @param index
-     * @param probVar a probability variable
+     * @param index   index of the probability variable
+     * @param probVar the new probability variable
      */
     public void setProbabilityVariable(int index, ProbabilityVariable probVar)
     {
-        probVar.bayesNet = this;
-        probVar.index = index;
+        probVar.setBayesNet(this);
+        probVar.setIndex(index);
         probabilityVariables[index] = probVar;
     }
 
     /**
      * Set a probability variable given its index.
      *
-     * @param index
+     * @param index    index of the probability function
      * @param probFunc probability function
      */
     public void setProbabilityFunction(int index, ProbabilityFunction probFunc)
@@ -976,7 +1003,7 @@ public class BayesNet
      *
      * @param probVar a probability variables
      */
-    public void setProbabilityVariables(ProbabilityVariable probVars[])
+    public final void setProbabilityVariables(ProbabilityVariable probVars[])
     {
         probabilityVariables = probVars;
     }
@@ -986,7 +1013,7 @@ public class BayesNet
      *
      * @param probFunc probability functions
      */
-    public void setProbabilityFunctions(ProbabilityFunction probFuncs[])
+    public final void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {
         probabilityFunctions = probFuncs;
     }

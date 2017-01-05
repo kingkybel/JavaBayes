@@ -68,7 +68,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      *
      */
-    protected ArrayList properties;
+    protected ArrayList<String> properties;
 
     /**
      *
@@ -92,7 +92,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public ProbabilityVariable(BayesNet bayesNet,
                                String name,
-                               ArrayList properties)
+                               ArrayList<String> properties)
     {
         super(name);
         this.properties = properties;
@@ -112,7 +112,7 @@ public class ProbabilityVariable extends DiscreteVariable
                                String name,
                                int index,
                                String values[],
-                               ArrayList properties)
+                               ArrayList<String> properties)
     {
         super(name, index, values);
         this.properties = properties;
@@ -155,18 +155,20 @@ public class ProbabilityVariable extends DiscreteVariable
     }
 
     /**
-     * Determine: 1) whether a variable is observed 2) whether a variable is a
-     * explanation variable
+     * Determine:
+     * <ol>
+     * <li> whether a variable is observed</li>
+     * <li>whether a variable is a explanation variable.</li>
+     * </ol>
      */
     void processProperties()
     {
-        String pp, property, propertyValue, keyword;
-        ArrayList propertiesToRemove = new ArrayList();
+        String property, propertyValue, keyword;
+        ArrayList<String> propertiesToRemove = new ArrayList<>();
 
         // Get all properties one by one
-        for (Object e : properties)
+        for (String pp : properties)
         {
-            pp = (String) (e);
             property = pp.trim();
             // If the property is an "observed" property
             keyword = observedPropertyName;
@@ -418,7 +420,7 @@ public class ProbabilityVariable extends DiscreteVariable
     {
         if (properties == null)
         {
-            properties = new ArrayList();
+            properties = new ArrayList<>();
         }
         properties.add(property);
     }
@@ -469,7 +471,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public int getExplanationIndex()
     {
-        return (explanationIndex);
+        return explanationIndex;
     }
 
     /**
@@ -477,9 +479,9 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @return
      */
-    public ArrayList getProperties()
+    public ArrayList<String> getProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
@@ -487,7 +489,7 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param properties list of properties
      */
-    public void setProperties(ArrayList properties)
+    public void setProperties(ArrayList<String> properties)
     {
         this.properties = properties;
     }
@@ -497,9 +499,9 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @return
      */
-    public ArrayList getEnumeratedProperties()
+    public ArrayList<String> getEnumeratedProperties()
     {
-        return (properties);
+        return properties;
     }
 
     /**
@@ -537,5 +539,10 @@ public class ProbabilityVariable extends DiscreteVariable
     public void setType(int type)
     {
         this.type = type;
+    }
+
+    public void setBayesNet(BayesNet bayesNet)
+    {
+        this.bayesNet = bayesNet;
     }
 }

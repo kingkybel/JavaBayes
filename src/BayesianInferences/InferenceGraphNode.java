@@ -175,7 +175,6 @@ public final class InferenceGraphNode
     {
         ArrayList properties = probVar.getProperties();
         ArrayList propertiesToRemove = new ArrayList();
-        String finalProperty = null;
         String s, ss;
 
         if ((properties != null) && (properties.size() > 0))
@@ -203,11 +202,8 @@ public final class InferenceGraphNode
             }
         }
 
-        // Build the new position property
-        finalProperty = "position = (" +
-                        pos.x + ", " + pos.y + ")";
-        // Insert the new position
-        probVar.addProperty(finalProperty);
+        // Build/Insert the new position property
+        probVar.addProperty("position = (" + pos.x + ", " + pos.y + ")");
     }
 
     /**
@@ -275,7 +271,7 @@ public final class InferenceGraphNode
             finalPosition = new Point(100, 100);
         }
 
-        return (finalPosition);
+        return finalPosition;
     }
 
     /**

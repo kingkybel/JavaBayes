@@ -28,13 +28,15 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
+ * Class to listen to windowClose-events. Use in combination with ExitAction.
  *
  * @author Dieter J Kybelksties
  */
 public class CloseListener extends WindowAdapter
 {
 
-    private static final String CLASS_NAME = CloseListener.class.getName();
+    public static final Class CLAZZ = CloseListener.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     String prompt = "Are you sure you want to exit the application";
     String title = "Exit Application";

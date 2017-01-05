@@ -43,7 +43,8 @@ import javax.swing.text.StyledDocument;
 public class OutputPanel extends javax.swing.JPanel
 {
 
-    private static final String CLASS_NAME = OutputPanel.class.getName();
+    private static final Class CLAZZ = OutputPanel.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     public static final String NEWLINE = System.getProperty("line.separator");

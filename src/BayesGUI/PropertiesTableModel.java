@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Table model class for properties as Key-value-pairs.
  *
  * @author Dieter J Kybelksties
  */
@@ -37,9 +38,18 @@ public class PropertiesTableModel
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    /**
+     * Key/Value convenience class.
+     */
     class KV
     {
 
+        /**
+         * Construct from given key and value.
+         *
+         * @param key   given key
+         * @param value new value
+         */
         KV(String key, String value)
         {
             this.key = key;
@@ -76,6 +86,11 @@ public class PropertiesTableModel
         }
     }
 
+    /**
+     * Retrieve properties as list of strings of the form [key]=[value].
+     *
+     * @return the property list
+     */
     ArrayList<String> getProperties()
     {
         ArrayList<String> reval = new ArrayList<>();
@@ -87,23 +102,38 @@ public class PropertiesTableModel
     }
 
     /**
+     * Add a new key-value-pair.
      *
-     * @param newKey
-     * @param newValue
+     * @param newKey   given key
+     * @param newValue new value
+     * @throws java.lang.Exception
      */
-    public void add(String newKey, String... newValue)
+    public void add(String newKey, String newValue) throws Exception
     {
-        if (newKey != null)
+        if (newKey == null || newKey.isEmpty())
         {
-            KV kv = new KV(newKey, newValue != null ? newValue[1] : "");
-            propertyList.add(kv);
-            fireTableDataChanged();
+            throw new Exception("Cannot add empty property.");
         }
+        KV kv = new KV(newKey, newValue != null ? newValue : "");
+        propertyList.add(kv);
+        fireTableDataChanged();
     }
 
     /**
+     * Add a new key-value-pair with empty value.
      *
-     * @param row
+     * @param newKey given key
+     * @throws java.lang.Exception
+     */
+    public void add(String newKey) throws Exception
+    {
+        add(newKey, null);
+    }
+
+    /**
+     * Remove row by index.
+     *
+     * @param row row-index
      */
     public void remove(int row)
     {
@@ -115,8 +145,9 @@ public class PropertiesTableModel
     }
 
     /**
+     * Remove rows by index.
      *
-     * @param rows
+     * @param rows array of row-indices
      */
     public void remove(int[] rows)
     {
@@ -127,13 +158,19 @@ public class PropertiesTableModel
     }
 
     /**
+     * Remove rows by key.
      *
-     * @param value
+     * @param key key to remove from the list
      */
-    public void remove(String value)
+    public void remove(String key)
     {
-        int row = propertyList.indexOf(value);
-        remove(row);
+        for (int i = 0; i < propertyList.size(); i++)
+        {
+            if (propertyList.get(i).key.equals(key))
+            {
+                remove(i);
+            }
+        }
     }
 
     @Override // AbstractTableModel

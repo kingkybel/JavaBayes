@@ -98,7 +98,7 @@ abstract class FinitelyGeneratedSet
     FinitelyGeneratedSet(BayesNet bayesNet,
                          DiscreteVariable variables[],
                          double values[],
-                         ArrayList properties)
+                         ArrayList<String> properties)
     {
         this(bayesNet,
              variables,
