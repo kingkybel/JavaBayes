@@ -91,11 +91,11 @@ class EditFunctionDialog extends Dialog
     {
         if (ign.isCredalSet())
         {
-            return (new EditCredalSet(ig, ign));
+            return new EditCredalSet(ig, ign);
         }
         else
         {
-            return (new EditProbability(this, ig, ign));
+            return new EditProbability(this, ig, ign);
         }
     }
 
@@ -121,8 +121,8 @@ class EditFunctionDialog extends Dialog
     public Insets getInsets()
     {
         Insets ins = super.getInsets();
-        return (new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
-                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET));
+        return new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
+                          ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
     /**
@@ -135,7 +135,7 @@ class EditFunctionDialog extends Dialog
         {
             dispose();
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 
     /**
@@ -149,13 +149,13 @@ class EditFunctionDialog extends Dialog
         {
             efp.dismiss();
             dispose();
-            return (true);
+            return true;
         }
         else if (evt.target == okButton)
         {
             efp.accept();
-            return (true);
+            return true;
         }
-        return (super.action(evt, arg));
+        return super.action(evt, arg);
     }
 }

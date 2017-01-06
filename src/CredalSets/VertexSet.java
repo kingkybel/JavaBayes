@@ -90,7 +90,7 @@ public final class VertexSet
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable probVars[],
                      double values[],
-                     ArrayList properties,
+                     ArrayList<String> properties,
                      double extremePoints[][])
     {
         super(bayesNet,
@@ -165,7 +165,7 @@ public final class VertexSet
         // auxiliaryVariable is non null (cannot happen in current version)
         if (auxiliaryVariable != null)
         {
-            return (this);
+            return this;
         }
 
         // Create the auxiliary variable for this credal set
@@ -190,7 +190,7 @@ public final class VertexSet
         newQbpf.auxiliaryVariable = auxv;
         newQbpf.variables = newVariables;
 
-        return (newQbpf);
+        return newQbpf;
     }
 
     /**
@@ -214,7 +214,7 @@ public final class VertexSet
                 extremePoints[j][i];
             }
         }
-        return (newValues);
+        return newValues;
     }
 
     /**
@@ -248,12 +248,12 @@ public final class VertexSet
                                                     auxiliaryVariableName,
                                                     BayesNet.INVALID_INDEX,
                                                     auxiliaryVariableValues,
-                                                    ((ArrayList) null));
+                                                    ((ArrayList<String>) null));
         // Mark the auxiliary variable as auxiliary
         auxv.setType(ProbabilityVariable.TRANSPARENT);
 
         // Return the created auxiliary variable
-        return (auxv);
+        return auxv;
     }
 
     /**
@@ -286,7 +286,7 @@ public final class VertexSet
         int position =
             getPositionFromIndexes(bayesNet.getProbabilityVariables(),
                                    valueIndexes);
-        return (extremePoints[indexExtremePoint][position]);
+        return extremePoints[indexExtremePoint][position];
     }
 
     /**

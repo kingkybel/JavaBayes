@@ -132,8 +132,8 @@ public abstract class TwoMonotoneCapacity
             }
         }
 
-        return (new QBProbabilityFunction(this, (double[]) null,
-                                          lowerValues, upperValues));
+        return new QBProbabilityFunction(this, (double[]) null,
+                                         lowerValues, upperValues);
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class TwoMonotoneCapacity
             discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
-            return (results);
+            return results;
         }
 
         // Else, apply the marginalization property and the
@@ -164,7 +164,7 @@ public abstract class TwoMonotoneCapacity
                                    new GeneralizedChoquetIntegral(this,
                                                                   discrFunc);
 
-        return (gci.results);
+        return gci.results;
     }
 
     /**
@@ -189,7 +189,7 @@ public abstract class TwoMonotoneCapacity
             discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
-            return (results);
+            return results;
         }
 
         // Else, apply the marginalization property and the
@@ -230,7 +230,7 @@ public abstract class TwoMonotoneCapacity
         results[0] = lowerExpectation;
         results[1] = upperExpectation;
 
-        return (results);
+        return results;
     }
 
     @Override
@@ -254,11 +254,11 @@ public abstract class TwoMonotoneCapacity
 
         if (mapType == MappingDouble.Type.LOWER_EXPECTATION_BRACKET)
         {
-            return (gci.results[0]); // LOWER_EXPECTATION_BRACKET
+            return gci.results[0];
         }
         else
         {
-            return (gci.results[1]); // UPPER_EXPECTATION_BRACKET
+            return gci.results[1];
         }
     }
 }

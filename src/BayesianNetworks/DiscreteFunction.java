@@ -91,10 +91,10 @@ public class DiscreteFunction
         {
             if (index == variable.index)
             {
-                return (true);
+                return true;
             }
         }
-        return (false);
+        return false;
     }
 
     /**
@@ -108,16 +108,16 @@ public class DiscreteFunction
     {
         if (variables.length != discrFunc.variables.length)
         {
-            return (false);
+            return false;
         }
         for (int i = 0; i < variables.length; i++)
         {
             if (variables[i] != discrFunc.variables[i])
             {
-                return (false);
+                return false;
             }
         }
-        return (true);
+        return true;
     }
 
     /**
@@ -134,7 +134,7 @@ public class DiscreteFunction
     public double evaluate(DiscreteVariable variables[], int valueIndexes[])
     {
         int position = getPositionFromIndexes(variables, valueIndexes);
-        return (values[position]);
+        return values[position];
     }
 
     /**
@@ -155,7 +155,7 @@ public class DiscreteFunction
             pos += variableIndexes[k] * jump;
             jump *= probVar[k].values.length;
         }
-        return (pos);
+        return pos;
     }
 
     /**
@@ -206,13 +206,13 @@ public class DiscreteFunction
         // If there is no variable that must stay, then return null.
         if (numberOfVariablesToStay == 0)
         {
-            return (null);
+            return null;
         }
 
         // If there is no variable to sum out, then return copy.
         if (numberOfVariablesToSumOut == 0)
         {
-            return (new DiscreteFunction(variables, values));
+            return new DiscreteFunction(variables, values);
         }
 
         // Initialize a vector with the indexes of variables to sum out.
@@ -293,7 +293,7 @@ public class DiscreteFunction
                 }
             }
         }
-        return (newDf);
+        return newDf;
     }
 
     /**
@@ -389,7 +389,7 @@ public class DiscreteFunction
             }
         }
 
-        return (newDf);
+        return newDf;
     }
 
     /**
@@ -491,7 +491,7 @@ public class DiscreteFunction
      */
     public int numberVariables()
     {
-        return (variables.length);
+        return variables.length;
     }
 
     /**
@@ -501,7 +501,7 @@ public class DiscreteFunction
      */
     public int numberValues()
     {
-        return (values.length);
+        return values.length;
     }
 
     /**
@@ -511,7 +511,7 @@ public class DiscreteFunction
      */
     public DiscreteVariable[] getVariables()
     {
-        return (variables);
+        return variables;
     }
 
     /**
@@ -523,7 +523,7 @@ public class DiscreteFunction
      */
     public DiscreteVariable getVariable(int index)
     {
-        return (variables[index]);
+        return variables[index];
     }
 
     /**
@@ -539,7 +539,7 @@ public class DiscreteFunction
         {
             ind[i] = variables[i].index;
         }
-        return (ind);
+        return ind;
     }
 
     /**
@@ -550,7 +550,7 @@ public class DiscreteFunction
      */
     public int getIndex(int ind)
     {
-        return (variables[ind].index);
+        return variables[ind].index;
     }
 
     /**
@@ -560,7 +560,7 @@ public class DiscreteFunction
      */
     public double[] getValues()
     {
-        return (values);
+        return values;
     }
 
     /**
@@ -572,7 +572,7 @@ public class DiscreteFunction
      */
     public double getValue(int index)
     {
-        return (values[index]);
+        return values[index];
     }
 
     /**

@@ -66,7 +66,7 @@ public class QBProbabilityFunction extends ProbabilityFunction
     public QBProbabilityFunction(BayesNet bayesNet,
                                  int numberOfVars,
                                  int numberOfValues,
-                                 ArrayList properties)
+                                 ArrayList<String> properties)
     {
         super(bayesNet, numberOfVars, numberOfValues, properties);
         lowerEnvelope = new double[numberOfValues];

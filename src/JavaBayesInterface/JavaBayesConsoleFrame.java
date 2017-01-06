@@ -616,7 +616,7 @@ public final class JavaBayesConsoleFrame extends Frame
                         true);
             }
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 
     /**
@@ -641,7 +641,7 @@ public final class JavaBayesConsoleFrame extends Frame
         if (s == false)
         { // If cur was on, then cur is still off and def is on.
             def.setState(true);
-            return (def);
+            return def;
         }
         else
         {           // If cur was off, then cur is on and all others are off.
@@ -651,7 +651,7 @@ public final class JavaBayesConsoleFrame extends Frame
                 ((CheckboxMenuItem) (m.getItem(i))).setState(false);
             }
             cur.setState(true); // then set cur back to on.
-            return (cur);
+            return cur;
         }
     }
 }

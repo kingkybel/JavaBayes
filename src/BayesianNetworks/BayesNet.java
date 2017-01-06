@@ -305,7 +305,6 @@ public class BayesNet
     public void saveBif(PrintStream out)
     {
         int i;
-        String property;
 
         out.println("// Bayesian network ");
         if (name != null)
@@ -325,9 +324,8 @@ public class BayesNet
         out.println();
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -454,7 +452,6 @@ public class BayesNet
     public void saveXml(PrintStream out)
     {
         int i;
-        String property;
 
         // Heading for the file
         out.println("<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\n\n");
@@ -493,9 +490,8 @@ public class BayesNet
         }
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -546,7 +542,6 @@ public class BayesNet
     public void saveXml_0_2(PrintStream out)
     {
         int i;
-        String property;
 
         // Heading for the file
         out.println("<?XML VERSION=\"1.0\"?>\n\n");
@@ -588,9 +583,8 @@ public class BayesNet
         }
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -671,12 +665,11 @@ public class BayesNet
         }
 
         j = 0;
-        for (Object e : evs)
+        for (ProbabilityVariable evidenceProbVar : evs)
         {
-            probVar = (ProbabilityVariable) (e);
-            allEvs[j][0] = probVar.name;
-            aux = probVar.observedIndex;
-            allEvs[j][1] = probVar.values[aux];
+            allEvs[j][0] = evidenceProbVar.name;
+            aux = evidenceProbVar.observedIndex;
+            allEvs[j][1] = evidenceProbVar.values[aux];
         }
 
         return allEvs;
@@ -1011,7 +1004,7 @@ public class BayesNet
     /**
      * Set the vector of probability functions.
      *
-     * @param probFunc probability functions
+     * @param probFuncs probability functions
      */
     public final void setProbabilityFunctions(ProbabilityFunction probFuncs[])
     {

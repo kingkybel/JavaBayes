@@ -103,7 +103,7 @@ public final class FunctionTablePanel extends Panel
     public double[] getTable()
     {
         updateTableValues();
-        return (tableValues);
+        return tableValues;
     }
 
     /**
@@ -306,11 +306,11 @@ public final class FunctionTablePanel extends Panel
                 if (evt.target == parentChoices[i])
                 {
                     updateTableForParents();
-                    return (true);
+                    return true;
                 }
             }
         }
-        return (super.action(evt, arg));
+        return super.action(evt, arg);
     }
 
     /**
@@ -465,6 +465,6 @@ public final class FunctionTablePanel extends Panel
             pos += indexes[i] * jump;
             jump *= allVariableValues[i].length;
         }
-        return (pos);
+        return pos;
     }
 }

@@ -321,7 +321,7 @@ public class Expectation
                                             moment.order()));
             }
         }
-        return (discrFunc);
+        return discrFunc;
     }
 
     /**
@@ -396,6 +396,6 @@ public class Expectation
      */
     public double[] getResults()
     {
-        return (results);
+        return results;
     }
 }

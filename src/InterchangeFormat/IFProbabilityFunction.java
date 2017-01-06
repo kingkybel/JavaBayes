@@ -82,7 +82,7 @@ public class IFProbabilityFunction
      *
      * @param tables
      */
-    public void setTables(ArrayList tables)
+    public void setTables(ArrayList<double[]> tables)
     {
         this.tables = tables;
     }
@@ -175,15 +175,14 @@ public class IFProbabilityFunction
             // Go through all the tables.
             ArrayList<double[]> newTables = new ArrayList<>();
             String runningName;
-            double t[], newTable[];
+            double newTable[];
             int i, j;
             int sizeOfFirst = 0, sizeOfOthers = 1;
 
-            for (Object e : tables)
+            for (double[] t : tables)
             {
                 sizeOfFirst = 0;
                 sizeOfOthers = 1;
-                t = (double[]) (e); // Get the table.
                 // Now get the first variable.
                 for (IFProbabilityVariable probVar : ifBayesNet.probVars)
                 {

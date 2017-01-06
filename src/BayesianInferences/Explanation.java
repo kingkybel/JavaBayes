@@ -222,6 +222,6 @@ public class Explanation
      */
     public ProbabilityFunction[] getResults()
     {
-        return (results);
+        return results;
     }
 }

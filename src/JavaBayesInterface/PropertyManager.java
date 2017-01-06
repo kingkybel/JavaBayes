@@ -37,9 +37,9 @@ class PropertyManager
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // The original properties.
-    private final ArrayList originalProperties;
+    private final ArrayList<String> originalProperties;
     // The vector holding a copy of the relevant properties.
-    private final ArrayList modifiedProperties;
+    private final ArrayList<String> modifiedProperties;
     // A flag indicating whether the original properties are valid.
     private boolean areOriginalPropertiesStillValid;
     // The index of the displayed property;
@@ -50,7 +50,7 @@ class PropertyManager
     /**
      * Default constructor for PropertyManager.
      */
-    PropertyManager(ArrayList op, TextField tf)
+    PropertyManager(ArrayList<String> op, TextField tf)
     {
         String property;
 
@@ -58,10 +58,10 @@ class PropertyManager
         originalProperties = op;
         textField = tf;
         // Make the copy of the properties.
-        modifiedProperties = new ArrayList();
+        modifiedProperties = new ArrayList<>();
         if (op != null)
         {
-            for (Object e : op)
+            for (String e : op)
             {
                 modifiedProperties.add(e);
             }
@@ -164,7 +164,7 @@ class PropertyManager
     /**
      * Modify a property when the dialog exits.
      */
-    ArrayList updatePropertyOnExit()
+    ArrayList<String> updatePropertyOnExit()
     {
         String property;
 
@@ -183,11 +183,11 @@ class PropertyManager
         }
         if (areOriginalPropertiesStillValid == false)
         {
-            return (modifiedProperties);
+            return modifiedProperties;
         }
         else
         {
-            return (null);
+            return null;
         }
     }
 }

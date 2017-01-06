@@ -138,7 +138,6 @@ public class BayesGUI extends javax.swing.JFrame
     Point newArcHead = null;
     boolean modifyGroup = false;
     InferenceGraphNode movenode = null;
-    ArrayList movingNodes = null;
     InferenceGraphNode arcbottomnode = null;
     InferenceGraphNode archeadnode = null;
     int xScroll;

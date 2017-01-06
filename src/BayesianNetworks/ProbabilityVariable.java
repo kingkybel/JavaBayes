@@ -193,10 +193,9 @@ public class ProbabilityVariable extends DiscreteVariable
             }
         }
 
-        for (Object e : propertiesToRemove)
+        for (String prop2Remove : propertiesToRemove)
         {
-            property = (String) (e);
-            properties.remove(property);
+            properties.remove(prop2Remove);
         }
     }
 
@@ -208,7 +207,6 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public void saveXml_0_3(PrintStream out)
     {
-        String property;
 
         if (this == null)
         {
@@ -242,9 +240,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -258,8 +255,6 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public void saveXml(PrintStream out)
     {
-        String property;
-
         if (this == null)
         {
             return;
@@ -293,9 +288,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\t<PROPERTY>" + property + "</PROPERTY>");
             }
         }
@@ -308,8 +302,6 @@ public class ProbabilityVariable extends DiscreteVariable
     @Override
     public void print(PrintStream out)
     {
-        String property;
-
         if (this == null)
         {
             return;
@@ -345,9 +337,8 @@ public class ProbabilityVariable extends DiscreteVariable
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String property : properties)
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -361,7 +352,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public int getType()
     {
-        return (type);
+        return type;
     }
 
     /**
@@ -372,7 +363,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public boolean isExplanation()
     {
-        return (explanationIndex != BayesNet.INVALID_INDEX);
+        return explanationIndex != BayesNet.INVALID_INDEX;
     }
 
     /**
@@ -383,7 +374,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public boolean isObserved()
     {
-        return (observedIndex != BayesNet.INVALID_INDEX);
+        return observedIndex != BayesNet.INVALID_INDEX;
     }
 
     /**
@@ -461,7 +452,7 @@ public class ProbabilityVariable extends DiscreteVariable
      */
     public int getObservedIndex()
     {
-        return (observedIndex);
+        return observedIndex;
     }
 
     /**

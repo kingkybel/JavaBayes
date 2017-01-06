@@ -106,7 +106,7 @@ public class JavaBayes extends Applet
      */
     public boolean open(String filename)
     {
-        return (editorFrame.open(filename));
+        return editorFrame.open(filename);
     }
 
     /**
@@ -117,7 +117,7 @@ public class JavaBayes extends Applet
      */
     public boolean openUrl(String filename)
     {
-        return (editorFrame.openUrl(filename));
+        return editorFrame.openUrl(filename);
     }
 
     /**
@@ -136,7 +136,7 @@ public class JavaBayes extends Applet
      */
     public boolean save()
     {
-        return (editorFrame.save());
+        return editorFrame.save();
     }
 
     /**
@@ -147,7 +147,7 @@ public class JavaBayes extends Applet
      */
     public boolean save(String filename)
     {
-        return (editorFrame.save(filename));
+        return editorFrame.save(filename);
     }
 
     /**
@@ -272,7 +272,7 @@ public class JavaBayes extends Applet
      */
     public String getCurrentSaveFilename()
     {
-        return (editorFrame.getCurrentSaveFilename());
+        return editorFrame.getCurrentSaveFilename();
     }
 
     /**

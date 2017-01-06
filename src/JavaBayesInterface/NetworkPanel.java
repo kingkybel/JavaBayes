@@ -42,7 +42,6 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
@@ -98,7 +97,7 @@ public class NetworkPanel extends Canvas
     Point newArcHead = null;
     boolean modifyGroup = false;
     InferenceGraphNode movenode = null;
-    ArrayList movingNodes = null;
+    ArrayList<InferenceGraphNode> movingNodes = null;
     InferenceGraphNode arcbottomnode = null;
     InferenceGraphNode archeadnode = null;
     int xScroll;
@@ -300,18 +299,16 @@ public class NetworkPanel extends Canvas
      */
     private InferenceGraphNode nodehit(int x, int y)
     {
-        InferenceGraphNode node;
-        for (Object e : ig.elements())
+        for (InferenceGraphNode node : ig.elements())
         {
-            node = (InferenceGraphNode) (e);
             if ((x - node.getPosX()) * (x - node.getPosX()) +
                 (y - node.getPosY()) * (y - node.getPosY()) <
                 NODE_RADIUS * NODE_RADIUS)
             {
-                return (node);
+                return node;
             }
         }
-        return (null);
+        return null;
     }
 
     /**
@@ -319,16 +316,12 @@ public class NetworkPanel extends Canvas
      */
     boolean archit(int x, int y)
     {
-        InferenceGraphNode hnode, pnode;
         double sdpa;
 
-        for (Object e : ig.elements())
+        for (InferenceGraphNode hnode : ig.elements())
         {
-            hnode = (InferenceGraphNode) (e);
-            for (Iterator it = (hnode.getParents()).iterator(); it.hasNext();)
+            for (InferenceGraphNode pnode : hnode.getParents())
             {
-                Object ee = it.next();
-                pnode = (InferenceGraphNode) (ee);
                 sdpa = squareDistancePointArc(hnode, pnode, x, y);
                 if ((sdpa >= 0.0) && (sdpa <= DISTANCE_HIT_ARC))
                 {
@@ -343,7 +336,7 @@ public class NetworkPanel extends Canvas
         }
         else
         {
-            return (false);
+            return false;
         }
     }
 
@@ -377,17 +370,17 @@ public class NetworkPanel extends Canvas
         if (squareHyp < ((double) ((x3 - x1) * (x3 - x1) + (y3 - y1) *
                                                            (y3 - y1))))
         {
-            return (-1.0);
+            return -1.0;
         }
         // Check second extreme point
         if (squareHyp < ((double) ((x3 - x2) * (x3 - x2) + (y3 - y2) *
                                                            (y3 - y2))))
         {
-            return (-1.0);
+            return -1.0;
         }
 
         // Requested distance is the height of the triangle
-        return (squareHeight);
+        return squareHeight;
     }
 
     /**
@@ -444,7 +437,6 @@ public class NetworkPanel extends Canvas
     @Override
     public void paint(Graphics g)
     {
-        InferenceGraphNode node, parent;
         ExplanationType explanationStatus = frame.getMode();
 
         if (ig == null)
@@ -463,12 +455,10 @@ public class NetworkPanel extends Canvas
         }
 
         // Draw all arcs.
-        for (Object e : ig.elements())
+        for (InferenceGraphNode node : ig.elements())
         {
-            node = (InferenceGraphNode) (e);
-            for (Object ee : (node.getParents()))
+            for (InferenceGraphNode parent : node.getParents())
             {
-                parent = (InferenceGraphNode) (ee);
                 drawArc(g, node, parent);
             }
         }
@@ -476,10 +466,8 @@ public class NetworkPanel extends Canvas
         // Draw the nodes.
         g.setFont(helvetica);
 
-        for (Object e : ig.elements())
+        for (InferenceGraphNode node : ig.elements())
         {
-            node = (InferenceGraphNode) e;
-
             g.setColor(nodeBorderColor);
             if ((node.getPosX() - xScroll) >= 0)
             {
@@ -653,7 +641,7 @@ public class NetworkPanel extends Canvas
      */
     InferenceGraph getInferenceGraph()
     {
-        return (ig);
+        return ig;
     }
 
     /**
@@ -711,7 +699,6 @@ public class NetworkPanel extends Canvas
      */
     void generateMovingNodes()
     {
-        InferenceGraphNode node;
 
         if (!insideGroup(movenode))
         {
@@ -719,10 +706,9 @@ public class NetworkPanel extends Canvas
         }
         else
         {
-            movingNodes = new ArrayList();
-            for (Object e : ig.elements())
+            movingNodes = new ArrayList<>();
+            for (InferenceGraphNode node : ig.elements())
             {
-                node = (InferenceGraphNode) e;
                 if (insideGroup(node))
                 {
                     movingNodes.add(node);
@@ -736,7 +722,6 @@ public class NetworkPanel extends Canvas
      */
     void moveNode(int x, int y)
     {
-        InferenceGraphNode node;
         int deltaX = movenode.getPosX() - x;
         int deltaY = movenode.getPosY() - y;
 
@@ -751,12 +736,11 @@ public class NetworkPanel extends Canvas
             groupEnd.x -= deltaX;
             groupStart.y -= deltaY;
             groupEnd.y -= deltaY;
-            for (Object e : movingNodes)
+            for (InferenceGraphNode node : movingNodes)
             {
-                node = (InferenceGraphNode) e;
                 ig.setPos(node, // Move all nodes in the group.
-                          new Point(node.getPosX() - deltaX, node.
-                                    getPosY() - deltaY));
+                          new Point(node.getPosX() - deltaX,
+                                    node.getPosY() - deltaY));
             }
         }
     }
@@ -766,8 +750,7 @@ public class NetworkPanel extends Canvas
      */
     void deleteNode(InferenceGraphNode node)
     {
-        InferenceGraphNode dnode;
-        ArrayList nodesToDelete;
+        ArrayList<InferenceGraphNode> nodesToDelete;
 
         // Check whether the node is in the group.
         if (!insideGroup(node))
@@ -776,19 +759,17 @@ public class NetworkPanel extends Canvas
         }
         else
         {
-            nodesToDelete = new ArrayList();
-            for (Object e : ig.elements())
+            nodesToDelete = new ArrayList<>();
+            for (InferenceGraphNode dnode : ig.elements())
             {
-                dnode = (InferenceGraphNode) e;
                 if (insideGroup(dnode))
                 {
                     nodesToDelete.add(dnode);
                 }
             }
-            for (Object e : nodesToDelete)
+            for (InferenceGraphNode dnode : nodesToDelete)
             {
-                dnode = (InferenceGraphNode) e;
-                ig.deleteNode(dnode); // Delete node.
+                ig.deleteNode(dnode);
             }
         }
         ig.resetMarginal();
@@ -799,10 +780,10 @@ public class NetworkPanel extends Canvas
      */
     boolean insideGroup(InferenceGraphNode node)
     {
-        return ((node.getPosX() > Math.min(groupStart.x, groupEnd.x)) &&
-                (node.getPosX() < Math.max(groupStart.x, groupEnd.x)) &&
-                (node.getPosY() > Math.min(groupStart.y, groupEnd.y)) &&
-                (node.getPosY() < Math.max(groupStart.y, groupEnd.y)));
+        return (node.getPosX() > Math.min(groupStart.x, groupEnd.x)) &&
+               (node.getPosX() < Math.max(groupStart.x, groupEnd.x)) &&
+               (node.getPosY() > Math.min(groupStart.y, groupEnd.y)) &&
+               (node.getPosY() < Math.max(groupStart.y, groupEnd.y));
     }
 
     /**

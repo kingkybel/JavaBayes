@@ -184,7 +184,7 @@ public class ProbabilityFunction extends DiscreteFunction
         }
 
         // Now evaluate
-        return (evaluate(valueIndexes));
+        return evaluate(valueIndexes);
     }
 
     /**
@@ -197,7 +197,7 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public double evaluate(int valueIndexes[])
     {
-        return (super.evaluate(bayesNet.probabilityVariables, valueIndexes));
+        return super.evaluate(bayesNet.probabilityVariables, valueIndexes);
     }
 
     /**
@@ -209,8 +209,8 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public int getPositionFromIndexes(int variableIndexes[])
     {
-        return (super.getPositionFromIndexes(bayesNet.probabilityVariables,
-                                             variableIndexes));
+        return super.getPositionFromIndexes(bayesNet.probabilityVariables,
+                                            variableIndexes);
     }
 
     /**
@@ -229,7 +229,7 @@ public class ProbabilityFunction extends DiscreteFunction
         {
             ev += values[i] * discrFunc.values[i];
         }
-        return (ev);
+        return ev;
     }
 
     /**
@@ -251,7 +251,7 @@ public class ProbabilityFunction extends DiscreteFunction
             p += values[i];
             ev += values[i] * discrFunc.values[i];
         }
-        return (ev / p);
+        return ev / p;
     }
 
     /**
@@ -272,7 +272,7 @@ public class ProbabilityFunction extends DiscreteFunction
             ev += aux;
             evv = discrFunc.values[i] * aux;
         }
-        return (evv - ev * ev);
+        return evv - ev * ev;
     }
 
     /**

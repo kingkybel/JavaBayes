@@ -194,7 +194,7 @@ public class EditorFrame extends Frame
                         true);
             }
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 
     /**
@@ -265,7 +265,7 @@ public class EditorFrame extends Frame
         {
             if (jb.isApplet)
             {
-                return (false);
+                return false;
             }
             else
             {
@@ -276,13 +276,13 @@ public class EditorFrame extends Frame
         catch (Exception e)
         {
             jb.appendText(e + "\n");
-            return (false);
+            return false;
         }
 
         // Put the network into the graphical interface
         setInferenceGraph(inferenceGraph);
 
-        return (true);
+        return true;
     }
 
     /**
@@ -303,13 +303,13 @@ public class EditorFrame extends Frame
         catch (Exception e)
         {
             jb.appendText("Exception: " + e + "\n");
-            return (false);
+            return false;
         }
 
         // Put the network into the graphical interface
         setInferenceGraph(ig);
 
-        return (true);
+        return true;
     }
 
     /**
@@ -319,7 +319,7 @@ public class EditorFrame extends Frame
      */
     public boolean save()
     {
-        return (save(currentSaveFilename));
+        return save(currentSaveFilename);
     }
 
     /**
@@ -335,13 +335,13 @@ public class EditorFrame extends Frame
         if (filename == null)
         {
             jb.appendText("\n Filename invalid!");
-            return (false);
+            return false;
         }
 
         if (ig == null)
         {
             jb.appendText("\n No Bayesian network to be saved.\n\n");
-            return (false);
+            return false;
         }
 
         try
@@ -366,9 +366,9 @@ public class EditorFrame extends Frame
         catch (IOException e)
         {
             jb.appendText("Exception: " + e + "\n");
-            return (false);
+            return false;
         }
-        return (true);
+        return true;
     }
 
     /**
@@ -538,7 +538,7 @@ public class EditorFrame extends Frame
      */
     public InferenceGraph getInferenceGraph()
     {
-        return (scrollPanel.netPanel.getInferenceGraph());
+        return scrollPanel.netPanel.getInferenceGraph();
     }
 
     /**
@@ -606,7 +606,7 @@ public class EditorFrame extends Frame
      */
     public ExplanationType getMode()
     {
-        return (modeMenuChoice);
+        return modeMenuChoice;
     }
 
     /**
@@ -616,7 +616,7 @@ public class EditorFrame extends Frame
      */
     public String getCurrentSaveFilename()
     {
-        return (currentSaveFilename);
+        return currentSaveFilename;
     }
 
     /**

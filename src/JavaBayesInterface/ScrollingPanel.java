@@ -100,6 +100,6 @@ public class ScrollingPanel extends Panel
             }
             netPanel.repaint();
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 }

@@ -101,7 +101,7 @@ public class BayesPanel
     Point newArcHead = null;
     boolean modifyGroup = false;
     InferenceGraphNode movenode = null;
-    ArrayList movingNodes = null;
+    ArrayList<InferenceGraphNode> movingNodes = null;
     InferenceGraphNode arcBottomNode = null;
     InferenceGraphNode arcHeadNode = null;
 
@@ -370,18 +370,16 @@ public class BayesPanel
      */
     private InferenceGraphNode getHitNode(int x, int y)
     {
-        InferenceGraphNode node;
-        for (Object e : inferenceGraph.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
-            node = (InferenceGraphNode) (e);
             if ((x - node.getPosX()) * (x - node.getPosX()) +
                 (y - node.getPosY()) * (y - node.getPosY()) <
                 NODE_RADIUS * NODE_RADIUS)
             {
-                return (node);
+                return node;
             }
         }
-        return (null);
+        return null;
     }
 
     /**
@@ -394,16 +392,13 @@ public class BayesPanel
      */
     boolean isArcHit(int x, int y)
     {
-        InferenceGraphNode hnode, pnode;
         double sdpa;
 
-        for (Object e : inferenceGraph.elements())
+        for (InferenceGraphNode hnode : inferenceGraph.elements())
         {
-            hnode = (InferenceGraphNode) (e);
             for (Iterator it = (hnode.getParents()).iterator(); it.hasNext();)
             {
-                Object ee = it.next();
-                pnode = (InferenceGraphNode) (ee);
+                InferenceGraphNode pnode = (InferenceGraphNode) it.next();
                 sdpa = squareDistancePointArc(hnode, pnode, x, y);
                 if ((sdpa >= 0.0) && (sdpa <= DISTANCE_HIT_ARC))
                 {
@@ -463,7 +458,7 @@ public class BayesPanel
         }
 
         // Requested distance is the height of the triangle
-        return (squareHeight);
+        return squareHeight;
     }
 
     /**
@@ -534,7 +529,6 @@ public class BayesPanel
     {
         super.paintComponent(g);
 
-        InferenceGraphNode node, parent;
         ExplanationType explanationStatus = frame.getCalculationType();
 
         if (inferenceGraph == null)
@@ -554,12 +548,10 @@ public class BayesPanel
         }
 
         // Draw all arcs.
-        for (Object e : inferenceGraph.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
-            node = (InferenceGraphNode) (e);
-            for (Object ee : (node.getParents()))
+            for (InferenceGraphNode parent : node.getParents())
             {
-                parent = (InferenceGraphNode) (ee);
                 drawArc(g, node, parent);
             }
         }
@@ -567,9 +559,8 @@ public class BayesPanel
         // Draw the nodes.
         g.setFont(helvetica);
 
-        for (Object e : inferenceGraph.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
-            node = (InferenceGraphNode) e;
 
             g.setColor(nodeBorderColor);
             if ((node.getPosX()) >= 0)
@@ -809,8 +800,6 @@ public class BayesPanel
      */
     void generateMovingNodes()
     {
-        InferenceGraphNode node;
-
         if (!insideGroup(movenode))
         {
             movingNodes = null;
@@ -818,9 +807,8 @@ public class BayesPanel
         else
         {
             movingNodes = new ArrayList();
-            for (Object e : inferenceGraph.elements())
+            for (InferenceGraphNode node : inferenceGraph.elements())
             {
-                node = (InferenceGraphNode) e;
                 if (insideGroup(node))
                 {
                     movingNodes.add(node);
@@ -837,7 +825,6 @@ public class BayesPanel
      */
     void moveNode(int x, int y)
     {
-        InferenceGraphNode node;
         int deltaX = movenode.getPosX() - x;
         int deltaY = movenode.getPosY() - y;
 
@@ -852,9 +839,8 @@ public class BayesPanel
             groupEnd.x -= deltaX;
             groupStart.y -= deltaY;
             groupEnd.y -= deltaY;
-            for (Object e : movingNodes)
+            for (InferenceGraphNode node : movingNodes)
             {
-                node = (InferenceGraphNode) e;
                 inferenceGraph.setPos(node, // Move all nodes in the group.
                                       new Point(node.getPosX() - deltaX,
                                                 node.getPosY() - deltaY));
@@ -869,8 +855,7 @@ public class BayesPanel
      */
     void deleteNode(InferenceGraphNode node)
     {
-        InferenceGraphNode dnode;
-        ArrayList nodesToDelete;
+        ArrayList<InferenceGraphNode> nodesToDelete;
 
         // Check whether the node is in the group.
         if (!insideGroup(node))
@@ -879,19 +864,17 @@ public class BayesPanel
         }
         else
         {
-            nodesToDelete = new ArrayList();
-            for (Object e : inferenceGraph.elements())
+            nodesToDelete = new ArrayList<>();
+            for (InferenceGraphNode dnode : inferenceGraph.elements())
             {
-                dnode = (InferenceGraphNode) e;
                 if (insideGroup(dnode))
                 {
                     nodesToDelete.add(dnode);
                 }
             }
-            for (Object e : nodesToDelete)
+            for (InferenceGraphNode dnode : nodesToDelete)
             {
-                dnode = (InferenceGraphNode) e;
-                inferenceGraph.deleteNode(dnode); // Delete node.
+                inferenceGraph.deleteNode(dnode);
             }
         }
         inferenceGraph.resetMarginal();
@@ -905,10 +888,10 @@ public class BayesPanel
      */
     boolean insideGroup(InferenceGraphNode node)
     {
-        return ((node.getPosX() > Math.min(groupStart.x, groupEnd.x)) &&
-                (node.getPosX() < Math.max(groupStart.x, groupEnd.x)) &&
-                (node.getPosY() > Math.min(groupStart.y, groupEnd.y)) &&
-                (node.getPosY() < Math.max(groupStart.y, groupEnd.y)));
+        return (node.getPosX() > Math.min(groupStart.x, groupEnd.x)) &&
+               (node.getPosX() < Math.max(groupStart.x, groupEnd.x)) &&
+               (node.getPosY() > Math.min(groupStart.y, groupEnd.y)) &&
+               (node.getPosY() < Math.max(groupStart.y, groupEnd.y));
     }
 
     /**

@@ -57,7 +57,7 @@ abstract class FinitelyGeneratedSet
     FinitelyGeneratedSet(BayesNet bayesNet,
                          int numberOfVars,
                          int numberOfValues,
-                         ArrayList properties)
+                         ArrayList<String> properties)
     {
         super(bayesNet, numberOfVars, numberOfValues, properties);
     }
@@ -77,7 +77,7 @@ abstract class FinitelyGeneratedSet
                          double values[],
                          double lowerEnvelope[],
                          double upperEnvelope[],
-                         ArrayList properties)
+                         ArrayList<String> properties)
     {
         super(bayesNet,
               variables,

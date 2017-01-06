@@ -84,7 +84,7 @@ public class QuasiBayesNet extends BayesNet
      * @param name       network name
      * @param properties list of properties
      */
-    public QuasiBayesNet(String name, ArrayList properties)
+    public QuasiBayesNet(String name, ArrayList<String> properties)
     {
         super(name, properties);
         globalNeighborhoodType = GlobalNeighbourhood.NO_CREDAL_SET;
@@ -202,15 +202,14 @@ public class QuasiBayesNet extends BayesNet
     protected void processProperties()
     {
         boolean isPropertyValueAvailable;
-        String property, propertyValue, keyword, token;
+        String propertyValue, keyword, token;
         StringTokenizer st;
         String delimiters = " \n\t\r\f";
-        ArrayList propertiesToRemove = new ArrayList();
+        ArrayList<String> propertiesToRemove = new ArrayList<>();
 
         // Go through the properties
-        for (Object e : getProperties())
+        for (String property : getProperties())
         {
-            property = (String) (e);
             st = new StringTokenizer(property, delimiters);
 
             // Extension: global neighborhoods
@@ -249,9 +248,9 @@ public class QuasiBayesNet extends BayesNet
             }
         }
 
-        for (Object e : propertiesToRemove)
+        for (String prop2Remove : propertiesToRemove)
         {
-            removeProperty((String) (e));
+            removeProperty(prop2Remove);
         }
     }
 
@@ -267,17 +266,16 @@ public class QuasiBayesNet extends BayesNet
         {
             if (probabilityFunction instanceof QBProbabilityFunction)
             {
-                return (true);
+                return true;
             }
         }
-        return (false);
+        return false;
     }
 
     @Override
     public void print(PrintStream out)
     {
         int i;
-        String property;
 
         out.println("// Bayesian network ");
         if (getName() != null)
@@ -307,9 +305,8 @@ public class QuasiBayesNet extends BayesNet
 
         if (hasProperties())
         {
-            for (Object e : getProperties())
+            for (String property : getProperties())
             {
-                property = (String) (e);
                 out.println("\tproperty \"" + property + "\" ;");
             }
         }
@@ -346,7 +343,7 @@ public class QuasiBayesNet extends BayesNet
      */
     public GlobalNeighbourhood getGlobalNeighborhoodType()
     {
-        return (globalNeighborhoodType);
+        return globalNeighborhoodType;
     }
 
     /**
@@ -366,7 +363,7 @@ public class QuasiBayesNet extends BayesNet
      */
     public double getGlobalNeighborhoodParameter()
     {
-        return (globalNeighborhoodParameter);
+        return globalNeighborhoodParameter;
     }
 
     /**

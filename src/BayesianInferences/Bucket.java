@@ -248,7 +248,7 @@ class Bucket
         // If the bucket is empty, return null
         if (orderedDfs.length == 0)
         {
-            return (null);
+            return null;
         }
 
         // Create the combined DiscreteFunction object
@@ -324,7 +324,7 @@ class Bucket
         {
             cluster = newDf;
         }
-        return (newDf);
+        return newDf;
     }
 
     /**
@@ -407,7 +407,7 @@ class Bucket
                 }
             }
         }
-        return (n);
+        return n;
     }
 
     /**
@@ -435,7 +435,7 @@ class Bucket
         // If the only variable is the bucket variable, then ignore
         if (n == 0)
         {
-            return (null);
+            return null;
         }
 
         // Calculate necessary quantities
@@ -457,7 +457,7 @@ class Bucket
                          joinedIndexes,
                          isBucketVariableIncluded);
 
-        return (newDf);
+        return newDf;
 
     }
 

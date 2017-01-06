@@ -46,6 +46,7 @@ public class ConvertInterchangeFormat
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    public static final double INVALID_VALUE = -1.0;
     InterchangeFormat interchangeFmt;
 
     /**
@@ -68,9 +69,9 @@ public class ConvertInterchangeFormat
         IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
-            return (null);
+            return null;
         }
-        return (ifbn.getName());
+        return ifbn.getName();
     }
 
     /**
@@ -99,11 +100,10 @@ public class ConvertInterchangeFormat
     public ProbabilityVariable[] getProbabilityVariables(BayesNet bayesNet)
     {
         int i;
-        IFProbabilityVariable ipv;
         IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
-            return (null);
+            return null;
         }
         ArrayList<IFProbabilityVariable> pvs = ifbn.getProbabilityVariables();
 
@@ -111,9 +111,8 @@ public class ConvertInterchangeFormat
                               new ProbabilityVariable[pvs.size()];
 
         i = 0;
-        for (Object e : pvs)
+        for (IFProbabilityVariable ipv : pvs)
         {
-            ipv = (IFProbabilityVariable) (e);
             probabilityVariables[i] =
             new ProbabilityVariable(bayesNet,
                                     ipv.getName(),
@@ -123,7 +122,7 @@ public class ConvertInterchangeFormat
             i++;
         }
 
-        return (probabilityVariables);
+        return probabilityVariables;
     }
 
     /**
@@ -132,7 +131,7 @@ public class ConvertInterchangeFormat
      *
      * @param bayesNet the underlying Bayesian network The BayesNet that will
      *                 receive the ProbabilityVariable objects.
-     * @return
+     * @return the generated array of ProbabilityFunctions
      */
     public ProbabilityFunction[] getProbabilityFunctions(BayesNet bayesNet)
     {
@@ -140,7 +139,7 @@ public class ConvertInterchangeFormat
         IFBayesNet ifbn = interchangeFmt.getBayesNetFromInterchangeFmt();
         if (ifbn == null)
         {
-            return (null);
+            return null;
         }
         ArrayList<IFProbabilityFunction> ifProbFuncs = ifbn.
                                          getProbabilityFunctions();
@@ -156,7 +155,7 @@ public class ConvertInterchangeFormat
             i++;
         }
 
-        return (probabilityFunctions);
+        return probabilityFunctions;
     }
 
     private ArrayList<Integer> incrementValueIndex(
@@ -312,7 +311,6 @@ public class ConvertInterchangeFormat
                                        values,
                                        ifProbFunc.getProperties());
     }
-    public static final double INVALID_VALUE = -1.0;
 
     /**
      * Create the variables in the ProbabilityFunction object from the variables
@@ -339,7 +337,7 @@ public class ConvertInterchangeFormat
                 variables[i] = bayesNet.getProbabilityVariable(index);
             }
         }
-        return (variables);
+        return variables;
     }
 
     /**

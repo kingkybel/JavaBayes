@@ -81,7 +81,7 @@ public class DSeparation
      */
     public ArrayList<DiscreteVariable> getDConnectedVariables(int x)
     {
-        return (separation(x, ConnectionType.CONNECTED_VARIABLES));
+        return separation(x, ConnectionType.CONNECTED_VARIABLES);
     }
 
     /**
@@ -93,7 +93,7 @@ public class DSeparation
      */
     public ArrayList<DiscreteVariable> getAllAffectingVariables(int x)
     {
-        return (separation(x, ConnectionType.AFFECTING_VARIABLES));
+        return separation(x, ConnectionType.AFFECTING_VARIABLES);
     }
 
     /**
@@ -263,7 +263,7 @@ public class DSeparation
             }
         }
 
-        return (dSeparatedVariables);
+        return dSeparatedVariables;
     }
 
     /**
@@ -280,11 +280,11 @@ public class DSeparation
             ((connectionType == ConnectionType.AFFECTING_VARIABLES) &&
              (varIndex < bayesNet.numberProbabilityFunctions())))
         {
-            return (bayesNet.getProbabilityVariable(varIndex).isObserved());
+            return bayesNet.getProbabilityVariable(varIndex).isObserved();
         }
         else
         {
-            return (false);
+            return false;
         }
     }
 
@@ -319,28 +319,22 @@ public class DSeparation
             }
             if (probFunc == null)
             {
-                return (false);
+                return false;
             }
 
             for (int i = 1; i < probFunc.numberVariables(); i++)
             {
                 if (probFunc.getIndex(i) == indexFrom)
                 {
-                    return (true);
+                    return true;
                 }
             }
-            return (false);
+            return false;
         }
         else
         {
-            if ((indexFrom - indexTo) == bayesNet.numberProbabilityFunctions())
-            {
-                return (true);
-            }
-            else
-            {
-                return (false);
-            }
+            return (indexFrom - indexTo) == bayesNet.
+                   numberProbabilityFunctions();
         }
     }
 }

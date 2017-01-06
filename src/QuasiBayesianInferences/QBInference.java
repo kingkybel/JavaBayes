@@ -116,7 +116,8 @@ public class QBInference extends Inference
 
         // Else, copy all relevant content from bayesNet to transformedBn
         bayesNet.setName("Transformed-Network");
-        ArrayList auxiliaryVariables = transformProbabilityFunctionsArray();
+        ArrayList<ProbabilityVariable> auxiliaryVariables =
+                                       transformProbabilityFunctionsArray();
         transformProbabilityVariablesArray(auxiliaryVariables);
     }
 
@@ -158,7 +159,8 @@ public class QBInference extends Inference
      * probabilityVariables array, making the auxiliary variables available for
      * calculation of marginals.
      */
-    private void transformProbabilityVariablesArray(ArrayList auxs)
+    private void transformProbabilityVariablesArray(
+            ArrayList<ProbabilityVariable> auxs)
     {
         ProbabilityVariable newProbabilityVariable;
         ProbabilityVariable newProbabilityVariables[];
@@ -237,9 +239,10 @@ public class QBInference extends Inference
         // Normalize with respect to transparent variables
         unnormalizedResults = bucketTree.getUnnormalizedResult();
         normalizedResults =
-        new ProbabilityFunction(bayesNet, unnormalizedResults.getVariables(),
+        new ProbabilityFunction(bayesNet,
+                                unnormalizedResults.getVariables(),
                                 unnormalizedResults.getValues(),
-                                (ArrayList) null);
+                                (ArrayList<String>) null);
         normalizedResults.normalizeFirst();
 
         // Get the bounds on probability

@@ -216,8 +216,8 @@ class EditNetworkDialog extends Dialog
     public Insets getInsets()
     {
         Insets ins = super.getInsets();
-        return (new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
-                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET));
+        return new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
+                          ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
     /**
@@ -230,7 +230,7 @@ class EditNetworkDialog extends Dialog
         {
             dispose();
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 
     /**
@@ -239,7 +239,7 @@ class EditNetworkDialog extends Dialog
     private void fillDialog()
     {
         String values[], allValues = "";
-        ArrayList properties;
+        ArrayList<String> properties;
         String property;
         double par;
 
@@ -308,7 +308,7 @@ class EditNetworkDialog extends Dialog
             return super.action(evt, arg);
         }
 
-        return (true);
+        return true;
     }
 
     /**
@@ -328,7 +328,7 @@ class EditNetworkDialog extends Dialog
         }
 
         // Update the properties (if necessary).
-        ArrayList properties = propertyManager.updatePropertyOnExit();
+        ArrayList<String> properties = propertyManager.updatePropertyOnExit();
         if (properties != null)
         {
             ig.setNetworkProperties(properties);

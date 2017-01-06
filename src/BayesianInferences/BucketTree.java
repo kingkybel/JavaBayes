@@ -171,7 +171,7 @@ public class BucketTree
         probFunc.setVariable(0, probVar);
         int indexOfValue = probVar.getObservedIndex();
         probFunc.setValue(indexOfValue, 1.0);
-        return (probFunc);
+        return probFunc;
     }
 
     /**
@@ -190,11 +190,11 @@ public class BucketTree
         // Handle special cases
         if (n == 0)
         {
-            return (null); // No probVar remains
+            return null; // No probVar remains
         }
         if (n == probFunc.numberVariables())
         {
-            return (probFunc); // No relevant evidence
+            return probFunc; // No relevant evidence
         }
 
         // Calculate necessary quantities in such a
@@ -224,7 +224,7 @@ public class BucketTree
         // Loop through the values
         checkEvidenceLoop(newPf, probFunc);
 
-        return (newPf);
+        return newPf;
     }
 
     /**
@@ -268,14 +268,14 @@ public class BucketTree
                 n++;
             }
         }
-        return (n);
+        return n;
     }
 
     /**
      * Obtain the values for the evidence plus function.
      *
      * @param newProbFunc
-     * @param probFunc probability function
+     * @param probFunc    probability function
      */
     private void checkEvidenceLoop(ProbabilityFunction newProbFunc,
                                    ProbabilityFunction probFunc)
@@ -360,17 +360,17 @@ public class BucketTree
         int last = bucketTree.length - 1;
         if (last < 1)
         {
-            return (true);
+            return true;
         }
         // Third, this method is used only if isProducingClusters is true.
         if (isProducingClusters == false)
         {
-            return (false);
+            return false;
         }
         // Fourth, this method is use only if no explanatory probVar was max'ed out.
         if (backwardPointers != null)
         {
-            return (false);
+            return false;
         }
 
         // Go through the Bucket objects, from bottom to top,
@@ -438,7 +438,7 @@ public class BucketTree
             bucketTree[i].bucketStatus = Bucket.Type.DISTRIBUTED;
         }
         // Indicate success.
-        return (true);
+        return true;
     }
 
     /**
@@ -458,7 +458,7 @@ public class BucketTree
         // If there are no explanation variables in the BayesNet, return null
         if (b.backwardPointers == null)
         {
-            return (null);
+            return null;
         }
 
         // Initialize the markers for backward pointers with INVALID_INDEX
@@ -501,7 +501,7 @@ public class BucketTree
             (int) (backDf.getValue(j) + 0.5);
         }
 
-        return (backwardMarkers);
+        return backwardMarkers;
     }
 
     /**
@@ -620,10 +620,10 @@ public class BucketTree
      */
     public ProbabilityFunction getNormalizedResult()
     {
-        ProbabilityFunction auxPf =
+        ProbabilityFunction auxProbFunc =
                             new ProbabilityFunction(unnormalizedResult, bayesNet);
-        auxPf.normalize();
-        return (auxPf);
+        auxProbFunc.normalize();
+        return auxProbFunc;
     }
 
     /**
@@ -633,7 +633,7 @@ public class BucketTree
      */
     public DiscreteFunction getUnnormalizedResult()
     {
-        return (unnormalizedResult);
+        return unnormalizedResult;
     }
 
     /**

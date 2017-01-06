@@ -56,8 +56,8 @@ public final class InferenceGraphNode
     ProbabilityVariable probVar;
     ProbabilityFunction probFunc;
 
-    ArrayList parents = new ArrayList();
-    ArrayList children = new ArrayList();
+    ArrayList<InferenceGraphNode> parents = new ArrayList<>();
+    ArrayList<InferenceGraphNode> children = new ArrayList<>();
 
     Point pos;
 
@@ -66,7 +66,7 @@ public final class InferenceGraphNode
         "true", "false"
     };
     private final BayesNet defaultInferenceGraphNodeBayesNet = null;
-    private final ArrayList defaultInferenceGraphNodeProperties = null;
+    private final ArrayList<String> defaultInferenceGraphNodeProperties = null;
 
     /**
      * Default constructor for an InferenceGraphNode.
@@ -129,13 +129,12 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Initialization for the probability function in the InferenceGraphNode.
+     * Initialisation for the probability function in the InferenceGraphNode.
      */
     void initDists()
     {
         int i, totalValues;
         double newValue;
-        InferenceGraphNode pnode;
 
         // Create the probabilityVariables
         ProbabilityVariable probVars[] =
@@ -146,9 +145,8 @@ public final class InferenceGraphNode
         newValue = 1.0 / ((double) (totalValues));
 
         i = 1;
-        for (Object e : parents)
+        for (InferenceGraphNode pnode : parents)
         {
-            pnode = (InferenceGraphNode) (e);
             probVars[i] = pnode.probVar;
             totalValues *= pnode.probVar.numberValues();
             i++;
@@ -173,15 +171,14 @@ public final class InferenceGraphNode
      */
     void updatePosition()
     {
-        ArrayList properties = probVar.getProperties();
-        ArrayList propertiesToRemove = new ArrayList();
-        String s, ss;
+        ArrayList<String> properties = probVar.getProperties();
+        ArrayList<String> propertiesToRemove = new ArrayList();
+        String s;
 
         if ((properties != null) && (properties.size() > 0))
         {
-            for (Object e : properties)
+            for (String ss : properties)
             {
-                ss = (String) e;
                 s = ss.trim();
 
                 // If property is not position, skip it
@@ -195,9 +192,8 @@ public final class InferenceGraphNode
             }
 
             // Remove the old position properties
-            for (Object e : propertiesToRemove)
+            for (String ss : propertiesToRemove)
             {
-                ss = (String) (e);
                 probVar.removeProperty(ss);
             }
         }
@@ -212,21 +208,20 @@ public final class InferenceGraphNode
      */
     private Point parsePosition(ProbabilityVariable probVar)
     {
-        ArrayList properties = probVar.getProperties();
+        ArrayList<String> properties = probVar.getProperties();
         Point finalPosition = null;
-        String s, ss;
+        String s;
 
         // get position values from the list of properties
         if (properties.isEmpty())
         {
-            return (new Point(100, 100));
+            return new Point(100, 100);
         }
 
         try
         {
-            for (Object e : properties)
+            for (String ss : properties)
             {
-                ss = (String) e;
                 s = ss.trim();
 
                 // If property is not position, skip it
@@ -288,12 +283,12 @@ public final class InferenceGraphNode
     {
         if (probFunc instanceof VertexSet)
         {
-            return (((VertexSet) probFunc).evaluate(variableValuePairs,
-                                                    indexExtremePoint));
+            return ((VertexSet) probFunc).evaluate(variableValuePairs,
+                                                   indexExtremePoint);
         }
         else
         {
-            return (probFunc.evaluate(variableValuePairs));
+            return probFunc.evaluate(variableValuePairs);
         }
     }
 
@@ -307,11 +302,11 @@ public final class InferenceGraphNode
         if (probFunc instanceof VertexSet)
         {
             double[][] ep = ((VertexSet) probFunc).getExtremePoints();
-            return (ep[0]);
+            return ep[0];
         }
         else
         {
-            return (probFunc.getValues());
+            return probFunc.getValues();
         }
     }
 
@@ -327,11 +322,11 @@ public final class InferenceGraphNode
         if (probFunc instanceof VertexSet)
         {
             double[][] ep = ((VertexSet) probFunc).getExtremePoints();
-            return (ep[index]);
+            return ep[index];
         }
         else
         {
-            return (probFunc.getValues());
+            return probFunc.getValues();
         }
     }
 
@@ -426,7 +421,7 @@ public final class InferenceGraphNode
      */
     public String getName()
     {
-        return (probVar.getName());
+        return probVar.getName();
     }
 
     /**
@@ -451,7 +446,7 @@ public final class InferenceGraphNode
         {
             ns[i] = probFunc.getVariable(i).getName();
         }
-        return (ns);
+        return ns;
     }
 
     /**
@@ -461,7 +456,7 @@ public final class InferenceGraphNode
      */
     public String[] getValues()
     {
-        return (probVar.getValues());
+        return probVar.getValues();
     }
 
     /**
@@ -483,7 +478,7 @@ public final class InferenceGraphNode
                 allValues[i][j] = dv.getValue(j);
             }
         }
-        return (allValues);
+        return allValues;
     }
 
     /**
@@ -493,7 +488,7 @@ public final class InferenceGraphNode
      */
     public int getNumberValues()
     {
-        return (probVar.numberValues());
+        return probVar.numberValues();
     }
 
     /**
@@ -503,7 +498,7 @@ public final class InferenceGraphNode
      */
     public boolean hasParent()
     {
-        return (probFunc.numberVariables() > 1);
+        return probFunc.numberVariables() > 1;
     }
 
     /**
@@ -511,9 +506,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList getParents()
+    public ArrayList<InferenceGraphNode> getParents()
     {
-        return (parents);
+        return parents;
     }
 
     /**
@@ -521,9 +516,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList getChildren()
+    public ArrayList<InferenceGraphNode> getChildren()
     {
-        return (children);
+        return children;
     }
 
     /**
@@ -533,7 +528,7 @@ public final class InferenceGraphNode
      */
     public boolean isObserved()
     {
-        return (probVar.isObserved());
+        return probVar.isObserved();
     }
 
     /**
@@ -543,7 +538,7 @@ public final class InferenceGraphNode
      */
     public boolean isExplanation()
     {
-        return (probVar.isExplanation());
+        return probVar.isExplanation();
     }
 
     /**
@@ -553,7 +548,7 @@ public final class InferenceGraphNode
      */
     public int getObservedIndex()
     {
-        return (probVar.getObservedIndex());
+        return probVar.getObservedIndex();
     }
 
     /**
@@ -563,7 +558,7 @@ public final class InferenceGraphNode
      */
     public String getObservedValue()
     {
-        return (probVar.getValue(getObservedIndex()));
+        return probVar.getValue(getObservedIndex());
     }
 
     /**
@@ -573,7 +568,7 @@ public final class InferenceGraphNode
      */
     public int getPosX()
     {
-        return (pos.x);
+        return pos.x;
     }
 
     /**
@@ -583,7 +578,7 @@ public final class InferenceGraphNode
      */
     public int getPosY()
     {
-        return (pos.y);
+        return pos.y;
     }
 
     /**
@@ -591,9 +586,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList getVariableProperties()
+    public ArrayList<String> getVariableProperties()
     {
-        return (probVar.getProperties());
+        return probVar.getProperties();
     }
 
     /**
@@ -601,7 +596,7 @@ public final class InferenceGraphNode
      *
      * @param properties list of properties
      */
-    public void setVariableProperties(ArrayList properties)
+    public void setVariableProperties(ArrayList<String> properties)
     {
         probVar.setProperties(properties);
     }
@@ -611,9 +606,9 @@ public final class InferenceGraphNode
      *
      * @return
      */
-    public ArrayList getFunctionProperties()
+    public ArrayList<String> getFunctionProperties()
     {
-        return (probFunc.getProperties());
+        return probFunc.getProperties();
     }
 
     /**
@@ -621,7 +616,7 @@ public final class InferenceGraphNode
      *
      * @param properties list of properties
      */
-    public void setFunctionProperties(ArrayList properties)
+    public void setFunctionProperties(ArrayList<String> properties)
     {
         probFunc.setProperties(properties);
     }
@@ -636,11 +631,11 @@ public final class InferenceGraphNode
     {
         if (probFunc instanceof QBProbabilityFunction)
         {
-            return (true);
+            return true;
         }
         else
         {
-            return (false);
+            return false;
         }
     }
 
@@ -653,11 +648,11 @@ public final class InferenceGraphNode
     {
         if (probFunc instanceof VertexSet)
         {
-            return (((VertexSet) probFunc).getExtremePoints().length);
+            return ((VertexSet) probFunc).getExtremePoints().length;
         }
         else
         {
-            return (1);
+            return 1;
         }
     }
 

@@ -98,11 +98,10 @@ class EditProbability extends EditFunctionPanel
         if (node.hasParent())
         {
             name.append(" |");
-            ArrayList parents = node.getParents();
-            for (Object e : parents)
+            ArrayList<InferenceGraphNode> parents = node.getParents();
+            for (InferenceGraphNode parent : parents)
             {
-                name.append(" ").append(((InferenceGraphNode) (e)).getName()).
-                        append(",");
+                name.append(" ").append((parent).getName()).append(",");
             }
             name.setCharAt(name.length() - 1, ')');
         }
@@ -110,7 +109,7 @@ class EditProbability extends EditFunctionPanel
         {
             name.append(")");
         }
-        return (new Label(name.toString(), Label.CENTER));
+        return new Label(name.toString(), Label.CENTER);
     }
 
     @Override

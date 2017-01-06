@@ -55,11 +55,11 @@ class Bracketing
                    double x2,
                    double xAccuracy)
     {
-        return (perform(function,
-                        MappingDouble.Type.LOWER_EXPECTATION_BRACKET,
-                        x1,
-                        x2,
-                        xAccuracy));
+        return perform(function,
+                       MappingDouble.Type.LOWER_EXPECTATION_BRACKET,
+                       x1,
+                       x2,
+                       xAccuracy);
     }
 
     /**
@@ -90,20 +90,20 @@ class Bracketing
         if (f1 == 0.0)
         {
             status = Status.EXACT_ROOT_FOUND;
-            return (x1);
+            return x1;
         }
 
         if (f2 == 0.0)
         {
             status = Status.EXACT_ROOT_FOUND;
-            return (x2);
+            return x2;
         }
 
         // Error: both endpoints have same sign
         if ((f1 * f2) > 0.0)
         {
             status = Status.ERROR;
-            return (0.0);
+            return 0.0;
         }
 
         // Bisection goes from x (where f(x)<=0) to x + dx
@@ -132,16 +132,16 @@ class Bracketing
             if (f2 == 0.0)
             {
                 status = Status.EXACT_ROOT_FOUND;
-                return (currentSolutionPoint);
+                return currentSolutionPoint;
             }
             if (Math.abs(dx) < xAccuracy)
             {
                 status = Status.APPROXIMATE_ROOT_FOUND;
-                return (currentSolutionPoint);
+                return currentSolutionPoint;
             }
         }
 
         status = Status.TOO_MANY_BISECTIONS;
-        return (0.0);
+        return 0.0;
     }
 }

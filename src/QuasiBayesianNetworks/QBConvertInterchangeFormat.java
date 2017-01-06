@@ -123,17 +123,18 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Fill the values with the contents of the tables in the
      * IFProbabilityFunction object.
      *
-     * @param ifProbFunc    interchange format probability function
-     * @param values an array of double values
+     * @param ifProbFunc interchange format probability function
+     * @param values     an array of double values
      * @return extreme points
      */
-    double[][] processExtremeTables(IFProbabilityFunction ifProbFunc, double values[])
+    double[][] processExtremeTables(IFProbabilityFunction ifProbFunc,
+                                    double values[])
     {
         int i, j;
         double table[], extremePoints[][];
 
         // Put the table values
-        ArrayList tables = ifProbFunc.getTables();
+        ArrayList<double[]> tables = ifProbFunc.getTables();
         int n = tables.size();
 
         // If there are no available tables
@@ -162,10 +163,9 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
             }
         }
         i = 0;
-        for (Object e : tables)
+        for (double[] srcTable : tables)
         {
-            table = (double[]) (e);
-            copyTableToValues(table, extremePoints[i]);
+            copyTableToValues(srcTable, extremePoints[i]);
             i++;
         }
         return extremePoints;
@@ -175,7 +175,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Insert default values from the contents of the first specification of
      * defaults in the IFProbabilityFunction object.
      *
-     * @param ifProbFunc           interchange format probability function
+     * @param ifProbFunc    interchange format probability function
      * @param values        an array of double values
      * @param extremePoints matrix of extreme points
      * @param jump
@@ -188,10 +188,10 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         int i, j, k;
 
         // Process the default values
-        ArrayList ddefaultss = ifProbFunc.getDefaults();
+        ArrayList<double[]> ddefaultss = ifProbFunc.getDefaults();
         if (ddefaultss.size() > 0)
         {
-            double ddefaults[] = (double[]) (ddefaultss.get(0));
+            double ddefaults[] = ddefaultss.get(0);
             for (i = 0; i < values.length; i++)
             {
                 for (j = 0; j < jump; j++)
@@ -210,7 +210,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * Insert entries specified in the IFProbabilityFunction object.
      *
      * @param bayesNet      the underlying Bayes net
-     * @param ifProbFunc           interchange format probability function
+     * @param ifProbFunc    interchange format probability function
      * @param variables     array of probability variables
      * @param values        an array of double values
      * @param extremePoints matrix of extreme points
@@ -228,16 +228,13 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         double eentryEntries[];
         String eentryValues[];
         ProbabilityVariable probVar;
-        IFProbabilityEntry entry;
 
         // Process the entries
-        ArrayList eentries = ifProbFunc.getEntries();
+        ArrayList<IFProbabilityEntry> eentries = ifProbFunc.getEntries();
         if ((eentries != null) && (eentries.size() > 0))
         {
-            for (Object e : eentries)
+            for (IFProbabilityEntry entry : eentries)
             {
-                entry =
-                (IFProbabilityEntry) (e);
                 eentryValues = entry.getValues();
                 eentryEntries = entry.getEntries();
                 entryValueIndexes = new int[eentryValues.length];

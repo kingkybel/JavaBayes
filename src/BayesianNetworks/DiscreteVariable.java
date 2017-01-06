@@ -114,10 +114,10 @@ public class DiscreteVariable
         {
             if (values[i].equals(value))
             {
-                return (i);
+                return i;
             }
         }
-        return (BayesNet.INVALID_INDEX);
+        return BayesNet.INVALID_INDEX;
     }
 
     /**
@@ -146,7 +146,7 @@ public class DiscreteVariable
                 numericValues[i] = (double) i;
             }
         }
-        return (new DiscreteFunction(dvs, numericValues));
+        return new DiscreteFunction(dvs, numericValues);
     }
 
     /**
@@ -194,7 +194,7 @@ public class DiscreteVariable
      */
     public String getName()
     {
-        return (name);
+        return name;
     }
 
     /**
@@ -214,7 +214,7 @@ public class DiscreteVariable
      */
     public int getIndex()
     {
-        return (index);
+        return index;
     }
 
     /**
@@ -224,7 +224,7 @@ public class DiscreteVariable
      */
     public int numberValues()
     {
-        return (values.length);
+        return values.length;
     }
 
     /**
@@ -234,7 +234,7 @@ public class DiscreteVariable
      */
     public String[] getValues()
     {
-        return (values);
+        return values;
     }
 
     /**
@@ -256,6 +256,6 @@ public class DiscreteVariable
      */
     public String getValue(int index)
     {
-        return (values[index]);
+        return values[index];
     }
 }

@@ -53,7 +53,7 @@ public final class InferenceGraph
     QuasiBayesNet qbn;
     QBInference qbi;
     QBExpectation qbe;
-    ArrayList nodes = new ArrayList();
+    ArrayList<InferenceGraphNode> nodes = new ArrayList();
     private final String defaultBayesNetName = "InternalNetwork";
 
     /**
@@ -108,7 +108,7 @@ public final class InferenceGraph
      */
     public QuasiBayesNet getBayesNet()
     {
-        return (convertGraph());
+        return convertGraph();
     }
 
     /**
@@ -133,14 +133,14 @@ public final class InferenceGraph
             // The variable does not have a corresponding function
             if (probFunc == null)
             {
-                return (false);
+                return false;
             }
 
             nodes.add(new InferenceGraphNode(this, probVar, probFunc));
         }
         generateParentsAndChildren();
 
-        return (true);
+        return true;
     }
 
     /**
@@ -151,12 +151,10 @@ public final class InferenceGraph
         int i, j;
         DiscreteVariable variables[];
         ProbabilityFunction probFunc;
-        InferenceGraphNode baseNode, node;
+        InferenceGraphNode node;
 
-        for (Object e : nodes)
+        for (InferenceGraphNode baseNode : nodes)
         {
-            baseNode = (InferenceGraphNode) (e);
-
             probFunc = baseNode.probFunc;
             variables = probFunc.getVariables();
 
@@ -178,16 +176,14 @@ public final class InferenceGraph
      */
     private InferenceGraphNode getNode(DiscreteVariable dv)
     {
-        InferenceGraphNode node;
-        for (Object e : nodes)
+        for (InferenceGraphNode node : nodes)
         {
-            node = (InferenceGraphNode) e;
             if (node.probVar == dv)
             {
-                return (node);
+                return node;
             }
         }
-        return (null);
+        return null;
     }
 
     /**
@@ -196,7 +192,6 @@ public final class InferenceGraph
     QuasiBayesNet convertGraph()
     {
         int i;
-        InferenceGraphNode node;
 
         // Create the arrays of variables and functions
         ProbabilityVariable probVars[] = new ProbabilityVariable[nodes.size()];
@@ -209,16 +204,15 @@ public final class InferenceGraph
         // Collect all variables and functions in the nodes
         // into the new QuasiBayesNet
         i = 0;
-        for (Object e : nodes)
+        for (InferenceGraphNode node : nodes)
         {
-            node = (InferenceGraphNode) (e);
             node.updatePosition();
             qbn.setProbabilityVariable(i, node.probVar);
             qbn.setProbabilityFunction(i, node.probFunc);
             i++;
         }
 
-        return (qbn);
+        return qbn;
     }
 
     /**
@@ -226,8 +220,6 @@ public final class InferenceGraph
      */
     private String generateName(int index)
     {
-        InferenceGraphNode no;
-
         // generate names of the form a..z, a1..z1, a2..z2, etc.
         char namec = (char) ((int) 'a' + index % 26);
         int suffix = index / 26;
@@ -241,15 +233,14 @@ public final class InferenceGraph
             name = "" + namec;
         }
         // check whether there is a variable with this name
-        for (Object e : nodes)
+        for (InferenceGraphNode node : nodes)
         {
-            no = (InferenceGraphNode) (e);
-            if (no.getName().equals(name))
+            if (node.getName().equals(name))
             {
-                return (generateName(index + 1));
+                return generateName(index + 1);
             }
         }
-        return (name);
+        return name;
     }
 
     /**
@@ -259,7 +250,7 @@ public final class InferenceGraph
      */
     public String getName()
     {
-        return (qbn.getName());
+        return qbn.getName();
     }
 
     /**
@@ -277,9 +268,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public ArrayList getNetworkProperties()
+    public ArrayList<String> getNetworkProperties()
     {
-        return (qbn.getProperties());
+        return qbn.getProperties();
     }
 
     /**
@@ -299,7 +290,7 @@ public final class InferenceGraph
      */
     public GlobalNeighbourhood getGlobalNeighborhoodType()
     {
-        return (qbn.getGlobalNeighborhoodType());
+        return qbn.getGlobalNeighborhoodType();
     }
 
     /**
@@ -319,7 +310,7 @@ public final class InferenceGraph
      */
     public double getGlobalNeighborhoodParameter()
     {
-        return (qbn.getGlobalNeighborhoodParameter());
+        return qbn.getGlobalNeighborhoodParameter();
     }
 
     /**
@@ -360,17 +351,15 @@ public final class InferenceGraph
      */
     public String checkName(String name)
     {
-        InferenceGraphNode no;
         String checkedName = validateValue(name);
-        for (Object e : nodes)
+        for (InferenceGraphNode node : nodes)
         {
-            no = (InferenceGraphNode) (e);
-            if (no.getName().equals(checkedName))
+            if (node.getName().equals(checkedName))
             {
-                return (null);
+                return null;
             }
         }
-        return (checkedName);
+        return checkedName;
     }
 
     /**
@@ -574,7 +563,7 @@ public final class InferenceGraph
      */
     public ArrayList getNodes()
     {
-        return (nodes);
+        return nodes;
     }
 
     /**
@@ -582,9 +571,9 @@ public final class InferenceGraph
      *
      * @return
      */
-    public ArrayList elements()
+    public ArrayList<InferenceGraphNode> elements()
     {
-        return (nodes);
+        return nodes;
     }
 
     /**
@@ -594,7 +583,7 @@ public final class InferenceGraph
      */
     public int numberNodes()
     {
-        return (nodes.size());
+        return nodes.size();
     }
 
     /**
@@ -625,11 +614,11 @@ public final class InferenceGraph
     {
         // Check whether the given parent is already a parent of the
         // given child.
-        for (Object e : child.parents)
+        for (InferenceGraphNode currentParentNode : child.parents)
         {
-            if (parent == ((InferenceGraphNode) (e)))
+            if (parent == currentParentNode)
             {
-                return (false);
+                return false;
             }
         }
 
@@ -647,7 +636,7 @@ public final class InferenceGraph
         convertGraph();
 
         // Return true.
-        return (true);
+        return true;
     }
 
     /**
@@ -657,20 +646,16 @@ public final class InferenceGraph
      */
     public void deleteNode(InferenceGraphNode node)
     {
-        InferenceGraphNode parent, child;
-
         // First, remove node from all its childrem
-        for (Object e : node.children)
+        for (InferenceGraphNode child : node.children)
         {
-            child = (InferenceGraphNode) (e);
             child.parents.remove(node);
             child.initDists();
         }
 
         // Second remove parent into the parents of child
-        for (Object e : node.parents)
+        for (InferenceGraphNode parent : node.parents)
         {
-            parent = (InferenceGraphNode) (e);
             parent.children.remove(node);
         }
 
@@ -715,8 +700,8 @@ public final class InferenceGraph
     public boolean hasCycle(InferenceGraphNode bottomNode,
                             InferenceGraphNode headNode)
     {
-        ArrayList children;
-        InferenceGraphNode nextNode, childNode;
+        ArrayList<InferenceGraphNode> children;
+        InferenceGraphNode nextNode;
 
         // Array with enough space to have all nodes
         InferenceGraphNode listedNodes[] =
@@ -745,12 +730,11 @@ public final class InferenceGraph
             // Get all children of the node being expanded
             children = nextNode.children;
             // Expand the node: put all its children into list
-            for (Object e : children)
+            for (InferenceGraphNode childNode : children)
             {
-                childNode = (InferenceGraphNode) (e);
                 if (childNode == bottomNode)
                 { // Cycle is detected
-                    return (true);
+                    return true;
                 }
                 if (!hashedNodes.containsKey(childNode.probVar.getName()))
                 {
@@ -760,7 +744,7 @@ public final class InferenceGraph
                 }
             }
         }
-        return (false);
+        return false;
     }
 
     /**
@@ -773,8 +757,7 @@ public final class InferenceGraph
      */
     public void changeValues(InferenceGraphNode node, String values[])
     {
-        InferenceGraphNode cnode;
-        ArrayList children;
+        ArrayList<InferenceGraphNode> children;
 
         if (node.probVar.numberValues() == values.length)
         {
@@ -786,9 +769,8 @@ public final class InferenceGraph
         node.initDists();
 
         children = node.getChildren();
-        for (Object e : children)
+        for (InferenceGraphNode cnode : children)
         {
-            cnode = (InferenceGraphNode) (e);
             cnode.initDists();
         }
 

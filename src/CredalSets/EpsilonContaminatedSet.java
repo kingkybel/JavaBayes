@@ -103,12 +103,12 @@ public class EpsilonContaminatedSet
             }
         }
 
-        return (new QBProbabilityFunction(bayesNet,
-                                          variables,
-                                          values,
-                                          lowerValues,
-                                          upperValues,
-                                          properties));
+        return new QBProbabilityFunction(bayesNet,
+                                         variables,
+                                         values,
+                                         lowerValues,
+                                         upperValues,
+                                         properties);
     }
 
     /**
@@ -159,7 +159,7 @@ public class EpsilonContaminatedSet
             results[1] = oneMinusEpsilon * uTotal + epsilon * minDfValue;
         }
 
-        return (results);
+        return results;
     }
 
     /**
@@ -218,6 +218,6 @@ public class EpsilonContaminatedSet
             (oneMinusEpsilon * pTotal + epsilon);
         }
 
-        return (results);
+        return results;
     }
 }

@@ -78,7 +78,7 @@ public class ConstantDensityBoundedSet
     @Override
     public double getLowerProbabilityFromBase(double p)
     {
-        return (Math.max(p / k, 1.0 - k * (1.0 - p)));
+        return Math.max(p / k, 1.0 - k * (1.0 - p));
     }
 
     /**
@@ -91,7 +91,7 @@ public class ConstantDensityBoundedSet
     @Override
     public double getUpperProbabilityFromBase(double p)
     {
-        return (Math.min(k * p, 1.0 - (1.0 - p) / k));
+        return Math.min(k * p, 1.0 - (1.0 - p) / k);
     }
 
     /**
@@ -103,6 +103,6 @@ public class ConstantDensityBoundedSet
     @Override
     public double getAtomProbability(int index)
     {
-        return (values[index]);
+        return values[index];
     }
 }

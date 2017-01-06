@@ -267,8 +267,8 @@ class EditVariableDialog extends Dialog
     public Insets getInsets()
     {
         Insets ins = super.getInsets();
-        return (new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
-                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET));
+        return new Insets(ins.top + TOP_INSET, ins.left + LEFT_INSET,
+                          ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
     /**
@@ -281,7 +281,7 @@ class EditVariableDialog extends Dialog
         {
             dispose();
         }
-        return (super.handleEvent(evt));
+        return super.handleEvent(evt);
     }
 
     /**
@@ -290,7 +290,7 @@ class EditVariableDialog extends Dialog
     private void fillDialog()
     {
         String values[], allValues = "";
-        ArrayList properties;
+        ArrayList<String> properties;
         String property;
 
         // Synchronize the network if necessary.
@@ -408,7 +408,7 @@ class EditVariableDialog extends Dialog
             vals[i] = ig.validateValue(st.nextToken());
             i++;
         }
-        return (vals);
+        return vals;
     }
 
     /**
@@ -448,17 +448,17 @@ class EditVariableDialog extends Dialog
             node.setLocalCredalSet();
         }
         // Update the variable properties (if necessary).
-        ArrayList vprop = variablePropertyManager.updatePropertyOnExit();
+        ArrayList<String> vprop = variablePropertyManager.updatePropertyOnExit();
         if (vprop != null)
         {
             node.setVariableProperties(vprop);
-            for (Object e : vprop)
+            for (String property : vprop)
             {
-                node.updatePositionFromProperty((String) (e));
+                node.updatePositionFromProperty(property);
             }
         }
         // Update the function properties (if necessary).
-        ArrayList fprop = functionPropertyManager.updatePropertyOnExit();
+        ArrayList<String> fprop = functionPropertyManager.updatePropertyOnExit();
         if (fprop != null)
         {
             node.setFunctionProperties(fprop);

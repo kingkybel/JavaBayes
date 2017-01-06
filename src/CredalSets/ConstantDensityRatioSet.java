@@ -114,12 +114,12 @@ public class ConstantDensityRatioSet
             }
         }
 
-        return (new QBProbabilityFunction(bayesNet,
-                                          variables,
-                                          values,
-                                          lowerValues,
-                                          upperValues,
-                                          properties));
+        return new QBProbabilityFunction(bayesNet,
+                                         variables,
+                                         values,
+                                         lowerValues,
+                                         upperValues,
+                                         properties);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ConstantDensityRatioSet
             discrFunc.getValue(((ProbabilityVariable) variables[0]).
                     getObservedIndex());
             results[1] = results[0];
-            return (results);
+            return results;
         }
      // Else, apply the marginalization property.
 
@@ -184,7 +184,7 @@ public class ConstantDensityRatioSet
         results[0] = lowerExpectation;
         results[1] = upperExpectation;
 
-        return (results);
+        return results;
     }
 
     /**
@@ -197,7 +197,7 @@ public class ConstantDensityRatioSet
      */
     public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
-        return (expectedValues(discrFunc));
+        return expectedValues(discrFunc);
     }
 
     @Override
@@ -230,6 +230,6 @@ public class ConstantDensityRatioSet
                 break;
         }
         mapOutput = mapOutputUpper + mapOutputLower;
-        return (mapOutput);
+        return mapOutput;
     }
 }
