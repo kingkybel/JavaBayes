@@ -53,7 +53,6 @@ public class Expectation
         private Type(int value)
         {
             this.value = value;
-
         }
 
         public int order()
@@ -83,12 +82,23 @@ public class Expectation
         initializeInference();
     }
 
+    /**
+     * Set the expected results array.
+     *
+     * @param expectedValue only the expected value in an array of size 1
+     */
     public void setResults(double expectedValue)
     {
         results = new double[1];
         results[0] = expectedValue;
     }
 
+    /**
+     * Set the expected results array.
+     *
+     * @param min minimum expectation
+     * @param max maximum expectation
+     */
     public void setResults(double min, double max)
     {
         results = new double[2];
@@ -96,46 +106,92 @@ public class Expectation
         results[1] = max;
     }
 
+    /**
+     * Set the expected results array.
+     *
+     * @param results arbitrary length array of results
+     */
     public void setResults(double[] results)
     {
-        this.results = results;
+        this.results = new double[results.length];
+        System.arraycopy(results, 0, this.results, 0, results.length);
     }
 
+    /**
+     * Retrieve the Bayes net.
+     *
+     * @return the Bayes net
+     */
     public BayesNet getBayesNet()
     {
         return bayesNet;
     }
 
+    /**
+     * Set a new Bayes net.
+     *
+     * @param bayesNet new Bayes net
+     */
     public void setBayesNet(BayesNet bayesNet)
     {
         this.bayesNet = bayesNet;
     }
 
+    /**
+     * Retrieve the inference object.
+     *
+     * @return the inference
+     */
     public Inference getInference()
     {
         return inference;
     }
 
+    /**
+     * Set s new inference object.
+     *
+     * @param inference the new inference
+     */
     public void setInference(Inference inference)
     {
         this.inference = inference;
     }
 
+    /**
+     * Is the produce Cluster flag set?
+     *
+     * @return true if so, false otherwise
+     */
     public boolean isProducingClusters()
     {
         return isProducingClusters;
     }
 
+    /**
+     * Set whether to produce clusters or not.
+     *
+     * @param isProducingClusters true/false
+     */
     public void setProducingClusters(boolean isProducingClusters)
     {
         this.isProducingClusters = isProducingClusters;
     }
 
+    /**
+     * Retrieve the current function.
+     *
+     * @return the current function
+     */
     public DiscreteFunction getCurrentFunction()
     {
         return currentFunction;
     }
 
+    /**
+     * Set a new discrete function as current.
+     *
+     * @param currentFunction the new discrete function to set as current
+     */
     public void setCurrentFunction(DiscreteFunction currentFunction)
     {
         this.currentFunction = currentFunction;

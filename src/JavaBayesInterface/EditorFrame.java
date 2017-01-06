@@ -675,7 +675,7 @@ public class EditorFrame extends Frame
      */
     public void estimateExplanationVariablesAction()
     {
-        modeMenuChoice = ExplanationType.SUBSET;
+        modeMenuChoice = ExplanationType.MARKED_VARIABLES_ONLY;
         scrollPanel.netPanel.repaint();
     }
 
@@ -684,7 +684,7 @@ public class EditorFrame extends Frame
      */
     public void estimateBestConfigurationAction()
     {
-        modeMenuChoice = ExplanationType.FULL;
+        modeMenuChoice = ExplanationType.ALL_NOT_OBSERVED_VARIABLES;
         scrollPanel.netPanel.repaint();
     }
 

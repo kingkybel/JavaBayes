@@ -323,16 +323,14 @@ public class BayesPanel
                                     ExplanationType.EXPECTATION);
                             break;
                         case QueryExplanation:
-                            processQuery(
-                                    inferenceGraph,
+                            processQuery(inferenceGraph,
                                     eventNode.getName(),
-                                    ExplanationType.SUBSET);
+                                    ExplanationType.MARKED_VARIABLES_ONLY);
                             break;
                         case QueryFullExplanation:
-                            processQuery(
-                                    inferenceGraph,
+                            processQuery(inferenceGraph,
                                     eventNode.getName(),
-                                    ExplanationType.FULL);
+                                    ExplanationType.ALL_NOT_OBSERVED_VARIABLES);
                             break;
                         case GetSeparation:
                             doSeparation(

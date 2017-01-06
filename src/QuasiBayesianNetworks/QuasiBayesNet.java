@@ -314,8 +314,7 @@ public class QuasiBayesNet extends BayesNet
 
         if (probabilityVariables != null)
         {
-            for (i = 0; i < probabilityVariables.length;
-                 i++)
+            for (i = 0; i < probabilityVariables.length; i++)
             {
                 if (probabilityVariables[i] != null)
                 {
@@ -325,8 +324,7 @@ public class QuasiBayesNet extends BayesNet
         }
         if (probabilityFunctions != null)
         {
-            for (i = 0; i < probabilityFunctions.length;
-                 i++)
+            for (i = 0; i < probabilityFunctions.length; i++)
             {
                 if (probabilityFunctions[i] != null)
                 {

@@ -130,7 +130,7 @@ public class Ordering
             if ((!(bayesNet.getProbabilityVariable(i).isObserved())) &&
                 (bayesNet.getProbabilityVariable(i).isExplanation()))
             {
-                explanationStatusFlag = ExplanationType.SUBSET;
+                explanationStatusFlag = ExplanationType.MARKED_VARIABLES_ONLY;
                 break;
             }
         }
@@ -237,10 +237,10 @@ public class Ordering
                 case IGNORE:
                     isVariableExplanationFlag = false;
                     break;
-                case SUBSET:
+                case MARKED_VARIABLES_ONLY:
                     isVariableExplanationFlag = probVar.isExplanation();
                     break;
-                case FULL:
+                case ALL_NOT_OBSERVED_VARIABLES:
                     isVariableExplanationFlag = true;
                     break;
             }

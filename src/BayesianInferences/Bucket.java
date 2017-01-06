@@ -241,7 +241,7 @@ class Bucket
         int i, j, k, m, p, current;
         int indexes[] = new int[bucketTree.bayesNet.numberVariables()];
         int valueLengths[] = new int[bucketTree.bayesNet.numberVariables()];
-        double t, v;
+        double maximalVal, combinedVal;
 
         // Order all the probability functions in the bucket
         orderTheFunctions();
@@ -266,17 +266,17 @@ class Bucket
         for (i = 0; i < newDf.numberValues(); i++)
         {
             // Calculate the combined value
-            v = 1.0;
+            combinedVal = 1.0;
             for (m = 0; m < orderedDfs.length; m++)
             {
-                v *= orderedDfs[m].evaluate(bucketTree.bayesNet.
-                getProbabilityVariables(),
-                                            indexes);
+                combinedVal *= orderedDfs[m].evaluate(
+                bucketTree.bayesNet.getProbabilityVariables(),
+                indexes);
             }
-            p = newDf.getPositionFromIndexes(bucketTree.bayesNet.
-            getProbabilityVariables(),
-                                             indexes);
-            newDf.setValue(p, v);
+            p = newDf.getPositionFromIndexes(
+            bucketTree.bayesNet.getProbabilityVariables(),
+            indexes);
+            newDf.setValue(p, combinedVal);
 
             // Update the indexes
             indexes[newDf.getIndex(newDf.numberVariables() - 1)]++;
@@ -306,14 +306,14 @@ class Bucket
                 jump *= newDf.getVariable(i).numberValues();
             }
             j = 0;
-            t = 0.0;
+            maximalVal = 0.0;
             backwardPointers = new DiscreteFunction(1, 1);
             backwardPointers.setVariable(0, probVar);
             for (i = 0; i < probVar.numberValues(); i++)
             {
-                if (newDf.getValue(i) > t)
+                if (newDf.getValue(i) > maximalVal)
                 {
-                    t = newDf.getValue(i * jump);
+                    maximalVal = newDf.getValue(i * jump);
                     j = i;
                 }
             }
@@ -377,8 +377,7 @@ class Bucket
         orderedDfs = new DiscreteFunction[discreteFunctions.size()];
         for (int i = 0; i < orderedDfs.length; i++)
         {
-            orderedDfs[i] =
-            (DiscreteFunction) (discreteFunctions.get(i));
+            orderedDfs[i] = (DiscreteFunction) discreteFunctions.get(i);
         }
     }
 
@@ -420,7 +419,7 @@ class Bucket
      */
     private DiscreteFunction buildNewFunction(boolean isBucketVariableIncluded)
     {
-        int i, j = 0, n, v = 1;
+        int i, j = 0, n, newNumberOfValues = 1;
         boolean variableMarkers[] =
                   new boolean[bucketTree.bayesNet.numberVariables()];
 
@@ -439,21 +438,23 @@ class Bucket
         }
 
         // Calculate necessary quantities
+        // the new number of values is the product of the cardinalities of the
+        // values of all marked variables
         int joinedIndexes[] = new int[n];
+        BayesNet bn = bucketTree.bayesNet;
         for (i = 0; i < variableMarkers.length; i++)
         {
             if (variableMarkers[i] == true)
             {
                 joinedIndexes[j] = i;
                 j++;
-                v *= bucketTree.bayesNet.getProbabilityVariable(i).
-                numberValues();
+                newNumberOfValues *= bn.getProbabilityVariable(i).numberValues();
             }
         }
 
         // Create new function to be filled with joined variables
         DiscreteFunction newDf = buildNewVariables(
-                         v,
+                         newNumberOfValues,
                          joinedIndexes,
                          isBucketVariableIncluded);
 
@@ -467,7 +468,8 @@ class Bucket
      *
      * @param numberOfValues
      * @param joinedIndexes
-     * @param isBucketVariableIncluded
+     * @param isBucketVariableIncluded whether or not to include the bucket
+     *                                 variable
      */
     private DiscreteFunction buildNewVariables(int numberOfValues,
                                                int joinedIndexes[],

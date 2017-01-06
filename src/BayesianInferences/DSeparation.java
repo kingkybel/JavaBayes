@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * d-separation is a criterion for deciding, from a given a causal graph,
  * whether a set X of variables is independent of another set Y, given a third
  * set Z. The idea is to associate "dependence" with "connectedness" (i.e., the
- * existence of a connecting path) and "independence" with "unconnected-ness" or
+ * existence of a connecting path) and "independence" with "unconnectedness" or
  * "separation". The only twist on this simple idea is to define what we mean by
  * "connecting path", given that we are dealing with a system of directed arrows
  * in which some vertices (those residing in Z) correspond to measured
@@ -257,8 +257,8 @@ public class DSeparation
             {
                 if (below[i] || above[i])
                 {
-                    dSeparatedVariables.add(bayesNet.getProbabilityVariable(i -
-                                                                            nvertices));
+                    dSeparatedVariables.add(
+                            bayesNet.getProbabilityVariable(i - nvertices));
                 }
             }
         }
@@ -292,9 +292,9 @@ public class DSeparation
      * Check whether there is a link from variable indexFrom to variable
      * indexTo.
      *
-     * @param indexFrom
-     * @param indexTo
-     * @param connectionType
+     * @param indexFrom      index of the source variable
+     * @param indexTo        index of the target variable
+     * @param connectionType the type of connection we are querying
      * @return
      */
     private boolean adj(int indexFrom,

@@ -35,14 +35,14 @@ import java.util.logging.Logger;
  * There are two cases to be considered: EXPLANATION or FULL_EXPLANATION the
  * only difference is which variables are considered explanation variables.
  *
- * In FULL_EXPLANATION all variables are explanation variables except variables
- * that are observed.
+ * In ALL_NOT_OBSERVED_VARIABLES all variables are explanation variables except
+ * variables that are observed.
  *
- * In EXPLANATION only variables that are marked as explanation variables are
- * used in the maximisation; an observed variable is not used, even if it is
- * marked as explanation variable. Note that in EXPLANATION mode, if there are
- * no variables marked as explanation variables, the final result is the
- * posterior marginal.
+ * In MARKED_VARIABLES_ONLY only variables that are marked as explanation
+ * variables are used in the maximisation; an observed variable is not used,
+ * even if it is marked as explanation variable. Note that in EXPLANATION mode,
+ * if there are no variables marked as explanation variables, the final result
+ * is the posterior marginal.
  */
 public class Explanation
 {
@@ -70,7 +70,7 @@ public class Explanation
      */
     public void explanation()
     {
-        explanation(ExplanationType.SUBSET);
+        explanation(ExplanationType.MARKED_VARIABLES_ONLY);
     }
 
     /**
@@ -78,7 +78,7 @@ public class Explanation
      */
     public void fullExplanation()
     {
-        explanation(ExplanationType.FULL);
+        explanation(ExplanationType.ALL_NOT_OBSERVED_VARIABLES);
     }
 
     /**
@@ -102,7 +102,7 @@ public class Explanation
      */
     public void explanation(String order[])
     {
-        explanation(order, ExplanationType.SUBSET);
+        explanation(order, ExplanationType.MARKED_VARIABLES_ONLY);
     }
 
     /**
@@ -112,7 +112,7 @@ public class Explanation
      */
     public void fullExplanation(String order[])
     {
-        explanation(order, ExplanationType.FULL);
+        explanation(order, ExplanationType.ALL_NOT_OBSERVED_VARIABLES);
     }
 
     /**

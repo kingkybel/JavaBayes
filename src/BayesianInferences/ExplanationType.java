@@ -15,8 +15,8 @@ public enum ExplanationType
 {
 
     IGNORE,
-    SUBSET,
-    FULL,
+    MARKED_VARIABLES_ONLY,
+    ALL_NOT_OBSERVED_VARIABLES,
     MARGINAL_POSTERIOR,
     EXPECTATION,
     SENSITIVITY_ANALYSIS;
@@ -32,12 +32,12 @@ public enum ExplanationType
 
     public boolean isSubset()
     {
-        return this == SUBSET;
+        return this == MARKED_VARIABLES_ONLY;
     }
 
     public boolean isFull()
     {
-        return this == FULL;
+        return this == ALL_NOT_OBSERVED_VARIABLES;
     }
 
     public boolean isExpectation()
@@ -58,8 +58,9 @@ public enum ExplanationType
     @Override
     public String toString()
     {
-        return this == SUBSET ? "Subset of explanantory variables" :
-               this == FULL ? "Complete explanation" :
+        return this == MARKED_VARIABLES_ONLY ?
+               "Subset of marked explanantory variables" :
+               this == ALL_NOT_OBSERVED_VARIABLES ? "Complete explanation" :
                this == MARGINAL_POSTERIOR ? "Posterior marginal" :
                this == EXPECTATION ? "Posterior Expectation" :
                this == SENSITIVITY_ANALYSIS ? "" : "<IGNORE>";
@@ -69,8 +70,8 @@ public enum ExplanationType
     {
         return new ExplanationType[]
         {
-            SUBSET,
-            FULL,
+            MARKED_VARIABLES_ONLY,
+            ALL_NOT_OBSERVED_VARIABLES,
             MARGINAL_POSTERIOR,
             EXPECTATION,
             SENSITIVITY_ANALYSIS
