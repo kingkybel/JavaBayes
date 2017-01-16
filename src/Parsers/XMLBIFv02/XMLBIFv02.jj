@@ -18,18 +18,17 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-/*
- * Options for JavaCC (only non-default options).
- */
+// ==========================================================
+// Options for JavaCC (only non-default options).
+// ==========================================================
 options
 {
     STATIC = false;
 }
 
-/*
- * Java code that is incorporated into the parser.
- */
-
+// ==========================================================
+// Java code that is incorporated into the parser
+// ==========================================================
 PARSER_BEGIN(XMLBIFv02)
 
 package Parsers.XMLBIFv02;
@@ -215,6 +214,9 @@ void CompilationUnit() :
     ( ( <EOT> <BIF> <CT> ) | <EOF> )
 }
 
+/**
+ * Parse an opening tag.
+ */
 void OpenTag() :
 {
 }
@@ -242,6 +244,7 @@ void NetworkDeclaration() :
 
 /**
  * Detect a variable declaration.
+ * @return the variable in interchange format
  */
 IFProbabilityVariable VariableDeclaration() :
 {
@@ -255,6 +258,10 @@ IFProbabilityVariable VariableDeclaration() :
     { return(pv); }
 }
 
+/**
+ * Parse a variable name.
+ * @return the name as string
+ */
 String ProbabilityVariableName() :
 {
     String s;
@@ -272,6 +279,12 @@ void ProbabilityVariableType() :
     <SOT> <TYPE> <CT> <DISCRETE> <EOT> <TYPE> <CT>
 }
 
+
+/**
+ * Detect a variable content.
+ * @param name of the variable
+ * @return the variable in interchange format
+ */
 IFProbabilityVariable VariableContent(String name) :
 {
     int i;
@@ -299,6 +312,11 @@ IFProbabilityVariable VariableContent(String name) :
     }
 }
 
+
+/**
+ * Parse a variable value.
+ * @return the value as string
+ */
 String VariableValue() :
 {
     String s;
@@ -310,6 +328,7 @@ String VariableValue() :
 
 /**
  * Detect a probability declaration.
+ * @return the function in interchange format
  */
 IFProbabilityFunction ProbabilityDeclaration() :
 {
@@ -321,6 +340,10 @@ IFProbabilityFunction ProbabilityDeclaration() :
     { return(ifProbFunc); }
 }
 
+/**
+ * Parse the content of a function.
+ * @param ifProbFunc the function in interchange format
+ */
 void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
     int i, j;
@@ -364,6 +387,10 @@ void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
         }
 }
 
+/**
+ * Parse a "for" variable.
+ * @return the variable name
+ */
 String ProbabilityFor() :
 {
     String s;
@@ -375,6 +402,10 @@ String ProbabilityFor() :
         }
 }
 
+/**
+ * Parse a "given" variable.
+ * @return the variable name
+ */
 String ProbabilityGiven() :
 {
     String s;
@@ -386,6 +417,10 @@ String ProbabilityGiven() :
         }
 }
 
+/**
+ * Parse a probability entry.
+ * @return the enty in interchange format
+ */
 IFProbabilityEntry ProbabilityEntry() :
 {
     int i;
@@ -412,6 +447,10 @@ IFProbabilityEntry ProbabilityEntry() :
     }
 }
 
+/**
+ * Parse default probabilities.
+ * @return the defaults as double array
+ */
 double[] ProbabilityDefault() :
 {
     double d[];
@@ -423,6 +462,10 @@ double[] ProbabilityDefault() :
     }
 }
 
+/**
+ * Parse probability table.
+ * @return the table as double array
+ */
 double[] ProbabilityTable() :
 {
     double d[];
@@ -440,6 +483,7 @@ double[] ProbabilityTable() :
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the double array
  */
 double[] FloatingPointList() :
 {
@@ -470,6 +514,7 @@ double[] FloatingPointList() :
  * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the parsed double
  */
 Double FloatingPointNumber() :
 {
@@ -484,6 +529,7 @@ Double FloatingPointNumber() :
 
 /**
  * Property definition.
+ * @return the property as string
  */
 String Property() :
 {
@@ -498,6 +544,7 @@ String Property() :
 
 /**
  * Retrieve String.
+ * @return the string
  */
 String getString() :
 {

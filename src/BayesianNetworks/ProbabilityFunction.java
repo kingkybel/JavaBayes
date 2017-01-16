@@ -139,25 +139,22 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public void setValue(String variableValuePairs[][], double value)
     {
-        int index;
-        ProbabilityVariable probVar;
-
         // Initialize with zeros an array of markers.
         int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePair[0]);
-            probVar = bayesNet.probabilityVariables[index];
+            int index = bayesNet.indexOfVariable(variableValuePair[0]);
+            ProbabilityVariable probVar = bayesNet.probabilityVariables[index];
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
-        int pos = getPositionFromIndexes(bayesNet.probabilityVariables,
-                                         valueIndexes);
+        int valuePos = getPositionFromIndexes(bayesNet.probabilityVariables,
+                                              valueIndexes);
         // Set the value.
-        values[pos] = value;
+        values[valuePos] = value;
     }
 
     /**
@@ -169,17 +166,14 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public double evaluate(String variableValuePairs[][])
     {
-        int index;
-        ProbabilityVariable probVar;
-
         // Initialize with zeros an array of markers.
         int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePair[0]);
-            probVar = bayesNet.probabilityVariables[index];
+            int index = bayesNet.indexOfVariable(variableValuePair[0]);
+            ProbabilityVariable probVar = bayesNet.probabilityVariables[index];
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
@@ -214,10 +208,10 @@ public class ProbabilityFunction extends DiscreteFunction
     }
 
     /**
-     * Obtain expected value of a DiscreteFunction The current implementation is
-     * very limited; it assumes that both the ProbabilityFunction object and the
-     * DiscreteFunctions object has a single variable, and the variable must be
-     * the same for both functions.
+     * Obtain the expected value of a DiscreteFunction. The current
+     * implementation is very limited; it assumes that both the
+     * ProbabilityFunction object and the DiscreteFunctions object have a single
+     * variable, and the variable must be the same for both functions.
      *
      * @param discrFunc
      * @return
@@ -225,7 +219,7 @@ public class ProbabilityFunction extends DiscreteFunction
     public double expectedValue(DiscreteFunction discrFunc)
     {
         double ev = 0.0;
-        for (int i = 0; i < discrFunc.values.length; i++)
+        for (int i = 0; i < discrFunc.numberValues(); i++)
         {
             ev += values[i] * discrFunc.values[i];
         }
@@ -246,7 +240,7 @@ public class ProbabilityFunction extends DiscreteFunction
     {
         double ev = 0.0;
         double p = 0.0;
-        for (int i = 0; i < discrFunc.values.length; i++)
+        for (int i = 0; i < discrFunc.numberValues(); i++)
         {
             p += values[i];
             ev += values[i] * discrFunc.values[i];
@@ -266,7 +260,7 @@ public class ProbabilityFunction extends DiscreteFunction
     public double variance(DiscreteFunction discrFunc)
     {
         double aux, ev = 0.0, evv = 0.0;
-        for (int i = 0; i < discrFunc.values.length; i++)
+        for (int i = 0; i < discrFunc.numberValues(); i++)
         {
             aux = values[i] * discrFunc.values[i];
             ev += aux;
@@ -290,14 +284,14 @@ public class ProbabilityFunction extends DiscreteFunction
         if (variables != null)
         {
             out.println("\t<FOR>" + variables[0].name + "</FOR>");
-            for (j = 1; j < variables.length; j++)
+            for (j = 1; j < numberVariables(); j++)
             {
                 out.println("\t<GIVEN>" + variables[j].name + "</GIVEN>");
             }
 
             out.print("\t<TABLE>");
 
-            if (variables.length > 1)
+            if (numberVariables() > 1)
             { // Necessary to invert variables.
                 sizeOfFirst = variables[0].numberValues();
                 for (j = 1; j < variables.length; j++)
@@ -315,7 +309,7 @@ public class ProbabilityFunction extends DiscreteFunction
             }
             else
             { // Not necessary to invert variables.
-                for (j = 0; j < values.length; j++)
+                for (j = 0; j < numberValues(); j++)
                 {
                     out.print(values[j] + " ");
                 }
@@ -348,13 +342,13 @@ public class ProbabilityFunction extends DiscreteFunction
         if (variables != null)
         {
             out.println("\t<FOR>" + variables[0].name + "</FOR>");
-            for (j = 1; j < variables.length; j++)
+            for (j = 1; j < numberVariables(); j++)
             {
                 out.println("\t<GIVEN>" + variables[j].name + "</GIVEN>");
             }
 
             out.print("\t<TABLE>");
-            for (j = 0; j < values.length; j++)
+            for (j = 0; j < numberValues(); j++)
             {
                 out.print(values[j] + " ");
             }
@@ -384,27 +378,27 @@ public class ProbabilityFunction extends DiscreteFunction
         if (variables != null)
         {
             out.print("probability ( ");
-            for (j = 0; j < variables.length; j++)
+            for (j = 0; j < numberVariables(); j++)
             {
                 out.print(" \"" + variables[j].name + "\" ");
             }
             out.print(") {");
-            out.println(" //" + variables.length +
-                        " variable(s) and " + values.length + " values");
+            out.println(" //" + numberVariables() +
+                        " variable(s) and " + numberValues() + " values");
 
             out.println("\ttable ");
-            if (variables.length == 1)
+            if (numberVariables() == 1)
             {
-                for (j = 0; j < values.length; j++)
+                for (j = 0; j < numberValues(); j++)
                 {
                     out.print("\t\t" + values[j]);
-                    if (j == (values.length - 1))
+                    if (j == (numberValues() - 1))
                     {
                         out.print("; ");
                     }
                     out.print("\t// p(" + variables[0].values[j] +
                               " | evidence )");
-                    if (j != (values.length - 1))
+                    if (j != (numberValues() - 1))
                     {
                         out.println();
                     }
@@ -413,7 +407,7 @@ public class ProbabilityFunction extends DiscreteFunction
             else
             {
                 out.print("\t\t");
-                for (j = 0; j < values.length; j++)
+                for (j = 0; j < numberValues(); j++)
                 {
                     out.print(" " + values[j]);
                 }

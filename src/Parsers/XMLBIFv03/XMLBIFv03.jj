@@ -21,20 +21,18 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-//
+// ==========================================================
 // Options for JavaCC (only non-default options).
-//
-
+// ==========================================================
 options
 {
     STATIC = false;
     JAVA_UNICODE_ESCAPE = true;
 }
 
-//
+// ==========================================================
 // Java code that is incorporated into the parser.
-//
-
+// ==========================================================
 PARSER_BEGIN(XMLBIFv03)
 
 package Parsers.XMLBIFv03;
@@ -44,9 +42,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Definition of the Interchange Format class and its
- * variables. The IFBayesNet ifbn contains the
- * parsed Bayesian network.
+ * Definition of the Interchange Format class and its  variables. The IFBayesNet
+ * ifbn contains the parsed Bayesian network.
  */
 public class XMLBIFv03 extends InterchangeFormat
 {
@@ -58,6 +55,7 @@ public class XMLBIFv03 extends InterchangeFormat
 
     /**
      * Retrieve the Bayes net from the interchange format.
+     * @return the Bayes net in interchange format
      */
     public IFBayesNet getBayesNetFromInterchangeFmt()
     {
@@ -95,6 +93,10 @@ public class XMLBIFv03 extends InterchangeFormat
         return(p.toString());
     }
 
+    /**
+     * Consume the heading.
+     * @throws a parse exception
+     */
     void globHeading() throws ParseException
     {
         Token t;
@@ -283,6 +285,9 @@ void CompilationUnit() :
   ( ( <EOT> <BIF> <CT> ) | <EOF> )
 }
 
+/**
+ * Parse the opening tag.
+ */
 void OpenTag() :
 {
 }
@@ -312,6 +317,7 @@ void NetworkDeclaration() :
 
 /**
  * Get the format version.
+ * @return the version as double value
  */
 double VersionDeclaration() :
 {
@@ -328,6 +334,7 @@ double VersionDeclaration() :
 
 /**
  * Detect a variable declaration.
+ * @return variable declaration in interchange format
  */
 IFProbabilityVariable VariableDeclaration() :
 {
@@ -344,6 +351,10 @@ IFProbabilityVariable VariableDeclaration() :
         }
 }
 
+/**
+ * Parse a variable name.
+ * @return name as string
+ */
 String ProbabilityVariableName() :
 {
     String s;
@@ -355,6 +366,10 @@ String ProbabilityVariableName() :
         }
 }
 
+/**
+ * Parse a type.
+ * @return type as integer
+ */
 int TypeDeclaration() :
 {
     int type;
@@ -366,6 +381,10 @@ int TypeDeclaration() :
         }
 }
 
+/**
+ * Parse a variable type.
+ * @return type as integer
+ */
 int ProbabilityVariableType() :
 {
 }
@@ -375,6 +394,10 @@ int ProbabilityVariableType() :
   | <UTILITY>  { return(UTILITY_DEFINE); }
 }
 
+/**
+ * Parse a variable.
+ * @return variable in interchange format
+ */
 IFProbabilityVariable VariableContent(String name) :
 {
     int i;
@@ -402,6 +425,10 @@ IFProbabilityVariable VariableContent(String name) :
         }
 }
 
+/**
+ * Parse a variable outcome.
+ * @return variable ID as string
+ */
 String VariableOutcome() :
 {
     String s;
@@ -414,7 +441,8 @@ String VariableOutcome() :
 }
 
 /**
- * Detect a probability declaration.
+ * Parse a probability declaration.
+ * @return probability declaration in interchange format
  */
 IFProbabilityFunction ProbabilityDeclaration() :
 {
@@ -428,6 +456,10 @@ IFProbabilityFunction ProbabilityDeclaration() :
         }
 }
 
+/**
+ * Parse a probability content.
+ * @param ifProbFunc probability function in interchange format
+ */
 void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
     int i, j;
@@ -478,6 +510,10 @@ void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 	}
 }
 
+/**
+ * Parse a "for" variable.
+ * @return the variable name
+ */
 String ProbabilityFor() :
 {
     String s;
@@ -489,6 +525,10 @@ String ProbabilityFor() :
         }
 }
 
+/**
+ * Parse a "given" variable.
+ * @return the variable name
+ */
 String ProbabilityGiven() :
 {
     String s;
@@ -500,6 +540,10 @@ String ProbabilityGiven() :
         }
 }
 
+/**
+ * Parse probability table.
+ * @return the table as double array
+ */
 double[] ProbabilityTable() :
 {
     double d[];
@@ -517,6 +561,7 @@ double[] ProbabilityTable() :
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the double array
  */
 double[] FloatingPointList() :
 {
@@ -547,10 +592,11 @@ double[] FloatingPointList() :
         }
 }
 
-/** 
+/**
  * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the parsed double
  */
 Double FloatingPointNumber() :
 {
@@ -565,6 +611,7 @@ Double FloatingPointNumber() :
 
 /**
  * Property definition.
+ * @return the property as string
  */
 String Property() :
 {
@@ -579,6 +626,7 @@ String Property() :
 
 /**
  * Identifier.
+ * @return the identifier as string
  */
 String getIdentifier() :
 {
@@ -593,6 +641,7 @@ String getIdentifier() :
 
 /**
  * Retrieve String.
+ * @return the string
  */
 String getString() :
 {

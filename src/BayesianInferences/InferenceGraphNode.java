@@ -237,7 +237,7 @@ public final class InferenceGraphNode
                 StreamTokenizer st = new StreamTokenizer(reader);
                 st.parseNumbers();
                 int tok;
-                int x = -1, y = 0;
+                int x = -1;
                 while ((tok = st.nextToken()) != StreamTokenizer.TT_EOF)
                 {
                     if (tok != StreamTokenizer.TT_NUMBER)
@@ -250,7 +250,7 @@ public final class InferenceGraphNode
                     }
                     else
                     {
-                        y = (int) st.nval;
+                        int y = (int) st.nval;
                         finalPosition = new Point(x, y);
                     }
                 }
@@ -629,14 +629,7 @@ public final class InferenceGraphNode
      */
     public boolean isCredalSet()
     {
-        if (probFunc instanceof QBProbabilityFunction)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return probFunc instanceof QBProbabilityFunction;
     }
 
     /**
@@ -783,7 +776,7 @@ public final class InferenceGraphNode
                 StreamTokenizer st = new StreamTokenizer(reader);
                 st.parseNumbers();
                 int tok;
-                int x = -1, y = 0;
+                int x = -1;
                 while ((tok = st.nextToken()) != StreamTokenizer.TT_EOF)
                 {
                     if (tok != StreamTokenizer.TT_NUMBER)
@@ -796,7 +789,7 @@ public final class InferenceGraphNode
                     }
                     else
                     {
-                        y = (int) st.nval;
+                        int y = (int) st.nval;
                         finalPosition = new Point(x, y);
                     }
                 }

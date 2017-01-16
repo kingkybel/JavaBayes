@@ -25,6 +25,8 @@ import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
 import java.awt.Color;
 import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -35,6 +37,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class EditProbabilitiesDialog extends javax.swing.JDialog
 {
 
+    private static final Class CLAZZ = EditProbabilitiesDialog.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     int numValues = 0;
 
     class MyTableCellRenderer extends DefaultTableCellRenderer
@@ -125,13 +130,21 @@ public class EditProbabilitiesDialog extends javax.swing.JDialog
                                    InferenceGraphNode node)
     {
         super(parent, true);
-        initComponents();
-        ProbabilityTableModel model = new ProbabilityTableModel(
-                              graph.getBayesNet().getFunction(node.getName()));
-        probabilityTable.setModel(model);
-        probabilityTable.setDefaultRenderer(Object.class,
-                                            new MyTableCellRenderer());
-        numValues = model.getNumberOfValues();
+        try
+        {
+            initComponents();
+            final String nodeName = node.getName();
+            ProbabilityTableModel model = new ProbabilityTableModel(
+                                  graph.getBayesNet().getFunction(nodeName));
+            probabilityTable.setModel(model);
+            probabilityTable.setDefaultRenderer(Object.class,
+                                                new MyTableCellRenderer());
+            numValues = model.getNumberOfValues();
+        }
+        catch (Exception ex)
+        {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

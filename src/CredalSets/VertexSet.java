@@ -145,7 +145,7 @@ public final class VertexSet
 
     /**
      * Put together all the values for the possible vertices of credal set and
-     * create an auxiliary variable to indicate which vertex to consider There
+     * create an auxiliary variable to indicate which vertex to consider. There
      * are three things to do:
      * <ol>
      * <li>Create an auxiliaryVariable with correct values. </li>
@@ -176,8 +176,8 @@ public final class VertexSet
 
         // Now insert the auxiliaryVariable in the variables array
         DiscreteVariable newVariables[] =
-                           new DiscreteVariable[variables.length + 1];
-        for (i = 0; i < variables.length; i++)
+                           new DiscreteVariable[numberVariables() + 1];
+        for (i = 0; i < numberVariables(); i++)
         {
             newVariables[i] = variables[i];
         }
@@ -205,8 +205,8 @@ public final class VertexSet
         int i, j;
         // Combine vertices and the auxiliaryVariable and create new values
         double newValues[] =
-                 new double[extremePoints.length * values.length];
-        for (i = 0; i < values.length; i++)
+                 new double[extremePoints.length * numberValues()];
+        for (i = 0; i < numberValues(); i++)
         {
             for (j = 0; j < extremePoints.length; j++)
             {
@@ -283,10 +283,10 @@ public final class VertexSet
         }
 
         // Now evaluate
-        int position =
+        int valuePos =
             getPositionFromIndexes(bayesNet.getProbabilityVariables(),
                                    valueIndexes);
-        return extremePoints[indexExtremePoint][position];
+        return extremePoints[indexExtremePoint][valuePos];
     }
 
     /**
@@ -315,10 +315,11 @@ public final class VertexSet
         }
 
         // Get the position of the value in the array of values
-        int pos = getPositionFromIndexes(bayesNet.getProbabilityVariables(),
-                                         valueIndexes);
+        int valuePos =
+            getPositionFromIndexes(bayesNet.getProbabilityVariables(),
+                                   valueIndexes);
         // Set the value.
-        extremePoints[indexExtremePoint][pos] = value;
+        extremePoints[indexExtremePoint][valuePos] = value;
         composeValues();
     }
 
@@ -335,13 +336,13 @@ public final class VertexSet
         if (variables != null)
         {
             out.print("probability ( ");
-            for (j = 0; j < variables.length; j++)
+            for (j = 0; j < numberVariables(); j++)
             {
                 out.print(" \"" + variables[j].getName() + "\" ");
             }
             out.print(") {");
-            out.println(" //" + variables.length +
-                        " variable(s) and " + values.length + " values");
+            out.println(" //" + numberVariables() +
+                        " variable(s) and " + numberValues() + " values");
             if (extremePoints != null)
             {
                 for (i = 0; i < extremePoints.length; i++)
@@ -356,7 +357,7 @@ public final class VertexSet
                 out.print(" // Values: ");
             }
             out.print("\ttable ");
-            for (j = 0; j < values.length; j++)
+            for (j = 0; j < numberValues(); j++)
             {
                 out.print(values[j] + " ");
             }
@@ -388,7 +389,7 @@ public final class VertexSet
 
         n = (double) (extremePoints.length);
 
-        for (int i = 0; i < values.length; i++)
+        for (int i = 0; i < numberValues(); i++)
         {
             aux = 0.0;
             for (double[] extremePoint : extremePoints)
@@ -430,7 +431,7 @@ public final class VertexSet
         }
 
         // Allocate the new extreme distributions.
-        newExtremePoints = new double[numberExtremePoints][values.length];
+        newExtremePoints = new double[numberExtremePoints][numberValues()];
 
         // If the new size is larger than the current size.
         if (numberExtremePoints > numberCurrentExtremePoints)
@@ -446,7 +447,7 @@ public final class VertexSet
             // Then fill with copies of values.
             for (k = i; k < newExtremePoints.length; k++)
             {
-                for (j = 0; j < values.length; j++)
+                for (j = 0; j < numberValues(); j++)
                 {
                     newExtremePoints[k][j] = values[j];
                 }
@@ -457,7 +458,7 @@ public final class VertexSet
             // If the new size is smaller than the current size.
             for (i = 0; i < newExtremePoints.length; i++)
             {
-                for (j = 0; j < values.length; j++)
+                for (j = 0; j < numberValues(); j++)
                 {
                     newExtremePoints[i][j] = extremePoints[i][j];
                 }

@@ -68,15 +68,15 @@ public class EpsilonContaminatedSet
     {
         double oneMinusEpsilon = 1.0 - epsilon;
 
-        double lowerValues[] = new double[values.length];
-        double upperValues[] = new double[values.length];
+        double lowerValues[] = new double[numberValues()];
+        double upperValues[] = new double[numberValues()];
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] = values[i];
                 upperValues[i] = values[i];
@@ -85,18 +85,18 @@ public class EpsilonContaminatedSet
         else
         {
             double summation = 0.0;
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 summation += values[i];
             }
 
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] = (oneMinusEpsilon * values[i]) /
                                  ((oneMinusEpsilon * summation) + epsilon);
             }
 
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 upperValues[i] = ((oneMinusEpsilon * values[i]) + epsilon) /
                                  ((oneMinusEpsilon * summation) + epsilon);
@@ -190,7 +190,7 @@ public class EpsilonContaminatedSet
             // Obtain the summations
             double pTotal = 0.0;
             double uTotal = 0.0;
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 pTotal += values[i];
                 uTotal += discrFunc.getValue(i) * values[i];

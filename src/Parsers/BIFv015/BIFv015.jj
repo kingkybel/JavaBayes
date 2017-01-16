@@ -41,9 +41,9 @@ import java.util.Iterator;
 
 /**
  * Definition of the Interchange Format class and its variables. The IFBayesNet
- * ifbn contains the parsed Bayesian network. 
+ * ifbn contains the parsed Bayesian network.
  * This parser uses the data structures in the JavaBayes core engine (package
- * BayesianNetworks); other implementationsmay use different data structures.
+ * BayesianNetworks); other implementations may use different data structures.
  */
 public class BIFv015 extends InterchangeFormat
 {
@@ -206,6 +206,7 @@ void NetworkDeclaration() :
 
 /**
  * Fill the network list of properties.
+ * @return the network as ArrayList
  */
 ArrayList NetworkContent() :
 {
@@ -225,6 +226,7 @@ ArrayList NetworkContent() :
 
 /**
  * Detect a variable declaration.
+ * @return the variable in interchange format
  */
 IFProbabilityVariable VariableDeclaration() :
 {
@@ -240,6 +242,8 @@ IFProbabilityVariable VariableDeclaration() :
 
 /**
  * Fill a variable list of properties.
+ * @param name of the variable
+ * @return the variable in interchange format
  */
 IFProbabilityVariable VariableContent(String name) :
 {
@@ -264,6 +268,7 @@ IFProbabilityVariable VariableContent(String name) :
 
 /**
  * Fill a variable type discrete.
+ * @return values of the variable as array
  */
 String[] VariableDiscrete() :
 {
@@ -281,6 +286,7 @@ String[] VariableDiscrete() :
 
 /**
  * Get the values of a discrete variable.
+ * @return values of the variable as array
  */
 String[] VariableValuesList() :
 {
@@ -312,6 +318,7 @@ String[] VariableValuesList() :
 
 /**
  * Pick a single word as a probability variable value.
+ * @return value of a variable
  */
 String ProbabilityVariableValue() :
 {
@@ -326,6 +333,7 @@ String ProbabilityVariableValue() :
 
 /**
  * Detect a probability declaration.
+ * @return the function in interchange format
  */
 IFProbabilityFunction ProbabilityDeclaration() :
 {
@@ -341,6 +349,7 @@ IFProbabilityFunction ProbabilityDeclaration() :
 
 /**
  * Parse the list of Probability variables.
+ * @param the function in interchange format
  */
 void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) :
 {
@@ -381,6 +390,7 @@ void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) :
 
 /**
  * Find the conditional mark.
+ * @return number of marked indices
  */
 int ConditionalMark(ArrayList v):
 {
@@ -394,6 +404,7 @@ int ConditionalMark(ArrayList v):
 
 /**
  * Pick a single word as a probability variable name.
+ * @return the name of the variable
  */
 String ProbabilityVariableName() :
 {
@@ -408,6 +419,7 @@ String ProbabilityVariableName() :
 
 /**
  * Fill a Probability list of properties.
+ * @param the function in interchange format
  */
 void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
@@ -449,6 +461,10 @@ void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
         }
 }
 
+/**
+ * Parse a probability entry..
+ * @return the entry in interchange format
+ */
 IFProbabilityEntry ProbabilityEntry() :
 {
     String s[];
@@ -463,6 +479,7 @@ IFProbabilityEntry ProbabilityEntry() :
 
 /**
  * Parse the list of Probability values in an entry.
+ * @return the probability values as string array
  */
 String[] ProbabilityValuesList() :
 {
@@ -493,6 +510,10 @@ String[] ProbabilityValuesList() :
         }
 }
 
+/**
+ * Parse the list of default-robabilities
+ * @return the probabilities as double array
+ */
 double[] ProbabilityDefaultEntry() :
 {
     double d[];
@@ -504,6 +525,10 @@ double[] ProbabilityDefaultEntry() :
         }
 }
 
+/**
+ * Parse the list of probabilities
+ * @return the probabilities as double array
+ */
 double[] ProbabilityTable() :
 {
     double d[];
@@ -521,6 +546,7 @@ double[] ProbabilityTable() :
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the double array
  */
 double[] FloatingPointList() :
 {
@@ -555,6 +581,7 @@ double[] FloatingPointList() :
  * Pick a non-negative floating number. This is necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the double value
  */
 Double FloatingPointNumber() :
 {
@@ -569,6 +596,7 @@ Double FloatingPointNumber() :
 
 /**
  * Property definition.
+ * @return the property as string
  */
 String Property() :
 {
@@ -583,6 +611,7 @@ String Property() :
 
 /**
  * Retrieve String.
+ * @return the string
  */
 String getString() :
 {

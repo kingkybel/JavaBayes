@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Definition of the Interchange Format class and its
- * variables. The IFBayesNet ifbn contains the
- * parsed Bayesian network.
+ * Definition of the Interchange Format class and its  variables. The IFBayesNet
+ * ifbn contains the parsed Bayesian network.
  */
 public class XMLBIFv03 extends InterchangeFormat implements XMLBIFv03Constants {
     IFBayesNet ifbn;
@@ -20,6 +19,7 @@ public class XMLBIFv03 extends InterchangeFormat implements XMLBIFv03Constants {
 
     /**
      * Retrieve the Bayes net from the interchange format.
+     * @return the Bayes net in interchange format
      */
     public IFBayesNet getBayesNetFromInterchangeFmt()
     {
@@ -57,6 +57,10 @@ public class XMLBIFv03 extends InterchangeFormat implements XMLBIFv03Constants {
         return(p.toString());
     }
 
+    /**
+     * Consume the heading.
+     * @throws a parse exception
+     */
     void globHeading() throws ParseException
     {
         Token t;
@@ -155,6 +159,9 @@ ifbn.add(ifProbFunc);
     }
   }
 
+/**
+ * Parse the opening tag.
+ */
   final public void OpenTag() throws ParseException {
     jj_consume_token(OPENTAG);
   }
@@ -192,6 +199,7 @@ ifbn = new IFBayesNet(s, properties);
 
 /**
  * Get the format version.
+ * @return the version as double value
  */
   final public double VersionDeclaration() throws ParseException {Token t;
     double version = 0;
@@ -205,6 +213,7 @@ version = (Double.valueOf( (t.image).substring(1,t.image.length()-1) )).doubleVa
 
 /**
  * Detect a variable declaration.
+ * @return variable declaration in interchange format
  */
   final public IFProbabilityVariable VariableDeclaration() throws ParseException {String s;
     IFProbabilityVariable pv;
@@ -229,6 +238,10 @@ version = (Double.valueOf( (t.image).substring(1,t.image.length()-1) )).doubleVa
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a variable name.
+ * @return name as string
+ */
   final public String ProbabilityVariableName() throws ParseException {String s;
     jj_consume_token(SOT);
     jj_consume_token(NAME);
@@ -240,6 +253,10 @@ version = (Double.valueOf( (t.image).substring(1,t.image.length()-1) )).doubleVa
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a type.
+ * @return type as integer
+ */
   final public int TypeDeclaration() throws ParseException {int type;
     jj_consume_token(TYPE);
     jj_consume_token(EQUAL);
@@ -248,6 +265,10 @@ version = (Double.valueOf( (t.image).substring(1,t.image.length()-1) )).doubleVa
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a variable type.
+ * @return type as integer
+ */
   final public int ProbabilityVariableType() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case NATURE:{
@@ -273,6 +294,10 @@ version = (Double.valueOf( (t.image).substring(1,t.image.length()-1) )).doubleVa
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a variable.
+ * @return variable in interchange format
+ */
   final public IFProbabilityVariable VariableContent(String name) throws ParseException {int i;
     String s, v, svalues[];
     ArrayList properties = new ArrayList();
@@ -319,6 +344,10 @@ pv.setName(name);
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a variable outcome.
+ * @return variable ID as string
+ */
   final public String VariableOutcome() throws ParseException {String s;
     jj_consume_token(SOT);
     jj_consume_token(OUTCOME);
@@ -331,7 +360,8 @@ pv.setName(name);
   }
 
 /**
- * Detect a probability declaration.
+ * Parse a probability declaration.
+ * @return probability declaration in interchange format
  */
   final public IFProbabilityFunction ProbabilityDeclaration() throws ParseException {String vs[];
     IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
@@ -345,6 +375,10 @@ pv.setName(name);
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a probability content.
+ * @param ifProbFunc probability function in interchange format
+ */
   final public void ProbabilityContent(IFProbabilityFunction ifProbFunc) throws ParseException {int i, j;
     double def[] = null;
     double tab[] = null;
@@ -414,6 +448,10 @@ ifProbFunc.setProperties(properties);
             ifProbFunc.setVariables(vs);
   }
 
+/**
+ * Parse a "for" variable.
+ * @return the variable name
+ */
   final public String ProbabilityFor() throws ParseException {String s;
     jj_consume_token(FOR);
     s = getIdentifier();
@@ -424,6 +462,10 @@ ifProbFunc.setProperties(properties);
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a "given" variable.
+ * @return the variable name
+ */
   final public String ProbabilityGiven() throws ParseException {String s;
     jj_consume_token(GIVEN);
     s = getIdentifier();
@@ -434,6 +476,10 @@ ifProbFunc.setProperties(properties);
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse probability table.
+ * @return the table as double array
+ */
   final public double[] ProbabilityTable() throws ParseException {double d[];
     jj_consume_token(TABLE);
     jj_consume_token(CT);
@@ -451,6 +497,7 @@ ifProbFunc.setProperties(properties);
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the double array
  */
   final public double[] FloatingPointList() throws ParseException {int i;
     Double d;
@@ -483,10 +530,11 @@ ds = new double[d_list.size()];
     throw new Error("Missing return statement in function");
   }
 
-/** 
+/**
  * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the parsed double
  */
   final public Double FloatingPointNumber() throws ParseException {Token t;
     t = jj_consume_token(NON_NEGATIVE_NUMBER);
@@ -496,6 +544,7 @@ ds = new double[d_list.size()];
 
 /**
  * Property definition.
+ * @return the property as string
  */
   final public String Property() throws ParseException {String s;
     jj_consume_token(SOT);
@@ -510,6 +559,7 @@ ds = new double[d_list.size()];
 
 /**
  * Identifier.
+ * @return the identifier as string
  */
   final public String getIdentifier() throws ParseException {Token t;
     jj_consume_token(CT);
@@ -520,6 +570,7 @@ ds = new double[d_list.size()];
 
 /**
  * Retrieve String.
+ * @return the string
  */
   final public String getString() throws ParseException {
     jj_consume_token(CT);
@@ -543,12 +594,6 @@ ds = new double[d_list.size()];
     finally { jj_save(1, xla); }
   }
 
-  private boolean jj_3_2()
- {
-    if (jj_3R_6()) return true;
-    return false;
-  }
-
   private boolean jj_3R_6()
  {
     if (jj_scan_token(SOT)) return true;
@@ -557,6 +602,12 @@ ds = new double[d_list.size()];
   }
 
   private boolean jj_3_1()
+ {
+    if (jj_3R_6()) return true;
+    return false;
+  }
+
+  private boolean jj_3_2()
  {
     if (jj_3R_6()) return true;
     return false;

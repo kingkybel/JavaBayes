@@ -79,15 +79,15 @@ public class ConstantDensityRatioSet
      */
     public ProbabilityFunction posteriorMarginal()
     {
-        double lowerValues[] = new double[values.length];
-        double upperValues[] = new double[values.length];
+        double lowerValues[] = new double[numberValues()];
+        double upperValues[] = new double[numberValues()];
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] = values[i];
                 upperValues[i] = values[i];
@@ -96,17 +96,17 @@ public class ConstantDensityRatioSet
         else
         {
             double total = 0.0;
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 total += values[i];
             }
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] =
                 (values[i] / k) /
                 ((values[i] / k) + k * (total - values[i]));
             }
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 upperValues[i] =
                 (k * values[i]) /
@@ -213,7 +213,7 @@ public class ConstantDensityRatioSet
         switch (mapType)
         {
             case LOWER_EXPECTATION_BRACKET:
-                for (i = 0; i < values.length; i++)
+                for (i = 0; i < numberValues(); i++)
                 {
                     aux = tdf.getValue(i) - mapInput;
                     mapOutputUpper += (k * values[i]) * (-Math.max(-aux, 0.0));
@@ -221,7 +221,7 @@ public class ConstantDensityRatioSet
                 }
                 break;
             case UPPER_EXPECTATION_BRACKET:
-                for (i = 0; i < values.length; i++)
+                for (i = 0; i < numberValues(); i++)
                 {
                     aux = tdf.getValue(i) - mapInput;
                     mapOutputUpper += (k * values[i]) * (Math.max(aux, 0.0));

@@ -291,8 +291,9 @@ public class BayesNet
      *
      * @param var the variable identified by its name
      * @return the probability function
+     * @throws java.lang.Exception
      */
-    public ProbabilityFunction getFunction(String var)
+    public ProbabilityFunction getFunction(String var) throws Exception
     {
         return getFunction(getProbabilityVariable(var));
     }
@@ -374,10 +375,10 @@ public class BayesNet
             out.println("\t\tnew CategoricalVariable(\"" +
                         probabilityVariables[i].name + "\",");
             out.print("\t\t\tnew String[] {");
-            for (j = 0; j < probabilityVariables[i].values.length; j++)
+            for (j = 0; j < probabilityVariables[i].numberValues(); j++)
             {
                 out.print("\"" + probabilityVariables[i].values[j] + "\"");
-                if (j != (probabilityVariables[i].values.length - 1))
+                if (j != (probabilityVariables[i].numberValues() - 1))
                 {
                     out.print(",");
                 }
@@ -390,13 +391,13 @@ public class BayesNet
             out.println("\tCategoricalProbability p" + i + " = ");
             out.println("\t\tnew CategoricalProbability(" +
                         probabilityFunctions[i].variables[0].getName() + ",");
-            if (probabilityFunctions[i].variables.length > 1)
+            if (probabilityFunctions[i].numberVariables() > 1)
             {
                 out.print("\t\t\tnew CategoricalVariable[] {");
-                for (j = 1; j < probabilityFunctions[i].variables.length; j++)
+                for (j = 1; j < probabilityFunctions[i].numberVariables(); j++)
                 {
                     out.print(probabilityFunctions[i].variables[j].getName());
-                    if (j != (probabilityFunctions[i].variables.length - 1))
+                    if (j != (probabilityFunctions[i].numberVariables() - 1))
                     {
                         out.print(", ");
                     }
@@ -404,10 +405,10 @@ public class BayesNet
                 out.println("}, ");
             }
             out.print("\t\t\tnew double[] {");
-            for (j = 0; j < probabilityFunctions[i].values.length; j++)
+            for (j = 0; j < probabilityFunctions[i].numberValues(); j++)
             {
                 out.print(probabilityFunctions[i].values[j]);
-                if (j != (probabilityFunctions[i].values.length - 1))
+                if (j != (probabilityFunctions[i].numberValues() - 1))
                 {
                     out.print(", ");
                 }
@@ -846,13 +847,15 @@ public class BayesNet
      */
     public ProbabilityFunction getProbabilityFunction(int index)
     {
-        if (index <= probabilityFunctions.length)
+        if (index > -1 && index < probabilityFunctions.length)
         {
             return probabilityFunctions[index];
         }
         else
         {
-            return null;
+            throw new IndexOutOfBoundsException(index +
+                                                " is out of range [0.." +
+                                                probabilityFunctions.length);
         }
     }
 
@@ -861,18 +864,28 @@ public class BayesNet
      *
      * @param varName the name to search for
      * @return the variable with this name if it exists, null otherwise
+     * @throws java.lang.Exception if there is no variable called varName
      */
     public ProbabilityVariable getProbabilityVariable(String varName)
+            throws Exception
     {
+        if (varName == null)
+        {
+            throw new Exception("Cannot get <null> probability variable.");
+        }
         for (ProbabilityVariable var : probabilityVariables)
         {
-            if (var.getName() == null ? varName == null :
-                var.getName().equals(varName))
+            if (var.getName() == null)
+            {
+                throw new Exception(
+                        "<null> probability variable in probabilityVariables.");
+            }
+            if (var.getName().equals(varName))
             {
                 return var;
             }
         }
-        return null;
+        throw new Exception("Cannot get probability variable '" + varName + "'");
     }
 
     /**
@@ -994,7 +1007,7 @@ public class BayesNet
     /**
      * Set the vector of probability variables.
      *
-     * @param probVar a probability variables
+     * @param probVars a probability variables
      */
     public final void setProbabilityVariables(ProbabilityVariable probVars[])
     {

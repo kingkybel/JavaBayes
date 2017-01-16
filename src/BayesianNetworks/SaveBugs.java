@@ -110,7 +110,7 @@ public class SaveBugs
         {
             probFunc = bayesNet.probabilityFunctions[i];
             probVar = (ProbabilityVariable) (probFunc.variables[0]);
-            pstream.print("\tp." + probVar.name + "[" + probFunc.values.length +
+            pstream.print("\tp." + probVar.name + "[" + probFunc.numberValues() +
                           "]");
             if (i > 0)
             {
@@ -179,15 +179,15 @@ public class SaveBugs
             step = 1;
             for (j = 1; j < probFunc.variables.length; j++)
             {
-                step *= probFunc.variables[j].values.length;
+                step *= probFunc.variables[j].numberValues();
             }
             for (j = 0; j < step; j++)
             {
-                for (k = 0; k < probFunc.variables[0].values.length; k++)
+                for (k = 0; k < probFunc.variables[0].numberValues(); k++)
                 {
                     value = probFunc.values[k * step + j];
                     pstream.print(" " + value);
-                    if (k < (probFunc.variables[0].values.length - 1))
+                    if (k < (probFunc.variables[0].numberValues() - 1))
                     {
                         pstream.print(",");
                     }

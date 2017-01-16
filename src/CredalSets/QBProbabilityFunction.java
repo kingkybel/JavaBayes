@@ -127,14 +127,14 @@ public class QBProbabilityFunction extends ProbabilityFunction
         if (variables != null)
         {
             out.print(" envelope ( ");
-            for (j = 0; j < variables.length; j++)
+            for (j = 0; j < numberVariables(); j++)
             {
                 out.print(" \"" + variables[j].getName() + "\" ");
             }
             out.print(") {");
             if (lowerEnvelope != null)
             {
-                out.println(" //" + variables.length +
+                out.println(" //" + numberVariables() +
                             " variable(s) and " + lowerEnvelope.length +
                             " values");
                 out.print("\ttable lower-envelope ");

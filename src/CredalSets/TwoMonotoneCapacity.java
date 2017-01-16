@@ -93,16 +93,16 @@ public abstract class TwoMonotoneCapacity
      */
     public ProbabilityFunction posteriorMarginal()
     {
-        double lowerValues[] = new double[values.length];
-        double upperValues[] = new double[values.length];
-        DiscreteFunction discrFunc = new DiscreteFunction(1, values.length);
+        double lowerValues[] = new double[numberValues()];
+        double upperValues[] = new double[numberValues()];
+        DiscreteFunction discrFunc = new DiscreteFunction(1, numberValues());
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
         if ((variables[0] instanceof ProbabilityVariable) &&
             (((ProbabilityVariable) variables[0]).isObserved() == true))
         {
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] = values[i];
                 upperValues[i] = values[i];
@@ -111,19 +111,19 @@ public abstract class TwoMonotoneCapacity
         else
         {
             double total = 0.0; // Probability p(e)
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 total += values[i];
             }
 
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] =
                 (getLowerProbabilityFromBase(values[i]) /
                  (getLowerProbabilityFromBase(values[i]) +
                   getUpperProbabilityFromBase(total - values[i])));
             }
-            for (int i = 0; i < values.length; i++)
+            for (int i = 0; i < numberValues(); i++)
             {
                 upperValues[i] =
                 (getUpperProbabilityFromBase(values[i]) /

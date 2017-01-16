@@ -476,11 +476,11 @@ public class NetworkPanel extends Canvas
                            NODE_SIZE + 2, NODE_SIZE + 2);
             }
 
-            if (explanationStatus.isFull())
+            if (explanationStatus.usesAllNotObservedVariables())
             {
                 g.setColor(explanationNodeColor);
             }
-            else if (explanationStatus.isSubset())
+            else if (explanationStatus.usesMarkedVariablesOnly())
             {
                 if (node.isExplanation())
                 {

@@ -9,18 +9,25 @@ import java.util.Iterator;
 /**
  * Definition of the Interchange Format class and its variables. The IFBayesNet
  * ifbn contains the parsed Bayesian network.
- * This parser uses the data structures in the JavaBayes core engine (package 
+ * This parser uses the data structures in the JavaBayes core engine (package
  * BayesianNetworks); other implementations may use different data structures.
  */
 public class BIFv01 extends InterchangeFormat implements BIFv01Constants {
     IFBayesNet ifbn;
 
+    /**
+     * Retrieve the Bayes net in interchange format.
+     * @return the Bayes net in interchange format
+     */
     public IFBayesNet getBayesNetFromInterchangeFmt()
     {
-        return(ifbn);
+        return ifbn ;
     }
 
-    /* Method responsible for globbing undefined text in an input file */
+    /**
+      * Method responsible for globbing undefined text in an input file.
+      * @throws ParseException on parser errors
+      */
     void globUndefinedText() throws ParseException
     {
         Token t;
@@ -101,6 +108,7 @@ ifbn = new IFBayesNet(t.image, properties);
 
 /**
  * Fill the network list of properties.
+ * @return list of strings
  */
   final public ArrayList<String> NetworkContent() throws ParseException {ArrayList<String> properties = new ArrayList<String>();
     String s;
@@ -126,6 +134,7 @@ properties.add(s);
 
 /**
  * Detect a variable declaration.
+ * @return probability variable in interchange format
  */
   final public IFProbabilityVariable VariableDeclaration() throws ParseException {String s;
     IFProbabilityVariable pv;
@@ -138,6 +147,8 @@ properties.add(s);
 
 /**
  * Fill a variable list of properties.
+ * @param name name of the variable
+ * @return probability variable in interchange format
  */
   final public IFProbabilityVariable VariableContent(String name) throws ParseException {String s;
     String values[] = null;
@@ -182,6 +193,7 @@ pv.setName(name);
 
 /**
  * Fill a variable type discrete.
+ * @return string list of values
  */
   final public String[] VariableDiscrete() throws ParseException {String values[] = null;
     jj_consume_token(VARIABLETYPE);
@@ -199,6 +211,7 @@ pv.setName(name);
 
 /**
  * Get the values of a discrete variable.
+ * @return string list of values
  */
   final public String[] VariableValuesList() throws ParseException {int i;
     String value;
@@ -233,6 +246,7 @@ values = new String[v.size()];
 
 /**
  * Pick a single word as a probability variable value.
+ * @return string value
  */
   final public String ProbabilityVariableValue() throws ParseException {Token t;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -255,6 +269,7 @@ values = new String[v.size()];
 
 /**
  * Detect a probability declaration.
+ * @return probability function in interchange format
  */
   final public IFProbabilityFunction ProbabilityDeclaration() throws ParseException {String vs[];
     IFProbabilityFunction ifProbFunc = new IFProbabilityFunction();
@@ -267,6 +282,7 @@ values = new String[v.size()];
 
 /**
  * Parse the list of Probability variables.
+ * @param ifProbFunc probability function in interchange format
  */
   final public void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) throws ParseException {int i;
     Iterator e;
@@ -321,6 +337,7 @@ vs = new String[v_list.size()];
 
 /**
  *  Find the conditional mark.
+ * @param v list of variables
  */
   final public int ConditionalMark(ArrayList v) throws ParseException {
     jj_consume_token(29);
@@ -330,6 +347,7 @@ vs = new String[v_list.size()];
 
 /**
  * Pick a single word as a probability variable name.
+  @return probability variable name
  */
   final public String ProbabilityVariableName() throws ParseException {Token t;
     t = jj_consume_token(WORD);
@@ -339,6 +357,7 @@ vs = new String[v_list.size()];
 
 /**
  * Fill a Probability list of properties.
+ * @param ifProbFunc probability function in interchange format
  */
   final public void ProbabilityContent(IFProbabilityFunction ifProbFunc) throws ParseException {String s = null;
     ArrayList<String> properties = new ArrayList<String>();
@@ -399,6 +418,7 @@ ifProbFunc.setProperties(properties);
 
 /**
  * Pick a probability entry.
+ * @param probabilit entry in interchange format
  */
   final public IFProbabilityEntry ProbabilityEntry() throws ParseException {String s[];
     double d[];
@@ -411,6 +431,7 @@ ifProbFunc.setProperties(properties);
 
 /**
  * Parse the list of Probability values in an entry.
+ * @return the list
  */
   final public String[] ProbabilityValuesList() throws ParseException {int i;
     Iterator e;
@@ -445,6 +466,10 @@ vs = new String[v_list.size()];
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a list of probability values as default.
+ * @return the list
+ */
   final public double[] ProbabilityDefaultEntry() throws ParseException {double d[];
     jj_consume_token(DEFAULTVALUE);
     d = FloatingPointList();
@@ -453,6 +478,10 @@ vs = new String[v_list.size()];
     throw new Error("Missing return statement in function");
   }
 
+/**
+ * Parse a list of floats as probability values.
+ * @return the list
+ */
   final public double[] ProbabilityTable() throws ParseException {double d[];
     jj_consume_token(TABLEVALUES);
     d = FloatingPointList();
@@ -462,11 +491,12 @@ vs = new String[v_list.size()];
   }
 
 // ======================================================
-//          Some general purpose non-terminals 
+//          Some general purpose non-terminals
 // ======================================================
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the list
  */
   final public double[] FloatingPointList() throws ParseException {int i;
     Double d;
@@ -503,6 +533,7 @@ ds = new double[d_list.size()];
  * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the number
  */
   final public Double FloatingPointNumber() throws ParseException {Token t;
     t = jj_consume_token(NUMBER);
@@ -512,6 +543,7 @@ ds = new double[d_list.size()];
 
 /**
  * Property definition.
+ * @return the property as string
  */
   final public String Property() throws ParseException {int k;
     Token t;

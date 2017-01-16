@@ -24,7 +24,7 @@
 
 options
 {
-    STATIC = false; 
+    STATIC = false;
 }
 
 // ==========================================================
@@ -42,19 +42,26 @@ import java.util.Iterator;
 /**
  * Definition of the Interchange Format class and its variables. The IFBayesNet
  * ifbn contains the parsed Bayesian network.
- * This parser uses the data structures in the JavaBayes core engine (package 
+ * This parser uses the data structures in the JavaBayes core engine (package
  * BayesianNetworks); other implementations may use different data structures.
  */
 public class BIFv01 extends InterchangeFormat
 {
     IFBayesNet ifbn;
 
+    /**
+     * Retrieve the Bayes net in interchange format.
+     * @return the Bayes net in interchange format
+     */
     public IFBayesNet getBayesNetFromInterchangeFmt()
     {
-        return(ifbn);
+        return ifbn ;
     }
 
-    /* Method responsible for globbing undefined text in an input file */
+    /**
+      * Method responsible for globbing undefined text in an input file.
+      * @throws ParseException on parser errors
+      */
     void globUndefinedText() throws ParseException
     {
 	Token t;
@@ -176,6 +183,7 @@ void NetworkDeclaration() :
 
 /**
  * Fill the network list of properties.
+ * @return list of strings
  */
 ArrayList<String> NetworkContent() :
 {
@@ -191,6 +199,7 @@ ArrayList<String> NetworkContent() :
 
 /**
  * Detect a variable declaration.
+ * @return probability variable in interchange format
  */
 IFProbabilityVariable VariableDeclaration() :
 {
@@ -204,6 +213,8 @@ IFProbabilityVariable VariableDeclaration() :
 
 /**
  * Fill a variable list of properties.
+ * @param name name of the variable
+ * @return probability variable in interchange format
  */
 IFProbabilityVariable VariableContent(String name) :
 {
@@ -224,6 +235,7 @@ IFProbabilityVariable VariableContent(String name) :
 
 /**
  * Fill a variable type discrete.
+ * @return string list of values
  */
 String[] VariableDiscrete() :
 {
@@ -239,6 +251,7 @@ String[] VariableDiscrete() :
 
 /**
  * Get the values of a discrete variable.
+ * @return string list of values
  */
 String[] VariableValuesList() :
 {
@@ -270,6 +283,7 @@ String[] VariableValuesList() :
 
 /**
  * Pick a single word as a probability variable value.
+ * @return string value
  */
 String ProbabilityVariableValue() :
 {
@@ -284,6 +298,7 @@ String ProbabilityVariableValue() :
 
 /**
  * Detect a probability declaration.
+ * @return probability function in interchange format
  */
 IFProbabilityFunction ProbabilityDeclaration() :
 {
@@ -299,6 +314,7 @@ IFProbabilityFunction ProbabilityDeclaration() :
 
 /**
  * Parse the list of Probability variables.
+ * @param ifProbFunc probability function in interchange format
  */
 void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) :
 {
@@ -335,6 +351,7 @@ void ProbabilityVariablesList(IFProbabilityFunction ifProbFunc) :
 
 /**
  *  Find the conditional mark.
+ * @param v list of variables
  */
 int ConditionalMark(ArrayList v):
 {
@@ -348,6 +365,7 @@ int ConditionalMark(ArrayList v):
 
 /**
  * Pick a single word as a probability variable name.
+  @return probability variable name
  */
 String ProbabilityVariableName() :
 {
@@ -362,6 +380,7 @@ String ProbabilityVariableName() :
 
 /**
  * Fill a Probability list of properties.
+ * @param ifProbFunc probability function in interchange format
  */
 void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 {
@@ -395,6 +414,7 @@ void ProbabilityContent(IFProbabilityFunction ifProbFunc) :
 
 /**
  * Pick a probability entry.
+ * @param probabilit entry in interchange format
  */
 IFProbabilityEntry ProbabilityEntry() :
 {
@@ -408,6 +428,7 @@ IFProbabilityEntry ProbabilityEntry() :
 
 /**
  * Parse the list of Probability values in an entry.
+ * @return the list
  */
 String[] ProbabilityValuesList() :
 {
@@ -434,6 +455,10 @@ String[] ProbabilityValuesList() :
         }
 }
 
+/**
+ * Parse a list of probability values as default.
+ * @return the list
+ */
 double[] ProbabilityDefaultEntry() :
 {
     double d[];
@@ -445,6 +470,10 @@ double[] ProbabilityDefaultEntry() :
         }
 }
 
+/**
+ * Parse a list of floats as probability values.
+ * @return the list
+ */
 double[] ProbabilityTable() :
 {
     double d[];
@@ -457,11 +486,12 @@ double[] ProbabilityTable() :
 }
 
 // ======================================================
-//          Some general purpose non-terminals 
+//          Some general purpose non-terminals
 // ======================================================
 
 /**
  * Pick a list of non-negative floating numbers.
+ * @return the list
  */
 double[] FloatingPointList() :
 {
@@ -496,6 +526,7 @@ double[] FloatingPointList() :
  * Pick a non-negative floating number; necessary to allow
  * ignored characters and comments to exist in the middle
  * of a FloatingPointList().
+ * @return the number
  */
 Double FloatingPointNumber() :
 {
@@ -510,6 +541,7 @@ Double FloatingPointNumber() :
 
 /**
  * Property definition.
+ * @return the property as string
  */
 String Property() :
 {

@@ -365,8 +365,8 @@ public class Ordering
                     // Order all other variables
                     variablesToOrder.add(probVar);
                     // Check the status of the variable as an explanatory variable
-                    if ((explanationStatus.isFull()) ||
-                        ((explanationStatus.isSubset()) &&
+                    if ((explanationStatus.usesAllNotObservedVariables()) ||
+                        ((explanationStatus.usesMarkedVariablesOnly()) &&
                          (probVar.isExplanation())))
                     {
                         phaseMarkers[probVar.getIndex()] = PHASE_TWO;

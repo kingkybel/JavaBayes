@@ -26,9 +26,13 @@
 package BayesianNetworks;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
+ * Arbitrary discrete Variable. Values need not be non-negative and need not add
+ * up to 1.0.
+ *
  * @author Fabio G. Cozman
  */
 public class DiscreteVariable
@@ -39,19 +43,19 @@ public class DiscreteVariable
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     /**
-     *
+     * Name of the variable.
      */
-    protected String name; // Name of the variable
+    protected String name;
 
     /**
-     *
+     * Index of the variable in a collection of variables.
      */
-    protected int index;   // Index of the variable in a collection of variables
+    protected int index;
 
     /**
-     *
+     * Values of the variable.
      */
-    protected String values[]; // Values of the variable
+    protected String values[];
 
     /**
      * Default constructor for a DiscreteVariable.
@@ -102,15 +106,19 @@ public class DiscreteVariable
     }
 
     /**
-     * Determine the index of a value given its name; returns INVALID_INDEX if
-     * there is no index.
+     * Determine the index of a value given its name.
      *
-     * @param value
-     * @return
+     * @param value string value to look for
+     * @return INVALID_INDEX if there is variable cannot assume the value,
+     *         otherwise the index of the value
      */
     public int indexOfValue(String value)
     {
-        for (int i = 0; i < values.length; i++)
+        if (values == null)
+        {
+            return BayesNet.INVALID_INDEX;
+        }
+        for (int i = 0; i < numberValues(); i++)
         {
             if (values[i].equals(value))
             {
@@ -122,7 +130,7 @@ public class DiscreteVariable
 
     /**
      * Produce an array of numeric values for the values of a variable. The
-     * values are direct translation of the string values into doubles; if the
+     * values are a direct translation of the string values into doubles; if the
      * translation fails for a particular value, that value is replaced by its
      * index.
      *
@@ -131,10 +139,10 @@ public class DiscreteVariable
     public DiscreteFunction getNumericValues()
     {
         Double daux;
-        DiscreteVariable dvs[] = new ProbabilityVariable[1];
-        dvs[0] = this;
-        double numericValues[] = new double[values.length];
-        for (int i = 0; i < values.length; i++)
+        ArrayList<DiscreteVariable> dvs = new ArrayList<>();
+        dvs.add(this);
+        double numericValues[] = new double[numberValues()];
+        for (int i = 0; i < numberValues(); i++)
         {
             try
             {
@@ -176,8 +184,8 @@ public class DiscreteVariable
         out.print("{");
         if (values != null)
         {
-            out.println("//" + values.length + " values");
-            out.print("\ttype discrete[" + values.length + "] { ");
+            out.println("//" + numberValues() + " values");
+            out.print("\ttype discrete[" + numberValues() + "] { ");
             for (String value : values)
             {
                 out.print(" \"" + value + "\" ");
@@ -224,6 +232,10 @@ public class DiscreteVariable
      */
     public int numberValues()
     {
+        if (values == null)
+        {
+            return 0;
+        }
         return values.length;
     }
 

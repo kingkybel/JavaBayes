@@ -30,12 +30,12 @@ public enum ExplanationType
         return this == IGNORE;
     }
 
-    public boolean isSubset()
+    public boolean usesMarkedVariablesOnly()
     {
         return this == MARKED_VARIABLES_ONLY;
     }
 
-    public boolean isFull()
+    public boolean usesAllNotObservedVariables()
     {
         return this == ALL_NOT_OBSERVED_VARIABLES;
     }
@@ -60,7 +60,8 @@ public enum ExplanationType
     {
         return this == MARKED_VARIABLES_ONLY ?
                "Subset of marked explanantory variables" :
-               this == ALL_NOT_OBSERVED_VARIABLES ? "Complete explanation" :
+               this == ALL_NOT_OBSERVED_VARIABLES ?
+               "All not observed variables are explanatory" :
                this == MARGINAL_POSTERIOR ? "Posterior marginal" :
                this == EXPECTATION ? "Posterior Expectation" :
                this == SENSITIVITY_ANALYSIS ? "" : "<IGNORE>";

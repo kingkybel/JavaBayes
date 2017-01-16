@@ -569,11 +569,11 @@ public class BayesPanel
                            NODE_SIZE + 2);
             }
 
-            if (explanationStatus.isFull())
+            if (explanationStatus.usesAllNotObservedVariables())
             {
                 g.setColor(explanationNodeColor);
             }
-            else if (explanationStatus.isSubset())
+            else if (explanationStatus.usesMarkedVariablesOnly())
             {
                 if (node.isExplanation())
                 {
@@ -997,7 +997,7 @@ public class BayesPanel
                                             frame.isComputingClusters(),
                                             frame.isBucketTree());
         }
-        else if (modeMenuChoice.isSubset())
+        else if (modeMenuChoice.usesMarkedVariablesOnly())
         {
             frame.queryOutput("Explanation of " +
                               queriedVariable +
@@ -1005,7 +1005,7 @@ public class BayesPanel
                               "\n");
             inferenceGraph.printExplanation(pstream, frame.isBucketTree());
         }
-        else if (modeMenuChoice.isFull())
+        else if (modeMenuChoice.usesAllNotObservedVariables())
         {
             frame.queryOutput("Full explanation of " +
                               queriedVariable +

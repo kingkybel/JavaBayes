@@ -25,6 +25,8 @@ import BayesianInferences.InferenceGraph;
 import BayesianInferences.InferenceGraphNode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -34,6 +36,10 @@ import javax.swing.JPopupMenu;
  */
 public class EditVariableDialog extends javax.swing.JDialog
 {
+
+    private static final Class CLAZZ = InferenceGraphNode.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     JPopupMenu valueTablePopup;
 
@@ -50,9 +56,16 @@ public class EditVariableDialog extends javax.swing.JDialog
     {
         super(parent, true);
         initComponents();
-        ValueTableModel model = new ValueTableModel(
-                        graph.getBayesNet().getFunction(node.getName()));
-        valueTable.setModel(model);
+        try
+        {
+            ValueTableModel model = new ValueTableModel(
+                            graph.getBayesNet().getFunction(node.getName()));
+            valueTable.setModel(model);
+        }
+        catch (Exception ex)
+        {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
         JMenuItem menuItem;
         ActionListener action = new ActionListener()
         {

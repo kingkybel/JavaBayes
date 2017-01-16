@@ -280,11 +280,11 @@ public class ConvertInterchangeFormat
         for (i = 1; i < variables.length; i++)
         {
             probVar = variables[i];
-            jump *= probVar.values.length;
+            jump *= probVar.numberValues();
         }
 
         // Calculate the number of values in the distribution
-        numberOfValues = jump * variables[0].values.length;
+        numberOfValues = jump * variables[0].numberValues();
 
         // Allocate values and initialize
         values = new double[numberOfValues];
@@ -454,10 +454,10 @@ public class ConvertInterchangeFormat
                 {
                     pos += entryValueIndexes[k - 1] * step;
                     step *=
-                    variables[k].values.length;
+                    variables[k].numberValues();
                 }
                 probVar = variables[0];
-                for (i = 0; i < probVar.values.length; i++)
+                for (i = 0; i < probVar.numberValues(); i++)
                 {
                     k = i * jump + pos;
                     values[k] = eentryEntries[i];

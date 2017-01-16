@@ -314,8 +314,8 @@ public class ProbabilityVariable extends DiscreteVariable
         out.print("{");
         if (values != null)
         {
-            out.println(" //" + values.length + " values");
-            out.print("\ttype discrete[" + values.length + "] { ");
+            out.println(" //" + numberValues() + " values");
+            out.print("\ttype discrete[" + numberValues() + "] { ");
             for (String value : values)
             {
                 out.print(" \"" + value + "\" ");

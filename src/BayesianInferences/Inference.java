@@ -108,8 +108,8 @@ public class Inference
             if (indexQueried != BayesNet.INVALID_INDEX)
             { // If the queriedVariableName is valid:
                 Bucket buck = bucketForVariable[indexQueried];
-                // If the probVar has no Bucket or a Bucket without valid cluster:
-                if ((buck == null) || (buck.cluster == null))
+                // If the probVar has no Bucket or a Bucket without valid clusterFunc:
+                if ((buck == null) || (buck.clusterFunc == null))
                 {
                     inference(new Ordering(bayesNet,
                                            queriedVariableName,
@@ -137,7 +137,7 @@ public class Inference
                             bucketTree.distribute();
                         }
                     }
-                    // Now process the cluster in the Bucket.
+                    // Now process the clusterFunc in the Bucket.
                     System.out.println("ARRIVED HERE!");
                     buck.reduceCluster();
                     // And then get the result
@@ -154,7 +154,7 @@ public class Inference
             }
         }
         else
-        { // If no cluster is generated:
+        { // If no clusterFunc is generated:
             inference(new Ordering(bayesNet,
                                    queriedVariableName,
                                    ExplanationType.IGNORE,

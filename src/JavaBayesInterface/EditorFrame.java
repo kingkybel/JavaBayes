@@ -413,11 +413,11 @@ public class EditorFrame extends Frame
         {
             printExpectation(pstream, ig, queriedVariable);
         }
-        else if (modeMenuChoice.isSubset())
+        else if (modeMenuChoice.usesMarkedVariablesOnly())
         {
             printExplanation(pstream, ig);
         }
-        else if (modeMenuChoice.isFull())
+        else if (modeMenuChoice.usesAllNotObservedVariables())
         {
             printFullExplanation(pstream, ig);
         }
