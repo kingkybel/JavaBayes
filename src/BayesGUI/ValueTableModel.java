@@ -31,6 +31,7 @@ import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Table model derivative for values.
  *
  * @author Dieter J Kybelksties
  */
@@ -42,16 +43,16 @@ public class ValueTableModel
     private static final Class<ValueTableModel> CLAZZ = ValueTableModel.class;
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+    static final String[] columnNames =
+                          new String[]
+                          {
+                              "Value", "Comment"
+                          };
 
     ProbabilityFunction function;
     ArrayList<String> valueList = new ArrayList<>();
     ArrayList<String> commentList = new ArrayList<>();
     DefaultListModel listModel = new DefaultListModel();
-    static final String[] columnNames = new String[]
-                  {
-                      "Value",
-                      "Comment"
-    };
 
     /**
      * Construct the ValueTableModel.

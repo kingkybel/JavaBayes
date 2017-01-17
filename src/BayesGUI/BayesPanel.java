@@ -244,22 +244,6 @@ public class BayesPanel
     class NodeMenu extends JPopupMenu
     {
 
-        class AugmentedMenuItem extends JMenuItem
-        {
-
-            NodeMenuActions action;
-
-            AugmentedMenuItem(NodeMenuActions action)
-            {
-                super(action.toString());
-                this.action = action;
-            }
-
-            NodeMenuActions getMenuAction()
-            {
-                return action;
-            }
-        }
 
         NodeMenu()
         {
@@ -352,6 +336,23 @@ public class BayesPanel
                 AugmentedMenuItem menuItem = new AugmentedMenuItem(nma);
                 menuItem.addActionListener(action);
                 add(menuItem);
+            }
+        }
+
+        class AugmentedMenuItem extends JMenuItem
+        {
+
+            NodeMenuActions action;
+
+            AugmentedMenuItem(NodeMenuActions action)
+            {
+                super(action.toString());
+                this.action = action;
+            }
+
+            NodeMenuActions getMenuAction()
+            {
+                return action;
             }
         }
     }

@@ -610,7 +610,7 @@ public class BayesGUI extends javax.swing.JFrame
             if (!bayesNetModelFile.isEmpty() && bayesNetModelFile.contains("."))
             {
                 typeStr = bayesNetModelFile.substring(
-                bayesNetModelFile.indexOf(".") + 1);
+                bayesNetModelFile.indexOf('.') + 1);
             }
             final JFileChooser fc = new JFileChooser(bayesNetModelFile);
             fc.setCurrentDirectory(
@@ -648,7 +648,7 @@ public class BayesGUI extends javax.swing.JFrame
             bayesNetModelFile =
             bayesNetModelFile.substring(0,
                                         bayesNetModelFile.
-                                        lastIndexOf(".") + 1) + typeStr;
+                                        lastIndexOf('.') + 1) + typeStr;
         }
         if (!bayesNetModelFile.endsWith("." + typeStr))
         {

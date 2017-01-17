@@ -46,6 +46,9 @@ public class ExitAction extends AbstractAction
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    /**
+     * Default constructor.
+     */
     public ExitAction()
     {
         super("Exit");

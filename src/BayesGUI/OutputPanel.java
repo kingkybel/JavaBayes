@@ -37,6 +37,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 /**
+ * A panel derivative with predefined styles for output of text.
  *
  * @author Dieter J Kybelksties
  */
@@ -47,12 +48,33 @@ public class OutputPanel extends javax.swing.JPanel
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    /**
+     * Architecture specific newline combination.
+     */
     public static final String NEWLINE = System.getProperty("line.separator");
 
+    /**
+     * Predefined style-tag enumeration.
+     */
     public enum Styles
     {
 
-        NORMAL, HIGHLIGHT, META, ERROR;
+        /**
+         * Tag for normal text style.
+         */
+        NORMAL,
+        /**
+         * Tag for highlighted text style.
+         */
+        HIGHLIGHT,
+        /**
+         * Tag for meta-text style.
+         */
+        META,
+        /**
+         * Tag for error-text style.
+         */
+        ERROR;
 
         @Override
         public String toString()
@@ -356,6 +378,9 @@ public class OutputPanel extends javax.swing.JPanel
         return newStyle;
     }
 
+    /**
+     * Reset the underlying document to an empty document.
+     */
     public final void resetDocument()
     {
         doc = textPane.getStyledDocument();
@@ -439,7 +464,8 @@ public class OutputPanel extends javax.swing.JPanel
     /**
      * Place text in the text area.
      *
-     * @param text the text to append
+     * @param style style-tag of the predefined style to use
+     * @param text  the text to append
      */
     void appendToDocument(Style style, String text)
     {

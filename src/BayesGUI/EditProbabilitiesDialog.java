@@ -40,6 +40,7 @@ public class EditProbabilitiesDialog extends javax.swing.JDialog
     private static final Class CLAZZ = EditProbabilitiesDialog.class;
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
+
     int numValues = 0;
 
     class MyTableCellRenderer extends DefaultTableCellRenderer
@@ -121,9 +122,9 @@ public class EditProbabilitiesDialog extends javax.swing.JDialog
     /**
      * Creates new form EditProbabilitiesDialog
      *
-     * @param parent
-     * @param graph
-     * @param node
+     * @param parent parent frame
+     * @param graph  the inference graph to refer to
+     * @param node   the node for which to edit the probabilities
      */
     public EditProbabilitiesDialog(java.awt.Frame parent,
                                    InferenceGraph graph,

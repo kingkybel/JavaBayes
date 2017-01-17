@@ -35,16 +35,25 @@ import javax.swing.JOptionPane;
 public class CloseListener extends WindowAdapter
 {
 
-    public static final Class CLAZZ = CloseListener.class;
+    private static final Class CLAZZ = CloseListener.class;
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
     String prompt = "Are you sure you want to exit the application";
     String title = "Exit Application";
 
+    /**
+     * Default constructor.
+     */
     public CloseListener()
     {
     }
 
+    /**
+     * Construct with a prompt and title.
+     *
+     * @param prompt prompt the user to confirm the close
+     * @param title  title to be displayed
+     */
     public CloseListener(String prompt, String title)
     {
         this.prompt = prompt;

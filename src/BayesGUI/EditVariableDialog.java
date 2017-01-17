@@ -46,9 +46,9 @@ public class EditVariableDialog extends javax.swing.JDialog
     /**
      * Creates new form EditVariableDialog
      *
-     * @param parent
-     * @param graph
-     * @param node
+     * @param parent the parent frame
+     * @param graph  the graph to refer to
+     * @param node   the node for which to edit the variables
      */
     public EditVariableDialog(java.awt.Frame parent,
                               InferenceGraph graph,

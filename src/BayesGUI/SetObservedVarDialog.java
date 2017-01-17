@@ -27,6 +27,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
 /**
+ * Dialog for setting the value of an observed variable.
  *
  * @author Dieter J Kybelksties
  */
@@ -44,9 +45,9 @@ public class SetObservedVarDialog extends javax.swing.JDialog
     /**
      * Creates new form SetObservedVarDialog
      *
-     * @param parent
-     * @param modal
-     * @param node
+     * @param parent parent frame
+     * @param modal  whether or not to display the dialog in modal form
+     * @param node   the node which is to be set as observed
      */
     public SetObservedVarDialog(JFrame parent,
                                 boolean modal,

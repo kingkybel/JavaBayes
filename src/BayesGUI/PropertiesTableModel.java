@@ -38,32 +38,12 @@ public class PropertiesTableModel
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     * Key/Value convenience class.
-     */
-    class KV
-    {
-
-        /**
-         * Construct from given key and value.
-         *
-         * @param key   given key
-         * @param value new value
-         */
-        KV(String key, String value)
-        {
-            this.key = key;
-            this.value = value;
-        }
-        String key;
-        String value;
-    }
-    ArrayList<KV> propertyList = new ArrayList<>();
     static final String[] columnNames = new String[]
                   {
                       "Property",
                       "Value"
     };
+    ArrayList<KV> propertyList = new ArrayList<>();
 
     /**
      * Construct the Model from a list of properties.
@@ -74,12 +54,12 @@ public class PropertiesTableModel
     {
         for (String prop : properties)
         {
-            int splitIndex = prop.indexOf("=");
+            int splitIndex = prop.indexOf('=');
             String key = splitIndex > -1 ?
-                         prop.substring(0, prop.indexOf("=")) :
+                         prop.substring(0, prop.indexOf('=')) :
                          "";
             String val = splitIndex > -1 ?
-                         prop.substring(prop.indexOf("=") + 1) :
+                         prop.substring(prop.indexOf('=') + 1) :
                          "";
             KV kv = new KV(key, val);
             propertyList.add(kv);
@@ -232,6 +212,28 @@ public class PropertiesTableModel
         }
         return columnIndex == 0 ? propertyList.get(rowIndex).key :
                columnIndex == 1 ? propertyList.get(rowIndex).value : "";
+    }
+
+    /**
+     * Key/Value convenience class.
+     */
+    class KV
+    {
+
+        String key;
+        String value;
+
+        /**
+         * Construct from given key and value.
+         *
+         * @param key   given key
+         * @param value new value
+         */
+        KV(String key, String value)
+        {
+            this.key = key;
+            this.value = value;
+        }
     }
 
 }

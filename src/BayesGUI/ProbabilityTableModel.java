@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Table model derivative for probabilities.
  *
  * @author Dieter J Kybelksties
  */
@@ -46,133 +47,14 @@ public class ProbabilityTableModel extends AbstractTableModel
     ArrayList<String> variableNames = new ArrayList<>();
     int numberOfValues = 0;
 
-    class Row implements Comparable<Row>
-    {
-
-        private final int indexInFunctionVariables;
-        private Comparable variableValue;
-        private final ArrayList<Comparable> conditionalsValues =
-                                            new ArrayList<>();
-        private double probability;
-        private int totalColumnCount = 0;
-
-        Row(int index, ArrayList<Comparable> variables)
-        {
-            this.indexInFunctionVariables = index;
-            if (variables != null && variables.size() > 1)
-            {
-                variableValue = variables.get(0);
-                for (int i = 1; i < variables.size() - 1; i++)
-                {
-                    conditionalsValues.add(variables.get(i));
-                }
-                probability = (double) variables.get(variables.size() - 1);
-                totalColumnCount = variables.size();
-            }
-
-        }
-
-        int probabiltyIndex()
-        {
-            return totalColumnCount - 1;
-        }
-
-        void setProbability(Double probability)
-        {
-            this.probability = probability;
-            function.getValues()[indexInFunctionVariables] = probability;
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (obj == null || obj.getClass() != this.getClass())
-            {
-                return false;
-            }
-            Row other = (Row) obj;
-            if (indexInFunctionVariables == other.indexInFunctionVariables &&
-                (variableValue == null ?
-                 other.variableValue == null :
-                 variableValue.equals(other.variableValue)))
-            {
-                if (conditionalsValues == null &&
-                    other.conditionalsValues == null)
-                {
-                    return true;
-                }
-                else if (conditionalsValues == null ||
-                         other.conditionalsValues == null)
-                {
-                    return false;
-                }
-                else if (conditionalsValues.size() !=
-                         other.conditionalsValues.size())
-                {
-                    return false;
-                }
-                else
-                {
-                    for (int i = 0; i < conditionalsValues.size(); i++)
-                    {
-                        if (conditionalsValues.get(i) !=
-                            other.conditionalsValues.get(i))
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int hash = 5;
-            hash = 17 * hash + this.indexInFunctionVariables;
-            hash = 17 * hash + Objects.hashCode(this.variableValue);
-            hash = 17 * hash + Objects.hashCode(this.conditionalsValues);
-            return hash;
-        }
-
-        @Override
-        public int compareTo(Row o)
-        {
-            if (o == null)
-            {
-                return 1;
-            }
-            int thisSize = conditionalsValues.size();
-            int thatSize = o.conditionalsValues.size();
-            int minLen = min(thisSize, thatSize);
-            for (int i = 0; i < minLen; i++)
-            {
-                int compareResult = conditionalsValues.get(i).compareTo(
-                    o.conditionalsValues.get(i));
-                if (compareResult != 0)
-                {
-                    return compareResult;
-                }
-            }
-            if (thisSize < thatSize)
-            {
-                return -1;
-            }
-            if (thisSize > thatSize)
-            {
-                return 1;
-            }
-            return variableValue.compareTo(o.variableValue);
-        }
-
-    }
-
     ArrayList<Row> dataRows = new ArrayList<>();
 
-    ProbabilityTableModel(ProbabilityFunction function)
+    /**
+     * Construct with a probability function.
+     *
+     * @param function the function we want to model
+     */
+    public ProbabilityTableModel(ProbabilityFunction function)
     {
         this.function = function;
         slurpData();
@@ -308,8 +190,135 @@ public class ProbabilityTableModel extends AbstractTableModel
                dataRows.get(rowIndex).conditionalsValues.get(columnIndex - 1);
     }
 
+    /**
+     * Retrieve the number of values in the model.
+     *
+     * @return the number of values
+     */
     public int getNumberOfValues()
     {
         return numberOfValues;
+    }
+
+    class Row implements Comparable<Row>
+    {
+
+        private final int indexInFunctionVariables;
+        private Comparable variableValue;
+        private final ArrayList<Comparable> conditionalsValues =
+                                            new ArrayList<>();
+        private double probability;
+        private int totalColumnCount = 0;
+
+        Row(int index, ArrayList<Comparable> variables)
+        {
+            this.indexInFunctionVariables = index;
+            if (variables != null && variables.size() > 1)
+            {
+                variableValue = variables.get(0);
+                for (int i = 1; i < variables.size() - 1; i++)
+                {
+                    conditionalsValues.add(variables.get(i));
+                }
+                probability = (double) variables.get(variables.size() - 1);
+                totalColumnCount = variables.size();
+            }
+        }
+
+        int probabiltyIndex()
+        {
+            return totalColumnCount - 1;
+        }
+
+        void setProbability(Double probability)
+        {
+            this.probability = probability;
+            function.getValues()[indexInFunctionVariables] = probability;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == null || obj.getClass() != this.getClass())
+            {
+                return false;
+            }
+            Row other = (Row) obj;
+            if (indexInFunctionVariables == other.indexInFunctionVariables &&
+                (variableValue == null ?
+                 other.variableValue == null :
+                 variableValue.equals(other.variableValue)))
+            {
+                if (conditionalsValues == null &&
+                    other.conditionalsValues == null)
+                {
+                    return true;
+                }
+                else if (conditionalsValues == null ||
+                         other.conditionalsValues == null)
+                {
+                    return false;
+                }
+                else if (conditionalsValues.size() !=
+                         other.conditionalsValues.size())
+                {
+                    return false;
+                }
+                else
+                {
+                    for (int i = 0; i < conditionalsValues.size(); i++)
+                    {
+                        if (conditionalsValues.get(i) !=
+                            other.conditionalsValues.get(i))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 5;
+            hash = 17 * hash + this.indexInFunctionVariables;
+            hash = 17 * hash + Objects.hashCode(this.variableValue);
+            hash = 17 * hash + Objects.hashCode(this.conditionalsValues);
+            return hash;
+        }
+
+        @Override
+        public int compareTo(Row o)
+        {
+            if (o == null)
+            {
+                return 1;
+            }
+            int thisSize = conditionalsValues.size();
+            int thatSize = o.conditionalsValues.size();
+            int minLen = min(thisSize, thatSize);
+            for (int i = 0; i < minLen; i++)
+            {
+                int compareResult = conditionalsValues.get(i).compareTo(
+                    o.conditionalsValues.get(i));
+                if (compareResult != 0)
+                {
+                    return compareResult;
+                }
+            }
+            if (thisSize < thatSize)
+            {
+                return -1;
+            }
+            if (thisSize > thatSize)
+            {
+                return 1;
+            }
+            return variableValue.compareTo(o.variableValue);
+        }
     }
 }
