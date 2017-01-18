@@ -40,11 +40,6 @@ class Bucket
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public enum Type
-    {
-
-        EMPTY, REDUCED, DISTRIBUTED;
-    }
     // BucketTree that holds the Bucket.
     BucketTree bucketTree;
 
@@ -689,6 +684,26 @@ class Bucket
             newDfValues[i] = newDf.getValue(i);
         }
         backwardPointers = new DiscreteFunction(newDfVariables, newDfValues);
+    }
+
+    /**
+     * Enumeration of Bucket-type.
+     */
+    public enum Type
+    {
+
+        /**
+         * Empty bucket.
+         */
+        EMPTY,
+        /**
+         * Reduced bucket.
+         */
+        REDUCED,
+        /**
+         * Distributed bucket.
+         */
+        DISTRIBUTED
     }
 
 }

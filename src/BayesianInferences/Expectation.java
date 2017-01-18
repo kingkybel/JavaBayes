@@ -42,27 +42,6 @@ public class Expectation
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public enum Type
-    {
-
-        EXPECTED_VALUE(1),
-        SECOND_MOMENT(2),
-        THIRD_MOMENT(3),
-        FOURTH_MOMENT(4);
-
-        private Type(int value)
-        {
-            this.value = value;
-        }
-
-        public int order()
-        {
-            return value;
-        }
-        int value;
-
-    }
-
     private BayesNet bayesNet;
     private Inference inference;
     private double results[];
@@ -439,10 +418,7 @@ public class Expectation
         currentFunction.print(out);
         out.println();
 
-        if (shouldPrintBucketTree == true)
-        {
-            inference.bucketTree.print(out);
-        }
+        inference.printBucketTree(out, shouldPrintBucketTree);
     }
 
     /**
@@ -453,5 +429,45 @@ public class Expectation
     public double[] getResults()
     {
         return results;
+    }
+
+    /**
+     * Type of expectation to calculate.
+     */
+    public enum Type
+    {
+
+        /**
+         * Expected value.
+         */
+        EXPECTED_VALUE(1),
+        /**
+         * Second moment expectation (derivate).
+         */
+        SECOND_MOMENT(2),
+        /**
+         * Third moment expectation.
+         */
+        THIRD_MOMENT(3),
+        /**
+         * Fourth moment expectation.
+         */
+        FOURTH_MOMENT(4);
+
+        private Type(int value)
+        {
+            this.value = value;
+        }
+
+        /**
+         * Retrieve the order of expectation from the enum value.
+         *
+         * @return the order (currently 1,2, 3 or 4
+         */
+        public int order()
+        {
+            return value;
+        }
+        private final int value;
     }
 }

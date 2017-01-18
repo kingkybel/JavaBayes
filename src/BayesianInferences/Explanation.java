@@ -171,11 +171,11 @@ public class Explanation
      * Print Explanation.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree flag to indicate whether or not the bucket
+     *                              tree should be printed
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
-        int i, bp[];
         ProbabilityVariable probVar;
 
         // Do explanation if Explanation is null.
@@ -195,15 +195,15 @@ public class Explanation
         if (bucketTree.backwardPointers == null)
         {
             out.println("No explanatory variable; posterior distribution:");
-            for (i = 0; i < results.length; i++)
+            for (ProbabilityFunction result : results)
             {
-                results[i].print(out);
+                result.print(out);
             }
         }
         else
         {
-            bp = bucketTree.backwardPointers;
-            for (i = 0; i < bp.length; i++)
+            int bp[] = bucketTree.backwardPointers;
+            for (int i = 0; i < bp.length; i++)
             {
                 if (bp[i] != BayesNet.INVALID_INDEX)
                 {
@@ -218,7 +218,7 @@ public class Explanation
     /**
      * Get the results in the Explanation.
      *
-     * @return
+     * @return the results
      */
     public ProbabilityFunction[] getResults()
     {

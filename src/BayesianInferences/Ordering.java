@@ -42,11 +42,6 @@ public class Ordering
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public enum Type
-    {
-
-        USER_DEFINED, USER_ORDER, MINIMUM_WEIGHT;
-    }
     BayesNet bayesNet;
     String order[];
     ExplanationType explanationStatus = ExplanationType.IGNORE;
@@ -56,22 +51,22 @@ public class Ordering
      * Basic constructor for Ordering.
      *
      * @param bayesNet     the underlying Bayesian network
-     * @param orderingType
-     * @param objective
+     * @param orderingType type of ordering
+     * @param objective    name of the objective variable
      */
     public Ordering(BayesNet bayesNet, String objective, Type orderingType)
     {
         this.bayesNet = bayesNet;
-        explanationStatus = obtainExplanationStatus(bayesNet);
+        this.explanationStatus = obtainExplanationStatus(bayesNet);
         this.orderingType = orderingType;
-        order = ordering(objective);
+        this.order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
      *
      * @param bayesNet the underlying Bayesian network
-     * @param order
+     * @param order    explicit order of variable names
      */
     public Ordering(BayesNet bayesNet, String order[])
     {
@@ -84,9 +79,9 @@ public class Ordering
      * Basic constructor for Ordering.
      *
      * @param bayesNet          the underlying Bayesian network
-     * @param objective
-     * @param explanationStatus
-     * @param orderingType
+     * @param objective         name of the objective variable
+     * @param explanationStatus what to use for explanation
+     * @param orderingType      type of ordering
      */
     public Ordering(BayesNet bayesNet,
                     String objective,
@@ -96,15 +91,15 @@ public class Ordering
         this.bayesNet = bayesNet;
         this.explanationStatus = explanationStatus;
         this.orderingType = orderingType;
-        order = ordering(objective);
+        this.order = ordering(objective);
     }
 
     /**
      * Basic constructor for Ordering.
      *
      * @param bayesNet          the underlying Bayesian network
-     * @param order
-     * @param explanationStatus
+     * @param order             explicit order of variable names
+     * @param explanationStatus what to use for explanation
      */
     public Ordering(BayesNet bayesNet,
                     String order[],
@@ -120,32 +115,33 @@ public class Ordering
      * IGNORE.
      *
      * @param bayesNet the underlying Bayesian network
-     * @return
+     * @return what to use for explanation
+     *
      */
     private ExplanationType obtainExplanationStatus(BayesNet bayesNet)
     {
         ExplanationType explanationStatusFlag = ExplanationType.IGNORE;
         for (int i = 0; i < bayesNet.numberVariables(); i++)
         {
-            if ((!(bayesNet.getProbabilityVariable(i).isObserved())) &&
-                (bayesNet.getProbabilityVariable(i).isExplanation()))
+            if (!bayesNet.getProbabilityVariable(i).isObserved() &&
+                bayesNet.getProbabilityVariable(i).isExplanation())
             {
                 explanationStatusFlag = ExplanationType.MARKED_VARIABLES_ONLY;
                 break;
             }
         }
+
         return explanationStatusFlag;
     }
 
     /**
      * Call the appropriate ordering depending on the type of ordering.
      *
-     * @param objective
-     * @return
+     * @param objective name of the objective variable
+     * @return an array of ordered variable names
      */
     private String[] ordering(String objective)
     {
-        int i;
         ArrayList<DiscreteVariable> variablesToOrder = new ArrayList<>();
 
         int objectiveIndex = bayesNet.indexOfVariable(objective);
@@ -166,7 +162,7 @@ public class Ordering
         if (orderingType == Type.USER_ORDER)
         {
             // For user order, just collect all variables.
-            for (i = 0; i < bayesNet.numberVariables(); i++)
+            for (int i = 0; i < bayesNet.numberVariables(); i++)
             {
                 variablesToOrder.add(bayesNet.getProbabilityVariable(i));
             }
@@ -177,10 +173,9 @@ public class Ordering
             // For explanations, just collect all variables.
             if (!explanationStatus.isIgnore())
             {
-                for (i = 0; i < bayesNet.numberVariables(); i++)
+                for (int i = 0; i < bayesNet.numberVariables(); i++)
                 {
-                    variablesToOrder.add(
-                            bayesNet.getProbabilityVariable(i));
+                    variablesToOrder.add(bayesNet.getProbabilityVariable(i));
                 }
             }
             else
@@ -188,9 +183,7 @@ public class Ordering
                 DSeparation dsep = new DSeparation(bayesNet);
                 variablesToOrder = dsep.getAllAffectingVariables(objectiveIndex);
             }
-            return heuristicOrder(variablesToOrder,
-                                  objectiveIndex,
-                                  orderingType);
+            return heuristicOrder(variablesToOrder, objectiveIndex, orderingType);
         }
     }
 
@@ -209,18 +202,16 @@ public class Ordering
      * the ordering to have this property (objective variable last for
      * inference).
      *
-     * @param variablesToOrder
-     * @param objectiveIndex
-     * @return
+     * @param variablesToOrder list of variables to put into an order
+     * @param objectiveIndex   index of the objective variable
+     * @return array of ordered variable names
      */
     private String[] userOrder(ArrayList<DiscreteVariable> variablesToOrder,
                                int objectiveIndex)
     {
-        int i, j;
         boolean isVariableExplanationFlag = false;
         ArrayList<String> nonExplanationVariables = new ArrayList<>();
         ArrayList<String> explanationVariables = new ArrayList<>();
-        String ord[];
 
         // Collect variables into related vectors
         for (DiscreteVariable discrVar : variablesToOrder)
@@ -263,17 +254,17 @@ public class Ordering
             }
         }
 
-        ord = new String[nonExplanationVariables.size() +
-                         explanationVariables.size()];
+        String ord[] = new String[nonExplanationVariables.size() +
+                                  explanationVariables.size()];
 
         if (explanationVariables.isEmpty())
         {
-            i = 0;
+            int i = 0;
             for (String varName : nonExplanationVariables)
             {
                 ord[i] = varName;
-                if (ord[i].equals(bayesNet.
-                        getProbabilityVariable(objectiveIndex).
+                if (ord[i].equals(
+                        bayesNet.getProbabilityVariable(objectiveIndex).
                         getName()))
                 {
                     i--;
@@ -284,16 +275,16 @@ public class Ordering
         }
         else
         {
-            i = 0;
+            int i = 0;
             for (String varName : nonExplanationVariables)
             {
                 ord[i] = varName;
                 i++;
             }
-            j = i;
             for (String varName : explanationVariables)
             {
-                ord[j] = varName;
+                ord[i] = varName;
+                i++;
             }
 
         }
@@ -302,7 +293,9 @@ public class Ordering
     }
 
     /**
-     * Heuristic ordering for the variables:
+     * Produce a heuristic ordering for the variables in variablesToOrder,
+     * assuming that all variables are in the BayesNet bayesNet object. The
+     * following rules apply:
      * <ol>
      * <li> Transparent variables are not included</li>
      * <li> Decision variables come last in the order they were input</li>
@@ -310,14 +303,12 @@ public class Ordering
      * objective variable which is the last of all non-explanation
      * variables</li>
      * </ol>
-     * Produce an ordering for the variables in variablesToOrder, assuming that
-     * all variables are in the BayesNet bayesNet object. The orderingType
-     * indicates which heuristic to use in the elimination procedure.
      *
-     * @param origVars
-     * @param objectiveIndex
-     * @param orderingType
-     * @return
+     * @param origVars       the original variables
+     * @param objectiveIndex index of the objective
+     * @param orderingType   indicates which heuristic to use in the elimination
+     *                       procedure
+     * @return variable names in an array describing the ordering
      */
     private String[] heuristicOrder(ArrayList<DiscreteVariable> origVars,
                                     int objectiveIndex,
@@ -353,7 +344,7 @@ public class Ordering
         // Filter the incoming variables
         for (DiscreteVariable discrVar : origVars)
         {
-            probVar = (ProbabilityVariable) (discrVar);
+            probVar = (ProbabilityVariable) discrVar;
             if (probVar.isObserved())
             { // Put observed variables at the beginning
                 eliminationOrdering.add(probVar);
@@ -439,7 +430,7 @@ public class Ordering
                     numberVariablesInPhase++;
 
                     // Get the value for the heuristic.
-                    value = obtainValue(vectors[j], orderingType);
+                    value = obtainHeuristicValue(vectors[j], orderingType);
                     if ((value < minValue) || (minIndex == -1))
                     { // Minimize the heuristic.
                         minIndex = j;
@@ -496,12 +487,13 @@ public class Ordering
      * Obtain the heuristic value of eliminating a variable, represented by the
      * list of variables linked to it.
      *
-     * @param linkedVars
-     * @param orderingType
-     * @return
+     * @param linkedVars   list of variables that are linked to the variable in
+     *                     question
+     * @param orderingType type of the ordering chosen
+     * @return the heuristic value
      */
-    private long obtainValue(ArrayList<DiscreteVariable> linkedVars,
-                             Type orderingType)
+    private long obtainHeuristicValue(ArrayList<DiscreteVariable> linkedVars,
+                                      Type orderingType)
     {
         ProbabilityVariable probVar;
         long value = 0;
@@ -525,8 +517,8 @@ public class Ordering
      * others.
      *
      * @param bayesNet                    the underlying Bayesian network
-     * @param vectors
-     * @param variablesToBeInterconnected
+     * @param vectors                     output array of lists of variables
+     * @param variablesToBeInterconnected source variables
      */
     private void interconnect(BayesNet bayesNet,
                               ArrayList<DiscreteVariable> vectors[],
@@ -535,7 +527,7 @@ public class Ordering
         int i, j;
         for (i = 0; i < (variablesToBeInterconnected.length - 1); i++)
         {
-            for (j = (i + 1); j < variablesToBeInterconnected.length; j++)
+            for (j = i + 1; j < variablesToBeInterconnected.length; j++)
             {
                 interconnect(bayesNet,
                              vectors,
@@ -548,10 +540,10 @@ public class Ordering
     /**
      * Connect two variables.
      *
-     * @param bayesNet the underlying Bayesian network
-     * @param vectors
-     * @param probVar  a probability variable_i
-     * @param probVar  a probability variable_j
+     * @param bayesNet  the underlying Bayesian network, not used
+     * @param vectors   output array of lists of variables
+     * @param probVar_i probability variable i
+     * @param probVar_j probability variable j
      */
     private void interconnect(BayesNet bayesNet,
                               ArrayList<DiscreteVariable> vectors[],
@@ -576,5 +568,25 @@ public class Ordering
         {
             jv.add(probVar_i);
         }
+    }
+
+    /**
+     * Enumeration of ordering types.
+     */
+    public enum Type
+    {
+
+        /**
+         * User defined ordering.
+         */
+        USER_DEFINED,
+        /**
+         * User-order: just collect all variables.
+         */
+        USER_ORDER,
+        /**
+         * Minimum weight ordering.
+         */
+        MINIMUM_WEIGHT
     }
 }

@@ -54,11 +54,6 @@ public class DSeparation
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    public enum ConnectionType
-    {
-
-        CONNECTED_VARIABLES, AFFECTING_VARIABLES;
-    }
     BayesNet bayesNet;
     boolean[] above;
     boolean[] below;
@@ -150,7 +145,7 @@ public class DSeparation
             {
                 for (i = 0; i < nvertices; i++)
                 {
-                    if (adj(i, v, connectionType))
+                    if (adjacent(i, v, connectionType))
                     {
                         if ((!below[i]) && (!isSeparator(i, connectionType)))
                         {
@@ -165,7 +160,7 @@ public class DSeparation
                 }
                 for (j = 0; j < nvertices; j++)
                 {
-                    if (adj(v, j, connectionType))
+                    if (adjacent(v, j, connectionType))
                     {
                         if (!above[j])
                         {
@@ -186,7 +181,7 @@ public class DSeparation
                 {  // v known
                     for (i = 0; i < nvertices; i++)
                     {
-                        if (adj(i, v, connectionType))
+                        if (adjacent(i, v, connectionType))
                         {
                             if ((!isSeparator(i, connectionType)) && !below[i])
                             {
@@ -204,7 +199,7 @@ public class DSeparation
                 {
                     for (j = 0; j < nvertices; j++)
                     {
-                        if (adj(v, j, connectionType))
+                        if (adjacent(v, j, connectionType))
                         {
                             if (!above[j])
                             {
@@ -297,9 +292,9 @@ public class DSeparation
      * @param connectionType the type of connection we are querying
      * @return
      */
-    private boolean adj(int indexFrom,
-                        int indexTo,
-                        ConnectionType connectionType)
+    private boolean adjacent(int indexFrom,
+                             int indexTo,
+                             ConnectionType connectionType)
     {
         ProbabilityFunction probFunc = null;
 
@@ -333,8 +328,23 @@ public class DSeparation
         }
         else
         {
-            return (indexFrom - indexTo) == bayesNet.
-                   numberProbabilityFunctions();
+            return indexFrom - indexTo == bayesNet.numberProbabilityFunctions();
         }
+    }
+
+    /**
+     * Type of the connection we are investigating.
+     */
+    public enum ConnectionType
+    {
+
+        /**
+         * Variables are connected to a (set of) variables.
+         */
+        CONNECTED_VARIABLES,
+        /**
+         * Variables are affecting a (set of) variables.
+         */
+        AFFECTING_VARIABLES
     }
 }

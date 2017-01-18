@@ -37,15 +37,15 @@ import java.util.logging.Logger;
 public class Inference
 {
 
-    private static final Class<Inference> CLAZZ = Inference.class;
+    private static final Class CLAZZ = Inference.class;
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    protected BayesNet bayesNet;
-    protected BucketTree bucketTree;
+    private BayesNet bayesNet;
+    private BucketTree bucketTree;
     private final Bucket bucketForVariable[];
     private ArrayList<BucketTree> bucketForest;
-    protected ProbabilityFunction result;
+    private ProbabilityFunction result;
     private boolean isProducingClusters;
 
     /**
@@ -63,25 +63,40 @@ public class Inference
     }
 
     /**
+     * Retrieve the bucket forest as list.
      *
-     * @return
+     * @return a list of bucket trees
      */
     public ArrayList<BucketTree> getBucketForest()
     {
         return bucketForest;
     }
 
-    public void setBucketForest(
-            ArrayList<BucketTree> bucketForest)
+    /**
+     * Set the bucket forest from a list.
+     *
+     * @param bucketForest the new list of bucket trees
+     */
+    public void setBucketForest(ArrayList<BucketTree> bucketForest)
     {
         this.bucketForest = bucketForest;
     }
 
-    public boolean isIsProducingClusters()
+    /**
+     * Check whether clusters are to be produced.
+     *
+     * @return true if so, false otherwise
+     */
+    public boolean isProducingClusters()
     {
         return isProducingClusters;
     }
 
+    /**
+     * Set whether clusters are to be produced.
+     *
+     * @param isProducingClusters true/false
+     */
     public void setIsProducingClusters(boolean isProducingClusters)
     {
         this.isProducingClusters = isProducingClusters;
@@ -98,7 +113,7 @@ public class Inference
     /**
      * Calculation of marginal posterior distribution for an arbitrary BayesNet.
      *
-     * @param queriedVariableName
+     * @param queriedVariableName name of the variable to query
      */
     protected void inference(String queriedVariableName)
     {
@@ -166,22 +181,22 @@ public class Inference
      * Calculation of marginal posterior distribution using a given ordering,
      * and an arbitrary BayesNet.
      *
-     * @param order
+     * @param order order of variables given as array of their names
      */
     protected void inference(String order[])
     {
-        inference(new Ordering(bayesNet,
-                               order,
-                               ExplanationType.IGNORE));
+        inference(new Ordering(bayesNet, order, ExplanationType.IGNORE));
     }
 
     /**
      * Calculation of marginal posterior distribution.
+     *
+     * @param ordering the ordering to use
      */
-    private void inference(Ordering or)
+    private void inference(Ordering ordering)
     {
         // Create the Ordering and the BucketTree.
-        bucketTree = new BucketTree(or, isProducingClusters);
+        bucketTree = new BucketTree(ordering, isProducingClusters);
         // Add the new BucketTree to the bucketForest and update bucketForVariable.
         if (isProducingClusters)
         {
@@ -241,7 +256,8 @@ public class Inference
      * Print the Inference.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree whether or not the bucket tree should be
+     *                              printed
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
@@ -254,10 +270,7 @@ public class Inference
         // Print it all.
         out.print("Posterior distribution:");
 
-        if (shouldPrintBucketTree == true)
-        {
-            bucketTree.print(out);
-        }
+        printBucketTree(out, shouldPrintBucketTree);
         out.println();
 
         result.print(out);
@@ -266,7 +279,7 @@ public class Inference
     /**
      * Get the BucketTree.
      *
-     * @return
+     * @return the bucket tree
      */
     public BucketTree getBucketTree()
     {
@@ -276,7 +289,7 @@ public class Inference
     /**
      * Get the BayesNet.
      *
-     * @return
+     * @return the Bayes net
      */
     public BayesNet getBayesNet()
     {
@@ -284,9 +297,19 @@ public class Inference
     }
 
     /**
+     * Set a new BayesNet.
+     *
+     * @param bayesNet the new Bayes net
+     */
+    public void setBayesNet(BayesNet bayesNet)
+    {
+        this.bayesNet = bayesNet;
+    }
+
+    /**
      * Get the current result of the Inference.
      *
-     * @return
+     * @return the result
      */
     public ProbabilityFunction getResult()
     {
@@ -294,12 +317,45 @@ public class Inference
     }
 
     /**
+     * Normalize the result.
+     */
+    public void normalizeResult()
+    {
+        result.normalize();
+    }
+
+    /**
+     * Get the current result of the Inference.
+     *
+     * @param result the new result probability function
+     */
+    public void setResult(ProbabilityFunction result)
+    {
+        this.result = result;
+    }
+
+    /**
      * Get the status of the clustering process.
      *
-     * @return
+     * @return true if clusters are produced, false otherwise
      */
     public boolean areClustersProduced()
     {
         return isProducingClusters;
+    }
+
+    /**
+     * Print the bucket tree is required.
+     *
+     * @param out                   output stream to print to
+     * @param shouldPrintBucketTree whether or not the bucket tree needs to be
+     *                              printed
+     */
+    void printBucketTree(PrintStream out, boolean shouldPrintBucketTree)
+    {
+        if (shouldPrintBucketTree == true)
+        {
+            bucketTree.print(out);
+        }
     }
 }

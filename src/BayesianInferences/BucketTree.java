@@ -34,6 +34,7 @@ import java.io.PrintStream;
 import java.util.logging.Logger;
 
 /**
+ * Class that combines a collection of buckets into a tree.
  *
  * @author Fabio G. Cozman
  */
