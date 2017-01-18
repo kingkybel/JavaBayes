@@ -46,6 +46,9 @@ public class ConvertInterchangeFormat
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
+    /**
+     *
+     */
     public static final double INVALID_VALUE = -1.0;
     InterchangeFormat interchangeFmt;
 
@@ -176,6 +179,13 @@ public class ConvertInterchangeFormat
         return currentValueIndex;
     }
 
+    /**
+     * Retrieve the functions as a map of a variable name mapped to a table
+     * describing the functions.
+     *
+     * @param bayesNet the underlying Bayes net
+     * @return the map of names vs functions
+     */
     public TreeMap<String, ArrayList<ArrayList<Object>>> getFunctionsAsTables(
             BayesNet bayesNet)
     {

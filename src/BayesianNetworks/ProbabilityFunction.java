@@ -140,19 +140,20 @@ public class ProbabilityFunction extends DiscreteFunction
     public void setValue(String variableValuePairs[][], double value)
     {
         // Initialize with zeros an array of markers.
-        int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
+        int valueIndexes[] = new int[bayesNet.numberVariables()];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
             int index = bayesNet.indexOfVariable(variableValuePair[0]);
-            ProbabilityVariable probVar = bayesNet.probabilityVariables[index];
+            ProbabilityVariable probVar = bayesNet.getVariable(index);
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
-        int valuePos = getPositionFromIndexes(bayesNet.probabilityVariables,
-                                              valueIndexes);
+        int valuePos =
+            getPositionFromIndexes(bayesNet.getProbabilityVariables(),
+                                   valueIndexes);
         // Set the value.
         values[valuePos] = value;
     }
@@ -167,13 +168,13 @@ public class ProbabilityFunction extends DiscreteFunction
     public double evaluate(String variableValuePairs[][])
     {
         // Initialize with zeros an array of markers.
-        int valueIndexes[] = new int[bayesNet.probabilityVariables.length];
+        int valueIndexes[] = new int[bayesNet.numberVariables()];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
             int index = bayesNet.indexOfVariable(variableValuePair[0]);
-            ProbabilityVariable probVar = bayesNet.probabilityVariables[index];
+            ProbabilityVariable probVar = bayesNet.getVariable(index);
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
@@ -191,7 +192,7 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public double evaluate(int valueIndexes[])
     {
-        return super.evaluate(bayesNet.probabilityVariables, valueIndexes);
+        return super.evaluate(bayesNet.getProbabilityVariables(), valueIndexes);
     }
 
     /**
@@ -203,7 +204,7 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public int getPositionFromIndexes(int variableIndexes[])
     {
-        return super.getPositionFromIndexes(bayesNet.probabilityVariables,
+        return super.getPositionFromIndexes(bayesNet.getProbabilityVariables(),
                                             variableIndexes);
     }
 

@@ -101,20 +101,24 @@ public class SaveBugs
         int i, j;
 
         pstream.println("var");
-        for (i = (bayesNet.probabilityVariables.length - 1); i >= 0; i--)
+        for (i = (bayesNet.numberVariables() - 1); i >= 0; i--)
         {
-            pstream.println("\t" + bayesNet.probabilityVariables[i].name + ",");
+            pstream.println("\t" + bayesNet.getVariable(i).name + ",");
         }
 
-        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.numberProbabilityFunctions() - 1); i >= 0; i--)
         {
-            probFunc = bayesNet.probabilityFunctions[i];
-            probVar = (ProbabilityVariable) (probFunc.variables[0]);
-            pstream.print("\tp." + probVar.name + "[" + probFunc.numberValues() +
-                          "]");
-            if (i > 0)
+            probFunc = bayesNet.getFunction(i);
+            if (probFunc != null)
             {
-                pstream.println(",");
+                probVar = (ProbabilityVariable) probFunc.variables[0];
+                pstream.print(
+                        "\tp." + probVar.name + "[" + probFunc.numberValues() +
+                        "]");
+                if (i > 0)
+                {
+                    pstream.println(",");
+                }
             }
         }
         pstream.println(";");
@@ -139,17 +143,21 @@ public class SaveBugs
         int i, j;
 
         pstream.println("{");
-        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.numberProbabilityFunctions() - 1); i >= 0; i--)
         {
-            probFunc = bayesNet.probabilityFunctions[i];
-            probVar = (ProbabilityVariable) (probFunc.variables[0]);
-            pstream.print(probVar.name + "  ~  dcat(p." + probVar.name + "[");
-            for (j = 1; j < probFunc.variables.length; j++)
+            probFunc = bayesNet.getFunction(i);
+            if (probFunc != null)
             {
-                pstream.print(probFunc.variables[j].name);
-                pstream.print(",");
+                probVar = (ProbabilityVariable) (probFunc.variables[0]);
+                pstream.
+                        print(probVar.name + "  ~  dcat(p." + probVar.name + "[");
+                for (j = 1; j < probFunc.variables.length; j++)
+                {
+                    pstream.print(probFunc.variables[j].name);
+                    pstream.print(",");
+                }
+                pstream.println("]);");
             }
-            pstream.println("]);");
         }
         pstream.println("}\n\n");
     }
@@ -168,41 +176,44 @@ public class SaveBugs
         double value;
 
         pstream.println("list(");
-        for (i = (bayesNet.probabilityFunctions.length - 1); i >= 0; i--)
+        for (i = (bayesNet.numberProbabilityFunctions() - 1); i >= 0; i--)
         {
-            probFunc = bayesNet.probabilityFunctions[i];
-            probVar = (ProbabilityVariable) (probFunc.variables[0]);
-            /**
-             * ** Put distribution values in the correct format. ***
-             */
-            pstream.print("\tp." + probVar.name + "  = c(");
-            step = 1;
-            for (j = 1; j < probFunc.variables.length; j++)
+            probFunc = bayesNet.getFunction(i);
+            if (probFunc != null)
             {
-                step *= probFunc.variables[j].numberValues();
-            }
-            for (j = 0; j < step; j++)
-            {
-                for (k = 0; k < probFunc.variables[0].numberValues(); k++)
+                probVar = (ProbabilityVariable) probFunc.variables[0];
+                /**
+                 * ** Put distribution values in the correct format. ***
+                 */
+                pstream.print("\tp." + probVar.name + "  = c(");
+                step = 1;
+                for (j = 1; j < probFunc.variables.length; j++)
                 {
-                    value = probFunc.values[k * step + j];
-                    pstream.print(" " + value);
-                    if (k < (probFunc.variables[0].numberValues() - 1))
+                    step *= probFunc.variables[j].numberValues();
+                }
+                for (j = 0; j < step; j++)
+                {
+                    for (k = 0; k < probFunc.variables[0].numberValues(); k++)
+                    {
+                        value = probFunc.values[k * step + j];
+                        pstream.print(" " + value);
+                        if (k < (probFunc.variables[0].numberValues() - 1))
+                        {
+                            pstream.print(",");
+                        }
+                    }
+                    if (j < (step - 1))
                     {
                         pstream.print(",");
                     }
                 }
-                if (j < (step - 1))
+                pstream.print(")");
+                if (i > 0)
                 {
-                    pstream.print(",");
+                    pstream.println(",");
                 }
             }
-            pstream.print(")");
-            if (i > 0)
-            {
-                pstream.println(",");
-            }
+            pstream.println(")\n");
         }
-        pstream.println(")\n");
     }
 }

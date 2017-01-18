@@ -52,9 +52,9 @@ public class BayesNet
 
     private String name;
     private ArrayList<String> properties = new ArrayList<>();
-    protected ProbabilityVariable probabilityVariables[];
-    protected ProbabilityFunction probabilityFunctions[];
-    protected DiscreteFunction utilityFunction;
+    private ProbabilityVariable probabilityVariables[];
+    private ProbabilityFunction probabilityFunctions[];
+    private DiscreteFunction utilityFunction;
 
     /**
      * Default constructor for a BayesNet.
@@ -289,13 +289,30 @@ public class BayesNet
     /**
      * Retrieve the probability function for a variable.
      *
-     * @param var the variable identified by its name
+     * @param varName the variable identified by its name
      * @return the probability function
      * @throws java.lang.Exception
      */
-    public ProbabilityFunction getFunction(String var) throws Exception
+    public ProbabilityFunction getFunction(String varName) throws Exception
     {
-        return getFunction(getProbabilityVariable(var));
+        return getFunction(getProbabilityVariable(varName));
+    }
+
+    /**
+     * Retrieve the probability function for a variable.
+     *
+     * @param index the variable identified by its name
+     * @return the probability function
+     */
+    public ProbabilityFunction getFunction(int index)
+    {
+        if (probabilityFunctions == null ||
+            index < 0 ||
+            index > numberProbabilityFunctions())
+        {
+            return null;
+        }
+        return probabilityFunctions[index];
     }
 
     /**
@@ -1024,8 +1041,31 @@ public class BayesNet
         probabilityFunctions = probFuncs;
     }
 
+    /**
+     * Check whether there are any properties defined.
+     *
+     * @return true if so, false otherwise
+     */
     public boolean hasProperties()
     {
         return (properties != null) && (properties.size() > 0);
+    }
+
+    /**
+     * Retrieve the variable with at index.
+     *
+     * @param index index of the variable in the array
+     * @return the variable if the index is a valid index in the array, null
+     *         otherwise
+     */
+    public ProbabilityVariable getVariable(int index)
+    {
+        if (probabilityVariables == null ||
+            index < 0 ||
+            index >= numberVariables())
+        {
+            return null;
+        }
+        return probabilityVariables[index];
     }
 }

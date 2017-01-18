@@ -532,6 +532,11 @@ public class ProbabilityVariable extends DiscreteVariable
         this.type = type;
     }
 
+    /**
+     * Set a new Bayes net.
+     *
+     * @param bayesNet the new Bayes net
+     */
     public void setBayesNet(BayesNet bayesNet)
     {
         this.bayesNet = bayesNet;
