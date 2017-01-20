@@ -6,6 +6,7 @@
 package BayesianNetworks;
 
 import java.io.PrintStream;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
@@ -17,30 +18,49 @@ import org.junit.Test;
 
 /**
  *
- * @author Dieter J Kybelksties
+ * @author kybelksd
  */
 public class DiscreteFunctionTest
 {
 
-    public DiscreteFunctionTest()
-    {
-    }
+    private static final Logger LOG =
+                                Logger.getLogger(DiscreteFunctionTest.class.
+                                        getName());
 
+    /**
+     * Set up the class for testing.
+     */
     @BeforeClass
     public static void setUpClass()
     {
     }
 
+    /**
+     * Tear down the class after testing.
+     */
     @AfterClass
     public static void tearDownClass()
     {
     }
 
+    /**
+     * Default constructor.
+     */
+    public DiscreteFunctionTest()
+    {
+    }
+
+    /**
+     * Set up a test.
+     */
     @Before
     public void setUp()
     {
     }
 
+    /**
+     * Tear down a test.
+     */
     @After
     public void tearDown()
     {
@@ -102,7 +122,7 @@ public class DiscreteFunctionTest
     }
 
     /**
-     * Test of getPositionFromIndexes method, of class DiscreteFunction.
+     * Test of findPositionOfProbabilityValue method, of class DiscreteFunction.
      */
 //    @Test
     public void testGetPositionFromIndexes()
@@ -112,7 +132,8 @@ public class DiscreteFunctionTest
         int[] variableIndexes = null;
         DiscreteFunction instance = new DiscreteFunction();
         int expResult = 0;
-        int result = instance.getPositionFromIndexes(probVar, variableIndexes);
+        int result = instance.findPositionOfProbabilityValue(probVar,
+                                                             variableIndexes);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

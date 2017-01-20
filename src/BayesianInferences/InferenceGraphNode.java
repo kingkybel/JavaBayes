@@ -59,7 +59,7 @@ public final class InferenceGraphNode
     ArrayList<InferenceGraphNode> parents = new ArrayList<>();
     ArrayList<InferenceGraphNode> children = new ArrayList<>();
 
-    Point pos;
+    Point coordinates;
 
     private final String defaultInferenceGraphNodeValues[] =
     {
@@ -70,6 +70,9 @@ public final class InferenceGraphNode
 
     /**
      * Default constructor for an InferenceGraphNode.
+     *
+     * @param inferenceGraph the graph this node belongs to
+     * @param name           the name of the node
      */
     InferenceGraphNode(InferenceGraph inferenceGraph, String name)
     {
@@ -81,10 +84,14 @@ public final class InferenceGraphNode
      * incomplete state; the constructor assumes the node is new and not
      * necessarily attached to the current network in the InferenceGraph; no
      * parents nor children are defined for such a node.
+     *
+     * @param inferenceGraph the graph this node belongs to
+     * @param name           the name of the node
+     * @param coordinates    x/y coordinates of the node
      */
     InferenceGraphNode(InferenceGraph inferenceGraph,
                        String name,
-                       Point position)
+                       Point coordinates)
     {
         this.inferenceGraph = inferenceGraph;
 
@@ -96,12 +103,16 @@ public final class InferenceGraphNode
         // Initialize the probability function
         initDists();
         // Initialize the position of the node
-        pos = position;
+        this.coordinates = coordinates;
     }
 
     /**
      * Constructor for a InferenceGraphNode object. Note that parents and
      * children are not properly set here.
+     *
+     * @param inferenceGraph the graph this node belongs to
+     * @param probVar        probability variable referring to the new node
+     * @param probFunc       probability function referring to the new node
      */
     InferenceGraphNode(InferenceGraph inferenceGraph,
                        ProbabilityVariable probVar,
@@ -110,22 +121,28 @@ public final class InferenceGraphNode
         this.inferenceGraph = inferenceGraph;
         this.probVar = probVar;
         this.probFunc = probFunc;
-        pos = parsePosition(probVar);
+        coordinates = parseCoordinates(probVar);
     }
 
     /**
      * Constructor for a InferenceGraphNode object. Note that parents and
-     * children are not properly set here.
+     * children are not properly set here. probability variable referring to the
+     * new node
+     *
+     * @param inferenceGraph the graph this node belongs to
+     * @param probVar        probability variable referring to the new node
+     * @param probFunc       probability function referring to the new node
+     * @param coordinates    x/y coordinates of the node
      */
     InferenceGraphNode(InferenceGraph inferenceGraph,
                        ProbabilityVariable probVar,
                        ProbabilityFunction probFunc,
-                       Point position)
+                       Point coordinates)
     {
         this.inferenceGraph = inferenceGraph;
         this.probVar = probVar;
         this.probFunc = probFunc;
-        pos = position;
+        this.coordinates = coordinates;
     }
 
     /**
@@ -199,14 +216,18 @@ public final class InferenceGraphNode
         }
 
         // Build/Insert the new position property
-        probVar.addProperty("position = (" + pos.x + ", " + pos.y + ")");
+        probVar.addProperty("position = (" + coordinates.x + ", " +
+                            coordinates.y + ")");
     }
 
     /**
-     * Get the position of a InferenceGraphNode from the properties in the
+     * Get the coordinates of a InferenceGraphNode from the properties in the
      * variable.
+     *
+     * @param probVar a probability variable
+     * @return the coordinates as point
      */
-    private Point parsePosition(ProbabilityVariable probVar)
+    private Point parseCoordinates(ProbabilityVariable probVar)
     {
         ArrayList<String> properties = probVar.getProperties();
         Point finalPosition = null;
@@ -274,9 +295,9 @@ public final class InferenceGraphNode
      * of pairs (Variable Value). The list specifies which element of the
      * function is referred to.
      *
-     * @param variableValuePairs
-     * @param indexExtremePoint
-     * @return
+     * @param variableValuePairs variable-value-pairs as arrays of string arrays
+     * @param indexExtremePoint  index of the extreme point
+     * @return the value at the extreme point
      */
     public double getFunctionValue(String variableValuePairs[][],
                                    int indexExtremePoint)
@@ -295,7 +316,7 @@ public final class InferenceGraphNode
     /**
      * Get an array containing probability values.
      *
-     * @return
+     * @return the probability values as an array of doubles
      */
     public double[] getFunctionValues()
     {
@@ -314,15 +335,16 @@ public final class InferenceGraphNode
      * Get an array containing probability values; if credal set, return the
      * first extreme point.
      *
-     * @param index
-     * @return
+     * @param indexExtremePoint index of the extreme points if the probability
+     *                          function is a vertex set, ignored otherwise
+     * @return the probability values as an array of doubles
      */
-    public double[] getFunctionValues(int index)
+    public double[] getFunctionValues(int indexExtremePoint)
     {
         if (probFunc instanceof VertexSet)
         {
             double[][] ep = ((VertexSet) probFunc).getExtremePoints();
-            return ep[index];
+            return ep[indexExtremePoint];
         }
         else
         {
@@ -334,56 +356,59 @@ public final class InferenceGraphNode
      * Set an array containing probability values; if credal set, insert the
      * array in the first extreme point.
      *
-     * @param fv
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
-    public void setFunctionValues(double[] fv)
+    public void setFunctionValues(double[] probValues)
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).setExtremePoint(0, fv);
+            ((VertexSet) probFunc).setExtremePoint(0, probValues);
         }
         else
         {
-            probFunc.setValues(fv);
+            probFunc.setValues(probValues);
         }
     }
 
     /**
      * Set an array containing an extreme point of the credal set.
      *
-     * @param indexExtremePoint
-     * @param values
+     * @param indexExtremePoint index of the extreme points if the probability
+     *                          function is a vertex set, ignored otherwise
+     * @param probValues        the probability values of the function as array
+     *                          of doubles
      */
-    public void setFunctionValues(int indexExtremePoint,
-                                  double[] values)
+    public void setFunctionValues(int indexExtremePoint, double[] probValues)
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).setExtremePoint(indexExtremePoint, values);
+            ((VertexSet) probFunc).
+                    setExtremePoint(indexExtremePoint, probValues);
         }
         else
         {
             if (indexExtremePoint == 0)
             {
-                probFunc.setValues(values);
+                probFunc.setValues(probValues);
             }
         }
     }
 
-    /**
-     * Get a single value of the probability function in the node given the
-     * index of the value and the index of the extreme point.
-     */
+//    /**
+//     * Get a single value of the probability function in the node given the
+//     * index of the value and the index of the extreme point.
+//     */
 //    public double getFunctionValue(int index, int indexExtremePoint) {
 //        if (probFunc instanceof VertexQBProbabilityFunction)
 //            return( ((VertexQBProbabilityFunction)probFunc).getValue(index, indexExtremePoint) );
 //        else
 //            return(probFunc.getValue(index));
 //    }
-    /**
-     * Get a single value of the probability function in the node given the
-     * index of the value.
-     */
+//    /**
+//     * Get a single value of the probability function in the node given the
+//     * index of the value.
+//     */
 //    public double getFunctionValue(int index) {
 //        if (probFunc instanceof VertexQBProbabilityFunction)
 //            return( ((VertexQBProbabilityFunction)probFunc).getValue(index, 0) );
@@ -395,29 +420,30 @@ public final class InferenceGraphNode
      * of pairs (Variable Value). The list specifies which element of the
      * function is referred to.
      *
-     * @param variableValuePairs
-     * @param indexExtremePoint
-     * @param value
+     * @param variableValuePairs variable-value-pairs as arrays of string arrays
+     * @param probValue          the probability value to set
+     * @param indexExtremePoint  index of the extreme points if the probability
+     *                           function is a vertex set, ignored otherwise
      */
     public void setFunctionValue(String variableValuePairs[][],
-                                 double value,
+                                 double probValue,
                                  int indexExtremePoint)
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).setValue(variableValuePairs, value,
+            ((VertexSet) probFunc).setValue(variableValuePairs, probValue,
                                             indexExtremePoint);
         }
         else
         {
-            probFunc.setValue(variableValuePairs, value);
+            probFunc.setValue(variableValuePairs, probValue);
         }
     }
 
     /**
      * Return the name of the variable in the node.
      *
-     * @return
+     * @return the name of the variable
      */
     public String getName()
     {
@@ -427,7 +453,7 @@ public final class InferenceGraphNode
     /**
      * Set the name of the variable.
      *
-     * @param name
+     * @param name the name of the variable
      */
     public void setName(String name)
     {
@@ -437,7 +463,7 @@ public final class InferenceGraphNode
     /**
      * Get the name of all variables in the probability function.
      *
-     * @return
+     * @return all variable names as string array
      */
     public String[] getAllNames()
     {
@@ -452,7 +478,7 @@ public final class InferenceGraphNode
     /**
      * Return the values of the variable in the node.
      *
-     * @return
+     * @return all enumerated discrete variable values as string array
      */
     public String[] getValues()
     {
@@ -462,9 +488,9 @@ public final class InferenceGraphNode
     /**
      * Get all values for variables in the function in the node.
      *
-     * @return
+     * @return all values for variables in the function
      */
-    public String[][] getAllValues()
+    public String[][] getAllVariableValues()
     {
         int i, j;
         String allValues[][] = new String[probFunc.numberVariables()][];
@@ -484,7 +510,7 @@ public final class InferenceGraphNode
     /**
      * Return the number of values in the variable in the node.
      *
-     * @return
+     * @return the number of values in the variable
      */
     public int getNumberValues()
     {
@@ -494,7 +520,7 @@ public final class InferenceGraphNode
     /**
      * Indicate whether the node has parents.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean hasParent()
     {
@@ -502,9 +528,9 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Return the parents of a node as an Iterator object.
+     * Return the parents of a node as list.
      *
-     * @return
+     * @return the parents of a node as list
      */
     public ArrayList<InferenceGraphNode> getParents()
     {
@@ -512,9 +538,9 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Return the children of a node as an Iterator object.
+     * Return the children of a node as list.
      *
-     * @return
+     * @return the children of a node as list
      */
     public ArrayList<InferenceGraphNode> getChildren()
     {
@@ -524,7 +550,7 @@ public final class InferenceGraphNode
     /**
      * Indicate whether the variable in the node is observed.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isObserved()
     {
@@ -534,7 +560,7 @@ public final class InferenceGraphNode
     /**
      * Indicate whether the variable in the node is an explanatory variable.
      *
-     * @return
+     * @return true if so false otherwise
      */
     public boolean isExplanation()
     {
@@ -542,9 +568,9 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Return the observed value for the variable in the node.
+     * Return the observed index for the variable in the node.
      *
-     * @return
+     * @return the observed index for the variable
      */
     public int getObservedIndex()
     {
@@ -554,7 +580,7 @@ public final class InferenceGraphNode
     /**
      * Return the observed value for the variable in the node.
      *
-     * @return
+     * @return the observed value for the variable
      */
     public String getObservedValue()
     {
@@ -562,29 +588,29 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Return the X position of the node.
+     * Return the X coordinate of the node.
      *
-     * @return
+     * @return the X coordinate
      */
-    public int getPosX()
+    public int getXCoordinate()
     {
-        return pos.x;
+        return coordinates.x;
     }
 
     /**
-     * Return the Y position of the node.
+     * Return the Y coordinate of the node.
      *
-     * @return
+     * @return the Y coordinate
      */
-    public int getPosY()
+    public int getYCoordinate()
     {
-        return pos.y;
+        return coordinates.y;
     }
 
     /**
-     * Return the variable properties
+     * Return the variable properties.
      *
-     * @return
+     * @return the variable properties as list
      */
     public ArrayList<String> getVariableProperties()
     {
@@ -604,7 +630,7 @@ public final class InferenceGraphNode
     /**
      * Return the function properties.
      *
-     * @return
+     * @return the function properties as list
      */
     public ArrayList<String> getFunctionProperties()
     {
@@ -625,7 +651,7 @@ public final class InferenceGraphNode
      * Whether or not the node represents a convex set of distributions (credal
      * set).
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isCredalSet()
     {
@@ -635,7 +661,7 @@ public final class InferenceGraphNode
     /**
      * Number of distributions that are represented by a node.
      *
-     * @return
+     * @return number of distributions
      */
     public int numberExtremeDistributions()
     {
@@ -665,10 +691,10 @@ public final class InferenceGraphNode
     }
 
     /**
-     * Make sure the node represents a VertexSet a given number of extreme
+     * Make sure the node represents a VertexSet with a given number of extreme
      * distributions.
      *
-     * @param numberExtremePoints
+     * @param numberExtremePoints number of extreme distributions
      */
     public void setLocalCredalSet(int numberExtremePoints)
     {
@@ -693,7 +719,7 @@ public final class InferenceGraphNode
     /**
      * Set the observation for the node.
      *
-     * @param value
+     * @param value the enumerated string value that was observed in this node
      */
     public void setObservationValue(String value)
     {
@@ -711,7 +737,7 @@ public final class InferenceGraphNode
     /**
      * Set the explanatory status of the node.
      *
-     * @param flag
+     * @param flag true means this node is explanation, false means it's not
      */
     public void setExplanation(boolean flag)
     {
@@ -728,49 +754,52 @@ public final class InferenceGraphNode
     /**
      * Remove a property from a variable.
      *
-     * @param index
+     * @param propIndex the index of the property to remove
      */
-    public void removeVariableProperty(int index)
+    public void removeVariableProperty(int propIndex)
     {
-        probVar.removeProperty(index);
+        probVar.removeProperty(propIndex);
     }
 
     /**
      * Remove a property from a function.
      *
-     * @param index
+     * @param propIndex the index of the property to remove
      */
-    public void removeFunctionProperty(int index)
+    public void removeFunctionProperty(int propIndex)
     {
-        probFunc.removeProperty(index);
+        probFunc.removeProperty(propIndex);
     }
 
     /**
      * Add a property to a variable.
      *
-     * @param s
+     * @param property property given as string
      */
-    public void addVariableProperty(String s)
+    public void addVariableProperty(String property)
     {
-        probVar.addProperty(s);
-        updatePositionFromProperty(s);
+        probVar.addProperty(property);
+        updateCoordinatesFromProperty(property);
     }
 
     /**
+     * Update the coordinate of this node by taking into account the given
+     * property.
      *
-     * @param s
+     * @param property property given as string
      */
-    public void updatePositionFromProperty(String s)
+    public void updateCoordinatesFromProperty(String property)
     {
         // If property is position:
-        if (s.startsWith("position"))
+        if (property.startsWith("position"))
         {
             Point finalPosition = null;
             // Parse the position property
             try
             {
                 final ByteArrayInputStream byteArrayInputStream =
-                                           new ByteArrayInputStream(s.getBytes());
+                                           new ByteArrayInputStream(property.
+                                                   getBytes());
                 Reader reader = new BufferedReader(
                        new InputStreamReader(byteArrayInputStream));
                 StreamTokenizer st = new StreamTokenizer(reader);
@@ -803,14 +832,14 @@ public final class InferenceGraphNode
                 finalPosition = new Point(100, 100);
             }
             // Update the position property.
-            pos = finalPosition;
+            coordinates = finalPosition;
         }
     }
 
     /**
      * Add a property from to function.
      *
-     * @param property
+     * @param property property given as string
      */
     public void addFunctionProperty(String property)
     {

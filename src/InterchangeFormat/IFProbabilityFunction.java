@@ -52,8 +52,9 @@ public class IFProbabilityFunction
     ArrayList<IFProbabilityEntry> entries;
 
     /**
+     * Set the variables string array.
      *
-     * @param sVariables
+     * @param sVariables the variables as string array
      */
     public void setVariables(String sVariables[])
     {
@@ -61,6 +62,7 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Set the properties list.
      *
      * @param properties list of properties
      */
@@ -70,8 +72,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Set the defaults.
      *
-     * @param defaults
+     * @param defaults list of double arrays
      */
     public void setDefaults(ArrayList<double[]> defaults)
     {
@@ -79,8 +82,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Set the tables.
      *
-     * @param tables
+     * @param tables list of double arrays
      */
     public void setTables(ArrayList<double[]> tables)
     {
@@ -88,8 +92,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Set the entries.
      *
-     * @param entries
+     * @param entries list of probability entries in interface format
      */
     public void setEntries(ArrayList<IFProbabilityEntry> entries)
     {
@@ -97,8 +102,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Set the conditional index.
      *
-     * @param conditionalIndex
+     * @param conditionalIndex the new conditional index.
      */
     public void setConditionalIndex(int conditionalIndex)
     {
@@ -106,8 +112,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the variables.
      *
-     * @return
+     * @return the variables as string array
      */
     public String[] getVariables()
     {
@@ -115,8 +122,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the properties.
      *
-     * @return
+     * @return the properties as list of strings
      */
     public ArrayList<String> getProperties()
     {
@@ -124,8 +132,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the defaults.
      *
-     * @return
+     * @return the defaults as list of strings
      */
     public ArrayList<double[]> getDefaults()
     {
@@ -133,8 +142,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the tables.
      *
-     * @return
+     * @return the tables as list of double arrays
      */
     public ArrayList<double[]> getTables()
     {
@@ -142,8 +152,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the entries.
      *
-     * @return
+     * @return the entries las ist of probability entries in interface format
      */
     public ArrayList<IFProbabilityEntry> getEntries()
     {
@@ -151,8 +162,9 @@ public class IFProbabilityFunction
     }
 
     /**
+     * Retrieve the conditional index.
      *
-     * @return
+     * @return the conditional index
      */
     public int getConditionalIndex()
     {

@@ -51,7 +51,7 @@ public class Ordering
      * Basic constructor for Ordering.
      *
      * @param bayesNet     the underlying Bayesian network
-     * @param orderingType type of ordering
+     * @param orderingType indicates which heuristic to use in the elimination
      * @param objective    name of the objective variable
      */
     public Ordering(BayesNet bayesNet, String objective, Type orderingType)
@@ -81,7 +81,8 @@ public class Ordering
      * @param bayesNet          the underlying Bayesian network
      * @param objective         name of the objective variable
      * @param explanationStatus what to use for explanation
-     * @param orderingType      type of ordering
+     * @param orderingType      indicates which heuristic to use in the
+     *                          elimination
      */
     public Ordering(BayesNet bayesNet,
                     String objective,
@@ -218,7 +219,7 @@ public class Ordering
         {
             ProbabilityVariable probVar = (ProbabilityVariable) discrVar;
             // Skip transparent variables
-            if (probVar.getType() == ProbabilityVariable.TRANSPARENT)
+            if (probVar.getType() == ProbabilityVariable.Type.TRANSPARENT)
             {
                 continue;
             }
@@ -351,7 +352,7 @@ public class Ordering
             }
             else
             { // Skip transparent variables
-                if (probVar.getType() != ProbabilityVariable.TRANSPARENT)
+                if (probVar.getType() != ProbabilityVariable.Type.TRANSPARENT)
                 {
                     // Order all other variables
                     variablesToOrder.add(probVar);
@@ -489,7 +490,7 @@ public class Ordering
      *
      * @param linkedVars   list of variables that are linked to the variable in
      *                     question
-     * @param orderingType type of the ordering chosen
+     * @param orderingType indicates which heuristic to use in the elimination
      * @return the heuristic value
      */
     private long obtainHeuristicValue(ArrayList<DiscreteVariable> linkedVars,

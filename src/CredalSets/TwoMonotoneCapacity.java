@@ -73,15 +73,15 @@ public abstract class TwoMonotoneCapacity
      * Obtain the upper probability of an event given the base
      *
      * @param p probability value
-     * @return
+     * @return the upper probability
      */
     public abstract double getUpperProbabilityFromBase(double p);
 
     /**
      * Get a base probability value for an atom.
      *
-     * @param index
-     * @return
+     * @param index index of a value
+     * @return the base probability
      */
     public abstract double getAtomProbability(int index);
 
@@ -89,7 +89,7 @@ public abstract class TwoMonotoneCapacity
      * Perform calculation of marginal posterior distributions for a total
      * variation global neighbourhood
      *
-     * @return
+     * @return the marginal posterior probability function
      */
     public ProbabilityFunction posteriorMarginal()
     {
@@ -99,13 +99,13 @@ public abstract class TwoMonotoneCapacity
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             for (int i = 0; i < numberValues(); i++)
             {
-                lowerValues[i] = values[i];
-                upperValues[i] = values[i];
+                lowerValues[i] = getValue(i);
+                upperValues[i] = getValue(i);
             }
         } // Else, apply the marginalization property.
         else
@@ -113,22 +113,22 @@ public abstract class TwoMonotoneCapacity
             double total = 0.0; // Probability p(e)
             for (int i = 0; i < numberValues(); i++)
             {
-                total += values[i];
+                total += getValue(i);
             }
 
             for (int i = 0; i < numberValues(); i++)
             {
                 lowerValues[i] =
-                (getLowerProbabilityFromBase(values[i]) /
-                 (getLowerProbabilityFromBase(values[i]) +
-                  getUpperProbabilityFromBase(total - values[i])));
+                (getLowerProbabilityFromBase(getValue(i)) /
+                 (getLowerProbabilityFromBase(getValue(i)) +
+                  getUpperProbabilityFromBase(total - getValue(i))));
             }
             for (int i = 0; i < numberValues(); i++)
             {
                 upperValues[i] =
-                (getUpperProbabilityFromBase(values[i]) /
-                 (getUpperProbabilityFromBase(values[i]) +
-                  getLowerProbabilityFromBase(total - values[i])));
+                (getUpperProbabilityFromBase(getValue(i)) /
+                 (getUpperProbabilityFromBase(getValue(i)) +
+                  getLowerProbabilityFromBase(total - getValue(i))));
             }
         }
 
@@ -139,8 +139,8 @@ public abstract class TwoMonotoneCapacity
     /**
      * Perform calculation of expected value for density ratio
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc a discrete function
+     * @return the expected values as array of doubles
      */
     public double[] expectedValues(DiscreteFunction discrFunc)
     {
@@ -148,11 +148,11 @@ public abstract class TwoMonotoneCapacity
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             results[0] =
-            discrFunc.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) getVariable(0)).
                     getObservedIndex());
             results[1] = results[0];
             return results;
@@ -172,8 +172,8 @@ public abstract class TwoMonotoneCapacity
      * probability values are not normalised; probability values are p(x, e)
      * where e is the fixed evidence .
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc a discrete function
+     * @return the expected posterior values as array of doubles
      */
     public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
@@ -182,11 +182,11 @@ public abstract class TwoMonotoneCapacity
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             results[0] =
-            discrFunc.getValue(((ProbabilityVariable) variables[0]).
+            discrFunc.getValue(((ProbabilityVariable) getVariable(0)).
                     getObservedIndex());
             results[1] = results[0];
             return results;
@@ -252,13 +252,8 @@ public abstract class TwoMonotoneCapacity
         GeneralizedChoquetIntegral gci = new GeneralizedChoquetIntegral(this,
                                                                         mtdf);
 
-        if (mapType == MappingDouble.Type.LOWER_EXPECTATION_BRACKET)
-        {
-            return gci.results[0];
-        }
-        else
-        {
-            return gci.results[1];
-        }
+        return (mapType == MappingDouble.Type.LOWER_EXPECTATION_BRACKET) ?
+               gci.results[0] :
+               gci.results[1];
     }
 }

@@ -516,13 +516,6 @@ public final class JavaBayesConsoleFrame extends Frame
         super.setVisible(show);
     }
 
-    /**
-     * Override action() to get events.
-     *
-     * @param event
-     * @param arg
-     * @return
-     */
     @Override
     public boolean action(Event event, Object arg)
     {
@@ -599,12 +592,6 @@ public final class JavaBayesConsoleFrame extends Frame
         return super.action(event, arg);
     }
 
-    /**
-     * Handle the possible destruction of the window.
-     *
-     * @param evt
-     * @return
-     */
     @Override
     public boolean handleEvent(Event evt)
     {

@@ -79,12 +79,6 @@ public class ScrollingPanel extends Panel
                            vertical.getMaximum());
     }
 
-    /**
-     * Handle the scrollbar events (set variables in the NetworkPanel).
-     *
-     * @param evt
-     * @return
-     */
     @Override
     public boolean handleEvent(Event evt)
     {

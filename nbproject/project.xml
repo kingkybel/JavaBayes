@@ -13,7 +13,9 @@
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>Bayes</word>
+            <word>Choquet</word>
             <word>credal</word>
+            <word>Walley's</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

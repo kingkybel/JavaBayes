@@ -66,7 +66,7 @@ public class IFProbabilityVariable
     /**
      * Set the values.
      *
-     * @param values the ne values
+     * @param values values the variable can assume as string array
      */
     public void setValues(String values[])
     {

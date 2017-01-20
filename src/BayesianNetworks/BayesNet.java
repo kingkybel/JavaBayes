@@ -66,9 +66,9 @@ public class BayesNet
     /**
      * Simple constructor for a BayesNet.
      *
-     * @param name          name of the network.
-     * @param numberOfVars  number of variables in the network.
-     * @param numberOfFuncs number of probability distributions in the network.
+     * @param name          name of the network
+     * @param numberOfVars  number of variables in the network
+     * @param numberOfFuncs number of probability distributions in the network
      */
     public BayesNet(String name, int numberOfVars, int numberOfFuncs)
     {
@@ -118,8 +118,9 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in a string.
      *
-     * @param networkDescription
-     * @throws Exception
+     * @param networkDescription the network given as a string description that
+     *                           will be parsed
+     * @throws Exception if the string cannot be successfully parsed
      */
     public BayesNet(String networkDescription) throws Exception
     {
@@ -136,8 +137,8 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in a stream.
      *
-     * @param istream
-     * @throws Exception
+     * @param istream input stream
+     * @throws Exception if the string cannot be successfully parsed
      */
     public BayesNet(InputStream istream) throws Exception
     {
@@ -154,9 +155,9 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in an URL.
      *
-     * @param context The URL context as defined in the Java libraries.
-     * @param spec    The URL spec as defined in the Java libraries.
-     * @throws Exception
+     * @param context the URL context as defined in the Java libraries
+     * @param spec    the URL spec as defined in the Java libraries
+     * @throws Exception if the string cannot be successfully parsed
      */
     public BayesNet(URL context, String spec) throws Exception
     {
@@ -176,8 +177,8 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in an URL.
      *
-     * @param url
-     * @throws Exception
+     * @param url the URL where to find the textual description
+     * @throws Exception if the string cannot be successfully parsed
      */
     public BayesNet(URL url) throws Exception
     {
@@ -207,7 +208,7 @@ public class BayesNet
      * <li> Detecting explanation variables.</li>
      * </ol>
      *
-     * @param interchangeFmt
+     * @param interchangeFmt a derivative of InterchangeFormat
      */
     protected void translate(InterchangeFormat interchangeFmt)
     {
@@ -247,21 +248,21 @@ public class BayesNet
     /**
      * Process the properties of a ProbabilityVariable.
      *
-     * @param index
+     * @param varIndex index of the variable we want to process
      */
-    protected void processProbabilityVariableProperties(int index)
+    protected void processProbabilityVariableProperties(int varIndex)
     {
-        probabilityVariables[index].processProperties();
+        probabilityVariables[varIndex].processProperties();
     }
 
     /**
      * Process the properties of a ProbabilityFunction.
      *
-     * @param index
+     * @param funcIndex index of the probability function we want to process
      */
-    protected void processProbabilityFunctionProperties(int index)
+    protected void processProbabilityFunctionProperties(int funcIndex)
     {
-        probabilityFunctions[index].processProperties();
+        probabilityFunctions[funcIndex].processProperties();
     }
 
     /**
@@ -271,13 +272,13 @@ public class BayesNet
      * to identify the variable uniquely.
      *
      * @param probVar a probability variable
-     * @return
+     * @return the corresponding function
      */
     public ProbabilityFunction getFunction(ProbabilityVariable probVar)
     {
         for (ProbabilityFunction probabilityFunction : probabilityFunctions)
         {
-            if (probVar.index == probabilityFunction.variables[0].index)
+            if (probVar.index == probabilityFunction.getVariable(0).index)
             {
                 return probabilityFunction;
             }
@@ -291,7 +292,7 @@ public class BayesNet
      *
      * @param varName the variable identified by its name
      * @return the probability function
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception if the function cannot be found
      */
     public ProbabilityFunction getFunction(String varName) throws Exception
     {
@@ -407,13 +408,13 @@ public class BayesNet
         {
             out.println("\tCategoricalProbability p" + i + " = ");
             out.println("\t\tnew CategoricalProbability(" +
-                        probabilityFunctions[i].variables[0].getName() + ",");
+                        probabilityFunctions[i].getVariable(0).getName() + ",");
             if (probabilityFunctions[i].numberVariables() > 1)
             {
                 out.print("\t\t\tnew CategoricalVariable[] {");
                 for (j = 1; j < probabilityFunctions[i].numberVariables(); j++)
                 {
-                    out.print(probabilityFunctions[i].variables[j].getName());
+                    out.print(probabilityFunctions[i].getVariable(0).getName());
                     if (j != (probabilityFunctions[i].numberVariables() - 1))
                     {
                         out.print(", ");
@@ -424,7 +425,7 @@ public class BayesNet
             out.print("\t\t\tnew double[] {");
             for (j = 0; j < probabilityFunctions[i].numberValues(); j++)
             {
-                out.print(probabilityFunctions[i].values[j]);
+                out.print(probabilityFunctions[i].getValue(j));
                 if (j != (probabilityFunctions[i].numberValues() - 1))
                 {
                     out.print(", ");
@@ -469,8 +470,6 @@ public class BayesNet
      */
     public void saveXml(PrintStream out)
     {
-        int i;
-
         // Heading for the file
         out.println("<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\n\n");
         out.println("<!--");
@@ -519,8 +518,7 @@ public class BayesNet
         out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
-            for (i = 0; i < probabilityVariables.length;
-                 i++)
+            for (int i = 0; i < probabilityVariables.length; i++)
             {
                 if (probabilityVariables[i] != null)
                 {
@@ -534,8 +532,7 @@ public class BayesNet
         out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
-            for (i = 0; i < probabilityFunctions.length;
-                 i++)
+            for (int i = 0; i < probabilityFunctions.length; i++)
             {
                 if (probabilityFunctions[i] != null)
                 {
@@ -559,8 +556,6 @@ public class BayesNet
      */
     public void saveXml_0_2(PrintStream out)
     {
-        int i;
-
         // Heading for the file
         out.println("<?XML VERSION=\"1.0\"?>\n\n");
         out.println("<!--");
@@ -612,8 +607,7 @@ public class BayesNet
         out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
-            for (i = 0; i < probabilityVariables.length;
-                 i++)
+            for (int i = 0; i < probabilityVariables.length; i++)
             {
                 if (probabilityVariables[i] != null)
                 {
@@ -627,8 +621,7 @@ public class BayesNet
         out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
-            for (i = 0; i < probabilityFunctions.length;
-                 i++)
+            for (int i = 0; i < probabilityFunctions.length; i++)
             {
                 if (probabilityFunctions[i] != null)
                 {
@@ -659,35 +652,34 @@ public class BayesNet
     /**
      * Get all the evidence contained in the network variables.
      *
-     * @return
+     * @return a list of all the evidence as an array of String arrays
      */
     public String[][] getAllEvidence()
     {
-        int i, j, aux;
         ProbabilityVariable probVar;
         ArrayList<ProbabilityVariable> evs = new ArrayList<>();
 
-        for (i = 0; i < probabilityVariables.length; i++)
+        for (int i = 0; i < probabilityVariables.length; i++)
         {
             probVar = probabilityVariables[i];
-            if (probVar.observedIndex != BayesNet.INVALID_INDEX)
+            if (probVar.getObservedIndex() != BayesNet.INVALID_INDEX)
             {
                 evs.add(probVar);
             }
         }
 
         String allEvs[][] = new String[evs.size()][];
-        for (i = 0; i < allEvs.length; i++)
+        for (int i = 0; i < allEvs.length; i++)
         {
             allEvs[i] = new String[2];
         }
 
-        j = 0;
-        for (ProbabilityVariable evidenceProbVar : evs)
+        for (int i = 0; i < evs.size(); i++)
         {
-            allEvs[j][0] = evidenceProbVar.name;
-            aux = evidenceProbVar.observedIndex;
-            allEvs[j][1] = evidenceProbVar.values[aux];
+            ProbabilityVariable evidenceProbVar = evs.get(i);
+            allEvs[i][0] = evidenceProbVar.name;
+            allEvs[i][1] =
+            evidenceProbVar.values[evidenceProbVar.getObservedIndex()];
         }
 
         return allEvs;
@@ -702,8 +694,7 @@ public class BayesNet
      */
     public int indexOfVariable(String searchName)
     {
-        int i;
-        for (i = 0; i < probabilityVariables.length; i++)
+        for (int i = 0; i < probabilityVariables.length; i++)
         {
             if (probabilityVariables[i].name.equals(searchName))
             {
@@ -737,7 +728,7 @@ public class BayesNet
     /**
      * Get the name of the network.
      *
-     * @return
+     * @return the network name
      */
     public String getName()
     {
@@ -747,7 +738,7 @@ public class BayesNet
     /**
      * Set the name of the network.
      *
-     * @param name
+     * @param name the new name
      */
     public final void setName(String name)
     {
@@ -757,7 +748,7 @@ public class BayesNet
     /**
      * Get the properties.
      *
-     * @return
+     * @return the properties as list
      */
     public ArrayList<String> getProperties()
     {
@@ -777,7 +768,7 @@ public class BayesNet
     /**
      * Add a property.
      *
-     * @param property
+     * @param property the property to add as string
      */
     public void addProperty(String property)
     {
@@ -801,11 +792,11 @@ public class BayesNet
     /**
      * Remove a property by its index.
      *
-     * @param index the index to remove
+     * @param propIndex the index of the property to remove
      */
-    public void removeProperty(int index)
+    public void removeProperty(int propIndex)
     {
-        properties.remove(index);
+        properties.remove(propIndex);
     }
 
     /**
@@ -841,14 +832,14 @@ public class BayesNet
     /**
      * Get the probability variable at a given index.
      *
-     * @param index the index to look for
+     * @param varIndex the index of the variable to look for
      * @return the probability variable at index if found or null otherwise
      */
-    public ProbabilityVariable getProbabilityVariable(int index)
+    public ProbabilityVariable getProbabilityVariable(int varIndex)
     {
-        if (index <= probabilityVariables.length)
+        if (varIndex <= probabilityVariables.length)
         {
-            return probabilityVariables[index];
+            return probabilityVariables[varIndex];
         }
         else
         {
@@ -859,18 +850,18 @@ public class BayesNet
     /**
      * Get the probability function at a given index.
      *
-     * @param index the index to look for
+     * @param funcIndex the index of the function to look for
      * @return the probability function at index if found or null otherwise
      */
-    public ProbabilityFunction getProbabilityFunction(int index)
+    public ProbabilityFunction getProbabilityFunction(int funcIndex)
     {
-        if (index > -1 && index < probabilityFunctions.length)
+        if (funcIndex > -1 && funcIndex < probabilityFunctions.length)
         {
-            return probabilityFunctions[index];
+            return probabilityFunctions[funcIndex];
         }
         else
         {
-            throw new IndexOutOfBoundsException(index +
+            throw new IndexOutOfBoundsException(funcIndex +
                                                 " is out of range [0.." +
                                                 probabilityFunctions.length);
         }
@@ -940,7 +931,7 @@ public class BayesNet
      *
      * @param index      index of the variable to set
      * @param name       new name
-     * @param values     array of values
+     * @param values     values the variable can assume as string array
      * @param properties list of properties
      * @throws java.lang.Exception if index is out of range
      */
@@ -972,20 +963,21 @@ public class BayesNet
      *
      * @param index
      * @param variables
-     * @param values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      * @param properties list of properties
      * @throws java.lang.Exception if index is out of range
      */
     public void setProbabilityFunction(int index,
                                        ProbabilityVariable[] variables,
-                                       double values[],
+                                       double probValues[],
                                        ArrayList<String> properties) throws
             Exception
     {
         if (index > 0 && index < probabilityFunctions.length)
         {
             probabilityFunctions[index] =
-            new ProbabilityFunction(this, variables, values, properties);
+            new ProbabilityFunction(this, variables, probValues, properties);
         }
         else
         {
@@ -1024,7 +1016,7 @@ public class BayesNet
     /**
      * Set the vector of probability variables.
      *
-     * @param probVars a probability variables
+     * @param probVars probability variables as array
      */
     public final void setProbabilityVariables(ProbabilityVariable probVars[])
     {

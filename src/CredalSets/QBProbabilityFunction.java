@@ -59,8 +59,8 @@ public class QBProbabilityFunction extends ProbabilityFunction
      * Constructor for QBProbabilityFunction.
      *
      * @param bayesNet       the underlying Bayesian network
-     * @param numberOfVars   number of variables
-     * @param numberOfValues number of values
+     * @param numberOfVars   number of variables in the function
+     * @param numberOfValues number of values in the function
      * @param properties     list of properties
      */
     public QBProbabilityFunction(BayesNet bayesNet,
@@ -78,19 +78,20 @@ public class QBProbabilityFunction extends ProbabilityFunction
      *
      * @param bayesNet      the underlying Bayesian network
      * @param properties    list of properties
-     * @param variables
-     * @param upperEnvelope
-     * @param values
-     * @param lowerEnvelope
+     * @param variables     an array of discrete variables
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
+     * @param upperEnvelope the upper envelope as array of doubles
+     * @param lowerEnvelope the lower envelope as array of doubles
      */
     public QBProbabilityFunction(BayesNet bayesNet,
                                  DiscreteVariable variables[],
-                                 double values[],
+                                 double probValues[],
                                  double lowerEnvelope[],
                                  double upperEnvelope[],
                                  ArrayList<String> properties)
     {
-        super(bayesNet, variables, values, properties);
+        super(bayesNet, variables, probValues, properties);
         this.lowerEnvelope = lowerEnvelope;
         this.upperEnvelope = upperEnvelope;
     }
@@ -98,17 +99,18 @@ public class QBProbabilityFunction extends ProbabilityFunction
     /**
      * Constructor for QBProbabilityFunction.
      *
-     * @param discrFunc
-     * @param upperEnvelope
-     * @param values
-     * @param lowerEnvelope
+     * @param discrFunc     a discrete function
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
+     * @param lowerEnvelope the lower envelope as array of doubles
+     * @param upperEnvelope the upper envelope as array of doubles
      */
     public QBProbabilityFunction(DiscreteFunction discrFunc,
-                                 double values[],
+                                 double probValues[],
                                  double lowerEnvelope[],
                                  double upperEnvelope[])
     {
-        super(discrFunc, values);
+        super(discrFunc, probValues);
         this.lowerEnvelope = lowerEnvelope;
         this.upperEnvelope = upperEnvelope;
     }
@@ -124,12 +126,12 @@ public class QBProbabilityFunction extends ProbabilityFunction
     {
         int j;
 
-        if (variables != null)
+        if (numberVariables() != BayesNet.INVALID_INDEX)
         {
             out.print(" envelope ( ");
             for (j = 0; j < numberVariables(); j++)
             {
-                out.print(" \"" + variables[j].getName() + "\" ");
+                out.print(" \"" + getVariable(j).getName() + "\" ");
             }
             out.print(") {");
             if (lowerEnvelope != null)
@@ -167,9 +169,9 @@ public class QBProbabilityFunction extends ProbabilityFunction
     }
 
     /**
-     * Get the lowerEnvelope array.
+     * Get the lower envelope array.
      *
-     * @return
+     * @return the lower envelope
      */
     public double[] getLowerEnvelope()
     {
@@ -177,9 +179,9 @@ public class QBProbabilityFunction extends ProbabilityFunction
     }
 
     /**
-     * Get the upperEnvelope array.
+     * Get the upper envelope array.
      *
-     * @return
+     * @return the upper envelope
      */
     public double[] getUpperEnvelope()
     {

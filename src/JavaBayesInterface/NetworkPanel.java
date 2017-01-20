@@ -137,14 +137,6 @@ public class NetworkPanel extends Canvas
         setBackground(backgroundColor);
     }
 
-    /**
-     * Process mouse down events.
-     *
-     * @param evt
-     * @param y
-     * @param x
-     * @return
-     */
     @Override
     public boolean mouseDown(Event evt, int x, int y)
     {
@@ -212,14 +204,6 @@ public class NetworkPanel extends Canvas
         return true;
     }
 
-    /**
-     * Process mouse drag events.
-     *
-     * @param evt
-     * @param y
-     * @param x
-     * @return
-     */
     @Override
     public boolean mouseDrag(Event evt, int x, int y)
     {
@@ -243,14 +227,6 @@ public class NetworkPanel extends Canvas
         return true;
     }
 
-    /**
-     * Process mouse up events.
-     *
-     * @param evt
-     * @param y
-     * @param x
-     * @return
-     */
     @Override
     public boolean mouseUp(Event evt, int x, int y)
     {
@@ -259,7 +235,7 @@ public class NetworkPanel extends Canvas
 
         if (movenode != null)
         {
-            ig.setPos(movenode, new Point(x, y));
+            ig.setCoordinates(movenode, new Point(x, y));
             movenode = null;
         }
         else if (newArc == true)
@@ -301,8 +277,8 @@ public class NetworkPanel extends Canvas
     {
         for (InferenceGraphNode node : ig.elements())
         {
-            if ((x - node.getPosX()) * (x - node.getPosX()) +
-                (y - node.getPosY()) * (y - node.getPosY()) <
+            if ((x - node.getXCoordinate()) * (x - node.getXCoordinate()) +
+                (y - node.getYCoordinate()) * (y - node.getYCoordinate()) <
                 NODE_RADIUS * NODE_RADIUS)
             {
                 return node;
@@ -330,14 +306,7 @@ public class NetworkPanel extends Canvas
                 }
             }
         }
-        if ((archeadnode != null) && (arcbottomnode != null))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (archeadnode != null) && (arcbottomnode != null);
     }
 
     /**
@@ -351,10 +320,10 @@ public class NetworkPanel extends Canvas
         int x1, y1, x2, y2;
         double area, squareBase, squareHeight, squareHyp;
 
-        x1 = hnode.getPosX();
-        y1 = hnode.getPosY();
-        x2 = pnode.getPosX();
-        y2 = pnode.getPosY();
+        x1 = hnode.getXCoordinate();
+        y1 = hnode.getYCoordinate();
+        x2 = pnode.getXCoordinate();
+        y2 = pnode.getYCoordinate();
 
         // Area of the triangle defined by the three points
         area = 0.5 * (double) (x1 * y2 + y1 * x3 + x2 * y3 -
@@ -449,8 +418,8 @@ public class NetworkPanel extends Canvas
 
         if (newArc)
         {
-            g.drawLine(arcbottomnode.getPosX() - xScroll,
-                       arcbottomnode.getPosY() - yScroll,
+            g.drawLine(arcbottomnode.getXCoordinate() - xScroll,
+                       arcbottomnode.getYCoordinate() - yScroll,
                        newArcHead.x - xScroll, newArcHead.y - yScroll);
         }
 
@@ -469,10 +438,10 @@ public class NetworkPanel extends Canvas
         for (InferenceGraphNode node : ig.elements())
         {
             g.setColor(nodeBorderColor);
-            if ((node.getPosX() - xScroll) >= 0)
+            if ((node.getXCoordinate() - xScroll) >= 0)
             {
-                g.fillOval((node.getPosX() - xScroll) - NODE_RADIUS - 1,
-                           (node.getPosY() - yScroll) - NODE_RADIUS - 1,
+                g.fillOval((node.getXCoordinate() - xScroll) - NODE_RADIUS - 1,
+                           (node.getYCoordinate() - yScroll) - NODE_RADIUS - 1,
                            NODE_SIZE + 2, NODE_SIZE + 2);
             }
 
@@ -503,17 +472,19 @@ public class NetworkPanel extends Canvas
                 g.setColor(observedNodeColor);
             }
 
-            if ((node.getPosX() - xScroll) >= 0)
+            if ((node.getXCoordinate() - xScroll) >= 0)
             {
-                g.fillOval((node.getPosX() - xScroll) - NODE_RADIUS,
-                           (node.getPosY() - yScroll) - NODE_RADIUS,
+                g.fillOval((node.getXCoordinate() - xScroll) - NODE_RADIUS,
+                           (node.getYCoordinate() - yScroll) - NODE_RADIUS,
                            NODE_SIZE, NODE_SIZE);
             }
 
             g.setColor(nodenameColor);
             g.drawString(node.getName(),
-                         (node.getPosX() - xScroll) - SPACE_DRAW_NODE_NAME,
-                         (node.getPosY() - yScroll) + SPACE_DRAW_NODE_NAME);
+                         (node.getXCoordinate() - xScroll) -
+                         SPACE_DRAW_NODE_NAME,
+                         (node.getYCoordinate() - yScroll) +
+                         SPACE_DRAW_NODE_NAME);
         }
 
         // Draw the group.
@@ -559,10 +530,10 @@ public class NetworkPanel extends Canvas
         double headX, headY, bottomX, bottomY;
 
         // calculate archead
-        nodeX = node.getPosX() - xScroll;
-        nodeY = node.getPosY() - yScroll;
-        parentX = parent.getPosX() - xScroll;
-        parentY = parent.getPosY() - yScroll;
+        nodeX = node.getXCoordinate() - xScroll;
+        nodeY = node.getYCoordinate() - yScroll;
+        parentX = parent.getXCoordinate() - xScroll;
+        parentY = parent.getYCoordinate() - yScroll;
 
         dirX = (double) (nodeX - parentX);
         dirY = (double) (nodeY - parentY);
@@ -722,13 +693,13 @@ public class NetworkPanel extends Canvas
      */
     void moveNode(int x, int y)
     {
-        int deltaX = movenode.getPosX() - x;
-        int deltaY = movenode.getPosY() - y;
+        int deltaX = movenode.getXCoordinate() - x;
+        int deltaY = movenode.getYCoordinate() - y;
 
         // Check whether the movenode is in the group.
         if (movingNodes == null)
         {
-            ig.setPos(movenode, new Point(x, y)); // Move only the movenode.
+            ig.setCoordinates(movenode, new Point(x, y)); // Move only the movenode.
         }
         else
         {
@@ -738,9 +709,9 @@ public class NetworkPanel extends Canvas
             groupEnd.y -= deltaY;
             for (InferenceGraphNode node : movingNodes)
             {
-                ig.setPos(node, // Move all nodes in the group.
-                          new Point(node.getPosX() - deltaX,
-                                    node.getPosY() - deltaY));
+                ig.setCoordinates(node, // Move all nodes in the group.
+                                  new Point(node.getXCoordinate() - deltaX,
+                                            node.getYCoordinate() - deltaY));
             }
         }
     }
@@ -780,10 +751,10 @@ public class NetworkPanel extends Canvas
      */
     boolean insideGroup(InferenceGraphNode node)
     {
-        return (node.getPosX() > Math.min(groupStart.x, groupEnd.x)) &&
-               (node.getPosX() < Math.max(groupStart.x, groupEnd.x)) &&
-               (node.getPosY() > Math.min(groupStart.y, groupEnd.y)) &&
-               (node.getPosY() < Math.max(groupStart.y, groupEnd.y));
+        return (node.getXCoordinate() > Math.min(groupStart.x, groupEnd.x)) &&
+               (node.getXCoordinate() < Math.max(groupStart.x, groupEnd.x)) &&
+               (node.getYCoordinate() > Math.min(groupStart.y, groupEnd.y)) &&
+               (node.getYCoordinate() < Math.max(groupStart.y, groupEnd.y));
     }
 
     /**

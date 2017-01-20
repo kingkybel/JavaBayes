@@ -72,7 +72,7 @@ class EditProbability extends EditFunctionPanel
         allVariableNames = node.getAllNames();
 
         // Get the variable values.
-        allVariableValues = node.getAllValues();
+        allVariableValues = node.getAllVariableValues();
 
         // Construct the name of the probability function.
         Label probabilityName = createProbabilityName();

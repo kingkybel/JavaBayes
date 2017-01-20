@@ -124,11 +124,12 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * IFProbabilityFunction object.
      *
      * @param ifProbFunc interchange format probability function
-     * @param values     an array of double values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      * @return extreme points
      */
     double[][] processExtremeTables(IFProbabilityFunction ifProbFunc,
-                                    double values[])
+                                    double probValues[])
     {
         int i, j;
         double table[], extremePoints[][];
@@ -148,7 +149,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         if (n == 1)
         {
             table = (double[]) (tables.get(0));
-            copyTableToValues(table, values);
+            copyTableToValues(table, probValues);
             return null;
         }
 
@@ -156,7 +157,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         extremePoints = new double[n][];
         for (i = 0; i < extremePoints.length; i++)
         {
-            extremePoints[i] = new double[values.length];
+            extremePoints[i] = new double[probValues.length];
             for (j = 0; j < extremePoints[i].length; j++)
             {
                 extremePoints[i][j] = ConvertInterchangeFormat.INVALID_VALUE;
@@ -176,12 +177,13 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * defaults in the IFProbabilityFunction object.
      *
      * @param ifProbFunc    interchange format probability function
-     * @param values        an array of double values
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
      * @param extremePoints matrix of extreme points
      * @param jump
      */
     void processDefaults(IFProbabilityFunction ifProbFunc,
-                         double values[],
+                         double probValues[],
                          double extremePoints[][],
                          int jump)
     {
@@ -192,14 +194,14 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         if (ddefaultss.size() > 0)
         {
             double ddefaults[] = ddefaultss.get(0);
-            for (i = 0; i < values.length; i++)
+            for (i = 0; i < probValues.length; i++)
             {
                 for (j = 0; j < jump; j++)
                 {
                     k = i * jump + j;
-                    if (values[k] == ConvertInterchangeFormat.INVALID_VALUE)
+                    if (probValues[k] == ConvertInterchangeFormat.INVALID_VALUE)
                     {
-                        values[k] = ddefaults[i];
+                        probValues[k] = ddefaults[i];
                     }
                 }
             }
@@ -212,14 +214,15 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
      * @param bayesNet      the underlying Bayes net
      * @param ifProbFunc    interchange format probability function
      * @param variables     array of probability variables
-     * @param values        an array of double values
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
      * @param extremePoints matrix of extreme points
      * @param jump
      */
     void processEntries(BayesNet bayesNet,
                         IFProbabilityFunction ifProbFunc,
                         ProbabilityVariable variables[],
-                        double values[],
+                        double probValues[],
                         double extremePoints[][],
                         int jump)
     {
@@ -256,7 +259,7 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
                 for (i = 0; i < probVar.numberValues(); i++)
                 {
                     k = i * jump + pos;
-                    values[k] = eentryEntries[i];
+                    probValues[k] = eentryEntries[i];
                 }
             }
         }
@@ -265,10 +268,11 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
     /**
      * Perform final calculations in the values.
      *
-     * @param values        an array of double values
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
      * @param extremePoints matrix of extreme points
      */
-    void finishValues(double values[], double extremePoints[][])
+    void finishValues(double probValues[], double extremePoints[][])
     {
         int i, j;
 
@@ -290,11 +294,11 @@ public class QBConvertInterchangeFormat extends ConvertInterchangeFormat
         }
         else
         { // Second case: single distribution; just fill zeros where needed
-            for (i = 0; i < values.length; i++)
+            for (i = 0; i < probValues.length; i++)
             {
-                if (values[i] == ConvertInterchangeFormat.INVALID_VALUE)
+                if (probValues[i] == ConvertInterchangeFormat.INVALID_VALUE)
                 {
-                    values[i] = 0.0;
+                    probValues[i] = 0.0;
                 }
             }
         }

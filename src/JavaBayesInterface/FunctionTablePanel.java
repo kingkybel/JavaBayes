@@ -98,7 +98,7 @@ public final class FunctionTablePanel extends Panel
     /**
      * Return the current table.
      *
-     * @return
+     * @return the current table as array of doubles
      */
     public double[] getTable()
     {
@@ -109,7 +109,7 @@ public final class FunctionTablePanel extends Panel
     /**
      * Insert a new table.
      *
-     * @param newTable
+     * @param newTable the new table as array of doubles
      */
     public void insertTable(double newTable[])
     {
@@ -138,7 +138,6 @@ public final class FunctionTablePanel extends Panel
         }
         else
         {
-            double valueSet = 0.0;
             int parentIndexes[] = new int[allVariableNames.length];
             for (k = 0; k < parentChoices.length; k++)
             {
@@ -282,13 +281,6 @@ public final class FunctionTablePanel extends Panel
         }
     }
 
-    /**
-     * Handle events in the panel.
-     *
-     * @param evt
-     * @param arg
-     * @return
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {

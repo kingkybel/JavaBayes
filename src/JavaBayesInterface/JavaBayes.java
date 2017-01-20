@@ -101,8 +101,8 @@ public class JavaBayes extends Applet
     /**
      * Open a file and read the network in it.
      *
-     * @param filename
-     * @return
+     * @param filename the file where the network is described
+     * @return true if successful, false otherwise
      */
     public boolean open(String filename)
     {
@@ -112,8 +112,8 @@ public class JavaBayes extends Applet
     /**
      * Open a URL and read the network in it.
      *
-     * @param filename
-     * @return
+     * @param filename the file where the network is described
+     * @return true if successful, false otherwise
      */
     public boolean openUrl(String filename)
     {
@@ -132,7 +132,7 @@ public class JavaBayes extends Applet
     /**
      * Save the network.
      *
-     * @return
+     * @return true if successful, false otherwise
      */
     public boolean save()
     {
@@ -143,7 +143,7 @@ public class JavaBayes extends Applet
      * Save the network.
      *
      * @param filename
-     * @return
+     * @return true if successful, false otherwise
      */
     public boolean save(String filename)
     {
@@ -153,7 +153,8 @@ public class JavaBayes extends Applet
     /**
      * Interact with menu options: whether to show BucketTree.
      *
-     * @param whatToShowBucketTree
+     * @param whatToShowBucketTree true if bucket tree should be shown, false
+     *                             otherwise
      */
     public void whatToShowBucketTreeAction(boolean whatToShowBucketTree)
     {
@@ -163,8 +164,8 @@ public class JavaBayes extends Applet
     /**
      * Interact with menu options: whether to show Bayesian networks.
      *
-     *
-     * @param whatToShowBayesianNetwork
+     * @param whatToShowBayesianNetwork true if Bayes net should be shown, false
+     *                                  otherwise
      */
     public void whatToShowBayesianNetworkAction(
             boolean whatToShowBayesianNetwork)
@@ -222,7 +223,7 @@ public class JavaBayes extends Applet
     }
 
     /**
-     * Use xml format for saving.
+     * Use XML format for saving.
      */
     public void xmlFormatAction()
     {
@@ -258,17 +259,17 @@ public class JavaBayes extends Applet
     /**
      * Put text in the consoleFrame.
      *
-     * @param s
+     * @param text text to add to the console frame
      */
-    public void appendText(String s)
+    public void appendText(String text)
     {
-        consoleFrame.appendText(s);
+        consoleFrame.appendText(text);
     }
 
     /**
      * Get the current filename for saving.
      *
-     * @return
+     * @return the current filename
      */
     public String getCurrentSaveFilename()
     {
@@ -278,7 +279,7 @@ public class JavaBayes extends Applet
     /**
      * Set the current filename for saving.
      *
-     * @param filename
+     * @param filename the new filename
      */
     public void setCurrentSaveFilename(String filename)
     {

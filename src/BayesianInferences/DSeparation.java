@@ -61,7 +61,7 @@ public class DSeparation
     /**
      * Constructor for DSeparation object.
      *
-     * @param bayesNet
+     * @param bayesNet the underlying Bayesian network
      */
     public DSeparation(BayesNet bayesNet)
     {
@@ -71,33 +71,33 @@ public class DSeparation
     /**
      * Return a list of all variables that are d-connected to a given variable.
      *
-     * @param x index of the variable to test
-     * @return
+     * @param varIndex index of the variable to test
+     * @return the list of d-connected variables
      */
-    public ArrayList<DiscreteVariable> getDConnectedVariables(int x)
+    public ArrayList<DiscreteVariable> getDConnectedVariables(int varIndex)
     {
-        return separation(x, ConnectionType.CONNECTED_VARIABLES);
+        return separation(varIndex, ConnectionType.CONNECTED_VARIABLES);
     }
 
     /**
      * Returns a list of all variables whose distributions can affect the
      * marginal posterior of a given variable.
      *
-     * @param x index of the variable to test
-     * @return
+     * @param varIndex index of the variable to test
+     * @return the list of affecting variables
      */
-    public ArrayList<DiscreteVariable> getAllAffectingVariables(int x)
+    public ArrayList<DiscreteVariable> getAllAffectingVariables(int varIndex)
     {
-        return separation(x, ConnectionType.AFFECTING_VARIABLES);
+        return separation(varIndex, ConnectionType.AFFECTING_VARIABLES);
     }
 
     /**
      * Find all d-separation relations.
      *
-     * @param x              index of the variable to test
-     * @param connectionType
+     * @param index          index of the variable to test
+     * @param connectionType type of connection to use
      */
-    private void separationRelations(int x, ConnectionType connectionType)
+    private void separationRelations(int index, ConnectionType connectionType)
     {
         int nvertices = bayesNet.numberProbabilityFunctions();
         if (connectionType == ConnectionType.AFFECTING_VARIABLES)
@@ -110,30 +110,30 @@ public class DSeparation
 
         int current[];
 
-        int i, j, v, subscript;
+        int v, subscript;
 
-        for (i = 0; i < nvertices; i++)
+        for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
         {
-            above[i] = false;
-            below[i] = false;
+            above[vertexInd] = false;
+            below[vertexInd] = false;
         }
 
         Stack stack = new Stack();
 
         int Xabove[] =
         {
-            x, 1
+            index, 1
         };
         int Xbelow[] =
         {
-            x, -1
+            index, -1
         };
 
         stack.push(Xabove);
         stack.push(Xbelow);
 
-        below[x] = true;
-        above[x] = true;
+        below[index] = true;
+        above[index] = true;
 
         while (!stack.empty())
         {
@@ -143,31 +143,32 @@ public class DSeparation
 
             if (subscript < 0)
             {
-                for (i = 0; i < nvertices; i++)
+                for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
                 {
-                    if (adjacent(i, v, connectionType))
+                    if (adjacent(vertexInd, v, connectionType))
                     {
-                        if ((!below[i]) && (!isSeparator(i, connectionType)))
+                        if ((!below[vertexInd]) &&
+                            (!isSeparator(vertexInd, connectionType)))
                         {
-                            below[i] = true;
+                            below[vertexInd] = true;
                             int Vbelow[] =
                             {
-                                i, -1
+                                vertexInd, -1
                             };
                             stack.push(Vbelow);
                         }
                     }
                 }
-                for (j = 0; j < nvertices; j++)
+                for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
                 {
-                    if (adjacent(v, j, connectionType))
+                    if (adjacent(v, vertexInd, connectionType))
                     {
-                        if (!above[j])
+                        if (!above[vertexInd])
                         {
-                            above[j] = true;
+                            above[vertexInd] = true;
                             int Tabove[] =
                             {
-                                j, 1
+                                vertexInd, 1
                             };
                             stack.push(Tabove);
                         }
@@ -179,16 +180,17 @@ public class DSeparation
             {
                 if (isSeparator(v, connectionType))
                 {  // v known
-                    for (i = 0; i < nvertices; i++)
+                    for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
                     {
-                        if (adjacent(i, v, connectionType))
+                        if (adjacent(vertexInd, v, connectionType))
                         {
-                            if ((!isSeparator(i, connectionType)) && !below[i])
+                            if (!isSeparator(vertexInd, connectionType) &&
+                                !below[vertexInd])
                             {
-                                below[i] = true;
+                                below[vertexInd] = true;
                                 int Tbelow[] =
                                 {
-                                    i, -1
+                                    vertexInd, -1
                                 };
                                 stack.push(Tbelow);
                             }
@@ -197,16 +199,16 @@ public class DSeparation
                 }
                 else
                 {
-                    for (j = 0; j < nvertices; j++)
+                    for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
                     {
-                        if (adjacent(v, j, connectionType))
+                        if (adjacent(v, vertexInd, connectionType))
                         {
-                            if (!above[j])
+                            if (!above[vertexInd])
                             {
-                                above[j] = true;
+                                above[vertexInd] = true;
                                 int Sabove[] =
                                 {
-                                    j, 1
+                                    vertexInd, 1
                                 };
                                 stack.push(Sabove);
                             }
@@ -221,39 +223,42 @@ public class DSeparation
     /**
      * Run the separation algorithm and process its results.
      *
-     * @param x              index of the variable to test
-     * @param connectionType
-     * @return
+     * @param varIndex       index of the variable to test
+     * @param connectionType type of connection to use
+     * @return a list of discrete separation variables
      */
-    private ArrayList<DiscreteVariable> separation(int x,
+    private ArrayList<DiscreteVariable> separation(int varIndex,
                                                    ConnectionType connectionType)
     {
-        int i;
         int nvertices = bayesNet.numberProbabilityFunctions();
         ArrayList<DiscreteVariable> dSeparatedVariables = new ArrayList<>();
 
         // Run algorithm
-        separationRelations(x, connectionType);
+        separationRelations(varIndex, connectionType);
 
         // Process results
         if (connectionType == ConnectionType.CONNECTED_VARIABLES)
         {
-            for (i = 0; i < nvertices; i++)
+            for (int vertexInd = 0; vertexInd < nvertices; vertexInd++)
             {
-                if (below[i] || above[i])
+                if (below[vertexInd] || above[vertexInd])
                 {
-                    dSeparatedVariables.add(bayesNet.getProbabilityVariable(i));
+                    dSeparatedVariables.add(
+                            bayesNet.getProbabilityVariable(vertexInd));
                 }
             }
         }
         else
         {
-            for (i = nvertices; i < (nvertices + nvertices); i++)
+            for (int vertexInd = nvertices;
+                 vertexInd < (nvertices + nvertices);
+                 vertexInd++)
             {
-                if (below[i] || above[i])
+                if (below[vertexInd] || above[vertexInd])
                 {
                     dSeparatedVariables.add(
-                            bayesNet.getProbabilityVariable(i - nvertices));
+                            bayesNet.getProbabilityVariable(vertexInd -
+                                                            nvertices));
                 }
             }
         }
@@ -265,9 +270,9 @@ public class DSeparation
      * Check whether the variable given by the index is in the list of
      * separators (i.e., it is observed).
      *
-     * @param varIndex
-     * @param connectionType
-     * @return
+     * @param varIndex       index of the variable to test
+     * @param connectionType type of connection to use
+     * @return true if the variable at varIndex is a separator
      */
     private boolean isSeparator(int varIndex, ConnectionType connectionType)
     {
@@ -290,7 +295,7 @@ public class DSeparation
      * @param indexFrom      index of the source variable
      * @param indexTo        index of the target variable
      * @param connectionType the type of connection we are querying
-     * @return
+     * @return true if so, false otherwise
      */
     private boolean adjacent(int indexFrom,
                              int indexTo,

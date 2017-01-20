@@ -92,8 +92,8 @@ public final class InferenceGraph
     /**
      * Constructor for an InferenceGraph.
      *
-     * @param url
-     * @throws Exception
+     * @param url source from where to read the Bayes net
+     * @throws Exception throw if the Bayes net can not be read from the URL
      */
     public InferenceGraph(URL url) throws Exception
     {
@@ -104,7 +104,7 @@ public final class InferenceGraph
     /**
      * Get the contents of the graph.
      *
-     * @return
+     * @return the graph converted into a quasi-Bayes net
      */
     public QuasiBayesNet getBayesNet()
     {
@@ -112,8 +112,9 @@ public final class InferenceGraph
     }
 
     /**
-     * Convert a QuasiBayesNet object to the InferenceGraph structure; returns
-     * true if the conversion is successful.
+     * Convert a QuasiBayesNet object to the InferenceGraph structure;
+     *
+     * @return true if the conversion is successful.
      */
     boolean convertBayesNet()
     {
@@ -173,6 +174,8 @@ public final class InferenceGraph
 
     /**
      * Get the node corresponding to a given variable.
+     *
+     * @return the node
      */
     private InferenceGraphNode getNode(DiscreteVariable dv)
     {
@@ -188,6 +191,8 @@ public final class InferenceGraph
 
     /**
      * Convert the InferenceGraph structure to a QuasiBayesNet object.
+     *
+     * @return the quasi Bayes net
      */
     QuasiBayesNet convertGraph()
     {
@@ -217,6 +222,8 @@ public final class InferenceGraph
 
     /**
      * Generate a valid name for a new variable.
+     *
+     * @return the name as string
      */
     private String generateName(int index)
     {
@@ -246,7 +253,7 @@ public final class InferenceGraph
     /**
      * Get the name of the network.
      *
-     * @return
+     * @return the name of the network
      */
     public String getName()
     {
@@ -256,17 +263,17 @@ public final class InferenceGraph
     /**
      * Set the name of the network.
      *
-     * @param n
+     * @param name he new name
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        qbn.setName(n);
+        qbn.setName(name);
     }
 
     /**
      * Get the properties of the network.
      *
-     * @return
+     * @return the properties as list of strings
      */
     public ArrayList<String> getNetworkProperties()
     {
@@ -278,7 +285,7 @@ public final class InferenceGraph
      *
      * @param properties list of properties
      */
-    public void setNetworkProperties(ArrayList properties)
+    public void setNetworkProperties(ArrayList<String> properties)
     {
         qbn.setProperties(properties);
     }
@@ -286,7 +293,7 @@ public final class InferenceGraph
     /**
      * Get the type of global neighborhood modeled by the network.
      *
-     * @return
+     * @return the type of global neighborhood
      */
     public GlobalNeighbourhood getGlobalNeighborhoodType()
     {
@@ -296,7 +303,7 @@ public final class InferenceGraph
     /**
      * Set the global neighborhood type.
      *
-     * @param type
+     * @param type the type of global neighborhood
      */
     public void setGlobalNeighborhood(GlobalNeighbourhood type)
     {
@@ -306,7 +313,7 @@ public final class InferenceGraph
     /**
      * Get the parameter for the global neighborhood modeled by the network.
      *
-     * @return
+     * @return the global neighborhood parameter
      */
     public double getGlobalNeighborhoodParameter()
     {
@@ -316,7 +323,7 @@ public final class InferenceGraph
     /**
      * Set the parameter for the global neighborhood modeled by the network.
      *
-     * @param parameter
+     * @param parameter the global neighborhood parameter
      */
     public void setGlobalNeighborhoodParameter(double parameter)
     {
@@ -326,11 +333,11 @@ public final class InferenceGraph
     /**
      * Remove a property from the network.
      *
-     * @param index
+     * @param propertyIndex the index of the property to remove
      */
-    public void removeNetworkProperty(int index)
+    public void removeNetworkProperty(int propertyIndex)
     {
-        qbn.removeProperty(index);
+        qbn.removeProperty(propertyIndex);
     }
 
     /**
@@ -346,12 +353,12 @@ public final class InferenceGraph
     /**
      * Determine whether or not a name is valid and/or repeated.
      *
-     * @param name
-     * @return
+     * @param name the name to check for validity
+     * @return the checked name if it is valid, null else
      */
     public String checkName(String name)
     {
-        String checkedName = validateValue(name);
+        String checkedName = makeValidValue(name);
         for (InferenceGraphNode node : nodes)
         {
             if (node.getName().equals(checkedName))
@@ -363,12 +370,12 @@ public final class InferenceGraph
     }
 
     /**
-     * Check whether a string is a valid name.
+     * Replace all spaces with underscores to make a valid name.
      *
-     * @param value
-     * @return
+     * @param value original value
+     * @return the valid name
      */
-    public String validateValue(String value)
+    public String makeValidValue(String value)
     {
         StringBuilder str = new StringBuilder(value);
         for (int i = 0; i < str.length(); i++)
@@ -397,21 +404,22 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queriedVariable   indicates the variable of interest.
-     * @param showBucketTree    determines whether or not to present a
-     *                          description of the BucketTree.
-     * @param doComputeClusters
+     * @param queriedVariable            indicates the variable of interest.
+     * @param showBucketTree             determines whether or not to present a
+     *                                   description of the BucketTree.
+     * @param isProducingComputeClusters whether or not clusters should be
+     *                                   produced
      */
     public void printMarginal(PrintStream pstream,
                               String queriedVariable,
-                              boolean doComputeClusters,
+                              boolean isProducingComputeClusters,
                               boolean showBucketTree)
     {
-        if ((doComputeClusters == false) ||
+        if ((isProducingComputeClusters == false) ||
             (qbi == null) ||
             (qbi.areClustersProduced() == false))
         {
-            qbi = new QBInference(getBayesNet(), doComputeClusters);
+            qbi = new QBInference(getBayesNet(), isProducingComputeClusters);
         }
         qbi.inference(queriedVariable);
         qbi.print(pstream, showBucketTree);
@@ -430,21 +438,22 @@ public final class InferenceGraph
      * into the given PrintStream.
      *
      * @param pstream
-     * @param queriedVariable   indicates the variable of interest.
-     * @param doComputeClusters
-     * @param showBucketTree    determines whether or not to present a
-     *                          description of the BucketTree.
+     * @param queriedVariable            indicates the variable of interest.
+     * @param isProducingComputeClusters whether or not clusters should be
+     *                                   produced
+     * @param showBucketTree             determines whether or not to present a
+     *                                   description of the BucketTree.
      */
     public void printExpectation(PrintStream pstream,
                                  String queriedVariable,
-                                 boolean doComputeClusters,
+                                 boolean isProducingComputeClusters,
                                  boolean showBucketTree)
     {
-        if ((doComputeClusters == false) ||
+        if ((isProducingComputeClusters == false) ||
             (qbe == null) /*|| // *** Removed as it does not seem to make sense here
                  (qbi.areClustersProduced() == false)*/)
         {
-            qbe = new QBExpectation(getBayesNet(), doComputeClusters);
+            qbe = new QBExpectation(getBayesNet(), isProducingComputeClusters);
         }
         qbe.expectation(queriedVariable);
         qbe.print(pstream, showBucketTree);
@@ -462,44 +471,44 @@ public final class InferenceGraph
      * Print information about an explanation for the Bayesian network into the
      * given PrintStream.
      *
-     * @param pstream
+     * @param out            output print stream
      * @param showBucketTree determines whether or not to present a description
      *                       of the BucketTree.
      */
-    public void printExplanation(PrintStream pstream, boolean showBucketTree)
+    public void printExplanation(PrintStream out, boolean showBucketTree)
     {
         Explanation ex = new Explanation(getBayesNet());
         ex.explanation();
-        ex.print(pstream, showBucketTree);
+        ex.print(out, showBucketTree);
     }
 
     /**
      * Print information about a full explanation for the Bayesian network into
      * the given PrintStream.
      *
-     * @param pstream
+     * @param out            output print stream
      * @param showBucketTree determines whether or not to present a description
      *                       of the BucketTree.
      */
-    public void printFullExplanation(PrintStream pstream,
+    public void printFullExplanation(PrintStream out,
                                      boolean showBucketTree)
     {
         Explanation fex = new Explanation(getBayesNet());
         fex.fullExplanation();
-        fex.print(pstream, showBucketTree);
+        fex.print(out, showBucketTree);
     }
 
     /**
      * Print the metrics for sensitivity analysis of the Bayesian network into
      * the given PrintStream.
      *
-     * @param pstream
+     * @param out output print stream
      */
-    public void printSensitivityAnalysis(PrintStream pstream)
+    public void printSensitivityAnalysis(PrintStream out)
     {
         SensitivityAnalysis sa = new SensitivityAnalysis(getBayesNet());
         //sa.compute(queriedVariable);
-        sa.print(pstream);
+        sa.print(out);
     }
 
     /**
@@ -559,9 +568,9 @@ public final class InferenceGraph
     /**
      * Get the nodes in the network.
      *
-     * @return
+     * @return the list if inference graph nodes
      */
-    public ArrayList getNodes()
+    public ArrayList<InferenceGraphNode> getNodes()
     {
         return nodes;
     }
@@ -569,7 +578,7 @@ public final class InferenceGraph
     /**
      * Get the nodes in the network as an Iterator object.
      *
-     * @return
+     * @return the list if inference graph nodes
      */
     public ArrayList<InferenceGraphNode> elements()
     {
@@ -579,7 +588,7 @@ public final class InferenceGraph
     /**
      * Get the number of variables in the network.
      *
-     * @return
+     * @return the number of variables
      */
     public int numberNodes()
     {
@@ -589,14 +598,14 @@ public final class InferenceGraph
     /**
      * Create a new node in the network.
      *
-     * @param x
-     * @param y
+     * @param x x-coordinate
+     * @param y y-coordinate
      */
     public void createNode(int x, int y)
     {
-        Point p = new Point(x, y);
+        Point coord = new Point(x, y);
         String n = generateName(nodes.size());
-        nodes.add(new InferenceGraphNode(this, n, p));
+        nodes.add(new InferenceGraphNode(this, n, coord));
 
         // Synchronize the QuasiBayesNet object and the graph.
         convertGraph();
@@ -605,9 +614,9 @@ public final class InferenceGraph
     /**
      * Create an arc from parent to child.
      *
-     * @param parent
-     * @param child
-     * @return
+     * @param parent parent node
+     * @param child  child node
+     * @return true, if arc was created, false otherwise
      */
     public boolean createArc(InferenceGraphNode parent,
                              InferenceGraphNode child)
@@ -642,7 +651,7 @@ public final class InferenceGraph
     /**
      * Delete a node in the network.
      *
-     * @param node
+     * @param node graph node
      */
     public void deleteNode(InferenceGraphNode node)
     {
@@ -669,8 +678,8 @@ public final class InferenceGraph
     /**
      * Delete the arc from parent to child.
      *
-     * @param parent
-     * @param child
+     * @param parent parent node
+     * @param child  child node
      */
     public void deleteArc(InferenceGraphNode parent,
                           InferenceGraphNode child)
@@ -693,9 +702,9 @@ public final class InferenceGraph
      * Determines whether the connection of bottomNode to headNode would cause
      * the network to have a cycle.
      *
-     * @param bottomNode
-     * @param headNode
-     * @return
+     * @param bottomNode from node
+     * @param headNode   to node
+     * @return true if so, false otherwise
      */
     public boolean hasCycle(InferenceGraphNode bottomNode,
                             InferenceGraphNode headNode)
@@ -752,8 +761,8 @@ public final class InferenceGraph
      * is different from the number of current values, this operation resets the
      * probability values of the variable and all its children.
      *
-     * @param node
-     * @param values
+     * @param node   graph node
+     * @param values values the variable can assume as string array
      */
     public void changeValues(InferenceGraphNode node, String values[])
     {
@@ -781,12 +790,12 @@ public final class InferenceGraph
     /**
      * Set a value for the position of the node.
      *
-     * @param node
-     * @param position
+     * @param node        graph node
+     * @param coordinates x/y coordinates of the node
      */
-    public void setPos(InferenceGraphNode node, Point position)
+    public void setCoordinates(InferenceGraphNode node, Point coordinates)
     {
-        node.pos = position;
+        node.coordinates = coordinates;
         convertGraph();
     }
 }

@@ -47,9 +47,8 @@ public final class VertexSet
     // Variable that indicates which extreme point is active
     ProbabilityVariable auxiliaryVariable;
 
-    // The set of extreme points; the first coordinate indexes
-    // a set of double[] arrays (each array contains the values
-    // for an extreme point).
+    // The set of extreme points; the first coordinate indexes  a set of
+    // double[] arrays (each array contains the values for an extreme point).
     double extremePoints[][];
 
     /**
@@ -71,7 +70,7 @@ public final class VertexSet
         // Now replace ep[0] with a new array to avoid wrong
         // cross-references among arrays.
         double[] vals = new double[extremePoints[0].length];
-        values = vals;
+        setValues(vals);
 
         // Update the extremePoints and the values.
         this.extremePoints = extremePoints;
@@ -82,20 +81,21 @@ public final class VertexSet
      * Constructor for a VertexSet.
      *
      * @param bayesNet      the underlying Bayesian network
-     * @param probVars      probability variables
-     * @param values        array of probability values
+     * @param probVars      probability variables as array
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
      * @param properties    list of properties
      * @param extremePoints matrix-array of extreme points
      */
     public VertexSet(BayesNet bayesNet,
                      ProbabilityVariable probVars[],
-                     double values[],
+                     double probValues[],
                      ArrayList<String> properties,
                      double extremePoints[][])
     {
         super(bayesNet,
               probVars,
-              values,
+              probValues,
               (double[]) null, // no lower envelope
               (double[]) null, // no upper envelope
               properties);
@@ -125,12 +125,13 @@ public final class VertexSet
      * Constructor for a VertexSet from a ProbabilityFunction object and new
      * values.
      *
-     * @param probFunc probability function
-     * @param values   array of probability values
+     * @param probFunc   probability function
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
-    public VertexSet(ProbabilityFunction probFunc, double values[])
+    public VertexSet(ProbabilityFunction probFunc, double probValues[])
     {
-        super(probFunc, values);
+        super(probFunc, probValues);
         if (probFunc instanceof VertexSet)
         {
             extremePoints = ((VertexSet) probFunc).extremePoints;
@@ -144,23 +145,20 @@ public final class VertexSet
     }
 
     /**
-     * Put together all the values for the possible vertices of credal set and
-     * create an auxiliary variable to indicate which vertex to consider. There
-     * are three things to do:
+     * Put together all the values for the possible vertices of the credal set
+     * and create an auxiliary variable to indicate which vertex to consider.
+     * There are three things to do:
      * <ol>
      * <li>Create an auxiliaryVariable with correct values. </li>
      * <li> Combine the values into a new array.</li>
      * <li> Insert the auxiliaryVariable into the variables array.</li>
      * </ol>
      *
-     * @param transformedBn
-     * @return
+     * @param transformedBn transformed Bayes net
+     * @return the vertex set probability function
      */
     public VertexSet prepareAuxiliaryVariable(BayesNet transformedBn)
     {
-        int i;
-        double newValues[];
-
         // Assume that values and auxiliaryVariable are correct if
         // auxiliaryVariable is non null (cannot happen in current version)
         if (auxiliaryVariable != null)
@@ -172,14 +170,15 @@ public final class VertexSet
         ProbabilityVariable auxv = createAuxiliaryVariable(transformedBn);
 
         // Create the new values for the credal set with auxiliaryVariable
-        newValues = createNewValues(transformedBn);
+        double newValues[] = createNewValues(transformedBn);
 
         // Now insert the auxiliaryVariable in the variables array
         DiscreteVariable newVariables[] =
                            new DiscreteVariable[numberVariables() + 1];
+        int i;
         for (i = 0; i < numberVariables(); i++)
         {
-            newVariables[i] = variables[i];
+            newVariables[i] = getVariable(i);
         }
         newVariables[i] = auxv;
 
@@ -188,7 +187,7 @@ public final class VertexSet
         VertexSet newQbpf = new VertexSet(this, newValues);
         newQbpf.bayesNet = transformedBn;
         newQbpf.auxiliaryVariable = auxv;
-        newQbpf.variables = newVariables;
+        newQbpf.setVariables(newVariables);
 
         return newQbpf;
     }
@@ -202,16 +201,13 @@ public final class VertexSet
      */
     private double[] createNewValues(BayesNet transformedBn)
     {
-        int i, j;
         // Combine vertices and the auxiliaryVariable and create new values
-        double newValues[] =
-                 new double[extremePoints.length * numberValues()];
-        for (i = 0; i < numberValues(); i++)
+        double newValues[] = new double[extremePoints.length * numberValues()];
+        for (int i = 0; i < numberValues(); i++)
         {
-            for (j = 0; j < extremePoints.length; j++)
+            for (int j = 0; j < extremePoints.length; j++)
             {
-                newValues[j + i * extremePoints.length] =
-                extremePoints[j][i];
+                newValues[j + i * extremePoints.length] = extremePoints[j][i];
             }
         }
         return newValues;
@@ -220,88 +216,83 @@ public final class VertexSet
     /**
      * Create an auxiliary variable to indicate the vertices.
      *
-     * @param transformedBn
-     * @return
+     * @param transformedBn transformed Bayes net to use for the creation of the
+     *                      auxiliary variable
+     * @return the newly created variable
      */
     private ProbabilityVariable createAuxiliaryVariable(BayesNet transformedBn)
     {
-        int i;
-
         // Compose the name of the auxiliary variable
         StringBuffer bufferAuxiliaryVariableName =
                      new StringBuffer("<Transparent:");
-        bufferAuxiliaryVariableName.append(variables[0].getName());
+        bufferAuxiliaryVariableName.append(getVariable(0).getName());
         bufferAuxiliaryVariableName.append(">");
         String auxiliaryVariableName =
                new String(bufferAuxiliaryVariableName);
 
         // Compose the values of the auxiliary variable
         String auxiliaryVariableValues[] = new String[extremePoints.length];
-        for (i = 0; i < auxiliaryVariableValues.length; i++)
+        for (int i = 0; i < auxiliaryVariableValues.length; i++)
         {
             auxiliaryVariableValues[i] = String.valueOf(i);
         }
 
         // Create the auxiliary variable
-        ProbabilityVariable auxv =
-                            new ProbabilityVariable(transformedBn,
-                                                    auxiliaryVariableName,
-                                                    BayesNet.INVALID_INDEX,
-                                                    auxiliaryVariableValues,
-                                                    ((ArrayList<String>) null));
+        ProbabilityVariable auxv = new ProbabilityVariable(transformedBn,
+                                                           auxiliaryVariableName,
+                                                           BayesNet.INVALID_INDEX,
+                                                           auxiliaryVariableValues,
+                                                           ((ArrayList<String>) null));
         // Mark the auxiliary variable as auxiliary
-        auxv.setType(ProbabilityVariable.TRANSPARENT);
+        auxv.setType(ProbabilityVariable.Type.TRANSPARENT);
 
         // Return the created auxiliary variable
         return auxv;
     }
 
     /**
-     * Evaluate a function given a list of pairs (Variable Value) which
+     * Evaluate a function given a list of pairs (Variable/Value) which
      * specifies a value of the function, and the index of the extreme
      * distribution to consider.
      *
-     * @param variableValuePairs
-     * @param indexExtremePoint
-     * @return
+     * @param variableValuePairs the array of string arrays that represents the
+     *                           variable-value-pairs
+     * @param indexExtremePoint  index of the extreme distribution
+     * @return the calculated double value
      */
     public double evaluate(String variableValuePairs[][],
                            int indexExtremePoint)
     {
-        int index;
-        ProbabilityVariable probVar;
-
         // Initialize with zeros an array of markers.
         int valueIndexes[] = new int[bayesNet.numberVariables()];
 
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePair[0]);
-            probVar = bayesNet.getProbabilityVariable(index);
+            int index = bayesNet.indexOfVariable(variableValuePair[0]);
+            ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Now evaluate
         int valuePos =
-            getPositionFromIndexes(bayesNet.getProbabilityVariables(),
-                                   valueIndexes);
+            findPositionOfProbabilityValue(bayesNet.getProbabilityVariables(),
+                                           valueIndexes);
         return extremePoints[indexExtremePoint][valuePos];
     }
 
     /**
      * Set a single value of the probability function.
      *
-     * @param variableValuePairs
-     * @param value
-     * @param indexExtremePoint
+     * @param variableValuePairs the array of string arrays that represents the
+     *                           variable-value-pairs
+     * @param value              the value to set
+     * @param indexExtremePoint  index of the extreme distribution
      */
     public void setValue(String variableValuePairs[][],
                          double value,
                          int indexExtremePoint)
     {
-        int index;
-        ProbabilityVariable probVar;
 
         // Initialize with zeros an array of markers.
         int valueIndexes[] = new int[bayesNet.numberVariables()];
@@ -309,57 +300,50 @@ public final class VertexSet
         // Fill the array of markers.
         for (String[] variableValuePair : variableValuePairs)
         {
-            index = bayesNet.indexOfVariable(variableValuePair[0]);
-            probVar = bayesNet.getProbabilityVariable(index);
+            int index = bayesNet.indexOfVariable(variableValuePair[0]);
+            ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
             valueIndexes[index] = probVar.indexOfValue(variableValuePair[1]);
         }
 
         // Get the position of the value in the array of values
         int valuePos =
-            getPositionFromIndexes(bayesNet.getProbabilityVariables(),
-                                   valueIndexes);
+            findPositionOfProbabilityValue(bayesNet.getProbabilityVariables(),
+                                           valueIndexes);
         // Set the value.
         extremePoints[indexExtremePoint][valuePos] = value;
         composeValues();
     }
 
-    /**
-     * Print method.
-     *
-     * @param out output print stream
-     */
     @Override
     public void print(PrintStream out)
     {
-        int i, j;
-
-        if (variables != null)
+        if (numberVariables() != BayesNet.INVALID_INDEX)
         {
             out.print("probability ( ");
-            for (j = 0; j < numberVariables(); j++)
+            for (int j = 0; j < numberVariables(); j++)
             {
-                out.print(" \"" + variables[j].getName() + "\" ");
+                out.print(" \"" + getVariable(j).getName() + "\" ");
             }
             out.print(") {");
             out.println(" //" + numberVariables() +
                         " variable(s) and " + numberValues() + " values");
             if (extremePoints != null)
             {
-                for (i = 0; i < extremePoints.length; i++)
+                for (double[] extremePoint : extremePoints)
                 {
                     out.print("\ttable ");
-                    for (j = 0; j < extremePoints[i].length; j++)
+                    for (int j = 0; j < extremePoint.length; j++)
                     {
-                        out.print(extremePoints[i][j] + " ");
+                        out.print(extremePoint[j] + " ");
                     }
                     out.println(";");
                 }
                 out.print(" // Values: ");
             }
             out.print("\ttable ");
-            for (j = 0; j < numberValues(); j++)
+            for (int j = 0; j < numberValues(); j++)
             {
-                out.print(values[j] + " ");
+                out.print(getValue(j) + " ");
             }
             out.print(";");
         }
@@ -387,7 +371,7 @@ public final class VertexSet
             return;
         }
 
-        n = (double) (extremePoints.length);
+        n = (double) extremePoints.length;
 
         for (int i = 0; i < numberValues(); i++)
         {
@@ -396,18 +380,17 @@ public final class VertexSet
             {
                 aux += extremePoint[i];
             }
-            values[i] = aux / n;
+            setValue(i, aux / n);
         }
     }
 
     /**
      * Set the number of extreme distributions in the credal set.
      *
-     * @param numberExtremePoints
+     * @param numberExtremePoints number of extreme points
      */
     public void setLocalCredalSet(int numberExtremePoints)
     {
-        int i, j, k;
         int numberCurrentExtremePoints;
         double newExtremePoints[][];
 
@@ -437,31 +420,35 @@ public final class VertexSet
         if (numberExtremePoints > numberCurrentExtremePoints)
         {
             // First copy what is already there.
+            int i;
             for (i = 0; i < numberCurrentExtremePoints; i++)
             {
-                for (j = 0; j < extremePoints[i].length; j++)
-                {
-                    newExtremePoints[i][j] = extremePoints[i][j];
-                }
+                System.arraycopy(extremePoints[i],
+                                 0,
+                                 newExtremePoints[i],
+                                 0,
+                                 extremePoints[i].length);
             }
             // Then fill with copies of values.
-            for (k = i; k < newExtremePoints.length; k++)
+            for (; i < newExtremePoints.length; i++)
             {
-                for (j = 0; j < numberValues(); j++)
-                {
-                    newExtremePoints[k][j] = values[j];
-                }
+                System.arraycopy(getValues(),
+                                 0,
+                                 newExtremePoints[i],
+                                 0,
+                                 numberValues());
             }
         }
         else
         {
             // If the new size is smaller than the current size.
-            for (i = 0; i < newExtremePoints.length; i++)
+            for (int i = 0; i < newExtremePoints.length; i++)
             {
-                for (j = 0; j < numberValues(); j++)
-                {
-                    newExtremePoints[i][j] = extremePoints[i][j];
-                }
+                System.arraycopy(extremePoints[i],
+                                 0,
+                                 newExtremePoints[i],
+                                 0,
+                                 numberValues());
             }
         }
 
@@ -471,8 +458,8 @@ public final class VertexSet
     /**
      * Set an extreme point of the credal set.
      *
-     * @param index
-     * @param extremePoints
+     * @param index         index of the point to set
+     * @param extremePoints double array of extreme points
      */
     public void setExtremePoint(int index, double extremePoints[])
     {
@@ -482,7 +469,7 @@ public final class VertexSet
     /**
      * Retrieve the auxiliary variable.
      *
-     * @return
+     * @return the auxiliary variable
      */
     public ProbabilityVariable getAuxiliaryVariable()
     {
@@ -492,7 +479,7 @@ public final class VertexSet
     /**
      * Retrieve the extreme points.
      *
-     * @return
+     * @return the extreme points
      */
     public double[][] getExtremePoints()
     {

@@ -38,42 +38,16 @@ public class ProbabilityVariable extends DiscreteVariable
     private static final Class CLAZZ = ProbabilityVariable.class;
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    /**
-     *
-     */
-    public static final int CHANCE = 0;
 
-    /**
-     *
-     */
-    public static final int TRANSPARENT = 1;
+
     static final String observedPropertyName = "observed";
     static final String explanationPropertyName = "explanation";
 
-    /**
-     *
-     */
-    protected int type = ProbabilityVariable.CHANCE;
-
-    /**
-     *
-     */
-    protected int observedIndex = BayesNet.INVALID_INDEX;
-
-    /**
-     *
-     */
-    protected int explanationIndex = BayesNet.INVALID_INDEX;
-
-    /**
-     *
-     */
-    protected ArrayList<String> properties;
-
-    /**
-     *
-     */
-    protected BayesNet bayesNet;
+    private Type type = Type.CHANCE;
+    private int observedIndex = BayesNet.INVALID_INDEX;
+    private int explanationIndex = BayesNet.INVALID_INDEX;
+    private ArrayList<String> properties;
+    private BayesNet bayesNet;
 
     /**
      * Default constructor for a ProbabilityVariable.
@@ -87,8 +61,8 @@ public class ProbabilityVariable extends DiscreteVariable
      * Constructor for ProbabilityVariable.
      *
      * @param bayesNet   the underlying Bayesian network
+     * @param name       name of the new variable
      * @param properties list of properties
-     * @param name
      */
     public ProbabilityVariable(BayesNet bayesNet,
                                String name,
@@ -103,10 +77,10 @@ public class ProbabilityVariable extends DiscreteVariable
      * Constructor for ProbabilityVariable.
      *
      * @param bayesNet   the underlying Bayesian network
+     * @param name       name of the new variable
+     * @param index      given index for the variable
+     * @param values     values the variable can assume as string array
      * @param properties list of properties
-     * @param name
-     * @param values
-     * @param index
      */
     public ProbabilityVariable(BayesNet bayesNet,
                                String name,
@@ -120,7 +94,7 @@ public class ProbabilityVariable extends DiscreteVariable
     }
 
     /**
-     * Constructor for ProbabilityVariable.
+     * Copy constructor for ProbabilityVariable.
      *
      * @param probVar a probability variable
      */
@@ -155,10 +129,10 @@ public class ProbabilityVariable extends DiscreteVariable
     }
 
     /**
-     * Determine:
+     * Process the variables properties. Determine:
      * <ol>
-     * <li> whether a variable is observed</li>
-     * <li>whether a variable is a explanation variable.</li>
+     * <li> whether a variable is observed </li>
+     * <li> whether a variable is a explanation variable </li>
      * </ol>
      */
     void processProperties()
@@ -296,9 +270,6 @@ public class ProbabilityVariable extends DiscreteVariable
         out.println("</VARIABLE>\n");
     }
 
-    /**
-     * Print method for ProbabilityVariable.
-     */
     @Override
     public void print(PrintStream out)
     {
@@ -348,9 +319,9 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Get the type of the ProbabilityVariable.
      *
-     * @return
+     * @return CHANCE or TRANSPARENT
      */
-    public int getType()
+    public Type getType()
     {
         return type;
     }
@@ -359,7 +330,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Indicate whether the current ProbabilityVariable is an explanatory
      * variable or not.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isExplanation()
     {
@@ -370,7 +341,7 @@ public class ProbabilityVariable extends DiscreteVariable
      * Indicate whether the current ProbabilityVariable has been observed or
      * not.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isObserved()
     {
@@ -395,17 +366,17 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the variable as explanatory with a given value.
      *
-     * @param index Index of the value that is assigned to the variable.
+     * @param valIndex Index of the value that is assigned to the variable.
      */
-    public void setExplanationValue(int index)
+    public void setExplanationValue(int valIndex)
     {
-        explanationIndex = index;
+        explanationIndex = valIndex;
     }
 
     /**
      * Add a property to the current ProbabilityVariable.
      *
-     * @param property
+     * @param property property given as string
      */
     public void addProperty(String property)
     {
@@ -419,7 +390,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Remove a property from the current ProbabilityVariable.
      *
-     * @param property
+     * @param property property given as string
      */
     public void removeProperty(String property)
     {
@@ -434,21 +405,21 @@ public class ProbabilityVariable extends DiscreteVariable
      * Remove a property from the current ProbabilityVariable given the position
      * of the property.
      *
-     * @param index
+     * @param propIndex index of the property
      */
-    public void removeProperty(int index)
+    public void removeProperty(int propIndex)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(index);
+        properties.remove(propIndex);
     }
 
     /**
      * Get the index of the observed value.
      *
-     * @return
+     * @return the index of the observed value
      */
     public int getObservedIndex()
     {
@@ -458,7 +429,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Get the index of the assigned value in the variable.
      *
-     * @return
+     * @return the index of the explanation value
      */
     public int getExplanationIndex()
     {
@@ -468,7 +439,7 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Get the properties.
      *
-     * @return
+     * @return the properties as list of strings
      */
     public ArrayList<String> getProperties()
     {
@@ -486,9 +457,9 @@ public class ProbabilityVariable extends DiscreteVariable
     }
 
     /**
-     * Get an Iterator with the properties.
+     * Get an list with the properties.
      *
-     * @return
+     * @return properties as list of strings
      */
     public ArrayList<String> getEnumeratedProperties()
     {
@@ -527,7 +498,7 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param type
      */
-    public void setType(int type)
+    public void setType(Type type)
     {
         this.type = type;
     }
@@ -540,5 +511,20 @@ public class ProbabilityVariable extends DiscreteVariable
     public void setBayesNet(BayesNet bayesNet)
     {
         this.bayesNet = bayesNet;
+    }
+
+    /**
+     * Enumeration to distinguish types of probability variables.
+     */
+    public enum Type
+    {
+
+        /**
+         * Chance variable.
+         */
+        CHANCE, /**
+         * Transparent variable.
+         */
+        TRANSPARENT
     }
 }

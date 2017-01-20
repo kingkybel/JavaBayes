@@ -49,23 +49,14 @@ public class ConstantDensityBoundedSet
      * object and given constant.
      *
      * @param probFunc probability function
-     * @param kk
+     * @param k        the "size" of the density bounds
      */
-    public ConstantDensityBoundedSet(ProbabilityFunction probFunc, double kk)
+    public ConstantDensityBoundedSet(ProbabilityFunction probFunc, double k)
     {
         super(probFunc);
-        k = kk;
-        if (k <= 0.0)
-        {
-            k = 1.0;
-        }
-        else
-        {
-            if (k < 1.0)
-            {
-                k = 1.0 / k;
-            }
-        }
+
+        // this.k will always be >= 1.0
+        this.k = (k <= 0.0) ? 1.0 : (k < 1.0) ? 1.0 / k : k;
     }
 
     /**
@@ -85,8 +76,8 @@ public class ConstantDensityBoundedSet
      * Obtain the upper probability of an event given the base probability for
      * the event.
      *
-     * @param p
-     * @return
+     * @param p base probability
+     * @return the upper probability for the base
      */
     @Override
     public double getUpperProbabilityFromBase(double p)
@@ -97,12 +88,12 @@ public class ConstantDensityBoundedSet
     /**
      * Get a base probability value for an atom.
      *
-     * @param index
-     * @return
+     * @param index index of the value
+     * @return the atom probability for the base
      */
     @Override
     public double getAtomProbability(int index)
     {
-        return values[index];
+        return getValue(index);
     }
 }

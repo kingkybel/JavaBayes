@@ -36,19 +36,16 @@ class Bracketing
 
     private final static int MAXIMUM_ITERATIONS = 40;
 
-    private enum Status
-    {
-
-        ERROR,
-        TOO_MANY_BISECTIONS,
-        EXACT_ROOT_FOUND,
-        APPROXIMATE_ROOT_FOUND
-    }
-
     Status status;
 
     /**
      * Perform bisection.
+     *
+     * @param function  function that implements the MappingDouble interface
+     * @param x1        first double value
+     * @param x2        second double value
+     * @param xAccuracy accuracy for the calculation
+     * @return bisection value as double
      */
     double perform(MappingDouble function,
                    double x1,
@@ -65,12 +62,12 @@ class Bracketing
     /**
      * Perform bisection.
      *
-     * @param function
-     * @param mappingType
-     * @param x1
-     * @param x2
-     * @param xAccuracy
-     * @return
+     * @param function    function that implements the MappingDouble interface
+     * @param mappingType upper or lower
+     * @param x1          first double value
+     * @param x2          second double value
+     * @param xAccuracy   accuracy for the calculation
+     * @return bisection value as double
      */
     double perform(MappingDouble function,
                    MappingDouble.Type mappingType,
@@ -143,5 +140,11 @@ class Bracketing
 
         status = Status.TOO_MANY_BISECTIONS;
         return 0.0;
+    }
+
+    private enum Status
+    {
+
+        ERROR, TOO_MANY_BISECTIONS, EXACT_ROOT_FOUND, APPROXIMATE_ROOT_FOUND
     }
 }

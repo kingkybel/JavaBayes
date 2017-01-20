@@ -5,6 +5,7 @@
  */
 package BayesianNetworks;
 
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
@@ -15,30 +16,49 @@ import org.junit.Test;
 
 /**
  *
- * @author Dieter J Kybelksties
+ * @author kybelksd
  */
 public class DiscreteVariableTest
 {
 
-    public DiscreteVariableTest()
-    {
-    }
+    private static final Logger LOG =
+                                Logger.getLogger(DiscreteVariableTest.class.
+                                        getName());
 
+    /**
+     * Set up the class for testing.
+     */
     @BeforeClass
     public static void setUpClass()
     {
     }
 
+    /**
+     * Tear down the class after testing.
+     */
     @AfterClass
     public static void tearDownClass()
     {
     }
 
+    /**
+     * Default constructor.
+     */
+    public DiscreteVariableTest()
+    {
+    }
+
+    /**
+     * Set up a test.
+     */
     @Before
     public void setUp()
     {
     }
 
+    /**
+     * Tear down a test.
+     */
     @After
     public void tearDown()
     {
@@ -87,7 +107,7 @@ public class DiscreteVariableTest
          {
              1.1, 2.2, 3.3
         };
-        assertArrayEquals(expectedResult, result.values, 0.00000000000001);
+        assertArrayEquals(expectedResult, result.getValues(), 0.00000000000001);
         instance = new DiscreteVariable("numericValuesTest",
                                         0,
                                         new String[]
@@ -104,7 +124,7 @@ public class DiscreteVariableTest
         {
             0.0, 1.1, 2.2, 3.3, 4.0
         };
-        assertArrayEquals(expectedResult, result.values, 0.00000000000001);
+        assertArrayEquals(expectedResult, result.getValues(), 0.00000000000001);
 
     }
 

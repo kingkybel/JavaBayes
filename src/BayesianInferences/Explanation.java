@@ -84,7 +84,7 @@ public class Explanation
     /**
      * Calculation of an Explanation accordingly to the flag explanationStatus.
      *
-     * @param explanationStatus
+     * @param explanationStatus what to use for explanation
      */
     public void explanation(ExplanationType explanationStatus)
     {
@@ -98,7 +98,7 @@ public class Explanation
     /**
      * Calculation of an Explanation given order.
      *
-     * @param order
+     * @param order order of variables given as array of their names
      */
     public void explanation(String order[])
     {
@@ -108,7 +108,7 @@ public class Explanation
     /**
      * Calculation of a full Explanation given order.
      *
-     * @param order
+     * @param order order of variables given as array of their names
      */
     public void fullExplanation(String order[])
     {
@@ -118,8 +118,8 @@ public class Explanation
     /**
      * Calculation of an Explanation accordingly to the flag explanationStatus.
      *
-     * @param order
-     * @param explanationStatus
+     * @param order             order of variables given as array of their names
+     * @param explanationStatus what to use for explanation
      */
     public void explanation(String order[],
                             ExplanationType explanationStatus)
@@ -160,7 +160,8 @@ public class Explanation
     /**
      * Print Explanation.
      *
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(boolean shouldPrintBucketTree)
     {
@@ -171,8 +172,8 @@ public class Explanation
      * Print Explanation.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree flag to indicate whether or not the bucket
-     *                              tree should be printed
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {

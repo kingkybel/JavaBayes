@@ -41,15 +41,8 @@ public class DiscreteFunction
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    /**
-     *
-     */
-    protected DiscreteVariable variables[];
-
-    /**
-     *
-     */
-    protected double values[];
+    private DiscreteVariable variables[];
+    private double values[];
 
     /**
      * Default constructor for a DiscreteFunction.
@@ -61,8 +54,8 @@ public class DiscreteFunction
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param numberOfVars   Number of variables in the function.
-     * @param numberOfValues Number of values in the function.
+     * @param numberOfVars   number of variables in the function
+     * @param numberOfValues number of values in the function
      */
     public DiscreteFunction(int numberOfVars, int numberOfValues)
     {
@@ -73,30 +66,30 @@ public class DiscreteFunction
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param variables An array of ProbabilityVariable objects.
-     * @param values    An array of values for the function.
+     * @param variables  an array of ProbabilityVariable objects
+     * @param funcValues the values of the function as array of doubles
      */
-    public DiscreteFunction(DiscreteVariable variables[], double values[])
+    public DiscreteFunction(DiscreteVariable variables[], double funcValues[])
     {
         this.variables = variables;
-        this.values = values;
+        this.values = funcValues;
     }
 
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param variables list of ProbabilityVariable objects.
-     * @param values    An array of values for the function.
+     * @param variables  list of ProbabilityVariable objects.
+     * @param funcValues the values of the function as array of doubles
      */
     public DiscreteFunction(ArrayList<DiscreteVariable> variables,
-                            double values[])
+                            double funcValues[])
     {
         this.variables = new DiscreteVariable[variables.size()];
         for (int i = 0; i < variables.size(); i++)
         {
             this.variables[i] = variables.get(i);
         }
-        this.values = values;
+        this.values = funcValues;
     }
 
     /**
@@ -124,8 +117,8 @@ public class DiscreteFunction
      * Method that determines whether a DiscreteFunction has exactly the same
      * DiscreteVariable's as with the current DiscreteFunction.
      *
-     * @param discrFunc DiscreteFunction to be compared with the current
-     *                  DiscreteFunction.
+     * @param discrFunc discrete function to be compared with the current
+     *                  discrete function.
      * @return true if so, false otherwise
      */
     boolean sameVariables(DiscreteFunction discrFunc)
@@ -151,14 +144,14 @@ public class DiscreteFunction
      * function to be evaluated, assuming an array of DiscreteVariable objects
      * is present.
      *
-     * @param variables    The array of DiscreteVariable objects that is used to
-     *                     compute the position indicated by the markers.
-     * @param valueIndexes The markers.
-     * @return
+     * @param variables    the array of DiscreteVariable objects that is used to
+     *                     compute the position indicated by the markers
+     * @param valueIndexes the markers
+     * @return the evaluated double value
      */
     public double evaluate(DiscreteVariable variables[], int valueIndexes[])
     {
-        int valuePos = getPositionFromIndexes(variables, valueIndexes);
+        int valuePos = findPositionOfProbabilityValue(variables, valueIndexes);
         return values[valuePos];
     }
 
@@ -166,12 +159,12 @@ public class DiscreteFunction
      * Get position in a function from a (possibly partial) instantiation of
      * variables through the indexes.
      *
-     * @param probVar
-     * @param variableIndexes
-     * @return
+     * @param probVar         a probability variable
+     * @param variableIndexes index array of the variables
+     * @return the index of the probability value in the function
      */
-    public int getPositionFromIndexes(DiscreteVariable probVar[],
-                                      int variableIndexes[])
+    public int findPositionOfProbabilityValue(DiscreteVariable probVar[],
+                                              int variableIndexes[])
     {
         int k, pos = 0, jump = 1;
         for (int i = (numberVariables() - 1); i >= 0; i--)
@@ -186,26 +179,26 @@ public class DiscreteFunction
     /**
      * Sum out some variables in the function.
      *
-     * @param newVariables
-     * @param markers      A boolean vector indicating which variables are to be
-     *                     summed out. If markers[i] is true, then the i'th
-     *                     variable is to be summed out; if markers[i] is false,
-     *                     the i'th variable is not to be summed out.
-     * @return
+     * @param variableArray an array containing some of the variables
+     * @param markers       A boolean vector indicating which variables are to
+     *                      be summed out. If markers[i] is true, then the i'th
+     *                      variable is to be summed out; if markers[i] is
+     *                      false, the i'th variable is not to be summed out.
+     * @return the resulting summed out discrete function
      */
-    public DiscreteFunction sumOut(DiscreteVariable newVariables[],
+    public DiscreteFunction sumOut(DiscreteVariable variableArray[],
                                    boolean markers[])
     {
         int i, j, k, current;
 
         // Initialize the indexes and the maximum length for all ProbabilityVariable
         // objects. This is used to circle through all the values in the newDf.
-        int indexes[] = new int[newVariables.length];
-        int valueLengths[] = new int[newVariables.length];
-        for (i = 0; i < newVariables.length; i++)
+        int indexes[] = new int[variableArray.length];
+        int valueLengths[] = new int[variableArray.length];
+        for (i = 0; i < variableArray.length; i++)
         {
             indexes[i] = 0;
-            valueLengths[i] = newVariables[i].numberValues();
+            valueLengths[i] = variableArray[i].numberValues();
         }
 
         // Collect some information used to construct the newDf.
@@ -279,7 +272,7 @@ public class DiscreteFunction
             { // Go through all values to be summed out.
 
                 // Do the summation for each value of the newDf.
-                valueSum += evaluate(newVariables, indexes);
+                valueSum += evaluate(variableArray, indexes);
 
                 // Increment the last index to be summed out.
                 indexes[indexForVariablesToSumOut[lastIndexForVariablesToSumOut]]++;
@@ -326,7 +319,7 @@ public class DiscreteFunction
      *
      * @param variables     array of discrete variables
      * @param multDiscrFunc a discrete function
-     * @return
+     * @return the resulting discrete function
      */
     public DiscreteFunction multiply(DiscreteVariable variables[],
                                      DiscreteFunction multDiscrFunc)
@@ -513,7 +506,7 @@ public class DiscreteFunction
      *
      * @return number of variables
      */
-    public int numberVariables()
+    public final int numberVariables()
     {
         return variables.length;
     }
@@ -523,7 +516,7 @@ public class DiscreteFunction
      *
      * @return number of values
      */
-    public int numberValues()
+    public final int numberValues()
     {
         return values.length;
     }
@@ -533,9 +526,19 @@ public class DiscreteFunction
      *
      * @return array of all variables
      */
-    public DiscreteVariable[] getVariables()
+    public final DiscreteVariable[] getVariables()
     {
         return variables;
+    }
+
+    /**
+     * Get the variables in the current DiscreteFunction.
+     *
+     * @param variables array of all variables
+     */
+    public final void setVariables(DiscreteVariable[] variables)
+    {
+        this.variables = variables;
     }
 
     /**
@@ -545,7 +548,7 @@ public class DiscreteFunction
      *              DiscreteVariable objects.
      * @return the variable at index
      */
-    public DiscreteVariable getVariable(int index)
+    public final DiscreteVariable getVariable(int index)
     {
         return variables[index];
     }
@@ -554,9 +557,9 @@ public class DiscreteFunction
      * Get an array with all the indexes of the DiscreteVariable objects in the
      * current DiscreteFunction.
      *
-     * @return
+     * @return the indices as integer array
      */
-    public int[] getIndexes()
+    public final int[] getIndexes()
     {
         int ind[] = new int[numberVariables()];
         for (int i = 0; i < ind.length; i++)
@@ -567,22 +570,31 @@ public class DiscreteFunction
     }
 
     /**
-     * Get a DiscreteVariable object with a particular index.
+     * Get the (member-)index of a variable given the index of that variable in
+     * the collection of variables.
      *
      * @param varIndex index of the desired DiscreteVariable.
-     * @return
+     * @return the member index
      */
-    public int getIndex(int varIndex)
+    public final int getIndex(int varIndex)
     {
+//        LOGGER.log(Level.INFO,
+//                   "in DiscreteFunction.getIndex(int varIndex={0}): variables[{1}].index={2}",
+//                   new Object[]
+//                   {
+//                       varIndex,
+//                       varIndex,
+//                       variables[varIndex].index
+//                   });
         return variables[varIndex].index;
     }
 
     /**
      * Get all values of the current DiscreteFunction.
      *
-     * @return
+     * @return the probability values as double array
      */
-    public double[] getValues()
+    public final double[] getValues()
     {
         return values;
     }
@@ -594,7 +606,7 @@ public class DiscreteFunction
      * @param valIndex value index
      * @return the value at the index
      */
-    public double getValue(int valIndex)
+    public final double getValue(int valIndex)
     {
         return values[valIndex];
     }
@@ -606,7 +618,7 @@ public class DiscreteFunction
      * @param index position of the value.
      * @param value new value.
      */
-    public void setValue(int index, double value)
+    public final void setValue(int index, double value)
     {
         values[index] = value;
     }
@@ -614,11 +626,11 @@ public class DiscreteFunction
     /**
      * Set the values in the DiscreteFunction.
      *
-     * @param values the new values
+     * @param funcValues the values of the function as array of doubles
      */
-    public void setValues(double values[])
+    public final void setValues(double funcValues[])
     {
-        this.values = values;
+        this.values = funcValues;
     }
 
     /**
@@ -628,7 +640,7 @@ public class DiscreteFunction
      * @param index    The position of the value.
      * @param discrVar the new discrete variable
      */
-    public void setVariable(int index, DiscreteVariable discrVar)
+    public final void setVariable(int index, DiscreteVariable discrVar)
     {
         variables[index] = discrVar;
     }

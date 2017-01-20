@@ -177,12 +177,6 @@ public class EditorFrame extends Frame
         setSize(d);
     }
 
-    /**
-     * Handle the possible destruction of the window.
-     *
-     * @param evt
-     * @return
-     */
     @Override
     public boolean handleEvent(Event evt)
     {
@@ -197,13 +191,6 @@ public class EditorFrame extends Frame
         return super.handleEvent(evt);
     }
 
-    /**
-     * Handle button events.
-     *
-     * @param evt
-     * @param arg
-     * @return
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {
@@ -255,7 +242,7 @@ public class EditorFrame extends Frame
      * Open a file and read the network in it.
      *
      * @param filename
-     * @return
+     * @return true if successful, false otherwise
      */
     public boolean open(String filename)
     {
@@ -288,8 +275,8 @@ public class EditorFrame extends Frame
     /**
      * Open a URL and read the network in it.
      *
-     * @param filename
-     * @return
+     * @param filename name of the file describing the network
+     * @return true if successful, false otherwise
      */
     public boolean openUrl(String filename)
     {
@@ -315,7 +302,7 @@ public class EditorFrame extends Frame
     /**
      * Save the network.
      *
-     * @return
+     * @return true if successful, false otherwise
      */
     public boolean save()
     {
@@ -326,7 +313,7 @@ public class EditorFrame extends Frame
      * Save the network.
      *
      * @param filename
-     * @return
+     * @return true if successful, false otherwise
      */
     public boolean save(String filename)
     {
@@ -534,7 +521,7 @@ public class EditorFrame extends Frame
     /**
      * Get the InferenceGraph in the NetworkPanel.
      *
-     * @return
+     * @return the InferenceGraph
      */
     public InferenceGraph getInferenceGraph()
     {
@@ -602,7 +589,7 @@ public class EditorFrame extends Frame
     /**
      * Return the mode.
      *
-     * @return
+     * @return the mode
      */
     public ExplanationType getMode()
     {
@@ -612,7 +599,7 @@ public class EditorFrame extends Frame
     /**
      * Get the current filename for saving.
      *
-     * @return
+     * @return the current filename
      */
     public String getCurrentSaveFilename()
     {
@@ -622,11 +609,11 @@ public class EditorFrame extends Frame
     /**
      * Set the current filename for saving.
      *
-     * @param csf
+     * @param currentSaveFilename new save filename
      */
-    public void setCurrentSaveFilename(String csf)
+    public void setCurrentSaveFilename(String currentSaveFilename)
     {
-        currentSaveFilename = csf;
+        this.currentSaveFilename = currentSaveFilename;
     }
 
     /**

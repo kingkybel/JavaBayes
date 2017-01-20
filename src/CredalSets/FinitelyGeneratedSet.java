@@ -44,15 +44,16 @@ abstract class FinitelyGeneratedSet
      */
     FinitelyGeneratedSet()
     {
+        super();
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      *
-     * @param bayesNet
-     * @param numberOfVars
-     * @param numberOfValues
-     * @param properties
+     * @param bayesNet       the underlying Bayesian network
+     * @param numberOfVars   number of variables in the function
+     * @param numberOfValues number of values in the function
+     * @param properties     string list of properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          int numberOfVars,
@@ -65,23 +66,24 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      *
-     * @param bayesNet
+     * @param bayesNet      the underlying Bayesian network
      * @param variables
-     * @param values
-     * @param lowerEnvelope
-     * @param upperEnvelope
-     * @param properties
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
+     * @param upperEnvelope the upper envelope as array of doubles
+     * @param lowerEnvelope the lower envelope as array of doubles
+     * @param properties    string list of properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          DiscreteVariable variables[],
-                         double values[],
+                         double probValues[],
                          double lowerEnvelope[],
                          double upperEnvelope[],
                          ArrayList<String> properties)
     {
         super(bayesNet,
               variables,
-              values,
+              probValues,
               lowerEnvelope,
               upperEnvelope,
               properties);
@@ -90,19 +92,20 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      *
-     * @param bayesNet
+     * @param bayesNet   the underlying Bayesian network
      * @param variables
-     * @param values
-     * @param properties
+     * @param probValues the probability values of the function as array of
+     *                   doubles
+     * @param properties string list of properties
      */
     FinitelyGeneratedSet(BayesNet bayesNet,
                          DiscreteVariable variables[],
-                         double values[],
+                         double probValues[],
                          ArrayList<String> properties)
     {
         this(bayesNet,
              variables,
-             values,
+             probValues,
              (double[]) null,
              (double[]) null,
              properties);
@@ -112,26 +115,28 @@ abstract class FinitelyGeneratedSet
      * Constructor for FinitelyGeneratedSet.
      *
      * @param discrFunc
-     * @param values
+     * @param probValues    the probability values of the function as array of
+     *                      doubles
      * @param lowerEnvelope
      * @param upperEnvelope
      */
     FinitelyGeneratedSet(DiscreteFunction discrFunc,
-                         double values[],
+                         double probValues[],
                          double lowerEnvelope[],
                          double upperEnvelope[])
     {
-        super(discrFunc, values, lowerEnvelope, upperEnvelope);
+        super(discrFunc, probValues, lowerEnvelope, upperEnvelope);
     }
 
     /**
      * Constructor for FinitelyGeneratedSet.
      *
      * @param discrFunc
-     * @param values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
-    FinitelyGeneratedSet(DiscreteFunction discrFunc, double values[])
+    FinitelyGeneratedSet(DiscreteFunction discrFunc, double probValues[])
     {
-        super(discrFunc, values, (double[]) null, (double[]) null);
+        super(discrFunc, probValues, (double[]) null, (double[]) null);
     }
 }

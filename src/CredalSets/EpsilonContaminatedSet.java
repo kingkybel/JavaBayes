@@ -53,7 +53,7 @@ public class EpsilonContaminatedSet
     public EpsilonContaminatedSet(ProbabilityFunction probFunc, double epsilon)
     {
         super(probFunc, probFunc.getValues());
-        this.epsilon = ((epsilon < 0.0) || (epsilon > 1.0)) ? 0.0 : epsilon;
+        this.epsilon = (epsilon < 0.0) || (epsilon > 1.0) ? 0.0 : epsilon;
     }
 
     /**
@@ -62,7 +62,7 @@ public class EpsilonContaminatedSet
      * values in the EpsilonContaminated are actually unnormalized --- if not,
      * incorrect results are produced.
      *
-     * @return
+     * @return he calculated probability function
      */
     public ProbabilityFunction posteriorMarginal()
     {
@@ -73,13 +73,13 @@ public class EpsilonContaminatedSet
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             for (int i = 0; i < numberValues(); i++)
             {
-                lowerValues[i] = values[i];
-                upperValues[i] = values[i];
+                lowerValues[i] = getValue(i);
+                upperValues[i] = getValue(i);
             }
         } // Else, apply the marginalization property.
         else
@@ -87,25 +87,25 @@ public class EpsilonContaminatedSet
             double summation = 0.0;
             for (int i = 0; i < numberValues(); i++)
             {
-                summation += values[i];
+                summation += getValue(i);
             }
 
             for (int i = 0; i < numberValues(); i++)
             {
-                lowerValues[i] = (oneMinusEpsilon * values[i]) /
+                lowerValues[i] = (oneMinusEpsilon * getValue(i)) /
                                  ((oneMinusEpsilon * summation) + epsilon);
             }
 
             for (int i = 0; i < numberValues(); i++)
             {
-                upperValues[i] = ((oneMinusEpsilon * values[i]) + epsilon) /
+                upperValues[i] = ((oneMinusEpsilon * getValue(i)) + epsilon) /
                                  ((oneMinusEpsilon * summation) + epsilon);
             }
         }
 
         return new QBProbabilityFunction(bayesNet,
-                                         variables,
-                                         values,
+                                         getVariables(),
+                                         getValues(),
                                          lowerValues,
                                          upperValues,
                                          properties);
@@ -114,8 +114,8 @@ public class EpsilonContaminatedSet
     /**
      * Perform calculation of expected value.
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc discrete function
+     * @return double array of the expected values
      */
     public double[] expectedValues(DiscreteFunction discrFunc)
     {
@@ -124,12 +124,12 @@ public class EpsilonContaminatedSet
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             results[0] =
             discrFunc.getValue(
-                    ((ProbabilityVariable) variables[0]).getObservedIndex());
+                    ((ProbabilityVariable) getVariable(0)).getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else
@@ -138,7 +138,7 @@ public class EpsilonContaminatedSet
             double uTotal = 0.0;
             for (int i = 0; i < numberValues(); i++)
             {
-                uTotal += discrFunc.getValue(i) * values[i];
+                uTotal += discrFunc.getValue(i) * getValue(i);
             }
             // Obtain the maximum and minimum of functions
             double maxDfValue = discrFunc.getValue(0);
@@ -167,8 +167,8 @@ public class EpsilonContaminatedSet
      * probability values are not normalised; probability values are p(x, e)
      * where e is the fixed evidence.
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc discrete function
+     * @return double array of the posterior expected values
      */
     public double[] posteriorExpectedValues(DiscreteFunction discrFunc)
     {
@@ -177,12 +177,12 @@ public class EpsilonContaminatedSet
 
         // Check the possibility that the query has an observed variable,
         // in which case the marginalization property does not apply.
-        if ((variables[0] instanceof ProbabilityVariable) &&
-            (((ProbabilityVariable) variables[0]).isObserved() == true))
+        if ((getVariable(0) instanceof ProbabilityVariable) &&
+            (((ProbabilityVariable) getVariable(0)).isObserved() == true))
         {
             results[0] =
             discrFunc.getValue(
-                    ((ProbabilityVariable) variables[0]).getObservedIndex());
+                    ((ProbabilityVariable) getVariable(0)).getObservedIndex());
             results[1] = results[0];
         } // Else, apply the marginalization property.
         else
@@ -192,8 +192,8 @@ public class EpsilonContaminatedSet
             double uTotal = 0.0;
             for (int i = 0; i < numberValues(); i++)
             {
-                pTotal += values[i];
-                uTotal += discrFunc.getValue(i) * values[i];
+                pTotal += getValue(i);
+                uTotal += discrFunc.getValue(i) * getValue(i);
             }
             // Obtain the maximum and minimum of functions
             double maxDfValue = discrFunc.getValue(0);

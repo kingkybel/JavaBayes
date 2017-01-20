@@ -245,7 +245,8 @@ public class Inference
     /**
      * Print the Inference.
      *
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(boolean shouldPrintBucketTree)
     {
@@ -256,8 +257,8 @@ public class Inference
      * Print the Inference.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree whether or not the bucket tree should be
-     *                              printed
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {
@@ -348,8 +349,8 @@ public class Inference
      * Print the bucket tree is required.
      *
      * @param out                   output stream to print to
-     * @param shouldPrintBucketTree whether or not the bucket tree needs to be
-     *                              printed
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     void printBucketTree(PrintStream out, boolean shouldPrintBucketTree)
     {

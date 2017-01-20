@@ -82,9 +82,9 @@ public class DiscreteVariable
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param name   Name of the variable.
-     * @param index  Index of the variable.
-     * @param values Values of the variable.
+     * @param name   name of the variable
+     * @param index  index of the variable
+     * @param values values the variable can assume as string array
      */
     public DiscreteVariable(String name, int index, String values[])
     {
@@ -134,7 +134,8 @@ public class DiscreteVariable
      * translation fails for a particular value, that value is replaced by its
      * index.
      *
-     * @return
+     * @return a new discrete function where the enumerated values are replaced
+     *         by the number equivalent
      */
     public DiscreteFunction getNumericValues()
     {
@@ -198,7 +199,7 @@ public class DiscreteVariable
     /**
      * Get the name of the current DiscreteVariable.
      *
-     * @return
+     * @return the name of the variable
      */
     public String getName()
     {
@@ -208,17 +209,17 @@ public class DiscreteVariable
     /**
      * Set the name of the current DiscreteVariable.
      *
-     * @param n
+     * @param name the new name to set
      */
-    public void setName(String n)
+    public void setName(String name)
     {
-        name = n;
+        this.name = name;
     }
 
     /**
      * Get the index of the current DiscreteVariable.
      *
-     * @return
+     * @return (member-)index of the variable
      */
     public int getIndex()
     {
@@ -228,7 +229,7 @@ public class DiscreteVariable
     /**
      * Return the number of values in the current DiscreteVariable.
      *
-     * @return
+     * @return the number of values
      */
     public int numberValues()
     {
@@ -242,7 +243,7 @@ public class DiscreteVariable
     /**
      * Get the values of the current DiscreteVariable.
      *
-     * @return
+     * @return the value-names as array of stings
      */
     public String[] getValues()
     {
@@ -252,7 +253,7 @@ public class DiscreteVariable
     /**
      * Set the values of the current DiscreteVariable.
      *
-     * @param values
+     * @param values values the variable can assume as string array
      */
     public void setValues(String values[])
     {
@@ -262,9 +263,9 @@ public class DiscreteVariable
     /**
      * Get a value of the current DiscreteVariable.
      *
-     * @param index Position of the value in the array of values.
+     * @param index position of the value in the array of values.
      *
-     * @return
+     * @return the value at the index
      */
     public String getValue(int index)
     {

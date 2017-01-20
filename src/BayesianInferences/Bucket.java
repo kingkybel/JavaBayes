@@ -79,9 +79,8 @@ class Bucket
      * Simple constructor for Bucket. Default behavior is not to build the
      * distributions for clusters of variables.
      *
-     * @param bucketTree The BucketTree that holds the bucket.
-     * @param probVar    a probability variable The bucket variable for the
-     *                   Bucket.
+     * @param bucketTree the BucketTree that holds the bucket.
+     * @param probVar    a probability variable (bucket variable) for the bucket
      */
     Bucket(BucketTree bucketTree, ProbabilityVariable probVar)
     {
@@ -271,7 +270,7 @@ class Bucket
                 bucketTree.bayesNet.getProbabilityVariables(),
                 indexes);
             }
-            int valuePos = newDf.getPositionFromIndexes(
+            int valuePos = newDf.findPositionOfProbabilityValue(
                 bucketTree.bayesNet.getProbabilityVariables(),
                 indexes);
             newDf.setValue(valuePos, combinedVal);
@@ -384,7 +383,7 @@ class Bucket
     /**
      * Join the indexes of the Bucket by marking the variable markers with true.
      *
-     * @param variableMarkers
+     * @param variableMarkers boolean array to mark indices of variables
      * @return the number of joined Indices
      */
     private int joinIndexes(boolean variableMarkers[])
@@ -466,8 +465,8 @@ class Bucket
      * Construct an array of variables that contains the variables in a new
      * function; if the bucket variable is present, it is the first variable.
      *
-     * @param numberOfValues
-     * @param joinedIndexes
+     * @param numberOfValues           number of values in the function
+     * @param joinedIndexes            array of indices of joined variables
      * @param isBucketVariableIncluded whether or not to include the bucket
      *                                 variable
      */
@@ -516,9 +515,9 @@ class Bucket
      * Obtain the values for the reducedFunction. Attention: the array
      * orderedDfs is supposed to be ready!
      *
-     * @param newDf new function
+     * @param newDiscrFunc new function
      */
-    private void sumOut(DiscreteFunction newDf)
+    private void sumOut(DiscreteFunction newDiscrFunc)
     {
         DiscreteVariable discrVars[];
         int i, j, k, l, m, current;
@@ -541,10 +540,10 @@ class Bucket
         }
 
         // Auxiliary variable to hold last valid index.
-        int lastValidIndex = newDf.numberVariables() - 1;
+        int lastValidIndex = newDiscrFunc.numberVariables() - 1;
 
         // Do the whole summation.
-        for (i = 0; i < newDf.numberValues(); i++)
+        for (i = 0; i < newDiscrFunc.numberValues(); i++)
         { // Compute all values of the newDf.
             double summedUpValue = 0.0;
             for (l = 0; l < numVals; l++)
@@ -559,7 +558,7 @@ class Bucket
                 }
                 if (isProducingClusters)
                 { // If necessary, insert value in the clusterFunc.
-                    int valuePosCluster = clusterFunc.getPositionFromIndexes(
+                    int valuePosCluster = clusterFunc.findPositionOfProbabilityValue(
                         discrVars,
                         indexes);
                     clusterFunc.setValue(valuePosCluster, partialValue);
@@ -569,19 +568,20 @@ class Bucket
                 summedUpValue += partialValue;
             }
             // Insert the summation for the value of newDf into newDf.
-            int valuePos = newDf.getPositionFromIndexes(discrVars, indexes);
-            newDf.setValue(valuePos, summedUpValue);
+            int valuePos = newDiscrFunc.findPositionOfProbabilityValue(discrVars,
+                                                               indexes);
+            newDiscrFunc.setValue(valuePos, summedUpValue);
 
             // Update the indexes.
-            indexes[newDf.getIndex(lastValidIndex)]++; // Increment the last index.
+            indexes[newDiscrFunc.getIndex(lastValidIndex)]++; // Increment the last index.
             for (j = lastValidIndex; j > 0; j--)
             { // Now do the updating of all indexes.
-                current = newDf.getIndex(j);
+                current = newDiscrFunc.getIndex(j);
                 if (indexes[current] >= valueLengths[current])
                 { // If overflow in an index,
                     indexes[current] = 0;
                     // then update the next index.
-                    indexes[newDf.getIndex(j - 1)]++;
+                    indexes[newDiscrFunc.getIndex(j - 1)]++;
                 }
                 else
                 {
@@ -595,9 +595,9 @@ class Bucket
      * Obtain the values for the reducedFunction through maximisation.
      * Attention: the array orderedDfs is supposed to be ready!
      *
-     * @param newDf new function
+     * @param newDiscrFunc new function
      */
-    private void maxOut(DiscreteFunction newDf)
+    private void maxOut(DiscreteFunction newDiscrFunc)
     {
         int i, j, k, lowerIndex, upperIndex, last, current;
         int numberOfVals = probVar.numberValues();
@@ -607,7 +607,7 @@ class Bucket
         double highValue;
 
         // Initialize some necessary values
-        createBackwardPointers(newDf);
+        createBackwardPointers(newDiscrFunc);
         for (i = 0; i < bucketTree.bayesNet.numberVariables(); i++)
         {
             indexes[i] = 0;
@@ -616,8 +616,8 @@ class Bucket
         }
 
         // Run through all the values of the bucket variable
-        last = newDf.numberVariables() - 1;
-        for (i = 0; i < newDf.numberValues(); i++)
+        last = newDiscrFunc.numberVariables() - 1;
+        for (i = 0; i < newDiscrFunc.numberValues(); i++)
         {
             highValue = 0.0;
             upperIndex = BayesNet.INVALID_INDEX;
@@ -640,20 +640,20 @@ class Bucket
                 }
             }
             // Update functions
-            int valuePos = newDf.getPositionFromIndexes(
+            int valuePos = newDiscrFunc.findPositionOfProbabilityValue(
                 bucketTree.bayesNet.getProbabilityVariables(), indexes);
-            newDf.setValue(valuePos, highValue);
+            newDiscrFunc.setValue(valuePos, highValue);
             backwardPointers.setValue(valuePos, (double) upperIndex);
 
             // Update the indexes
-            indexes[newDf.getIndex(last)]++;
+            indexes[newDiscrFunc.getIndex(last)]++;
             for (j = last; j > 0; j--)
             {
-                current = newDf.getIndex(j);
+                current = newDiscrFunc.getIndex(j);
                 if (indexes[current] >= valueLengths[current])
                 {
                     indexes[current] = 0;
-                    indexes[newDf.getIndex(j - 1)]++;
+                    indexes[newDiscrFunc.getIndex(j - 1)]++;
                 }
                 else
                 {
@@ -666,22 +666,22 @@ class Bucket
     /**
      * Allocate and initialise the backwardPointers in the Bucket.
      *
-     * @param newDf new function
+     * @param newDiscrFunc new function
      */
-    private void createBackwardPointers(DiscreteFunction newDf)
+    private void createBackwardPointers(DiscreteFunction newDiscrFunc)
     {
         int i;
         DiscreteVariable newDfVariables[] =
-                           new DiscreteVariable[newDf.numberVariables()];
-        double newDfValues[] = new double[newDf.numberValues()];
+                           new DiscreteVariable[newDiscrFunc.numberVariables()];
+        double newDfValues[] = new double[newDiscrFunc.numberValues()];
 
-        for (i = 0; i < newDf.numberVariables(); i++)
+        for (i = 0; i < newDiscrFunc.numberVariables(); i++)
         {
-            newDfVariables[i] = newDf.getVariable(i);
+            newDfVariables[i] = newDiscrFunc.getVariable(i);
         }
-        for (i = 0; i < newDf.numberValues(); i++)
+        for (i = 0; i < newDiscrFunc.numberValues(); i++)
         {
-            newDfValues[i] = newDf.getValue(i);
+            newDfValues[i] = newDiscrFunc.getValue(i);
         }
         backwardPointers = new DiscreteFunction(newDfVariables, newDfValues);
     }

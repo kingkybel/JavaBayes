@@ -223,7 +223,7 @@ public class Expectation
     /**
      * Perform calculation of expectation given order.
      *
-     * @param order
+     * @param order order of variables given as array of their names
      */
     public void expectation(String order[])
     {
@@ -280,7 +280,7 @@ public class Expectation
      * Calculation of expectation given order.
      *
      * @param moment
-     * @param order
+     * @param order  order of variables given as array of their names
      */
     public void expectation(Type moment, String order[])
     {
@@ -301,7 +301,7 @@ public class Expectation
      * Do the Expectation, assuming the input DiscreteFunction is a function
      * only of the queried variable.
      *
-     * @param discrFunc
+     * @param discrFunc discrete function of the queried variable
      */
     public void expectation(DiscreteFunction discrFunc)
     {
@@ -313,8 +313,8 @@ public class Expectation
      * Do the Expectation, assuming the input DiscreteFunction is a function
      * only of the queried variable.
      *
-     * @param discrFunc
-     * @param queriedVariableName
+     * @param discrFunc           discrete function of the queried variable
+     * @param queriedVariableName the queried variable
      */
     public void expectation(DiscreteFunction discrFunc,
                             String queriedVariableName)
@@ -327,8 +327,8 @@ public class Expectation
      * Do the Expectation given order, assuming the input DiscreteFunction is a
      * function only of the queried variable.
      *
-     * @param discrFunc
-     * @param order
+     * @param discrFunc discrete function of the queried variable
+     * @param order     order of variables given as array of their names
      */
     public void expectation(DiscreteFunction discrFunc, String order[])
     {
@@ -360,9 +360,9 @@ public class Expectation
     }
 
     /**
-     * Do the expectations discrFunc inference.
+     * Do the expectations function's inference.
      *
-     * @param discrFunc
+     * @param discrFunc discrete function of the queried variable
      */
     protected void doExpectationFromInference(DiscreteFunction discrFunc)
     {
@@ -394,7 +394,8 @@ public class Expectation
     /**
      * Print Expectation.
      *
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(boolean shouldPrintBucketTree)
     {
@@ -405,7 +406,8 @@ public class Expectation
      * Print Expectation.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {

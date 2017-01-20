@@ -47,8 +47,9 @@ public enum ExplanationType
 
     /**
      * I
+     * Check whether no explanation is required.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isIgnore()
     {
@@ -56,8 +57,9 @@ public enum ExplanationType
     }
 
     /**
+     * Check whether marked variables only should be used for explanation.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean usesMarkedVariablesOnly()
     {
@@ -65,8 +67,9 @@ public enum ExplanationType
     }
 
     /**
+     * Check whether all not observed variables should be used for explanation.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean usesAllNotObservedVariables()
     {
@@ -74,8 +77,9 @@ public enum ExplanationType
     }
 
     /**
+     * Check whether expectation should be calculated.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isExpectation()
     {
@@ -83,8 +87,9 @@ public enum ExplanationType
     }
 
     /**
+     * Check whether marginal posterior should be calculated.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isMarginalPosterior()
     {
@@ -92,8 +97,9 @@ public enum ExplanationType
     }
 
     /**
+     * Check whether sensitivity analysis should be calculated.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean isSensitivityAnalysis()
     {
@@ -113,8 +119,10 @@ public enum ExplanationType
     }
 
     /**
+     * Get a list of valid explanation type choices for GUIs. IGNORE can be left
+     * out, for example, as it is not a valid choice for calculation.
      *
-     * @return
+     * @return valid choices as array
      */
     public static ExplanationType[] validChoices()
     {

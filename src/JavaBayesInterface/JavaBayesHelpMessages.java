@@ -66,6 +66,9 @@ public class JavaBayesHelpMessages
                                "click on the JavaBayes editor, or load a network using\n" +
                                "the Network->Open menu.\n\n";
 
+    /**
+     *
+     */
     public static final String createMessage =
                                "To create a new node, click the mouse button once\n" +
                                "on the area above.\n" +
@@ -74,59 +77,120 @@ public class JavaBayesHelpMessages
                                "To edit node attributes, click on Edit button.\n" +
                                "To move or delete nodes, click on appropriate button.\n\n";
 
+    /**
+     *
+     */
     public static final String moveMessage =
                                "To move a node, click on it and drag it to the new position.\n\n";
 
+    /**
+     *
+     */
     public static final String deleteMessage =
                                "To delete a node, click on it.\n" +
                                "To delete an arrow, click on the arrow's head.\n\n";
 
+    /**
+     *
+     */
     public static final String editMessage =
                                "To edit attributes of a node, click on it.\n\n";
 
+    /**
+     *
+     */
     public static final String observeMessage =
                                "To observe a node, click on it.\n\n";
 
+    /**
+     *
+     */
     public static final String queryMessage =
                                "To query on a particular node, click on it.\n\n";
 
     // Error and exception messages
-    public static final String unexpectedEndOfInput =
+
+    /**
+     *
+     */
+        public static final String unexpectedEndOfInput =
                                "Unable to complete load: Unexpected end of input!\n\n";
 
+    /**
+     *
+     */
     public static final String incorrectFileFormat =
                                "Unable to complete load: Incorrect file format.\n\n";
 
+    /**
+     *
+     */
     public static final String unableReadFile = "Unable to read file!\n\n";
 
+    /**
+     *
+     */
     public static final String unableGenerateParentsDialog =
                                "Unable to generate parent values dialog!\n\n";
 
+    /**
+     *
+     */
     public static final String duplicateValues = "Duplicate value!\n\n";
 
+    /**
+     *
+     */
     public static final String nodeNameChangeFailed =
                                "Node name change failed.\n\n";
 
+    /**
+     *
+     */
     public static final String noValueToReplace = "No new value to replace!\n\n";
 
+    /**
+     *
+     */
     public static final String noValueSelectedToReplace =
                                "No value selected for replace!\n\n";
 
+    /**
+     *
+     */
     public static final String noValueToAdd = "No value to add!\n\n";
 
+    /**
+     *
+     */
     public static final String noValueSelectedToDelete =
                                "No value selected for delete!\n\n";
 
+    /**
+     *
+     */
     public static final String observeError =
                                "No value selected for Observe!\n\n";
 
+    /**
+     *
+     */
     public static final String notnode = "Please click on a node.\n\n";
 
+    /**
+     *
+     */
     public static final String maxnodes =
                                "Reached limit on maximum number of nodes.\n\n";
 
+    /**
+     *
+     */
     public static final String selfarc = "Can not create arc to self.\n\n";
 
+    /**
+     *
+     */
     public static final String circular =
                                "Circular parent relations not allowed.\n\n";
 

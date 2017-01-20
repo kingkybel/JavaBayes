@@ -58,8 +58,9 @@ public class IFBayesNet
     }
 
     /**
+     * Retrieve the name of the Bayes net.
      *
-     * @return
+     * @return the name
      */
     public String getName()
     {
@@ -69,7 +70,7 @@ public class IFBayesNet
     /**
      * Retrieve the properties as String list.
      *
-     * @return
+     * @return the properties
      */
     public ArrayList<String> getProperties()
     {
@@ -77,8 +78,9 @@ public class IFBayesNet
     }
 
     /**
+     * Retrieve the probability variables as String list.
      *
-     * @return
+     * @return the probability variables as String list
      */
     public ArrayList<IFProbabilityVariable> getProbabilityVariables()
     {
@@ -86,8 +88,9 @@ public class IFBayesNet
     }
 
     /**
+     * Retrieve the probability functions as String list.
      *
-     * @return
+     * @return the probability functions as String list
      */
     public ArrayList<IFProbabilityFunction> getProbabilityFunctions()
     {

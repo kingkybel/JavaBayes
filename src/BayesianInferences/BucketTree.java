@@ -65,7 +65,7 @@ public class BucketTree
     /**
      * Simple constructor for BucketTree.
      *
-     * @param ordering
+     * @param ordering indicates which heuristic to use in the elimination
      */
     public BucketTree(Ordering ordering)
     {
@@ -76,7 +76,8 @@ public class BucketTree
      * Constructor for BucketTree. Does the whole initialization; it should be
      * the only method that deals with symbolic names for variables.
      *
-     * @param ordering
+     * @param ordering            indicates which heuristic to use in the
+     *                            elimination
      * @param isProducingClusters
      */
     public BucketTree(Ordering ordering, boolean isProducingClusters)
@@ -156,7 +157,8 @@ public class BucketTree
      * Transform an observed ProbabilityVariable into a ProbabilityFunction to
      * handle the case where the query involves an observed variable.
      *
-     * @param bayesNet the underlying Bayesian network
+     * @param bayesNet the underlying Bayesian network the underlying Bayesian
+     *                 network
      * @param probVar  a probability variable
      * @return the transformed function
      */
@@ -177,10 +179,10 @@ public class BucketTree
 
     /**
      * Eliminates all variables defined as evidence. The order of the variables
-     * that are not eliminated is the same order in the original function.
+     * that are not eliminated is the same order as in the original function.
      *
      * @param probFunc probability function
-     * @return
+     * @return a new function with evidence variables eliminated
      */
     private ProbabilityFunction checkEvidence(ProbabilityFunction probFunc)
     {
@@ -281,7 +283,7 @@ public class BucketTree
     /**
      * Obtain the values for the evidence plus function.
      *
-     * @param newProbFunc
+     * @param newProbFunc output probability function
      * @param probFunc    probability function
      */
     private void checkEvidenceLoop(ProbabilityFunction newProbFunc,
@@ -450,10 +452,10 @@ public class BucketTree
 
     /**
      * Recover the maximizing variables going back through the maximizing
-     * bucketTree; the variables are returned as an array of markers
+     * bucketTree. The variables are returned as an array of markers
      * (non-explanation variables get INVALID_INDEX).
      *
-     * @return
+     * @return array of indices of maximising variables
      */
     private int[] backwardMaximization()
     {
@@ -501,9 +503,9 @@ public class BucketTree
                 continue;
             }
             // Process the bucket
-            int valuePos = backDf.
-                getPositionFromIndexes(bayesNet.getProbabilityVariables(),
-                                       backwardMarkers);
+            int valuePos = backDf.findPositionOfProbabilityValue(bayesNet.
+                getProbabilityVariables(),
+                                                                 backwardMarkers);
             backwardMarkers[bucketTree[i].probVar.getIndex()] =
             (int) (backDf.getValue(valuePos) + 0.5);
         }
@@ -512,10 +514,10 @@ public class BucketTree
     }
 
     /**
-     * Put the separatorFunc function of a Bucket buck into the BucketTree
-     * beyond the current activeBucket.
+     * Put the separatorFunc function of a bucket into the BucketTree beyond the
+     * current activeBucket.
      *
-     * @param bucket
+     * @param bucket the bucket to insert
      */
     private void insert(Bucket bucket)
     {
@@ -568,8 +570,9 @@ public class BucketTree
      * activeBucket. If wasFirstVariableCancelledByEvidence is true, then mark
      * the bucket accordingly.
      *
-     * @param discrFunc
-     * @param wasFirstVariableCancelledByEvidence
+     * @param discrFunc                           the function we want to insert
+     * @param wasFirstVariableCancelledByEvidence true if the first variable was
+     *                                            cancelled false otherwise
      */
     private void insert(DiscreteFunction discrFunc,
                         boolean wasFirstVariableCancelledByEvidence)

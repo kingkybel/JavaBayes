@@ -43,7 +43,7 @@ public class IFProbabilityEntry
     /**
      * Simple constructor for an entry object
      *
-     * @param values
+     * @param values  values the variable can assume as string array
      * @param entries
      */
     public IFProbabilityEntry(String values[], double entries[])

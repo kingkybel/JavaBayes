@@ -31,7 +31,17 @@ import java.util.logging.Logger;
 
 /**
  * Use Walley generalisation of the Choquet lower and upper integrals to obtain
- * the lower and upper expectations of 2-monotone capacities.
+ * the lower and upper expectations of 2-monotone capacities. A Choquet integral
+ * is a subadditive or superadditive integral created by the French
+ * mathematician Gustave Choquet in 1953.[1] It was initially used in
+ * statistical mechanics and potential theory,[2] but found its way into
+ * decision theory in the 1980s,[3] where it is used as a way of measuring the
+ * expected utility of an uncertain event. It is applied specifically to
+ * membership functions and capacities. In imprecise probability theory, the
+ * Choquet integral is also used to calculate the lower expectation induced by a
+ * 2-monotone lower probability, or the upper expectation induced by a
+ * 2-alternating upper probability.
+ * (https://en.wikipedia.org/wiki/Choquet_integral)
  */
 public class GeneralizedChoquetIntegral
 {
@@ -46,8 +56,8 @@ public class GeneralizedChoquetIntegral
      * Calculate the lower and upper Choquet integrals using Walley's
      * generalisation, for a total variation neighbourhood.
      *
-     * @param twoMonotoneCapacity
-     * @param discrFunc
+     * @param twoMonotoneCapacity two monotone capacity derivative
+     * @param discrFunc           a discrete function
      */
     public GeneralizedChoquetIntegral(TwoMonotoneCapacity twoMonotoneCapacity,
                                       DiscreteFunction discrFunc)
@@ -131,8 +141,8 @@ public class GeneralizedChoquetIntegral
      * Collect the positive values in discrFunc and sort them in increasing
      * order (first value is assumed zero).
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc a discrete function
+     * @return list of positive increasing values
      */
     private ArrayList<Double> sortPositive(DiscreteFunction discrFunc)
     {
@@ -153,7 +163,7 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (discrFunc.getValue(i) < ((Double) sorted.get(j)))
+                if (discrFunc.getValue(i) < sorted.get(j))
                 {
                     sorted.add(discrFunc.getValue(i));
                 }
@@ -169,8 +179,8 @@ public class GeneralizedChoquetIntegral
      * Collect the negative values in discrFunc and sort them in decreasing
      * order (first value is assumed zero).
      *
-     * @param discrFunc
-     * @return
+     * @param discrFunc a discrete function
+     * @return list of negative values in decreasing order
      */
     private ArrayList<Double> sortNegative(DiscreteFunction discrFunc)
     {
@@ -191,7 +201,7 @@ public class GeneralizedChoquetIntegral
             // Insert value in vector
             for (int j = 0; j < sorted.size(); j++)
             {
-                if (discrFunc.getValue(i) > ((Double) sorted.get(j)))
+                if (discrFunc.getValue(i) > sorted.get(j))
                 {
                     sorted.add(discrFunc.getValue(i));
                 }
@@ -207,17 +217,17 @@ public class GeneralizedChoquetIntegral
      * Obtain the lower and upper probability for the event { df(x) >
      * sortedValue[i] }.
      *
-     * @param tmc
-     * @param discrFunc
-     * @param sortedValues
-     * @param lps          lower probabilities
-     * @param ups          upper probabilities
+     * @param twoMonotoneCapacity a two monotone capacity derivative
+     * @param discrFunc           a discrete function
+     * @param sortedValues        a list of sorted values
+     * @param lowerProbs          lower probabilities
+     * @param upperProbs          upper probabilities
      */
-    private void boundPositive(TwoMonotoneCapacity tmc,
+    private void boundPositive(TwoMonotoneCapacity twoMonotoneCapacity,
                                DiscreteFunction discrFunc,
                                ArrayList<Double> sortedValues,
-                               double lps[],
-                               double ups[])
+                               double lowerProbs[],
+                               double upperProbs[])
     {
         int i, j;
 
@@ -232,12 +242,12 @@ public class GeneralizedChoquetIntegral
                 if (discrFunc.getValue(j) > sortedValue)
                 {
                     // Add base probability of this atom
-                    lp += tmc.getAtomProbability(j);
+                    lp += twoMonotoneCapacity.getAtomProbability(j);
                 }
             }
             // Calculate the lower and upper probabilities
-            lps[i] = tmc.getLowerProbabilityFromBase(lp);
-            ups[i] = tmc.getUpperProbabilityFromBase(lp);
+            lowerProbs[i] = twoMonotoneCapacity.getLowerProbabilityFromBase(lp);
+            upperProbs[i] = twoMonotoneCapacity.getUpperProbabilityFromBase(lp);
             i++;
         }
     }
@@ -246,28 +256,25 @@ public class GeneralizedChoquetIntegral
      * Obtain the lower and upper probability for the event { discrFunc(x) &lt;
      * sortedValue[i] }.
      *
-     * @param twoMonotoneCapacity
-     * @param discrFunc
-     * @param sortedValues
-     * @param lps                 lower probabilities
-     * @param ups                 upper probabilities
+     * @param twoMonotoneCapacity a two monotone capacity derivative
+     * @param discrFunc           a discrete function
+     * @param sortedValues        a list of sorted values
+     * @param lowerProbs          lower probabilities
+     * @param upperProbs          upper probabilities
      */
     private void boundNegative(TwoMonotoneCapacity twoMonotoneCapacity,
                                DiscreteFunction discrFunc,
                                ArrayList<Double> sortedValues,
-                               double lps[],
-                               double ups[])
+                               double lowerProbs[],
+                               double upperProbs[])
     {
-        int i, j;
-        double lp;
-
-        i = 0;
+        int i = 0;
         for (Double sortedValue : sortedValues)
         {
-            lp = 0.0; // Initialize
+            double lp = 0.0;
             // Collect the base probability for
             // all atoms such that df(xJ > sortedValues[i])
-            for (j = 0; j < discrFunc.numberValues(); j++)
+            for (int j = 0; j < discrFunc.numberValues(); j++)
             {
                 if (discrFunc.getValue(j) < sortedValue)
                 {
@@ -276,8 +283,8 @@ public class GeneralizedChoquetIntegral
                 }
             }
             // Calculate the lower and upper probabilities
-            lps[i] = twoMonotoneCapacity.getLowerProbabilityFromBase(lp);
-            ups[i] = twoMonotoneCapacity.getUpperProbabilityFromBase(lp);
+            lowerProbs[i] = twoMonotoneCapacity.getLowerProbabilityFromBase(lp);
+            upperProbs[i] = twoMonotoneCapacity.getUpperProbabilityFromBase(lp);
             i++;
         }
     }

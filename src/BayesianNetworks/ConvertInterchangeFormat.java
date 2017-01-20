@@ -65,7 +65,7 @@ public class ConvertInterchangeFormat
     /**
      * Get the name of the IFBayesNet in the InterchangeFormat.
      *
-     * @return
+     * @return the network name
      */
     public String getName()
     {
@@ -80,7 +80,7 @@ public class ConvertInterchangeFormat
     /**
      * Get the properties of the IFBayesNet in the InterchangeFormat.
      *
-     * @return
+     * @return the properties as list of strings
      */
     public ArrayList<String> getProperties()
     {
@@ -98,7 +98,7 @@ public class ConvertInterchangeFormat
      *
      * @param bayesNet the underlying Bayesian network The BayesNet that will
      *                 receive the ProbabilityVariable objects.
-     * @return
+     * @return the generated array of probability variables
      */
     public ProbabilityVariable[] getProbabilityVariables(BayesNet bayesNet)
     {
@@ -211,7 +211,7 @@ public class ConvertInterchangeFormat
             ArrayList<Integer> currentValueIndex = new ArrayList<>();
 
             int numRows = 1;
-            for (DiscreteVariable var : pf.variables)
+            for (DiscreteVariable var : pf.getVariables())
             {
                 String varName = var.getName();
                 record.add(varName);
@@ -271,7 +271,7 @@ public class ConvertInterchangeFormat
      * @param bayesNet   the underlying Bayesian network
      * @param ifProbFunc interchange format probability function
      *
-     * @return
+     * @return the generated probability function
      */
     protected ProbabilityFunction getProbabilityFunction(BayesNet bayesNet,
                                                          IFProbabilityFunction ifProbFunc)
@@ -328,7 +328,7 @@ public class ConvertInterchangeFormat
      *
      * @param bayesNet   the underlying Bayesian network
      * @param ifProbFunc probability function in interchange format
-     * @return
+     * @return the generated probability variable
      */
     protected ProbabilityVariable[] createVariables(
             BayesNet bayesNet,
@@ -355,25 +355,27 @@ public class ConvertInterchangeFormat
      * contained in the ifProbFunc object.
      *
      * @param ifProbFunc probability function in interchange format
-     * @param values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
     protected void processTables(IFProbabilityFunction ifProbFunc,
-                                 double values[])
+                                 double probValues[])
     {
         // Put the table values
         ArrayList<double[]> ttables = ifProbFunc.getTables();
         if (ttables.size() > 0)
         {
             double ttable[] = (double[]) (ttables.get(0));
-            copyTableToValues(ttable, values);
+            copyTableToValues(ttable, probValues);
         }
     }
 
     /**
      * Copy content from a table to another.
      *
-     * @param table
-     * @param probValues probability values
+     * @param table      source table of double values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
     protected void copyTableToValues(double table[], double probValues[])
     {
@@ -393,29 +395,28 @@ public class ConvertInterchangeFormat
      * Insert default values from the contents of the first specification of
      * defaults in the IFProbabilityFunction.
      *
-     * @param ifProbFunc
-     * @param values
-     * @param jump
+     * @param ifProbFunc probability function in interchange format
+     * @param probValues the probability values of the function as array of
+     *                   doubles
+     * @param jump       offset to the desired index
      */
     void processDefaults(IFProbabilityFunction ifProbFunc,
-                         double values[],
+                         double probValues[],
                          int jump)
     {
-        int i, j, k;
-
         // Process the default values
         ArrayList<double[]> ddefaultss = ifProbFunc.getDefaults();
         if (ddefaultss.size() > 0)
         {
             double ddefaults[] = ddefaultss.get(0);
-            for (i = 0; i < values.length; i++)
+            for (int i = 0; i < probValues.length; i++)
             {
-                for (j = 0; j < jump; j++)
+                for (int j = 0; j < jump; j++)
                 {
-                    k = i * jump + j;
-                    if (values[k] == ConvertInterchangeFormat.INVALID_VALUE)
+                    int k = i * jump + j;
+                    if (probValues[k] == ConvertInterchangeFormat.INVALID_VALUE)
                     {
-                        values[k] = ddefaults[i];
+                        probValues[k] = ddefaults[i];
                     }
                 }
             }
@@ -425,16 +426,17 @@ public class ConvertInterchangeFormat
     /**
      * Insert entries specified in the IFProbabilityFunction.
      *
-     * @param bayesNet
-     * @param ifProbFunc
-     * @param variables
-     * @param values
+     * @param bayesNet   the underlying Bayesian network
+     * @param ifProbFunc probability function in interchange format
+     * @param probVars   probability variables as array
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      * @param jump
      */
     void processEntries(BayesNet bayesNet,
                         IFProbabilityFunction ifProbFunc,
-                        ProbabilityVariable variables[],
-                        double values[],
+                        ProbabilityVariable probVars[],
+                        double probValues[],
                         int jump)
     {
         int i, j, k, pos, step;
@@ -454,7 +456,7 @@ public class ConvertInterchangeFormat
                 entryValueIndexes = new int[eentryValues.length];
                 for (i = 0; i < entryValueIndexes.length; i++)
                 {
-                    probVar = variables[i + 1];
+                    probVar = probVars[i + 1];
                     entryValueIndexes[i] =
                     probVar.indexOfValue(eentryValues[i]);
                 }
@@ -464,13 +466,13 @@ public class ConvertInterchangeFormat
                 {
                     pos += entryValueIndexes[k - 1] * step;
                     step *=
-                    variables[k].numberValues();
+                    probVars[k].numberValues();
                 }
-                probVar = variables[0];
+                probVar = probVars[0];
                 for (i = 0; i < probVar.numberValues(); i++)
                 {
                     k = i * jump + pos;
-                    values[k] = eentryEntries[i];
+                    probValues[k] = eentryEntries[i];
                 }
             }
         }
@@ -479,16 +481,17 @@ public class ConvertInterchangeFormat
     /**
      * Perform final calculations in the values.
      *
-     * @param values
+     * @param probValues the probability values of the function as array of
+     *                   doubles
      */
-    void finishValues(double values[])
+    void finishValues(double probValues[])
     {
         // Put zeroes in the values that were not defined
-        for (int i = 0; i < values.length; i++)
+        for (int i = 0; i < probValues.length; i++)
         {
-            if (values[i] == ConvertInterchangeFormat.INVALID_VALUE)
+            if (probValues[i] == ConvertInterchangeFormat.INVALID_VALUE)
             {
-                values[i] = 0.0;
+                probValues[i] = 0.0;
             }
         }
     }

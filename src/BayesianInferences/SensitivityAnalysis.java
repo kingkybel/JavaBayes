@@ -69,7 +69,8 @@ public class SensitivityAnalysis
     /**
      * Print Expectation.
      *
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(boolean shouldPrintBucketTree)
     {
@@ -77,10 +78,11 @@ public class SensitivityAnalysis
     }
 
     /**
-     * Print Expectation.
+     * Print Sensitivity analysis.
      *
      * @param out                   output print stream
-     * @param shouldPrintBucketTree
+     * @param shouldPrintBucketTree if true, then print the bucket tree, if
+     *                              false don't
      */
     public void print(PrintStream out, boolean shouldPrintBucketTree)
     {

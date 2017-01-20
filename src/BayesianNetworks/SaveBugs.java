@@ -111,7 +111,7 @@ public class SaveBugs
             probFunc = bayesNet.getFunction(i);
             if (probFunc != null)
             {
-                probVar = (ProbabilityVariable) probFunc.variables[0];
+                probVar = (ProbabilityVariable) probFunc.getVariable(0);
                 pstream.print(
                         "\tp." + probVar.name + "[" + probFunc.numberValues() +
                         "]");
@@ -148,12 +148,12 @@ public class SaveBugs
             probFunc = bayesNet.getFunction(i);
             if (probFunc != null)
             {
-                probVar = (ProbabilityVariable) (probFunc.variables[0]);
+                probVar = (ProbabilityVariable) (probFunc.getVariable(0));
                 pstream.
                         print(probVar.name + "  ~  dcat(p." + probVar.name + "[");
-                for (j = 1; j < probFunc.variables.length; j++)
+                for (j = 1; j < probFunc.getVariables().length; j++)
                 {
-                    pstream.print(probFunc.variables[j].name);
+                    pstream.print(probFunc.getVariable(j).name);
                     pstream.print(",");
                 }
                 pstream.println("]);");
@@ -181,23 +181,23 @@ public class SaveBugs
             probFunc = bayesNet.getFunction(i);
             if (probFunc != null)
             {
-                probVar = (ProbabilityVariable) probFunc.variables[0];
+                probVar = (ProbabilityVariable) probFunc.getVariable(0);
                 /**
                  * ** Put distribution values in the correct format. ***
                  */
                 pstream.print("\tp." + probVar.name + "  = c(");
                 step = 1;
-                for (j = 1; j < probFunc.variables.length; j++)
+                for (j = 1; j < probFunc.getVariables().length; j++)
                 {
-                    step *= probFunc.variables[j].numberValues();
+                    step *= probFunc.getVariable(j).numberValues();
                 }
                 for (j = 0; j < step; j++)
                 {
-                    for (k = 0; k < probFunc.variables[0].numberValues(); k++)
+                    for (k = 0; k < probFunc.getVariable(0).numberValues(); k++)
                     {
-                        value = probFunc.values[k * step + j];
+                        value = probFunc.getValue(k * step + j);
                         pstream.print(" " + value);
-                        if (k < (probFunc.variables[0].numberValues() - 1))
+                        if (k < (probFunc.getVariable(0).numberValues() - 1))
                         {
                             pstream.print(",");
                         }

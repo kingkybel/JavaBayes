@@ -74,6 +74,6 @@ public class TotalVariationSet
     @Override
     public double getAtomProbability(int index)
     {
-        return values[index];
+        return getValue(index);
     }
 }

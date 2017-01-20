@@ -67,8 +67,8 @@ public class QuasiBayesNet extends BayesNet
      * of variables/functions and the name of the network.
      *
      * @param name          network name
-     * @param numberOfFuncs number of functions
-     * @param numberOfVars  number of variables
+     * @param numberOfFuncs number of functions in the Bayesian network
+     * @param numberOfVars  number of variables in the Bayesian network
      */
     public QuasiBayesNet(String name, int numberOfVars, int numberOfFuncs)
     {
@@ -154,22 +154,6 @@ public class QuasiBayesNet extends BayesNet
         super(url);
     }
 
-    /**
-     * Method that translates the contents of a IFBayesNet object into a
-     * QuasiBayesNet object (method works by overriding method in BayesNet
-     * class). The method makes modifications to the basic objects supported by
-     * the InterchangeFormat, so that the full functionality of the
-     * BayesianNetworks package can be used. As the InterchangeFormat evolves,
-     * probably some of the objects created through extensions will be created
-     * directly by the parser as it parses an InterchangeFormat stream. Right
-     * now the extensions involve:
-     * <ul>
-     * <li>Detecting observed variables</li>
-     * <li>Detecting explanation variables</li>
-     * </ul>
-     *
-     * @param interchangeFmt
-     */
     @Override
     protected void translate(InterchangeFormat interchangeFmt)
     {
@@ -178,7 +162,7 @@ public class QuasiBayesNet extends BayesNet
         setName(qbcbn.getName());
         setProperties(qbcbn.getProperties());
         setProbabilityVariables(qbcbn.getProbabilityVariables(this));
-        probabilityFunctions = qbcbn.getProbabilityFunctions(this);
+        setProbabilityFunctions(qbcbn.getProbabilityFunctions(this));
 
         qbcbn.getFunctionsAsTables(this);
 
@@ -192,7 +176,7 @@ public class QuasiBayesNet extends BayesNet
         }
 
         // Process ProbabilityFunction properties: create QB functions if necessary
-        for (int i = 0; i < probabilityFunctions.length; i++)
+        for (int i = 0; i < numberProbabilityFunctions(); i++)
         {
             processProbabilityFunctionProperties(i);
         }
@@ -258,11 +242,11 @@ public class QuasiBayesNet extends BayesNet
      * Indicate whether or not there are local credal sets defined in the
      * network.
      *
-     * @return
+     * @return true if so, false otherwise
      */
     public boolean areLocalCredalSetsPresent()
     {
-        for (ProbabilityFunction probabilityFunction : probabilityFunctions)
+        for (ProbabilityFunction probabilityFunction : getProbabilityFunctions())
         {
             if (probabilityFunction instanceof QBProbabilityFunction)
             {
@@ -282,13 +266,13 @@ public class QuasiBayesNet extends BayesNet
         {
             out.print("network \"" + getName() + "\" {");
         }
-        if (probabilityVariables != null)
+        if (numberVariables() != INVALID_INDEX)
         {
-            out.print(" //" + probabilityVariables.length + " variables");
+            out.print(" //" + numberVariables() + " variables");
         }
-        if (probabilityFunctions != null)
+        if (numberProbabilityFunctions() != INVALID_INDEX)
         {
-            out.print(" and " + probabilityFunctions.length +
+            out.print(" and " + numberProbabilityFunctions() +
                       " probability distributions");
         }
 
@@ -312,24 +296,18 @@ public class QuasiBayesNet extends BayesNet
         }
         out.println("}");
 
-        if (probabilityVariables != null)
+        if (numberVariables() != INVALID_INDEX)
         {
-            for (i = 0; i < probabilityVariables.length; i++)
+            for (i = 0; i < numberVariables(); i++)
             {
-                if (probabilityVariables[i] != null)
-                {
-                    probabilityVariables[i].print(out);
-                }
+                getVariable(i).print(out);
             }
         }
-        if (probabilityFunctions != null)
+        if (numberProbabilityFunctions() != INVALID_INDEX)
         {
-            for (i = 0; i < probabilityFunctions.length; i++)
+            for (i = 0; i < numberProbabilityFunctions(); i++)
             {
-                if (probabilityFunctions[i] != null)
-                {
-                    probabilityFunctions[i].print(out);
-                }
+                getFunction(i).print(out);
             }
         }
     }
@@ -337,7 +315,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Get the type of global neighbourhood.
      *
-     * @return
+     * @return the type of global neighbourhood
      */
     public GlobalNeighbourhood getGlobalNeighborhoodType()
     {
@@ -347,7 +325,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Set the type of global neighbourhood.
      *
-     * @param type
+     * @param type the new type of global neighbourhood
      */
     public void setGlobalNeighborhoodType(GlobalNeighbourhood type)
     {
@@ -357,7 +335,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Get the parameter for the global neighbourhood modeled by the network.
      *
-     * @return
+     * @return he parameter for the global neighbourhood
      */
     public double getGlobalNeighborhoodParameter()
     {
@@ -367,7 +345,7 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Set the parameter for the global neighbourhood modeled by the network.
      *
-     * @param p
+     * @param p the parameter for the global neighbourhood
      */
     public void setGlobalNeighborhoodParameter(double p)
     {

@@ -405,7 +405,7 @@ class EditVariableDialog extends Dialog
 
         while (st.hasMoreTokens())
         {
-            vals[i] = ig.validateValue(st.nextToken());
+            vals[i] = ig.makeValidValue(st.nextToken());
             i++;
         }
         return vals;
@@ -454,7 +454,7 @@ class EditVariableDialog extends Dialog
             node.setVariableProperties(vprop);
             for (String property : vprop)
             {
-                node.updatePositionFromProperty(property);
+                node.updateCoordinatesFromProperty(property);
             }
         }
         // Update the function properties (if necessary).

@@ -31,18 +31,27 @@ package CredalSets;
 public interface MappingDouble
 {
 
+    /**
+     * Type of value to be mapped.
+     */
     public enum Type
     {
 
+        /**
+         * Lower bracket.
+         */
         LOWER_EXPECTATION_BRACKET,
+        /**
+         * Upper bracket.
+         */
         UPPER_EXPECTATION_BRACKET
     }
 
     /**
      *
-     * @param mapType
-     * @param mapInput
-     * @return
+     * @param mapType  type of value to be mapped
+     * @param mapInput input value
+     * @return the mapped value
      */
     public double map(Type mapType, double mapInput);
 }
