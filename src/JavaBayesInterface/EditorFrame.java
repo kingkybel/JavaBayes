@@ -124,7 +124,7 @@ public class EditorFrame extends Frame
     Panel cmdPanel;
     Panel editPanel;
     /**
-     *
+     * The scroll panel for the graph.
      */
     public ScrollingPanel scrollPanel;
     // Options (controlled by menus in JavaBayesConsoleFrame)
@@ -138,8 +138,8 @@ public class EditorFrame extends Frame
     /**
      * Default constructor for an EditorFrame.
      *
-     * @param javaBayes
-     * @param title
+     * @param javaBayes backpointer to the main class
+     * @param title     title of the frame
      */
     public EditorFrame(JavaBayes javaBayes, String title)
     {
@@ -241,7 +241,7 @@ public class EditorFrame extends Frame
     /**
      * Open a file and read the network in it.
      *
-     * @param filename
+     * @param filename name of the file describing the network
      * @return true if successful, false otherwise
      */
     public boolean open(String filename)
@@ -312,7 +312,7 @@ public class EditorFrame extends Frame
     /**
      * Save the network.
      *
-     * @param filename
+     * @param filename name of the file describing the network
      * @return true if successful, false otherwise
      */
     public boolean save(String filename)
@@ -369,13 +369,14 @@ public class EditorFrame extends Frame
     /**
      * Process a query.
      *
-     * @param ig
-     * @param queriedVariable
+     * @param inferenceGraph  the underlying inference graph
+     * @param queriedVariable name of the queried variable
      */
-    public void processQuery(InferenceGraph ig, String queriedVariable)
+    public void processQuery(InferenceGraph inferenceGraph,
+                             String queriedVariable)
     {
         // Check whether inference is possible
-        if (ig == null)
+        if (inferenceGraph == null)
         {
             jb.appendText("\nLoad Bayesian network.\n\n");
             return;
@@ -388,29 +389,29 @@ public class EditorFrame extends Frame
         // Print the Bayes net.
         if (whatToShowBayesianNetworkState)
         {
-            printBayesNet(pstream, ig);
+            printBayesNet(pstream, inferenceGraph);
         }
 
         // Perform inference
         if (modeMenuChoice.isMarginalPosterior())
         {
-            printMarginal(pstream, ig, queriedVariable);
+            printMarginal(pstream, inferenceGraph, queriedVariable);
         }
         else if (modeMenuChoice.isExpectation())
         {
-            printExpectation(pstream, ig, queriedVariable);
+            printExpectation(pstream, inferenceGraph, queriedVariable);
         }
         else if (modeMenuChoice.usesMarkedVariablesOnly())
         {
-            printExplanation(pstream, ig);
+            printExplanation(pstream, inferenceGraph);
         }
         else if (modeMenuChoice.usesAllNotObservedVariables())
         {
-            printFullExplanation(pstream, ig);
+            printFullExplanation(pstream, inferenceGraph);
         }
         else if (modeMenuChoice.isSensitivityAnalysis())
         {
-            printSensitivityAnalysis(pstream, ig);
+            printSensitivityAnalysis(pstream, inferenceGraph);
         }
 
         // Print results to test window
@@ -430,33 +431,33 @@ public class EditorFrame extends Frame
     /**
      * Print the QuasiBayesNet in the InferenceGraph.
      *
-     * @param pstream
-     * @param ig
+     * @param out            output print stream
+     * @param inferenceGraph the underlying inference graph
      */
-    protected void printBayesNet(PrintStream pstream, InferenceGraph ig)
+    protected void printBayesNet(PrintStream out, InferenceGraph inferenceGraph)
     {
-        ig.printBayesNet(pstream);
+        inferenceGraph.printBayesNet(out);
     }
 
     /**
      * Compute and print a posterior marginal distribution for the
      * InferenceGraph.
      *
-     * @param pstream
-     * @param queriedVariable
+     * @param out             output print stream
+     * @param queriedVariable name of the queried variable
      * @param ig
      */
-    protected void printMarginal(PrintStream pstream, InferenceGraph ig,
+    protected void printMarginal(PrintStream out, InferenceGraph ig,
                                  String queriedVariable)
     {
         if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
-            ig.printMarginal(pstream, queriedVariable, false,
+            ig.printMarginal(out, queriedVariable, false,
                              whatToShowBucketTreeState);
         }
         else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
-            ig.printMarginal(pstream, queriedVariable, true,
+            ig.printMarginal(out, queriedVariable, true,
                              whatToShowBucketTreeState);
         }
     }
@@ -464,58 +465,61 @@ public class EditorFrame extends Frame
     /**
      * Compute and print a posterior expectation for the InferenceGraph.
      *
-     * @param pstream
-     * @param queriedVariable
-     * @param ig
+     * @param out             output print stream
+     * @param queriedVariable name of the queried variable
+     * @param inferenceGraph  the underlying inference graph
      */
-    protected void printExpectation(PrintStream pstream, InferenceGraph ig,
+    protected void printExpectation(PrintStream out,
+                                    InferenceGraph inferenceGraph,
                                     String queriedVariable)
     {
         if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
         {
-            ig.printExpectation(pstream, queriedVariable, false,
-                                whatToShowBucketTreeState);
+            inferenceGraph.printExpectation(out, queriedVariable, false,
+                                            whatToShowBucketTreeState);
         }
         else if (algorithmType == ALGORITHM_BUCKET_TREE)
         {
-            ig.printExpectation(pstream, queriedVariable, true,
-                                whatToShowBucketTreeState);
+            inferenceGraph.printExpectation(out, queriedVariable, true,
+                                            whatToShowBucketTreeState);
         }
     }
 
     /**
      * Compute and print an explanation for the InferenceGraph.
      *
-     * @param pstream
-     * @param ig
+     * @param out            output print stream
+     * @param inferenceGraph the underlying inference graph
      */
-    protected void printExplanation(PrintStream pstream, InferenceGraph ig)
+    protected void printExplanation(PrintStream out,
+                                    InferenceGraph inferenceGraph)
     {
-        ig.printExplanation(pstream, whatToShowBucketTreeState);
+        inferenceGraph.printExplanation(out, whatToShowBucketTreeState);
     }
 
     /**
      * Compute and print a full explanation for the InferenceGraph.
      *
-     * @param pstream
-     * @param ig
+     * @param out            output print stream
+     * @param inferenceGraph the underlying inference graph
      */
-    protected void printFullExplanation(PrintStream pstream, InferenceGraph ig)
+    protected void printFullExplanation(PrintStream out,
+                                        InferenceGraph inferenceGraph)
     {
-        ig.printFullExplanation(pstream, whatToShowBucketTreeState);
+        inferenceGraph.printFullExplanation(out, whatToShowBucketTreeState);
     }
 
     /**
      * Compute and print the metrics for sensitivity analysis of the
      * InferenceGraph.
      *
-     * @param pstream
-     * @param ig
+     * @param out            output print stream
+     * @param inferenceGraph the underlying inference graph
      */
-    protected void printSensitivityAnalysis(PrintStream pstream,
-                                            InferenceGraph ig)
+    protected void printSensitivityAnalysis(PrintStream out,
+                                            InferenceGraph inferenceGraph)
     {
-        ig.printSensitivityAnalysis(pstream);
+        inferenceGraph.printSensitivityAnalysis(out);
     }
 
     /**
@@ -531,11 +535,11 @@ public class EditorFrame extends Frame
     /**
      * Load an InferenceGraph.
      *
-     * @param ig
+     * @param inferenceGraph the new inference graph
      */
-    public void setInferenceGraph(InferenceGraph ig)
+    public void setInferenceGraph(InferenceGraph inferenceGraph)
     {
-        scrollPanel.netPanel.load(ig);
+        scrollPanel.netPanel.load(inferenceGraph);
     }
 
     /**

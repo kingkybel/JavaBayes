@@ -82,14 +82,14 @@ public class DiscreteVariable
     /**
      * Simple constructor for DiscreteVariable.
      *
-     * @param name   name of the variable
-     * @param index  index of the variable
-     * @param values values the variable can assume as string array
+     * @param name     name of the variable
+     * @param varIndex index of the variable
+     * @param values   values the variable can assume as string array
      */
-    public DiscreteVariable(String name, int index, String values[])
+    public DiscreteVariable(String name, int varIndex, String values[])
     {
         this.name = name;
-        this.index = index;
+        this.index = varIndex;
         this.values = values;
     }
 
@@ -263,12 +263,12 @@ public class DiscreteVariable
     /**
      * Get a value of the current DiscreteVariable.
      *
-     * @param index position of the value in the array of values.
+     * @param valIndex position of the value in the array of values.
      *
      * @return the value at the index
      */
-    public String getValue(int index)
+    public String getValue(int valIndex)
     {
-        return values[index];
+        return values[valIndex];
     }
 }

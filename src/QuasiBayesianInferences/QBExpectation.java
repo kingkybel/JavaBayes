@@ -60,7 +60,8 @@ public class QBExpectation extends Expectation
      * Constructor for a QBExpectation.
      *
      * @param bayesNet            the underlying Bayesian network
-     * @param isProducingClusters
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public QBExpectation(BayesNet bayesNet, boolean isProducingClusters)
     {
@@ -79,7 +80,7 @@ public class QBExpectation extends Expectation
     /**
      * Do the Expectation.
      *
-     * @param discrFunc
+     * @param discrFunc discrete function
      */
     @Override
     protected void doExpectationFromInference(DiscreteFunction discrFunc)

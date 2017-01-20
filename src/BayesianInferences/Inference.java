@@ -52,7 +52,8 @@ public class Inference
      * Constructor for an Inference.
      *
      * @param bayesNet            the underlying Bayesian network
-     * @param isProducingClusters
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public Inference(BayesNet bayesNet, boolean isProducingClusters)
     {
@@ -95,7 +96,8 @@ public class Inference
     /**
      * Set whether clusters are to be produced.
      *
-     * @param isProducingClusters true/false
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public void setIsProducingClusters(boolean isProducingClusters)
     {

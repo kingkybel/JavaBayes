@@ -177,7 +177,7 @@ public class BayesNet
     /**
      * Construct a BayesNet from a textual description in an URL.
      *
-     * @param url the URL where to find the textual description
+     * @param url the URL where to find the textual description of the Bayes net
      * @throws Exception if the string cannot be successfully parsed
      */
     public BayesNet(URL url) throws Exception
@@ -302,18 +302,18 @@ public class BayesNet
     /**
      * Retrieve the probability function for a variable.
      *
-     * @param index the variable identified by its name
+     * @param varIndex the variable identified by its name
      * @return the probability function
      */
-    public ProbabilityFunction getFunction(int index)
+    public ProbabilityFunction getFunction(int varIndex)
     {
         if (probabilityFunctions == null ||
-            index < 0 ||
-            index > numberProbabilityFunctions())
+            varIndex < 0 ||
+            varIndex > numberProbabilityFunctions())
         {
             return null;
         }
-        return probabilityFunctions[index];
+        return probabilityFunctions[varIndex];
     }
 
     /**
@@ -929,30 +929,30 @@ public class BayesNet
     /**
      * Set a probability variable given its constituents.
      *
-     * @param index      index of the variable to set
+     * @param varIndex   index of the variable to set
      * @param name       new name
      * @param values     values the variable can assume as string array
      * @param properties list of properties
      * @throws java.lang.Exception if index is out of range
      */
-    public void setProbabilityVariable(int index,
+    public void setProbabilityVariable(int varIndex,
                                        String name,
                                        String values[],
                                        ArrayList<String> properties)
             throws Exception
     {
-        if (index > 0 && index < probabilityVariables.length)
+        if (varIndex > 0 && varIndex < probabilityVariables.length)
         {
-            probabilityVariables[index] = new ProbabilityVariable(this,
-                                                                  name,
-                                                                  index,
-                                                                  values,
-                                                                  properties);
+            probabilityVariables[varIndex] = new ProbabilityVariable(this,
+                                                                     name,
+                                                                     varIndex,
+                                                                     values,
+                                                                     properties);
         }
         else
         {
             throw new Exception("Attempt to set variable at index " +
-                                index +
+                                varIndex +
                                 ": illegal index. Range=[0.." +
                                 probabilityVariables.length);
         }
@@ -961,28 +961,28 @@ public class BayesNet
     /**
      * Set a probability function given its constituents.
      *
-     * @param index
-     * @param variables
+     * @param funcIndex  index of the probability function we want to change
+     * @param variables  an array of discrete variable objects
      * @param probValues the probability values of the function as array of
      *                   doubles
      * @param properties list of properties
      * @throws java.lang.Exception if index is out of range
      */
-    public void setProbabilityFunction(int index,
+    public void setProbabilityFunction(int funcIndex,
                                        ProbabilityVariable[] variables,
                                        double probValues[],
                                        ArrayList<String> properties) throws
             Exception
     {
-        if (index > 0 && index < probabilityFunctions.length)
+        if (funcIndex > 0 && funcIndex < probabilityFunctions.length)
         {
-            probabilityFunctions[index] =
+            probabilityFunctions[funcIndex] =
             new ProbabilityFunction(this, variables, probValues, properties);
         }
         else
         {
             throw new Exception("Attempt to set function at index " +
-                                index +
+                                funcIndex +
                                 ": illegal index. Range=[0.." +
                                 probabilityFunctions.length);
         }
@@ -991,26 +991,27 @@ public class BayesNet
     /**
      * Set a probability variable given its index.
      *
-     * @param index   index of the probability variable
-     * @param probVar the new probability variable
+     * @param varIndex index of the probability variable
+     * @param probVar  the new probability variable
      */
-    public void setProbabilityVariable(int index, ProbabilityVariable probVar)
+    public void setProbabilityVariable(int varIndex, ProbabilityVariable probVar)
     {
         probVar.setBayesNet(this);
-        probVar.setIndex(index);
-        probabilityVariables[index] = probVar;
+        probVar.setIndex(varIndex);
+        probabilityVariables[varIndex] = probVar;
     }
 
     /**
      * Set a probability variable given its index.
      *
-     * @param index    index of the probability function
-     * @param probFunc probability function
+     * @param funcIndex index of the probability function
+     * @param probFunc  probability function
      */
-    public void setProbabilityFunction(int index, ProbabilityFunction probFunc)
+    public void setProbabilityFunction(int funcIndex,
+                                       ProbabilityFunction probFunc)
     {
         probFunc.bayesNet = this;
-        probabilityFunctions[index] = probFunc;
+        probabilityFunctions[funcIndex] = probFunc;
     }
 
     /**
@@ -1046,18 +1047,18 @@ public class BayesNet
     /**
      * Retrieve the variable with at index.
      *
-     * @param index index of the variable in the array
+     * @param varIndex index of the variable in the array
      * @return the variable if the index is a valid index in the array, null
      *         otherwise
      */
-    public ProbabilityVariable getVariable(int index)
+    public ProbabilityVariable getVariable(int varIndex)
     {
         if (probabilityVariables == null ||
-            index < 0 ||
-            index >= numberVariables())
+            varIndex < 0 ||
+            varIndex >= numberVariables())
         {
             return null;
         }
-        return probabilityVariables[index];
+        return probabilityVariables[varIndex];
     }
 }

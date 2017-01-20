@@ -78,7 +78,8 @@ public class BucketTree
      *
      * @param ordering            indicates which heuristic to use in the
      *                            elimination
-     * @param isProducingClusters
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public BucketTree(Ordering ordering, boolean isProducingClusters)
     {
@@ -438,9 +439,10 @@ public class BucketTree
                 bucketTree[i].clusterFunc.normalizeFirst();
                 // Now combine the clusterFunc and the separatorFunc.
                 bucketTree[i].clusterFunc =
-                bucketTree[i].clusterFunc.multiply(bayesNet.
-                        getProbabilityVariables(),
-                                                   bucketTree[i].separatorFunc);
+                bucketTree[i].clusterFunc.multiply(
+                        bayesNet.getProbabilityVariables(),
+                        bucketTree[i].separatorFunc
+                );
             }
 
             // Mark the Bucket as DISTRIBUTED.

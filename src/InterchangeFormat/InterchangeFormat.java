@@ -91,7 +91,7 @@ public class InterchangeFormat
      * Starting point of a parse. Call this to parse the input stream into a
      * Bayes net in interchange format.
      *
-     * @throws Exception
+     * @throws Exception if parse error occurs
      */
     public void CompilationUnit() throws Exception
     {

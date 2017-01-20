@@ -458,12 +458,12 @@ public final class VertexSet
     /**
      * Set an extreme point of the credal set.
      *
-     * @param index         index of the point to set
+     * @param pointIndex    index of the point to set
      * @param extremePoints double array of extreme points
      */
-    public void setExtremePoint(int index, double extremePoints[])
+    public void setExtremePoint(int pointIndex, double extremePoints[])
     {
-        this.extremePoints[index] = extremePoints;
+        this.extremePoints[pointIndex] = extremePoints;
     }
 
     /**

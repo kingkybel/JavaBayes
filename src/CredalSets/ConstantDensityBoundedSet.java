@@ -88,12 +88,12 @@ public class ConstantDensityBoundedSet
     /**
      * Get a base probability value for an atom.
      *
-     * @param index index of the value
+     * @param valIndex index of the value
      * @return the atom probability for the base
      */
     @Override
-    public double getAtomProbability(int index)
+    public double getAtomProbability(int valIndex)
     {
-        return getValue(index);
+        return getValue(valIndex);
     }
 }

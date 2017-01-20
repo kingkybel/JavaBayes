@@ -142,7 +142,7 @@ public class JavaBayes extends Applet
     /**
      * Save the network.
      *
-     * @param filename
+     * @param filename name of the file describing the network
      * @return true if successful, false otherwise
      */
     public boolean save(String filename)

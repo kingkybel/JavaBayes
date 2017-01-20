@@ -80,10 +80,10 @@ public abstract class TwoMonotoneCapacity
     /**
      * Get a base probability value for an atom.
      *
-     * @param index index of a value
+     * @param valIndex index of a value
      * @return the base probability
      */
-    public abstract double getAtomProbability(int index);
+    public abstract double getAtomProbability(int valIndex);
 
     /**
      * Perform calculation of marginal posterior distributions for a total

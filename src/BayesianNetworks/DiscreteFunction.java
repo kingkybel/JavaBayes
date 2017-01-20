@@ -66,7 +66,7 @@ public class DiscreteFunction
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param variables  an array of ProbabilityVariable objects
+     * @param variables  an array of discrete variable objects
      * @param funcValues the values of the function as array of doubles
      */
     public DiscreteFunction(DiscreteVariable variables[], double funcValues[])
@@ -78,7 +78,7 @@ public class DiscreteFunction
     /**
      * Simple constructor for DiscreteFunction.
      *
-     * @param variables  list of ProbabilityVariable objects.
+     * @param variables  an array of discrete variable objects
      * @param funcValues the values of the function as array of doubles
      */
     public DiscreteFunction(ArrayList<DiscreteVariable> variables,
@@ -544,13 +544,13 @@ public class DiscreteFunction
     /**
      * Get a variable in the current DiscreteFunction.
      *
-     * @param index Position of the variable to be returned in the array of
-     *              DiscreteVariable objects.
+     * @param varIndex Position of the variable to be returned in the array of
+     *                 DiscreteVariable objects.
      * @return the variable at index
      */
-    public final DiscreteVariable getVariable(int index)
+    public final DiscreteVariable getVariable(int varIndex)
     {
-        return variables[index];
+        return variables[varIndex];
     }
 
     /**
@@ -615,12 +615,12 @@ public class DiscreteFunction
      * Set a value in the current DiscreteFunction given its position in the
      * array of values.
      *
-     * @param index position of the value.
-     * @param value new value.
+     * @param valIndex position of the value.
+     * @param value    new value.
      */
-    public final void setValue(int index, double value)
+    public final void setValue(int valIndex, double value)
     {
-        values[index] = value;
+        values[valIndex] = value;
     }
 
     /**
@@ -637,11 +637,11 @@ public class DiscreteFunction
      * Set a DiscreteVariable in the current DiscreteFunction given its position
      * in the array of values.
      *
-     * @param index    The position of the value.
+     * @param valIndex the position of the value
      * @param discrVar the new discrete variable
      */
-    public final void setVariable(int index, DiscreteVariable discrVar)
+    public final void setVariable(int valIndex, DiscreteVariable discrVar)
     {
-        variables[index] = discrVar;
+        variables[valIndex] = discrVar;
     }
 }

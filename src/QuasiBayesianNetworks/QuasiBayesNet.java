@@ -113,7 +113,7 @@ public class QuasiBayesNet extends BayesNet
      * Constructor for a Quasi-Bayesian network from a string.
      *
      * @param networkDescription
-     * @throws Exception
+     * @throws Exception if string cannot be read or parsed
      */
     public QuasiBayesNet(String networkDescription) throws Exception
     {
@@ -124,7 +124,7 @@ public class QuasiBayesNet extends BayesNet
      * Constructor for a Bayesian network from an input stream.
      *
      * @param istream
-     * @throws Exception
+     * @throws Exception if string cannot be read or parsed
      */
     public QuasiBayesNet(InputStream istream) throws Exception
     {
@@ -136,7 +136,7 @@ public class QuasiBayesNet extends BayesNet
      *
      * @param context
      * @param spec
-     * @throws Exception
+     * @throws Exception if URL cannot be read or parsed
      */
     public QuasiBayesNet(URL context, String spec) throws Exception
     {
@@ -146,8 +146,8 @@ public class QuasiBayesNet extends BayesNet
     /**
      * Constructor for a Bayesian network from a URL.
      *
-     * @param url
-     * @throws Exception
+     * @param url the URL where to find the textual description of the Bayes net
+     * @throws Exception if URL cannot be read or parsed
      */
     public QuasiBayesNet(URL url) throws Exception
     {

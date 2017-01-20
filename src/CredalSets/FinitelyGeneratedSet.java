@@ -114,11 +114,11 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      *
-     * @param discrFunc
+     * @param discrFunc     discrete function
      * @param probValues    the probability values of the function as array of
      *                      doubles
-     * @param lowerEnvelope
-     * @param upperEnvelope
+     * @param lowerEnvelope the lower envelope as array of doubles
+     * @param upperEnvelope the upper envelope as array of doubles
      */
     FinitelyGeneratedSet(DiscreteFunction discrFunc,
                          double probValues[],
@@ -131,7 +131,7 @@ abstract class FinitelyGeneratedSet
     /**
      * Constructor for FinitelyGeneratedSet.
      *
-     * @param discrFunc
+     * @param discrFunc  discrete function
      * @param probValues the probability values of the function as array of
      *                   doubles
      */

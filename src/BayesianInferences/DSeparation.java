@@ -94,10 +94,10 @@ public class DSeparation
     /**
      * Find all d-separation relations.
      *
-     * @param index          index of the variable to test
+     * @param varIndex       index of the variable to test
      * @param connectionType type of connection to use
      */
-    private void separationRelations(int index, ConnectionType connectionType)
+    private void separationRelations(int varIndex, ConnectionType connectionType)
     {
         int nvertices = bayesNet.numberProbabilityFunctions();
         if (connectionType == ConnectionType.AFFECTING_VARIABLES)
@@ -122,18 +122,18 @@ public class DSeparation
 
         int Xabove[] =
         {
-            index, 1
+            varIndex, 1
         };
         int Xbelow[] =
         {
-            index, -1
+            varIndex, -1
         };
 
         stack.push(Xabove);
         stack.push(Xbelow);
 
-        below[index] = true;
-        above[index] = true;
+        below[varIndex] = true;
+        above[varIndex] = true;
 
         while (!stack.empty())
         {

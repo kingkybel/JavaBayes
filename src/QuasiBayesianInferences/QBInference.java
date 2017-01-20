@@ -74,8 +74,10 @@ public class QBInference extends Inference
     /**
      * Constructor for a QBInference.
      *
-     * @param bayesNet the underlying Bayesian network            the underlying Bayesian network
-     * @param isProducingClusters
+     * @param bayesNet            the underlying Bayesian network the underlying
+     *                            Bayesian network
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public QBInference(BayesNet bayesNet, boolean isProducingClusters)
     {
@@ -282,7 +284,7 @@ public class QBInference extends Inference
 
     /**
      * Perform calculation of marginal posterior distributions when local
-     * neighbourhoods are absent; handles global neighbourhoods if necessary.
+     * neighbourhoods are absent. Handles global neighbourhoods if necessary.
      */
     private void inferenceWithoutLocalNeighborhoods()
     {

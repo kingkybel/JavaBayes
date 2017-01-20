@@ -714,7 +714,7 @@ public class BayesPanel
     /**
      * Store the QuasiBayesNet object to be displayed in the NetworkPanel.
      *
-     * @param inferenceGraph
+     * @param inferenceGraph the underlying inference graph
      */
     void load(InferenceGraph inferenceGraph)
     {
@@ -959,9 +959,9 @@ public class BayesPanel
     /**
      * Process a query.
      *
-     * @param inferenceGraph
-     * @param queriedVariable
-     * @param modeMenuChoice
+     * @param inferenceGraph  the underlying inference graph
+     * @param queriedVariable name of the queried variable
+     * @param modeMenuChoice  type of explanation for this query
      */
     public void processQuery(InferenceGraph inferenceGraph,
                              String queriedVariable,

@@ -52,7 +52,8 @@ public class Expectation
      * Constructor for an Expectation.
      *
      * @param bayesNet            the underlying Bayesian network
-     * @param isProducingClusters
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public Expectation(BayesNet bayesNet, boolean isProducingClusters)
     {
@@ -149,7 +150,8 @@ public class Expectation
     /**
      * Set whether to produce clusters or not.
      *
-     * @param isProducingClusters true/false
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     public void setProducingClusters(boolean isProducingClusters)
     {
@@ -194,7 +196,7 @@ public class Expectation
         // Construct the function with the values.
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Type.EXPECTED_VALUE);
+                                                     MomentType.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc);
     }
@@ -202,7 +204,7 @@ public class Expectation
     /**
      * Calculation of Expectation.
      *
-     * @param queriedVariableName
+     * @param queriedVariableName name of the queried Variable
      */
     public void expectation(String queriedVariableName)
     {
@@ -215,7 +217,7 @@ public class Expectation
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Type.EXPECTED_VALUE);
+                                                     MomentType.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc, queriedVariableName);
     }
@@ -236,7 +238,7 @@ public class Expectation
         }
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(index);
         DiscreteFunction discrFunc = constructValues(probVar,
-                                                     Type.EXPECTED_VALUE);
+                                                     MomentType.EXPECTED_VALUE);
         // Calculate expectation.
         expectation(discrFunc, order);
     }
@@ -244,9 +246,9 @@ public class Expectation
     /**
      * Calculation of Expectation.
      *
-     * @param moment
+     * @param moment moment type
      */
-    public void expectation(Type moment)
+    public void expectation(MomentType moment)
     {
         // Construct the function with the values
         ProbabilityVariable probVar = bayesNet.getProbabilityVariable(0);
@@ -258,10 +260,10 @@ public class Expectation
     /**
      * Calculation of Expectation.
      *
-     * @param moment
-     * @param queriedVariableName
+     * @param moment              moment type
+     * @param queriedVariableName name of the queried Variable
      */
-    public void expectation(Type moment, String queriedVariableName)
+    public void expectation(MomentType moment, String queriedVariableName)
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(queriedVariableName);
@@ -279,10 +281,10 @@ public class Expectation
     /**
      * Calculation of expectation given order.
      *
-     * @param moment
+     * @param moment moment type
      * @param order  order of variables given as array of their names
      */
-    public void expectation(Type moment, String order[])
+    public void expectation(MomentType moment, String order[])
     {
         // Construct the function with the values
         int index = bayesNet.indexOfVariable(order[order.length - 1]);
@@ -314,7 +316,7 @@ public class Expectation
      * only of the queried variable.
      *
      * @param discrFunc           discrete function of the queried variable
-     * @param queriedVariableName the queried variable
+     * @param queriedVariableName name of the queried Variable
      */
     public void expectation(DiscreteFunction discrFunc,
                             String queriedVariableName)
@@ -344,10 +346,10 @@ public class Expectation
      * @return discrete utility function
      */
     private DiscreteFunction constructValues(ProbabilityVariable probVar,
-                                             Type moment)
+                                             MomentType moment)
     {
         DiscreteFunction discrFunc = probVar.getNumericValues();
-        if (moment != Type.EXPECTED_VALUE)
+        if (moment != MomentType.EXPECTED_VALUE)
         {
             for (int i = 0; i < discrFunc.numberValues(); i++)
             {
@@ -434,9 +436,9 @@ public class Expectation
     }
 
     /**
-     * Type of expectation to calculate.
+     * MomentType of expectation moment to calculate.
      */
-    public enum Type
+    public enum MomentType
     {
 
         /**
@@ -456,7 +458,7 @@ public class Expectation
          */
         FOURTH_MOMENT(4);
 
-        private Type(int value)
+        private MomentType(int value)
         {
             this.value = value;
         }

@@ -39,7 +39,6 @@ public class ProbabilityVariable extends DiscreteVariable
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-
     static final String observedPropertyName = "observed";
     static final String explanationPropertyName = "explanation";
 
@@ -78,17 +77,17 @@ public class ProbabilityVariable extends DiscreteVariable
      *
      * @param bayesNet   the underlying Bayesian network
      * @param name       name of the new variable
-     * @param index      given index for the variable
+     * @param varIndex   given index for the variable
      * @param values     values the variable can assume as string array
      * @param properties list of properties
      */
     public ProbabilityVariable(BayesNet bayesNet,
                                String name,
-                               int index,
+                               int varIndex,
                                String values[],
                                ArrayList<String> properties)
     {
-        super(name, index, values);
+        super(name, varIndex, values);
         this.properties = properties;
         this.bayesNet = bayesNet;
     }
@@ -469,11 +468,11 @@ public class ProbabilityVariable extends DiscreteVariable
     /**
      * Set the index of the variable.
      *
-     * @param index
+     * @param varIndex variable index
      */
-    public void setIndex(int index)
+    public void setIndex(int varIndex)
     {
-        this.index = index;
+        this.index = varIndex;
     }
 
     /**

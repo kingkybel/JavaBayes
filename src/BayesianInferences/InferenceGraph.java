@@ -79,8 +79,8 @@ public final class InferenceGraph
     /**
      * Constructor for an InferenceGraph.
      *
-     * @param filename
-     * @throws Exception
+     * @param filename name of the file describing the network
+     * @throws Exception if file cannot be read or parsed
      */
     public InferenceGraph(String filename) throws Exception
     {
@@ -92,7 +92,7 @@ public final class InferenceGraph
     /**
      * Constructor for an InferenceGraph.
      *
-     * @param url source from where to read the Bayes net
+     * @param url the URL where to find the textual description of the Bayes net
      * @throws Exception throw if the Bayes net can not be read from the URL
      */
     public InferenceGraph(URL url) throws Exception
@@ -343,7 +343,7 @@ public final class InferenceGraph
     /**
      * Add a property to the network.
      *
-     * @param property
+     * @param property property given as string
      */
     public void addNetworkProperty(String property)
     {
@@ -403,14 +403,14 @@ public final class InferenceGraph
      * Print information about a posterior marginal for the Bayesian network
      * into the given PrintStream.
      *
-     * @param pstream
+     * @param out                        output print stream
      * @param queriedVariable            indicates the variable of interest.
      * @param showBucketTree             determines whether or not to present a
      *                                   description of the BucketTree.
      * @param isProducingComputeClusters whether or not clusters should be
      *                                   produced
      */
-    public void printMarginal(PrintStream pstream,
+    public void printMarginal(PrintStream out,
                               String queriedVariable,
                               boolean isProducingComputeClusters,
                               boolean showBucketTree)
@@ -422,7 +422,7 @@ public final class InferenceGraph
             qbi = new QBInference(getBayesNet(), isProducingComputeClusters);
         }
         qbi.inference(queriedVariable);
-        qbi.print(pstream, showBucketTree);
+        qbi.print(out, showBucketTree);
     }
 
     /**
@@ -437,14 +437,14 @@ public final class InferenceGraph
      * Print information about a posterior expectation for the Bayesian network
      * into the given PrintStream.
      *
-     * @param pstream
+     * @param out                        output print stream
      * @param queriedVariable            indicates the variable of interest.
      * @param isProducingComputeClusters whether or not clusters should be
      *                                   produced
      * @param showBucketTree             determines whether or not to present a
      *                                   description of the BucketTree.
      */
-    public void printExpectation(PrintStream pstream,
+    public void printExpectation(PrintStream out,
                                  String queriedVariable,
                                  boolean isProducingComputeClusters,
                                  boolean showBucketTree)
@@ -456,7 +456,7 @@ public final class InferenceGraph
             qbe = new QBExpectation(getBayesNet(), isProducingComputeClusters);
         }
         qbe.expectation(queriedVariable);
-        qbe.print(pstream, showBucketTree);
+        qbe.print(out, showBucketTree);
     }
 
     /**

@@ -79,7 +79,7 @@ public class ProbabilityFunction extends DiscreteFunction
      *
      * @param bayesNet   the underlying Bayesian network
      * @param properties list of properties
-     * @param variables
+     * @param variables  an array of discrete variable objects
      * @param probValues the probability values of the function as array of
      *                   doubles
      */
@@ -154,7 +154,8 @@ public class ProbabilityFunction extends DiscreteFunction
 
         // Get the position of the value in the array of values
         int valuePos =
-            findPositionOfProbabilityValue(bayesNet.getProbabilityVariables(), valueIndexes);
+            findPositionOfProbabilityValue(bayesNet.getProbabilityVariables(),
+                                           valueIndexes);
         // Set the value.
         setValue(valuePos, value);
     }
@@ -205,8 +206,9 @@ public class ProbabilityFunction extends DiscreteFunction
      */
     public int getPositionFromIndexes(int variableIndexes[])
     {
-        return super.findPositionOfProbabilityValue(bayesNet.getProbabilityVariables(),
-                                         variableIndexes);
+        return super.findPositionOfProbabilityValue(bayesNet.
+                getProbabilityVariables(),
+                                                    variableIndexes);
     }
 
     /**
@@ -484,14 +486,14 @@ public class ProbabilityFunction extends DiscreteFunction
     /**
      * Remove a property in a given position in the current ProbabilityFunction.
      *
-     * @param index position of the property.
+     * @param propIndex position of the property.
      */
-    public void removeProperty(int index)
+    public void removeProperty(int propIndex)
     {
         if (properties == null)
         {
             return;
         }
-        properties.remove(index);
+        properties.remove(propIndex);
     }
 }

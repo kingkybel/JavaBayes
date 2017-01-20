@@ -93,9 +93,8 @@ class Bucket
      * @param bucketTree          The BucketTree that holds the bucket.
      * @param probVar             a probability variable. The bucket variable
      *                            for the Bucket.
-     * @param isProducingClusters Flag that indicates whether distributions for
-     *                            clusters of variables are to be computed or
-     *                            not.
+     * @param isProducingClusters true, if clusters should be produced, false
+     *                            otherwise
      */
     Bucket(BucketTree bucketTree,
            ProbabilityVariable probVar,
@@ -558,9 +557,10 @@ class Bucket
                 }
                 if (isProducingClusters)
                 { // If necessary, insert value in the clusterFunc.
-                    int valuePosCluster = clusterFunc.findPositionOfProbabilityValue(
-                        discrVars,
-                        indexes);
+                    int valuePosCluster = clusterFunc.
+                        findPositionOfProbabilityValue(
+                                discrVars,
+                                indexes);
                     clusterFunc.setValue(valuePosCluster, partialValue);
                 }
 
@@ -568,8 +568,9 @@ class Bucket
                 summedUpValue += partialValue;
             }
             // Insert the summation for the value of newDf into newDf.
-            int valuePos = newDiscrFunc.findPositionOfProbabilityValue(discrVars,
-                                                               indexes);
+            int valuePos = newDiscrFunc.
+                findPositionOfProbabilityValue(discrVars,
+                                               indexes);
             newDiscrFunc.setValue(valuePos, summedUpValue);
 
             // Update the indexes.

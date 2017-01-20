@@ -63,24 +63,24 @@ public class SaveBugs
     /**
      * Save a BayesNet in a stream in the BUGS format.
      *
-     * @param pstream
+     * @param out output print stream
      */
-    public void save(PrintStream pstream)
+    public void save(PrintStream out)
     {
-        pstream.println("# Bayesian Network in the BUGS Format");
-        pstream.println("# Produced by BayesianNetworks package in JavaBayes");
-        pstream.println("# Output created " + (new Date()));
-        pstream.println("\n");
+        out.println("# Bayesian Network in the BUGS Format");
+        out.println("# Produced by BayesianNetworks package in JavaBayes");
+        out.println("# Output created " + (new Date()));
+        out.println("\n");
 
-        saveModel(pstream);
+        saveModel(out);
 
-        saveVariables(pstream);
+        saveVariables(out);
 
-        printDataIn(pstream);
+        printDataIn(out);
 
-        saveStructure(pstream);
+        saveStructure(out);
 
-        saveData(pstream);
+        saveData(out);
     }
 
     /**
