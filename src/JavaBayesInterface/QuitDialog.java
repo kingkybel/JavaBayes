@@ -43,30 +43,32 @@ public class QuitDialog extends Dialog
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Variables
-    JavaBayes jb;
+    JavaBayes javaBayes;
 
     java.awt.Button yesButton;
     java.awt.Button noButton;
 
     /**
+     * Main constructor.
      *
-     * @param parent
-     * @param javaBayes
-     * @param title
-     * @param modal
+     * @param parent    parent frame
+     * @param javaBayes back-pointer to the main class
+     * @param title     title of the frame
+     * @param modal     whether or not to display the dialog in modal form
      */
-    public QuitDialog(Frame parent, JavaBayes javaBayes, String title,
+    public QuitDialog(Frame parent,
+                      JavaBayes javaBayes,
+                      String title,
                       boolean modal)
     {
         super(parent, title, true);
-        jb = javaBayes;
+        this.javaBayes = javaBayes;
 
         //{{INIT_CONTROLS
         setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         addNotify();
-        setSize(getInsets().left + getInsets().right + 295, getInsets().top +
-                                                            getInsets().bottom +
-                                                            92);
+        setSize(getInsets().left + getInsets().right + 295,
+                getInsets().top + getInsets().bottom + 92);
         yesButton = new java.awt.Button("Yes");
         yesButton.setBounds(getInsets().left + 51, getInsets().top + 20, 60, 40);
         add(yesButton);
@@ -80,7 +82,7 @@ public class QuitDialog extends Dialog
     void yesButtonClicked(Event event)
     {
         dispose();
-        jb.quit();
+        javaBayes.quit();
     }
 
     void noButtonClicked(Event event)

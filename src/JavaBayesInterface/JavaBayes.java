@@ -41,7 +41,7 @@ public class JavaBayes extends Applet
     /**
      * Main method for JavaBayes.
      *
-     * @param argv
+     * @param argv standard command line arguments
      */
     public static void main(String argv[])
     {
@@ -64,18 +64,12 @@ public class JavaBayes extends Applet
      */
     public boolean isApplet = false;
 
-    /**
-     * Init method for JavaBayes operating as an applet.
-     */
     @Override
     public void init()
     {
         construct(true);
     }
 
-    /**
-     * Stop method for JavaBayes operating as an applet.
-     */
     @Override
     public void stop()
     {
@@ -84,10 +78,12 @@ public class JavaBayes extends Applet
 
     /**
      * Do all the initializations for a JavaBayes object.
+     *
+     * @param isApplet true if this is run as applet, false otherwise
      */
-    private void construct(boolean ia)
+    private void construct(boolean isApplet)
     {
-        isApplet = ia;
+        this.isApplet = isApplet;
 
         editorFrame = new EditorFrame(this, "JavaBayes Editor");
         editorFrame.setVisible(true);
@@ -219,7 +215,7 @@ public class JavaBayes extends Applet
      */
     public void bifFormatAction()
     {
-        editorFrame.setSaveFormat(EditorFrame.BIF_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.SaveFormat.BIF_FORMAT);
     }
 
     /**
@@ -227,7 +223,7 @@ public class JavaBayes extends Applet
      */
     public void xmlFormatAction()
     {
-        editorFrame.setSaveFormat(EditorFrame.XML_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.SaveFormat.XML_FORMAT);
     }
 
     /**
@@ -235,7 +231,7 @@ public class JavaBayes extends Applet
      */
     public void bugsFormatAction()
     {
-        editorFrame.setSaveFormat(EditorFrame.BUGS_FORMAT);
+        editorFrame.setSaveFormat(EditorFrame.SaveFormat.BUGS_FORMAT);
     }
 
     /**
@@ -291,7 +287,7 @@ public class JavaBayes extends Applet
      */
     public void setAlgorithmVariableElimination()
     {
-        editorFrame.setAlgorithm(EditorFrame.ALGORITHM_VARIABLE_ELIMINATION);
+        editorFrame.setAlgorithm(EditorFrame.AlgorithmType.VARIABLE_ELIMINATION);
     }
 
     /**
@@ -299,7 +295,7 @@ public class JavaBayes extends Applet
      */
     public void setAlgorithmBucketTree()
     {
-        editorFrame.setAlgorithm(EditorFrame.ALGORITHM_BUCKET_TREE);
+        editorFrame.setAlgorithm(EditorFrame.AlgorithmType.BUCKET_TREE);
     }
 
 }

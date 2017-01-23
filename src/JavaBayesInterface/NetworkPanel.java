@@ -87,7 +87,7 @@ public class NetworkPanel extends Canvas
     // Used to control scrolling
     private int mode; // Store the mode for events in the panel
     // Store the mode for events in the panel
-    private InferenceGraph ig; // The object with the Bayes net
+    private InferenceGraph inferenceGraph; // The object with the Bayes net
     // The object with the Bayes net
     private final Point groupStart;
     private final Point groupEnd; // The region that is considered the group
@@ -116,14 +116,17 @@ public class NetworkPanel extends Canvas
 
     /**
      * Default constructor for NetworkPanel.
+     *
+     * @param frame       the frame for this panel
+     * @param scrollPanel scroll supporting panel
      */
-    NetworkPanel(EditorFrame frame, ScrollingPanel scroll)
+    NetworkPanel(EditorFrame frame, ScrollingPanel scrollPanel)
     {
         this.frame = frame;
-        this.scrollPanel = scroll;
+        this.scrollPanel = scrollPanel;
 
         // Create default InferenceGraph
-        ig = new InferenceGraph();
+        inferenceGraph = new InferenceGraph();
 
         // Create the group object.
         groupStart = new Point(0, 0);
@@ -173,7 +176,7 @@ public class NetworkPanel extends Canvas
             }
             else if (mode == QUERY_MODE)
             { // Query node
-                frame.processQuery(ig, node.getName());
+                frame.processQuery(inferenceGraph, node.getName());
             }
             else if (mode == MOVE_MODE)
             { // Move node
@@ -235,7 +238,7 @@ public class NetworkPanel extends Canvas
 
         if (movenode != null)
         {
-            ig.setCoordinates(movenode, new Point(x, y));
+            inferenceGraph.setCoordinates(movenode, new Point(x, y));
             movenode = null;
         }
         else if (newArc == true)
@@ -247,7 +250,7 @@ public class NetworkPanel extends Canvas
                 {
                     JavaBayesHelpMessages.show(JavaBayesHelpMessages.selfarc);
                 }
-                else if (ig.hasCycle(arcbottomnode, archeadnode))
+                else if (inferenceGraph.hasCycle(arcbottomnode, archeadnode))
                 {
                     JavaBayesHelpMessages.show(JavaBayesHelpMessages.circular);
                 }
@@ -273,9 +276,16 @@ public class NetworkPanel extends Canvas
     /**
      * Determine whether a node was hit by a mouse click.
      */
+    /**
+     *
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return the inference graph node if there is one at the location, null
+     *         otherwise
+     */
     private InferenceGraphNode nodehit(int x, int y)
     {
-        for (InferenceGraphNode node : ig.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
             if ((x - node.getXCoordinate()) * (x - node.getXCoordinate()) +
                 (y - node.getYCoordinate()) * (y - node.getYCoordinate()) <
@@ -289,12 +299,16 @@ public class NetworkPanel extends Canvas
 
     /**
      * Determine whether an arc was hit by a mouse click.
+     *
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return true if there is an arc at the location, false otherwise
      */
     boolean archit(int x, int y)
     {
         double sdpa;
 
-        for (InferenceGraphNode hnode : ig.elements())
+        for (InferenceGraphNode hnode : inferenceGraph.elements())
         {
             for (InferenceGraphNode pnode : hnode.getParents())
             {
@@ -311,11 +325,19 @@ public class NetworkPanel extends Canvas
 
     /**
      * Determine whether a point is close to the segment between two nodes
-     * (hnode and pnode); if the point does not lie over or above the segment,
-     * return -1.0
+     * (hnode and pnode).
+     *
+     * @param hnode the first node
+     * @param pnode the second node
+     * @param x3    X-coordinate
+     * @param y3    Y-coordinate
+     * @return if the point does not lie over or above the segment, return -1.0,
+     *         the height of the triangle otherwise
      */
     double squareDistancePointArc(InferenceGraphNode hnode,
-                                  InferenceGraphNode pnode, int x3, int y3)
+                                  InferenceGraphNode pnode,
+                                  int x3,
+                                  int y3)
     {
         int x1, y1, x2, y2;
         double area, squareBase, squareHeight, squareHyp;
@@ -352,9 +374,6 @@ public class NetworkPanel extends Canvas
         return squareHeight;
     }
 
-    /**
-     * Update the screen with the network.
-     */
     @Override
     public void update(Graphics g)
     {
@@ -408,7 +427,7 @@ public class NetworkPanel extends Canvas
     {
         ExplanationType explanationStatus = frame.getMode();
 
-        if (ig == null)
+        if (inferenceGraph == null)
         {
             return;
         }
@@ -424,7 +443,7 @@ public class NetworkPanel extends Canvas
         }
 
         // Draw all arcs.
-        for (InferenceGraphNode node : ig.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
             for (InferenceGraphNode parent : node.getParents())
             {
@@ -435,7 +454,7 @@ public class NetworkPanel extends Canvas
         // Draw the nodes.
         g.setFont(helvetica);
 
-        for (InferenceGraphNode node : ig.elements())
+        for (InferenceGraphNode node : inferenceGraph.elements())
         {
             g.setColor(nodeBorderColor);
             if ((node.getXCoordinate() - xScroll) >= 0)
@@ -520,8 +539,13 @@ public class NetworkPanel extends Canvas
 
     /**
      * Auxiliary function that draws an arc.
+     *
+     * @param g      graphics
+     * @param node   inference graph node
+     * @param parent parent graph node
      */
-    private void drawArc(Graphics g, InferenceGraphNode node,
+    private void drawArc(Graphics g,
+                         InferenceGraphNode node,
                          InferenceGraphNode parent)
     {
         int nodeX, nodeY, parentX, parentY;
@@ -574,10 +598,12 @@ public class NetworkPanel extends Canvas
 
     /**
      * Set the mode for the NetworkPanel.
+     *
+     * @param modeLabel
      */
-    void setMode(String label)
+    void setMode(String modeLabel)
     {
-        switch (label)
+        switch (modeLabel)
         {
             case EditorFrame.createLabel:
                 mode = CREATE_MODE;
@@ -609,18 +635,22 @@ public class NetworkPanel extends Canvas
 
     /**
      * Return the QuasiBayesNet object displayed int the NetworkPanel.
+     *
+     * @return the QuasiBayesNet object
      */
     InferenceGraph getInferenceGraph()
     {
-        return ig;
+        return inferenceGraph;
     }
 
     /**
      * Store the QuasiBayesNet object to be displayed in the NetworkPanel.
+     *
+     * @param inferenceGraph new inference graph
      */
     void load(InferenceGraph inferenceGraph)
     {
-        ig = inferenceGraph;
+        this.inferenceGraph = inferenceGraph;
         repaint();
     }
 
@@ -629,27 +659,35 @@ public class NetworkPanel extends Canvas
      */
     void clear()
     {
-        ig = new InferenceGraph();
+        inferenceGraph = new InferenceGraph();
         repaint();
     }
 
     /**
      * Observe a node.
+     *
+     * @param inferenceGraphNode
      */
-    void observe(InferenceGraphNode node)
+    void observe(InferenceGraphNode inferenceGraphNode)
     {
-        ig.resetMarginal();
-        Dialog d = new ObserveDialog(this, frame, ig, node);
+        inferenceGraph.resetMarginal();
+        Dialog d = new ObserveDialog(this,
+                                     frame,
+                                     inferenceGraph,
+                                     inferenceGraphNode);
         d.setVisible(true);
     }
 
     /**
      * Create a node.
+     *
+     * @param x X-coordinate
+     * @param y Y-coordinate
      */
     void createNode(int x, int y)
     {
-        ig.createNode(x, y);
-        ig.resetMarginal();
+        inferenceGraph.createNode(x, y);
+        inferenceGraph.resetMarginal();
     }
 
     /**
@@ -658,10 +696,11 @@ public class NetworkPanel extends Canvas
      */
     void createArc()
     {
-        boolean flagCreated = ig.createArc(arcbottomnode, archeadnode);
+        boolean flagCreated = inferenceGraph.createArc(arcbottomnode,
+                                                       archeadnode);
         if (flagCreated == true)
         {
-            ig.resetMarginal();
+            inferenceGraph.resetMarginal();
         }
     }
 
@@ -678,7 +717,7 @@ public class NetworkPanel extends Canvas
         else
         {
             movingNodes = new ArrayList<>();
-            for (InferenceGraphNode node : ig.elements())
+            for (InferenceGraphNode node : inferenceGraph.elements())
             {
                 if (insideGroup(node))
                 {
@@ -690,6 +729,9 @@ public class NetworkPanel extends Canvas
 
     /**
      * Move a node.
+     *
+     * @param x X-coordinate
+     * @param y Y-coordinate
      */
     void moveNode(int x, int y)
     {
@@ -699,7 +741,7 @@ public class NetworkPanel extends Canvas
         // Check whether the movenode is in the group.
         if (movingNodes == null)
         {
-            ig.setCoordinates(movenode, new Point(x, y)); // Move only the movenode.
+            inferenceGraph.setCoordinates(movenode, new Point(x, y)); // Move only the movenode.
         }
         else
         {
@@ -709,29 +751,33 @@ public class NetworkPanel extends Canvas
             groupEnd.y -= deltaY;
             for (InferenceGraphNode node : movingNodes)
             {
-                ig.setCoordinates(node, // Move all nodes in the group.
-                                  new Point(node.getXCoordinate() - deltaX,
-                                            node.getYCoordinate() - deltaY));
+                inferenceGraph.setCoordinates(node, // Move all nodes in the group.
+                                              new Point(node.getXCoordinate() -
+                                                        deltaX,
+                                                        node.getYCoordinate() -
+                                                        deltaY));
             }
         }
     }
 
     /**
      * Delete a node.
+     *
+     * @param inferenceGraphNode
      */
-    void deleteNode(InferenceGraphNode node)
+    void deleteNode(InferenceGraphNode inferenceGraphNode)
     {
         ArrayList<InferenceGraphNode> nodesToDelete;
 
         // Check whether the node is in the group.
-        if (!insideGroup(node))
+        if (!insideGroup(inferenceGraphNode))
         {
-            ig.deleteNode(node); // Delete only the movenode.
+            inferenceGraph.deleteNode(inferenceGraphNode); // Delete only the movenode.
         }
         else
         {
             nodesToDelete = new ArrayList<>();
-            for (InferenceGraphNode dnode : ig.elements())
+            for (InferenceGraphNode dnode : inferenceGraph.elements())
             {
                 if (insideGroup(dnode))
                 {
@@ -740,14 +786,17 @@ public class NetworkPanel extends Canvas
             }
             for (InferenceGraphNode dnode : nodesToDelete)
             {
-                ig.deleteNode(dnode);
+                inferenceGraph.deleteNode(dnode);
             }
         }
-        ig.resetMarginal();
+        inferenceGraph.resetMarginal();
     }
 
     /**
      * Determine whether a given InferenceGraphNode is inside the group.
+     *
+     * @param node inference graph node
+     * @return true if so false otherwise
      */
     boolean insideGroup(InferenceGraphNode node)
     {
@@ -763,27 +812,36 @@ public class NetworkPanel extends Canvas
      */
     void deleteArc()
     {
-        ig.deleteArc(arcbottomnode, archeadnode);
-        ig.resetMarginal();
+        inferenceGraph.deleteArc(arcbottomnode, archeadnode);
+        inferenceGraph.resetMarginal();
     }
 
     /**
      * Edit the components of a node.
+     *
+     * @param inferenceGraphNode inference graph node
      */
-    void editVariable(InferenceGraphNode node)
+    void editVariable(InferenceGraphNode inferenceGraphNode)
     {
-        ig.resetMarginal();
-        Dialog d = new EditVariableDialog(this, frame, ig, node);
+        inferenceGraph.resetMarginal();
+        Dialog d = new EditVariableDialog(this,
+                                          frame,
+                                          inferenceGraph,
+                                          inferenceGraphNode);
         d.setVisible(true);
     }
 
     /**
      * Edit the function in a node.
+     *
+     * @param inferenceGraphNode inference graph node
      */
-    void editFunction(InferenceGraphNode node)
+    void editFunction(InferenceGraphNode inferenceGraphNode)
     {
-        ig.resetMarginal();
-        Dialog d = new EditFunctionDialog(frame, ig, node);
+        inferenceGraph.resetMarginal();
+        Dialog d = new EditFunctionDialog(frame,
+                                          inferenceGraph,
+                                          inferenceGraphNode);
         d.setVisible(true);
     }
 
@@ -792,8 +850,8 @@ public class NetworkPanel extends Canvas
      */
     void editNetwork()
     {
-        ig.resetMarginal();
-        Dialog d = new EditNetworkDialog(frame, ig);
+        inferenceGraph.resetMarginal();
+        Dialog d = new EditNetworkDialog(frame, inferenceGraph);
         d.setVisible(true);
     }
 

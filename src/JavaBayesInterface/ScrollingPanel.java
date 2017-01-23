@@ -52,6 +52,11 @@ public class ScrollingPanel extends Panel
      */
     public NetworkPanel netPanel;
 
+    /**
+     * Main constructor of the scrolling panel.
+     *
+     * @param editorFrame the editor frame where the panel belongs
+     */
     ScrollingPanel(EditorFrame editorFrame)
     {
         // Start the scrollbars without valid parameters since network is not there.
@@ -70,12 +75,18 @@ public class ScrollingPanel extends Panel
 
     /**
      * Update the scrollbars.
+     *
+     * @param dimension the new dimensions for the scrollbars
      */
-    void setScrollbars(Dimension d)
+    void setScrollbars(Dimension dimension)
     {
-        horizontal.setValues(horizontal.getValue(), d.width,
-                             horizontal.getMinimum(), horizontal.getMaximum());
-        vertical.setValues(vertical.getValue(), d.height, vertical.getMinimum(),
+        horizontal.setValues(horizontal.getValue(),
+                             dimension.width,
+                             horizontal.getMinimum(),
+                             horizontal.getMaximum());
+        vertical.setValues(vertical.getValue(),
+                           dimension.height,
+                           vertical.getMinimum(),
                            vertical.getMaximum());
     }
 

@@ -54,73 +54,52 @@ public class EditorFrame extends Frame
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    // Constants
     /**
-     *
+     * Enumeration of formats in which to save the net.
      */
-    final static public int BIF_FORMAT = 0;
+    public enum SaveFormat
+    {
+
+        /**
+         * Bayes interchange format.
+         */
+        BIF_FORMAT,
+        /**
+         * XML representation.
+         */
+        XML_FORMAT,
+        /**
+         * BUGS save format.
+         */
+        BUGS_FORMAT
+    }
 
     /**
-     *
+     * Enumeration of the algorithms available.
      */
-    final static public int XML_FORMAT = 1;
+    public enum AlgorithmType
+    {
 
-    /**
-     *
-     */
-    final static public int BUGS_FORMAT = 2;
-
-    /**
-     *
-     */
-    final static public int ALGORITHM_VARIABLE_ELIMINATION = 0;
-
-    /**
-     *
-     */
-    final static public int ALGORITHM_BUCKET_TREE = 1;
+        /**
+         * Variable elimination
+         */
+        VARIABLE_ELIMINATION,
+        /**
+         * Bucket tree algorithm.
+         */
+        BUCKET_TREE
+    }
 
     // constants for caption text of all buttons
-    /**
-     *
-     */
-    public static final String createLabel = "Create";
-
-    /**
-     *
-     */
-    public static final String moveLabel = "Move";
-
-    /**
-     *
-     */
-    public static final String deleteLabel = "Delete";
-
-    /**
-     *
-     */
-    public static final String queryLabel = "Query";
-
-    /**
-     *
-     */
-    public static final String observeLabel = "Observe";
-
-    /**
-     *
-     */
-    public static final String editVariableLabel = "Edit Variable";
-
-    /**
-     *
-     */
-    public static final String editFunctionLabel = "Edit Function";
-
-    /**
-     *
-     */
-    public static final String editNetworkLabel = "Edit Network";
-    JavaBayes jb;
+    static final String createLabel = "Create";
+    static final String moveLabel = "Move";
+    static final String deleteLabel = "Delete";
+    static final String queryLabel = "Query";
+    static final String observeLabel = "Observe";
+    static final String editVariableLabel = "Edit Variable";
+    static final String editFunctionLabel = "Edit Function";
+    private static final String editNetworkLabel = "Edit Network";
+    JavaBayes javaBayes;
     Panel cmdPanel;
     Panel editPanel;
     /**
@@ -131,21 +110,21 @@ public class EditorFrame extends Frame
     ExplanationType modeMenuChoice = ExplanationType.MARGINAL_POSTERIOR;
     boolean whatToShowBayesianNetworkState = false;
     boolean whatToShowBucketTreeState = false;
-    int saveFormat = BIF_FORMAT;
+    SaveFormat saveFormat = SaveFormat.BIF_FORMAT;
     private String currentSaveFilename;
-    private int algorithmType = ALGORITHM_VARIABLE_ELIMINATION;
+    private AlgorithmType algorithmType = AlgorithmType.VARIABLE_ELIMINATION;
 
     /**
      * Default constructor for an EditorFrame.
      *
-     * @param javaBayes backpointer to the main class
+     * @param javaBayes back-pointer to the main class
      * @param title     title of the frame
      */
     public EditorFrame(JavaBayes javaBayes, String title)
     {
         super(title);
 
-        jb = javaBayes;
+        this.javaBayes = javaBayes;
 
         scrollPanel = new ScrollingPanel(this);
 
@@ -182,9 +161,9 @@ public class EditorFrame extends Frame
     {
         if (evt.id == Event.WINDOW_DESTROY)
         {
-            if (jb != null)
+            if (javaBayes != null)
             {
-                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(
+                (new QuitDialog(this, javaBayes, "Quit JavaBayes?", false)).setVisible(
                         true);
             }
         }
@@ -196,7 +175,7 @@ public class EditorFrame extends Frame
     {
         if (evt.target instanceof Button)
         {
-            String label = ((Button) (evt.target)).getLabel();
+            String label = ((Button) evt.target).getLabel();
 
             switch ((String) arg)
             {
@@ -250,19 +229,19 @@ public class EditorFrame extends Frame
 
         try
         {
-            if (jb.isApplet)
+            if (javaBayes.isApplet)
             {
                 return false;
             }
             else
             {
-                jb.appendText("\nLoading " + filename + "\n");
+                javaBayes.appendText("\nLoading " + filename + "\n");
                 inferenceGraph = new InferenceGraph(filename);
             }
         }
         catch (Exception e)
         {
-            jb.appendText(e + "\n");
+            javaBayes.appendText(e + "\n");
             return false;
         }
 
@@ -284,12 +263,12 @@ public class EditorFrame extends Frame
 
         try
         {
-            jb.appendText("\nLoading " + filename + "\n");
+            javaBayes.appendText("\nLoading " + filename + "\n");
             ig = new InferenceGraph(new URL(filename));
         }
         catch (Exception e)
         {
-            jb.appendText("Exception: " + e + "\n");
+            javaBayes.appendText("Exception: " + e + "\n");
             return false;
         }
 
@@ -321,20 +300,19 @@ public class EditorFrame extends Frame
 
         if (filename == null)
         {
-            jb.appendText("\n Filename invalid!");
+            javaBayes.appendText("\n Filename invalid!");
             return false;
         }
 
         if (ig == null)
         {
-            jb.appendText("\n No Bayesian network to be saved.\n\n");
+            javaBayes.appendText("\n No Bayesian network to be saved.\n\n");
             return false;
         }
 
-        try
+        try (FileOutputStream fileout = new FileOutputStream(filename);
+             PrintStream out = new PrintStream(fileout))
         {
-            FileOutputStream fileout = new FileOutputStream(filename);
-            PrintStream out = new PrintStream(fileout);
             switch (saveFormat)
             {
                 case BIF_FORMAT:
@@ -347,14 +325,13 @@ public class EditorFrame extends Frame
                     ig.saveBugs(out);
                     break;
             }
-            out.close();
-            fileout.close();
         }
         catch (IOException e)
         {
-            jb.appendText("Exception: " + e + "\n");
+            javaBayes.appendText("Exception: " + e + "\n");
             return false;
         }
+
         return true;
     }
 
@@ -378,7 +355,7 @@ public class EditorFrame extends Frame
         // Check whether inference is possible
         if (inferenceGraph == null)
         {
-            jb.appendText("\nLoad Bayesian network.\n\n");
+            javaBayes.appendText("\nLoad Bayesian network.\n\n");
             return;
         }
 
@@ -415,7 +392,7 @@ public class EditorFrame extends Frame
         }
 
         // Print results to test window
-        jb.appendText(bstream.toString());
+        javaBayes.appendText(bstream.toString());
 
         // Close streams
         try
@@ -445,20 +422,25 @@ public class EditorFrame extends Frame
      *
      * @param out             output print stream
      * @param queriedVariable name of the queried variable
-     * @param ig
+     * @param inferenceGraph  the underlying inference graph
      */
-    protected void printMarginal(PrintStream out, InferenceGraph ig,
+    protected void printMarginal(PrintStream out,
+                                 InferenceGraph inferenceGraph,
                                  String queriedVariable)
     {
-        if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
+        if (algorithmType == AlgorithmType.VARIABLE_ELIMINATION)
         {
-            ig.printMarginal(out, queriedVariable, false,
-                             whatToShowBucketTreeState);
+            inferenceGraph.printMarginal(out,
+                                         queriedVariable,
+                                         false,
+                                         whatToShowBucketTreeState);
         }
-        else if (algorithmType == ALGORITHM_BUCKET_TREE)
+        else if (algorithmType == AlgorithmType.BUCKET_TREE)
         {
-            ig.printMarginal(out, queriedVariable, true,
-                             whatToShowBucketTreeState);
+            inferenceGraph.printMarginal(out,
+                                         queriedVariable,
+                                         true,
+                                         whatToShowBucketTreeState);
         }
     }
 
@@ -473,12 +455,12 @@ public class EditorFrame extends Frame
                                     InferenceGraph inferenceGraph,
                                     String queriedVariable)
     {
-        if (algorithmType == ALGORITHM_VARIABLE_ELIMINATION)
+        if (algorithmType == AlgorithmType.VARIABLE_ELIMINATION)
         {
             inferenceGraph.printExpectation(out, queriedVariable, false,
                                             whatToShowBucketTreeState);
         }
-        else if (algorithmType == ALGORITHM_BUCKET_TREE)
+        else if (algorithmType == AlgorithmType.BUCKET_TREE)
         {
             inferenceGraph.printExpectation(out, queriedVariable, true,
                                             whatToShowBucketTreeState);
@@ -623,7 +605,8 @@ public class EditorFrame extends Frame
     /**
      * Interact with menu options: whether to show BucketTree.
      *
-     * @param whatToShowBucketTree
+     * @param whatToShowBucketTree true if bucket tree should be shown, false
+     *                             otherwise
      */
     public void whatToShowBucketTreeAction(boolean whatToShowBucketTree)
     {
@@ -633,14 +616,13 @@ public class EditorFrame extends Frame
     /**
      * Interact with menu options: whether to show Bayesian networks.
      *
-     *
-     * @param whatToShowBayesianNetwork
+     * @param whatToShowBayesianNetwork true if Bayes net should be shown, false
+     *                                  otherwise
      */
     public void whatToShowBayesianNetworkAction(
             boolean whatToShowBayesianNetwork)
     {
-        whatToShowBayesianNetworkState =
-        whatToShowBayesianNetwork;
+        whatToShowBayesianNetworkState = whatToShowBayesianNetwork;
     }
 
     /**
@@ -691,20 +673,20 @@ public class EditorFrame extends Frame
     /**
      * Set the format for saving.
      *
-     * @param sf
+     * @param saveFormat format to save the net in
      */
-    public void setSaveFormat(int sf)
+    public void setSaveFormat(SaveFormat saveFormat)
     {
-        saveFormat = sf;
+        this.saveFormat = saveFormat;
     }
 
     /**
      * Set the algorithm type.
      *
-     * @param type
+     * @param algorithmType the new algorithm type
      */
-    public void setAlgorithm(int type)
+    public void setAlgorithm(AlgorithmType algorithmType)
     {
-        algorithmType = type;
+        this.algorithmType = algorithmType;
     }
 }

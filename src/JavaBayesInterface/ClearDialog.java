@@ -48,14 +48,17 @@ public class ClearDialog extends Dialog
     java.awt.Button noButton;
 
     /**
+     * Main constructor.
      *
-     * @param parent
-     * @param javaBayes
-     * @param title
-     * @param modal
+     * @param parent    parent frame
+     * @param javaBayes back-pointer to the main class
+     * @param title     title of the frame
+     * @param modal     whether or not to display the dialog in modal form
      */
-    public ClearDialog(Frame parent, JavaBayes javaBayes,
-                       String title, boolean modal)
+    public ClearDialog(Frame parent,
+                       JavaBayes javaBayes,
+                       String title,
+                       boolean modal)
     {
         super(parent, title, true);
         jb = javaBayes;

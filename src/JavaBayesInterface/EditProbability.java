@@ -41,11 +41,11 @@ class EditProbability extends EditFunctionPanel
 
     EditFunctionDialog parentDialog;
 
-    // The graph and node that contain the probability function.
-    InferenceGraph ig;
-    InferenceGraphNode node;
+    // The graph and inferenceGraphNode that contain the probability function.
+    InferenceGraph inferenceGraph;
+    InferenceGraphNode inferenceGraphNode;
 
-    // Variables that hold the relevant information from the node.
+    // Variables that hold the relevant information from the inferenceGraphNode.
     String allVariableNames[];
     String allVariableValues[][];
     double probabilityValues[];
@@ -54,25 +54,31 @@ class EditProbability extends EditFunctionPanel
 
     /**
      * Default constructor for an EditProbability.
+     *
+     * @param parentDialog       parent dialog
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode inferenceGraphNode of the credal set
      */
     EditProbability(EditFunctionDialog parentDialog,
-                    InferenceGraph iG, InferenceGraphNode iGN)
+                    InferenceGraph inferenceGraph,
+                    InferenceGraphNode inferenceGraphNode)
     {
         this.parentDialog = parentDialog;
-        this.ig = iG;
-        this.node = iGN;
+        this.inferenceGraph = inferenceGraph;
+        this.inferenceGraphNode = inferenceGraphNode;
 
-        // Copy the probability values in the node.
-        double originalProbabilityValues[] = node.getFunctionValues();
+        // Copy the probability values in the inferenceGraphNode.
+        double originalProbabilityValues[] =
+                 this.inferenceGraphNode.getFunctionValues();
         probabilityValues = new double[originalProbabilityValues.length];
         System.arraycopy(originalProbabilityValues, 0, probabilityValues, 0,
                          probabilityValues.length);
 
         // Get the variable names.
-        allVariableNames = node.getAllNames();
+        allVariableNames = this.inferenceGraphNode.getAllNames();
 
         // Get the variable values.
-        allVariableValues = node.getAllVariableValues();
+        allVariableValues = this.inferenceGraphNode.getAllVariableValues();
 
         // Construct the name of the probability function.
         Label probabilityName = createProbabilityName();
@@ -94,11 +100,12 @@ class EditProbability extends EditFunctionPanel
     private Label createProbabilityName()
     {
         StringBuilder name = new StringBuilder("p(");
-        name.append(node.getName());
-        if (node.hasParent())
+        name.append(inferenceGraphNode.getName());
+        if (inferenceGraphNode.hasParent())
         {
             name.append(" |");
-            ArrayList<InferenceGraphNode> parents = node.getParents();
+            ArrayList<InferenceGraphNode> parents =
+                                          inferenceGraphNode.getParents();
             for (InferenceGraphNode parent : parents)
             {
                 name.append(" ").append((parent).getName()).append(",");
@@ -119,7 +126,7 @@ class EditProbability extends EditFunctionPanel
         // Get the values from the table.
         probabilityValues = probabilityTable.getTable();
         // Check whether things add up to one.
-        int numberValues = node.getNumberValues();
+        int numberValues = inferenceGraphNode.getNumberValues();
         int numberConditioningValues =
             probabilityValues.length / numberValues;
         double verificationCounters[] =
@@ -137,7 +144,7 @@ class EditProbability extends EditFunctionPanel
                 if (parentDialog.parent instanceof EditorFrame)
                 {
                     ef = (EditorFrame) (parentDialog.parent);
-                    ef.jb.appendText("Some of the probability values " +
+                    ef.javaBayes.appendText("Some of the probability values " +
                                      "you have edited add up to " +
                                      verificationCounters[j] +
                                      ". Please check it.\n\n");
@@ -145,7 +152,7 @@ class EditProbability extends EditFunctionPanel
             }
         }
         // Set the values.
-        node.setFunctionValues(probabilityValues);
+        inferenceGraphNode.setFunctionValues(probabilityValues);
     }
 
     @Override

@@ -49,19 +49,22 @@ class PropertyManager
 
     /**
      * Default constructor for PropertyManager.
+     *
+     * @param originalProperties list of original properties
+     * @param textField          a textfield object
      */
-    PropertyManager(ArrayList<String> op, TextField tf)
+    PropertyManager(ArrayList<String> originalProperties, TextField textField)
     {
         String property;
 
         // Copy the inputs into internal variables.
-        originalProperties = op;
-        textField = tf;
+        this.originalProperties = originalProperties;
+        this.textField = textField;
         // Make the copy of the properties.
         modifiedProperties = new ArrayList<>();
-        if (op != null)
+        if (originalProperties != null)
         {
-            for (String e : op)
+            for (String e : originalProperties)
             {
                 modifiedProperties.add(e);
             }
@@ -163,6 +166,8 @@ class PropertyManager
 
     /**
      * Modify a property when the dialog exits.
+     *
+     * @return a list of properties with the displayed property updated
      */
     ArrayList<String> updatePropertyOnExit()
     {
@@ -170,14 +175,13 @@ class PropertyManager
 
         if (displayedPropertyIndex != -1)
         {
-            property =
-            (String) (modifiedProperties.get(displayedPropertyIndex));
+            property = (String) modifiedProperties.get(displayedPropertyIndex);
         }
         else
         {
             property = "";
         }
-        if (!(property.equals(textField.getText())))
+        if (!property.equals(textField.getText()))
         {
             updateProperty();
         }

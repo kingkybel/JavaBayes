@@ -78,18 +78,18 @@ class EditNetworkDialog extends Dialog
     private final static String okLabel = "Apply";
     private final static String dismissLabel = "Dismiss";
     // The InferenceGraph object that contains the network.
-    InferenceGraph ig;
+    InferenceGraph inferenceGraph;
     // Variables that hold the properties in the dialog.
     PropertyManager propertyManager;
     // Variables used to construct the dialog.
     int displayedNetworkPropertyIndex;
-    Panel np;
-    Panel npp;
-    Panel gnp;
+    Panel namePanel;
+    Panel networkPropertyPanel;
+    Panel globalNeighbourhoodPanel;
     Panel gncp;
-    Panel gnpp;
-    Panel tp;
-    Panel okp;
+    Panel globalNeighbourhoodPropertyPanel;
+    Panel parameterPanel;
+    Panel okPanel;
     Label name;
     Label networkProperties;
     TextField textName;
@@ -110,37 +110,40 @@ class EditNetworkDialog extends Dialog
 
     /**
      * Default constructor for an EditNetworkDialog object.
+     *
+     * @param parent         parent frame
+     * @param inferenceGraph inference graph referring to
      */
-    EditNetworkDialog(Frame parent, InferenceGraph iG)
+    EditNetworkDialog(Frame parent, InferenceGraph inferenceGraph)
     {
         super(parent, dialogTitle, true);
-        this.ig = iG;
+        this.inferenceGraph = inferenceGraph;
 
         // Compose the whole frame.
         // Panel for the name.
-        np = new Panel();
-        np.setLayout(new BorderLayout());
+        namePanel = new Panel();
+        namePanel.setLayout(new BorderLayout());
         name = new Label(nameLabel);
         textName = new TextField(30);
-        np.add("West", name);
-        np.add("Center", textName);
+        namePanel.add("West", name);
+        namePanel.add("Center", textName);
 
         // Network properties.
-        npp = new Panel();
-        npp.setLayout(new BorderLayout());
+        networkPropertyPanel = new Panel();
+        networkPropertyPanel.setLayout(new BorderLayout());
         networkProperties = new Label(networkPropertiesLabel);
         nextNetworkProperty = new Button(nextPropertyLabel);
         newNetworkProperty = new Button(newPropertyLabel);
         networkPropertiesText = new TextField(40);
 
-        npp.add("North", networkProperties);
-        npp.add("West", nextNetworkProperty);
-        npp.add("Center", networkPropertiesText);
-        npp.add("East", newNetworkProperty);
+        networkPropertyPanel.add("North", networkProperties);
+        networkPropertyPanel.add("West", nextNetworkProperty);
+        networkPropertyPanel.add("Center", networkPropertiesText);
+        networkPropertyPanel.add("East", newNetworkProperty);
 
         // Global neighborhood parameters
-        gnp = new Panel();
-        gnp.setLayout(new BorderLayout());
+        globalNeighbourhoodPanel = new Panel();
+        globalNeighbourhoodPanel.setLayout(new BorderLayout());
         global = new Label(globalLabel);
 
         gncp = new Panel();
@@ -157,35 +160,35 @@ class EditNetworkDialog extends Dialog
         gncp.add(totalGlobal);
         gncp.add(boundedGlobal);
 
-        gnpp = new Panel();
-        gnpp.setLayout(new BorderLayout());
+        globalNeighbourhoodPropertyPanel = new Panel();
+        globalNeighbourhoodPropertyPanel.setLayout(new BorderLayout());
         globalParameter = new Label(globalParameterLabel);
         textGlobalParameter = new TextField(10);
-        gnpp.add("West", globalParameter);
-        gnpp.add("Center", textGlobalParameter);
+        globalNeighbourhoodPropertyPanel.add("West", globalParameter);
+        globalNeighbourhoodPropertyPanel.add("Center", textGlobalParameter);
 
-        gnp.add("North", global);
-        gnp.add("Center", gncp);
-        gnp.add("South", gnpp);
+        globalNeighbourhoodPanel.add("North", global);
+        globalNeighbourhoodPanel.add("Center", gncp);
+        globalNeighbourhoodPanel.add("South", globalNeighbourhoodPropertyPanel);
 
         // All the network parameters
-        tp = new Panel();
-        tp.setLayout(new BorderLayout());
-        tp.add("North", np);
-        tp.add("Center", npp);
-        tp.add("South", gnp);
+        parameterPanel = new Panel();
+        parameterPanel.setLayout(new BorderLayout());
+        parameterPanel.add("North", namePanel);
+        parameterPanel.add("Center", networkPropertyPanel);
+        parameterPanel.add("South", globalNeighbourhoodPanel);
 
         // Return buttons
-        okp = new Panel();
-        okp.setLayout(new FlowLayout(FlowLayout.CENTER));
+        okPanel = new Panel();
+        okPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         okButton = new Button(okLabel);
         dismissButton = new Button(dismissLabel);
-        okp.add(okButton);
-        okp.add(dismissButton);
+        okPanel.add(okButton);
+        okPanel.add(dismissButton);
 
         setLayout(new BorderLayout());
-        add("North", tp);
-        add("Center", okp);
+        add("North", parameterPanel);
+        add("Center", okPanel);
 
         // Pack the whole window
         pack();
@@ -209,9 +212,6 @@ class EditNetworkDialog extends Dialog
         super.setVisible(show);
     }
 
-    /**
-     * Customized getInsets() method.
-     */
     @Override
     public Insets getInsets()
     {
@@ -220,9 +220,6 @@ class EditNetworkDialog extends Dialog
                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
-    /**
-     * Handle the possible destruction of the window.
-     */
     @Override
     public boolean handleEvent(Event evt)
     {
@@ -244,17 +241,18 @@ class EditNetworkDialog extends Dialog
         double par;
 
         // Synchronize the network if necessary.
-        ig.getBayesNet();
+        inferenceGraph.getBayesNet();
 
         // Fill the name.
-        textName.setText(ig.getName());
+        textName.setText(inferenceGraph.getName());
 
         // Fill and store network properties
-        propertyManager = new PropertyManager(ig.getNetworkProperties(),
+        propertyManager = new PropertyManager(inferenceGraph.
+        getNetworkProperties(),
                                               networkPropertiesText);
 
         // Set global neighborhood
-        switch (ig.getGlobalNeighborhoodType())
+        switch (inferenceGraph.getGlobalNeighborhoodType())
         {
             case NO_CREDAL_SET:
                 globals.setSelectedCheckbox(noGlobal);
@@ -273,13 +271,10 @@ class EditNetworkDialog extends Dialog
                 break;
         }
 
-        par = ig.getGlobalNeighborhoodParameter();
+        par = inferenceGraph.getGlobalNeighborhoodParameter();
         textGlobalParameter.setText(String.valueOf(par));
     }
 
-    /**
-     * Handle the possible events.
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {
@@ -318,12 +313,12 @@ class EditNetworkDialog extends Dialog
     {
         // Update the name of the network.
         String newNetworkName = textName.getText();
-        if (!(newNetworkName.equals(ig.getName())))
+        if (!(newNetworkName.equals(inferenceGraph.getName())))
         {
-            newNetworkName = ig.checkName(newNetworkName);
+            newNetworkName = inferenceGraph.checkName(newNetworkName);
             if (newNetworkName != null)
             {
-                ig.setName(newNetworkName);
+                inferenceGraph.setName(newNetworkName);
             }
         }
 
@@ -331,31 +326,35 @@ class EditNetworkDialog extends Dialog
         ArrayList<String> properties = propertyManager.updatePropertyOnExit();
         if (properties != null)
         {
-            ig.setNetworkProperties(properties);
+            inferenceGraph.setNetworkProperties(properties);
         }
 
         // Update the global neighborhood parameters.
         Checkbox selectedGlobalNeighborhood = globals.getSelectedCheckbox();
         if (selectedGlobalNeighborhood == noGlobal)
         {
-            ig.setGlobalNeighborhood(GlobalNeighbourhood.NO_CREDAL_SET);
+            inferenceGraph.setGlobalNeighborhood(
+                    GlobalNeighbourhood.NO_CREDAL_SET);
         }
         else if (selectedGlobalNeighborhood == epsilonGlobal)
         {
-            ig.setGlobalNeighborhood(GlobalNeighbourhood.EPSILON_CONTAMINATED);
+            inferenceGraph.setGlobalNeighborhood(
+                    GlobalNeighbourhood.EPSILON_CONTAMINATED);
         }
         else if (selectedGlobalNeighborhood == ratioGlobal)
         {
-            ig.setGlobalNeighborhood(GlobalNeighbourhood.CONSTANT_DENSITY_RATIO);
+            inferenceGraph.setGlobalNeighborhood(
+                    GlobalNeighbourhood.CONSTANT_DENSITY_RATIO);
         }
         else if (selectedGlobalNeighborhood == boundedGlobal)
         {
-            ig.setGlobalNeighborhood(
+            inferenceGraph.setGlobalNeighborhood(
                     GlobalNeighbourhood.CONSTANT_DENSITY_BOUNDED);
         }
         else if (selectedGlobalNeighborhood == totalGlobal)
         {
-            ig.setGlobalNeighborhood(GlobalNeighbourhood.TOTAL_VARIATION);
+            inferenceGraph.setGlobalNeighborhood(
+                    GlobalNeighbourhood.TOTAL_VARIATION);
         }
 
         try
@@ -365,7 +364,7 @@ class EditNetworkDialog extends Dialog
             {
                 par = 0.0;
             }
-            ig.setGlobalNeighborhoodParameter(par);
+            inferenceGraph.setGlobalNeighborhoodParameter(par);
         }
         catch (NumberFormatException e)
         {

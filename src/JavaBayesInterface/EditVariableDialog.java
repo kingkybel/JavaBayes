@@ -81,8 +81,8 @@ class EditVariableDialog extends Dialog
     NetworkPanel npan;
     // The InferenceGraph and InferenceGraphNode objects
     // that hold the variable.
-    InferenceGraph ig;
-    InferenceGraphNode node;
+    InferenceGraph inferenceGraph;
+    InferenceGraphNode inferenceGraphNode;
     // Variables that hold the contents of the dialog.
     int numberExtremePoints;
     PropertyManager variablePropertyManager;
@@ -130,14 +130,21 @@ class EditVariableDialog extends Dialog
 
     /**
      * Default constructor for an EditVariableDialog object.
+     *
+     * @param networkPanel       the network panel
+     * @param parent             parent frame
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode inferenceGraphNode of the credal set
      */
-    EditVariableDialog(NetworkPanel networkPanel, Frame parent,
-                       InferenceGraph iG, InferenceGraphNode node)
+    EditVariableDialog(NetworkPanel networkPanel,
+                       Frame parent,
+                       InferenceGraph inferenceGraph,
+                       InferenceGraphNode inferenceGraphNode)
     {
-        super(parent, "Edit: " + node.getName(), true);
+        super(parent, "Edit: " + inferenceGraphNode.getName(), true);
         this.npan = networkPanel;
-        this.ig = iG;
-        this.node = node;
+        this.inferenceGraph = inferenceGraph;
+        this.inferenceGraphNode = inferenceGraphNode;
 
         // Compose the frame
         // Panel for name, values and type
@@ -245,9 +252,6 @@ class EditVariableDialog extends Dialog
         fillDialog();
     }
 
-    /**
-     * Customized setVisible method.
-     */
     @Override
     public void setVisible(boolean show)
     {
@@ -260,9 +264,6 @@ class EditVariableDialog extends Dialog
         super.setVisible(show);
     }
 
-    /**
-     * Customize getInsets() method.
-     */
     @Override
     public Insets getInsets()
     {
@@ -271,9 +272,6 @@ class EditVariableDialog extends Dialog
                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
-    /**
-     * Handle the possible destruction of the window.
-     */
     @Override
     public boolean handleEvent(Event evt)
     {
@@ -294,13 +292,13 @@ class EditVariableDialog extends Dialog
         String property;
 
         // Synchronize the network if necessary.
-        ig.getBayesNet();
+        inferenceGraph.getBayesNet();
 
         // Fill name
-        textName.setText(node.getName());
+        textName.setText(inferenceGraphNode.getName());
 
         // Fill values
-        values = node.getValues();
+        values = inferenceGraphNode.getValues();
         for (int i = 0; i < values.length; i++)
         {
             allValues += values[i];
@@ -312,7 +310,7 @@ class EditVariableDialog extends Dialog
         textNewValue.setText(allValues);
 
         // Set type: explanatory or chance.
-        if (node.isExplanation())
+        if (inferenceGraphNode.isExplanation())
         {
             types.setSelectedCheckbox(explanationType);
         }
@@ -322,7 +320,7 @@ class EditVariableDialog extends Dialog
         }
 
         // Set type: standard or credal.
-        if (node.isCredalSet())
+        if (inferenceGraphNode.isCredalSet())
         {
             functionTypes.setSelectedCheckbox(localCredalSetType);
         }
@@ -333,16 +331,13 @@ class EditVariableDialog extends Dialog
 
         // Fill and store properties
         variablePropertyManager =
-        new PropertyManager(node.getVariableProperties(),
+        new PropertyManager(inferenceGraphNode.getVariableProperties(),
                             variablePropertiesText);
         functionPropertyManager =
-        new PropertyManager(node.getFunctionProperties(),
+        new PropertyManager(inferenceGraphNode.getFunctionProperties(),
                             functionPropertiesText);
     }
 
-    /**
-     * Handle the events.
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {
@@ -383,7 +378,7 @@ class EditVariableDialog extends Dialog
         }
         else if (evt.target == distButton)
         {
-            npan.editFunction(node);
+            npan.editFunction(inferenceGraphNode);
         }
         else
         {
@@ -395,6 +390,9 @@ class EditVariableDialog extends Dialog
 
     /**
      * Parse the values stated in the values TextField.
+     *
+     * @param allValues all values in a single string
+     * @return a string array containing the parsed strings
      */
     private String[] parseValues(String allValues)
     {
@@ -405,7 +403,7 @@ class EditVariableDialog extends Dialog
 
         while (st.hasMoreTokens())
         {
-            vals[i] = ig.makeValidValue(st.nextToken());
+            vals[i] = inferenceGraph.makeValidValue(st.nextToken());
             i++;
         }
         return vals;
@@ -417,51 +415,51 @@ class EditVariableDialog extends Dialog
     private void updateDialog()
     {
         // Update the name of the variable.
-        String checkedName = ig.checkName(textName.getText());
+        String checkedName = inferenceGraph.checkName(textName.getText());
         if (checkedName != null)
         {
-            node.setName(checkedName);
+            inferenceGraphNode.setName(checkedName);
         }
         // Update the values of the variable.
         String[] values = parseValues(textNewValue.getText());
         if (values != null)
         {
-            ig.changeValues(node, values);
+            inferenceGraph.changeValues(inferenceGraphNode, values);
         }
         // Update the explanatory/chance type.
         if (types.getSelectedCheckbox() == chanceType)
         {
-            node.setExplanation(false);
+            inferenceGraphNode.setExplanation(false);
         }
         else
         {
-            node.setExplanation(true);
+            inferenceGraphNode.setExplanation(true);
         }
         npan.repaint();
         // Update the standard/credal type.
         if (functionTypes.getSelectedCheckbox() == noLocalCredalSetType)
         {
-            node.setNoLocalCredalSet();
+            inferenceGraphNode.setNoLocalCredalSet();
         }
         else
         {
-            node.setLocalCredalSet();
+            inferenceGraphNode.setLocalCredalSet();
         }
         // Update the variable properties (if necessary).
         ArrayList<String> vprop = variablePropertyManager.updatePropertyOnExit();
         if (vprop != null)
         {
-            node.setVariableProperties(vprop);
+            inferenceGraphNode.setVariableProperties(vprop);
             for (String property : vprop)
             {
-                node.updateCoordinatesFromProperty(property);
+                inferenceGraphNode.updateCoordinatesFromProperty(property);
             }
         }
         // Update the function properties (if necessary).
         ArrayList<String> fprop = functionPropertyManager.updatePropertyOnExit();
         if (fprop != null)
         {
-            node.setFunctionProperties(fprop);
+            inferenceGraphNode.setFunctionProperties(fprop);
         }
     }
 }

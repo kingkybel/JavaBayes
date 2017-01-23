@@ -65,15 +65,17 @@ public final class FunctionTablePanel extends Panel
     /**
      * Default constructor for an FunctionTablePanel.
      *
-     * @param avn
-     * @param tv
-     * @param avv
+     * @param allVariableNames  string array of variable names
+     * @param allVariableValues string array of enumerated variable values
+     * @param tableValues       array of probability values
      */
-    public FunctionTablePanel(String avn[], String avv[][], double tv[])
+    public FunctionTablePanel(String allVariableNames[],
+                              String allVariableValues[][],
+                              double tableValues[])
     {
-        this.allVariableNames = avn;
-        this.allVariableValues = avv;
-        this.tableValues = tv;
+        this.allVariableNames = allVariableNames;
+        this.allVariableValues = allVariableValues;
+        this.tableValues = tableValues;
 
         // Construct the relevant panels.
         buildPanels();
@@ -285,8 +287,6 @@ public final class FunctionTablePanel extends Panel
     public boolean action(Event evt, Object arg)
     {
         int i, j, k;
-        int startingIndex;
-        double valueSet = 0.0;
 
         // In case the node has more than one
         // parent, check whether parent values
@@ -448,6 +448,9 @@ public final class FunctionTablePanel extends Panel
 
     /**
      * Determine the index of a given location.
+     *
+     * @param indexes the indices
+     * @return the index of the value
      */
     private int getLocationFromIndexes(int indexes[])
     {

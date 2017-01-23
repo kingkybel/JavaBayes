@@ -50,8 +50,8 @@ class EditCredalSet extends EditFunctionPanel
     private static final String numberExtremePointsLabel =
                                 "Number of extreme points:";
     // The graph and node that contain the probability function.
-    private final InferenceGraph ig;
-    private final InferenceGraphNode node;
+    private final InferenceGraph inferenceGraph;
+    private final InferenceGraphNode inferenceGraphNode;
 
     // Variables that hold the relevant information from the node.
     private final String allVariableNames[];
@@ -68,20 +68,24 @@ class EditCredalSet extends EditFunctionPanel
 
     /**
      * Default constructor for an EditCredalSet.
+     *
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode node of the credal set
      */
-    EditCredalSet(InferenceGraph iG, InferenceGraphNode iGN)
+    EditCredalSet(InferenceGraph inferenceGraph,
+                  InferenceGraphNode inferenceGraphNode)
     {
-        this.ig = iG;
-        this.node = iGN;
+        this.inferenceGraph = inferenceGraph;
+        this.inferenceGraphNode = inferenceGraphNode;
 
         // Copy the probability values in the node.
         copyProbabilityValues();
 
         // Get the variable names.
-        allVariableNames = node.getAllNames();
+        allVariableNames = inferenceGraphNode.getAllNames();
 
         // Get the variable values.
-        allVariableValues = node.getAllVariableValues();
+        allVariableValues = inferenceGraphNode.getAllVariableValues();
 
         // Construct the name of the probability function.
         Label probabilityName = createCredalSetName();
@@ -109,10 +113,10 @@ class EditCredalSet extends EditFunctionPanel
     {
         double originalProbabilityValues[];
         allProbabilityValues =
-        new double[node.numberExtremeDistributions()][];
+        new double[inferenceGraphNode.numberExtremeDistributions()][];
         for (int i = 0; i < allProbabilityValues.length; i++)
         {
-            originalProbabilityValues = node.getFunctionValues(i);
+            originalProbabilityValues = inferenceGraphNode.getFunctionValues(i);
             allProbabilityValues[i] =
             new double[originalProbabilityValues.length];
             System.arraycopy(originalProbabilityValues, 0,
@@ -127,11 +131,12 @@ class EditCredalSet extends EditFunctionPanel
     private Label createCredalSetName()
     {
         StringBuilder name = new StringBuilder("K(");
-        name.append(node.getName());
-        if (node.hasParent())
+        name.append(inferenceGraphNode.getName());
+        if (inferenceGraphNode.hasParent())
         {
             name.append(" |");
-            ArrayList<InferenceGraphNode> parents = node.getParents();
+            ArrayList<InferenceGraphNode> parents = inferenceGraphNode.
+                                          getParents();
             for (InferenceGraphNode parent : parents)
             {
                 name.append(" ").append((parent).getName()).append(",");
@@ -153,7 +158,7 @@ class EditCredalSet extends EditFunctionPanel
         getTable();
         for (i = 0; i < allProbabilityValues.length; i++)
         {
-            node.setFunctionValues(i, allProbabilityValues[i]);
+            inferenceGraphNode.setFunctionValues(i, allProbabilityValues[i]);
         }
         // Update the number of extreme points.
         try
@@ -163,7 +168,7 @@ class EditCredalSet extends EditFunctionPanel
                 (new Integer(textLocalParameter.getText()));
             if (numberExtremePoints != allProbabilityValues.length)
             {
-                node.setLocalCredalSet(numberExtremePoints);
+                inferenceGraphNode.setLocalCredalSet(numberExtremePoints);
                 copyProbabilityValues();
                 if (indexExtremePoint >= numberExtremePoints)
                 {
@@ -218,7 +223,7 @@ class EditCredalSet extends EditFunctionPanel
         ics.setLayout(new BorderLayout());
         Label credalSetLabel = new Label(credalSet);
         credalSetChoice = new Choice();
-        for (int i = 0; i < node.numberExtremeDistributions(); i++)
+        for (int i = 0; i < inferenceGraphNode.numberExtremeDistributions(); i++)
         {
             credalSetChoice.add(String.valueOf(i));
         }
@@ -229,7 +234,8 @@ class EditCredalSet extends EditFunctionPanel
         qbpp.setLayout(new BorderLayout());
         localParameter = new Label(numberExtremePointsLabel);
         textLocalParameter = new TextField(5);
-        int numberExtremePoints = node.numberExtremeDistributions();
+        int numberExtremePoints = inferenceGraphNode.
+            numberExtremeDistributions();
         textLocalParameter.setText(String.valueOf(numberExtremePoints));
         qbpp.add("West", localParameter);
         qbpp.add("Center", textLocalParameter);
@@ -239,9 +245,6 @@ class EditCredalSet extends EditFunctionPanel
         csp.add("South", ics);
     }
 
-    /**
-     * Handle the events.
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {

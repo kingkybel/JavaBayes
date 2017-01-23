@@ -64,14 +64,19 @@ class EditFunctionDialog extends Dialog
 
     /**
      * Default constructor for an EditFunctionDialog.
+     *
+     * @param parent             parent frame
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode node of the credal set
      */
-    EditFunctionDialog(Frame parent, InferenceGraph ig,
-                       InferenceGraphNode ign)
+    EditFunctionDialog(Frame parent,
+                       InferenceGraph inferenceGraph,
+                       InferenceGraphNode inferenceGraphNode)
     {
         super(parent, dialogTitle, true);
         this.parent = parent;
         setLayout(new BorderLayout());
-        efp = dispatch(ig, ign);
+        efp = dispatch(inferenceGraph, inferenceGraphNode);
         buttons = new Panel();
         buttons.setLayout(new FlowLayout(FlowLayout.CENTER));
         okButton = new Button(okLabel);
@@ -86,22 +91,24 @@ class EditFunctionDialog extends Dialog
     /**
      * Create the appropriate instance of EditFunctionPanel, based on the
      * function in the node.
+     *
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode node of the credal set
+     * @return created instance of EditFunctionPanel
      */
-    private EditFunctionPanel dispatch(InferenceGraph ig, InferenceGraphNode ign)
+    private EditFunctionPanel dispatch(InferenceGraph inferenceGraph,
+                                       InferenceGraphNode inferenceGraphNode)
     {
-        if (ign.isCredalSet())
+        if (inferenceGraphNode.isCredalSet())
         {
-            return new EditCredalSet(ig, ign);
+            return new EditCredalSet(inferenceGraph, inferenceGraphNode);
         }
         else
         {
-            return new EditProbability(this, ig, ign);
+            return new EditProbability(this, inferenceGraph, inferenceGraphNode);
         }
     }
 
-    /**
-     * Customized setVisible method.
-     */
     @Override
     public void setVisible(boolean show)
     {
@@ -114,9 +121,6 @@ class EditFunctionDialog extends Dialog
         super.setVisible(show);
     }
 
-    /**
-     * Customize getInsets() method.
-     */
     @Override
     public Insets getInsets()
     {
@@ -125,9 +129,6 @@ class EditFunctionDialog extends Dialog
                           ins.bottom + BOTTOM_INSET, ins.right + RIGHT_INSET);
     }
 
-    /**
-     * Handle the possible destruction of the window.
-     */
     @Override
     public boolean handleEvent(Event evt)
     {
@@ -138,9 +139,6 @@ class EditFunctionDialog extends Dialog
         return super.handleEvent(evt);
     }
 
-    /**
-     * Handle events in the dialog.
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {

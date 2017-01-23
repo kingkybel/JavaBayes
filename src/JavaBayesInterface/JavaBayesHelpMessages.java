@@ -38,7 +38,7 @@ public class JavaBayesHelpMessages
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Static JavaBayes object; there must be a single JavaBayesHelpMessages
-    static JavaBayes jb;
+    static JavaBayes javaBayes;
 
     // Help messages
     static final String versionNumberMessage = "Version 0.346";
@@ -109,11 +109,10 @@ public class JavaBayesHelpMessages
                                "To query on a particular node, click on it.\n\n";
 
     // Error and exception messages
-
     /**
      *
      */
-        public static final String unexpectedEndOfInput =
+    public static final String unexpectedEndOfInput =
                                "Unable to complete load: Unexpected end of input!\n\n";
 
     /**
@@ -197,11 +196,11 @@ public class JavaBayesHelpMessages
     /**
      * Constructor
      *
-     * @param javaBayes
+     * @param javaBayes back-pointer to the main class
      */
     public static void insert(JavaBayes javaBayes)
     {
-        jb = javaBayes;
+        JavaBayesHelpMessages.javaBayes = javaBayes;
     }
 
     /**
@@ -211,6 +210,6 @@ public class JavaBayesHelpMessages
      */
     public static void show(String message)
     {
-        jb.appendText(message);
+        javaBayes.appendText(message);
     }
 }

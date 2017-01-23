@@ -46,10 +46,10 @@ class ObserveDialog extends Dialog
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    NetworkPanel npan;
+    NetworkPanel networkPanel;
 
-    InferenceGraph ig;
-    InferenceGraphNode node;
+    InferenceGraph inferenceGraph;
+    InferenceGraphNode inferenceGraphNode;
 
     boolean observed;
 
@@ -58,19 +58,26 @@ class ObserveDialog extends Dialog
 
     /**
      * Default constructor for an ObserveDialog object.
+     *
+     * @param networkPanel       the network panel
+     * @param parent             parent frame
+     * @param inferenceGraph     inference graph referring to
+     * @param inferenceGraphNode inferenceGraphNode of the credal set
      */
-    ObserveDialog(NetworkPanel networkPanel, Frame parent,
-                  InferenceGraph iG, InferenceGraphNode node)
+    ObserveDialog(NetworkPanel networkPanel,
+                  Frame parent,
+                  InferenceGraph inferenceGraph,
+                  InferenceGraphNode inferenceGraphNode)
     {
         super(parent, "Set Observe Value", true);
-        this.ig = iG;
-        this.node = node;
-        this.npan = networkPanel;
+        this.inferenceGraph = inferenceGraph;
+        this.inferenceGraphNode = inferenceGraphNode;
+        this.networkPanel = networkPanel;
 
         Panel cbp = new Panel();
         cbp.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        observed = node.isObserved();
+        observed = inferenceGraphNode.isObserved();
         observedBox = new Checkbox("Observed", null, observed);
         cbp.add(observedBox);
 
@@ -78,7 +85,7 @@ class ObserveDialog extends Dialog
         listp.setLayout(new GridLayout(1, 1));
         valuesList = new List(6, false);
 
-        String[] values = node.getValues();
+        String[] values = inferenceGraphNode.getValues();
         for (String value : values)
         {
             valuesList.add(value);
@@ -86,7 +93,7 @@ class ObserveDialog extends Dialog
 
         if (observed)
         {
-            valuesList.select(node.getObservedIndex());
+            valuesList.select(inferenceGraphNode.getObservedIndex());
         }
 
         listp.add(valuesList);
@@ -103,9 +110,6 @@ class ObserveDialog extends Dialog
         pack();
     }
 
-    /**
-     * Handle the observation events.
-     */
     @Override
     public boolean action(Event evt, Object arg)
     {
@@ -134,9 +138,8 @@ class ObserveDialog extends Dialog
         }
         else if (arg.equals("Ok"))
         {
-            String selValue = null;
             observed = observedBox.getState();
-            selValue = valuesList.getSelectedItem();
+            String selValue = valuesList.getSelectedItem();
             if (observed && selValue == null)
             {
                 JavaBayesHelpMessages.show(JavaBayesHelpMessages.observeError);
@@ -144,13 +147,13 @@ class ObserveDialog extends Dialog
             }
             if (observed)
             {
-                node.setObservationValue(selValue);
+                inferenceGraphNode.setObservationValue(selValue);
             }
             else
             {
-                node.clearObservation();
+                inferenceGraphNode.clearObservation();
             }
-            npan.repaint();
+            networkPanel.repaint();
             dispose();
         }
         else if (arg.equals("Cancel"))

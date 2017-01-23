@@ -53,10 +53,11 @@ public class OpenURLDialog extends Dialog
     java.awt.Button cancelButton;
 
     /**
+     * Constructor for an OpenURLDialog object.
      *
-     * @param parent
-     * @param javaBayes
-     * @param modal
+     * @param parent    parent frame
+     * @param javaBayes back-pointer to the main class
+     * @param modal     whether or not to display the dialog in modal form
      */
     public OpenURLDialog(Frame parent, JavaBayes javaBayes, boolean modal)
     {
@@ -88,14 +89,17 @@ public class OpenURLDialog extends Dialog
     }
 
     /**
+     * Constructor for an OpenURLDialog object.
      *
-     * @param parent
-     * @param javaBayes
-     * @param title
-     * @param modal
+     * @param parent    parent frame
+     * @param javaBayes back-pointer to the main class
+     * @param title     title of the frame
+     * @param modal     whether or not to display the dialog in modal form
      */
-    public OpenURLDialog(Frame parent, JavaBayes javaBayes,
-                         String title, boolean modal)
+    public OpenURLDialog(Frame parent,
+                         JavaBayes javaBayes,
+                         String title,
+                         boolean modal)
     {
         this(parent, javaBayes, modal);
         setTitle(title);

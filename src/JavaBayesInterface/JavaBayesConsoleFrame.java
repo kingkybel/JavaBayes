@@ -83,7 +83,7 @@ public final class JavaBayesConsoleFrame extends Frame
     final static String sensitivityAnalysisTitle = "Sensitivity analysis";
     final static String helpTitle = "Help";
     final static String aboutTitle = "About";
-    private JavaBayes jb;
+    private JavaBayes javaBayes;
     // Declare controls
     FileDialog OpenFileDialog;
     FileDialog SaveFileDialog;
@@ -113,12 +113,12 @@ public final class JavaBayesConsoleFrame extends Frame
     /**
      * Constructor for JavaBayesConsoleFrame.
      *
-     * @param javaBayes
-     * @param title
+     * @param javaBayes back-pointer to the main class
+     * @param title     title of the frame
      */
     public JavaBayesConsoleFrame(JavaBayes javaBayes, String title)
     {
-        jb = javaBayes;
+        this.javaBayes = javaBayes;
         setTitle(title);
 
         // Initialize controls.
@@ -218,174 +218,176 @@ public final class JavaBayesConsoleFrame extends Frame
     /**
      * Constructor for JavaBayesConsoleFrame.
      *
-     * @param jb
+     * @param javaBayes the javaBayes main frame
      */
-    public JavaBayesConsoleFrame(JavaBayes jb)
+    public JavaBayesConsoleFrame(JavaBayes javaBayes)
     {
-        this(jb, ((String) null));
+        this(javaBayes, ((String) null));
     }
 
     void BucketTreeAction()
     {
-        jb.whatToShowBucketTreeAction(showBuckets.getState());
+        javaBayes.whatToShowBucketTreeAction(showBuckets.getState());
     }
 
     void BayesianNetworkAction()
     {
-        jb.whatToShowBayesianNetworkAction(showBayesNet.getState());
+        javaBayes.whatToShowBayesianNetworkAction(showBayesNet.getState());
     }
 
     void PosteriorExpectationAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu2, posteriorExpectation,
-                                            posteriorMarginal);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu2,
+                                                         posteriorExpectation,
+                                                         posteriorMarginal);
         if (activeItem == posteriorExpectation)
         {
-            jb.posteriorExpectationAction();
+            javaBayes.posteriorExpectationAction();
         }
         else
         {
-            jb.posteriorMarginalAction();
+            javaBayes.posteriorMarginalAction();
         }
     }
 
     void PosteriorMarginalAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu2, posteriorMarginal,
-                                            posteriorExpectation);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu2,
+                                                         posteriorMarginal,
+                                                         posteriorExpectation);
         if (activeItem == posteriorExpectation)
         {
-            jb.posteriorExpectationAction();
+            javaBayes.posteriorExpectationAction();
         }
         else
         {
-            jb.posteriorMarginalAction();
+            javaBayes.posteriorMarginalAction();
         }
     }
 
     void EstimateBestConfigurationAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu2, bestConfiguration,
-                                            posteriorMarginal);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu2,
+                                                         bestConfiguration,
+                                                         posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
-            jb.posteriorMarginalAction();
+            javaBayes.posteriorMarginalAction();
         }
         else
         {
-            jb.estimateBestConfigurationAction();
+            javaBayes.estimateBestConfigurationAction();
         }
     }
 
     void SensitivityAnalysisAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu2, sensitivityAnalysis,
-                                            posteriorMarginal);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu2,
+                                                         sensitivityAnalysis,
+                                                         posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
-            jb.posteriorMarginalAction();
+            javaBayes.posteriorMarginalAction();
         }
         else
         {
-            jb.sensitivityAnalysisAction();
+            javaBayes.sensitivityAnalysisAction();
         }
     }
 
     void EstimateExplanationVariablesAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu2, explanation,
-                                            posteriorMarginal);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu2,
+                                                         explanation,
+                                                         posteriorMarginal);
         if (activeItem == posteriorMarginal)
         {
-            jb.posteriorMarginalAction();
+            javaBayes.posteriorMarginalAction();
         }
         else
         {
-            jb.estimateExplanationVariablesAction();
+            javaBayes.estimateExplanationVariablesAction();
         }
     }
 
     void BifFormatAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu5, bifFormat, xmlFormat);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu5,
+                                                         bifFormat,
+                                                         xmlFormat);
         if (activeItem == bifFormat)
         {
-            jb.bifFormatAction();
+            javaBayes.bifFormatAction();
         }
         else
         {
-            jb.xmlFormatAction();
+            javaBayes.xmlFormatAction();
         }
     }
 
     void XmlFormatAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu5, xmlFormat, bifFormat);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu5,
+                                                         xmlFormat,
+                                                         bifFormat);
         if (activeItem == xmlFormat)
         {
-            jb.xmlFormatAction();
+            javaBayes.xmlFormatAction();
         }
         else
         {
-            jb.bifFormatAction();
+            javaBayes.bifFormatAction();
         }
     }
 
     void BugsFormatAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu5, bugsFormat, bifFormat);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu5,
+                                                         bugsFormat,
+                                                         bifFormat);
         if (activeItem == bugsFormat)
         {
-            jb.bugsFormatAction();
+            javaBayes.bugsFormatAction();
         }
         else
         {
-            jb.bifFormatAction();
+            javaBayes.bifFormatAction();
         }
     }
 
     void AlgorithmVariableEliminationAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu7,
-                                            algorithmVariableElimination,
-                                            algorithmBucketTree);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu7,
+                                                         algorithmVariableElimination,
+                                                         algorithmBucketTree);
         if (activeItem == algorithmVariableElimination)
         {
-            jb.setAlgorithmVariableElimination();
+            javaBayes.setAlgorithmVariableElimination();
         }
         else
         {
-            jb.setAlgorithmBucketTree();
+            javaBayes.setAlgorithmBucketTree();
         }
     }
 
     void AlgorithmBucketTreeAction()
     {
-        CheckboxMenuItem activeItem =
-                         updateCheckboxMenu(menu7, algorithmBucketTree,
-                                            algorithmVariableElimination);
+        CheckboxMenuItem activeItem = updateCheckboxMenu(menu7,
+                                                         algorithmBucketTree,
+                                                         algorithmVariableElimination);
         if (activeItem == algorithmBucketTree)
         {
-            jb.setAlgorithmBucketTree();
+            javaBayes.setAlgorithmBucketTree();
         }
         else
         {
-            jb.setAlgorithmVariableElimination();
+            javaBayes.setAlgorithmVariableElimination();
         }
     }
 
     void DumpConsoleToFileAction()
     {
-        if (jb.isApplet)
+        if (javaBayes.isApplet)
         {
             textArea1.setText(appletInvalidOperation);
             return;
@@ -417,31 +419,34 @@ public final class JavaBayesConsoleFrame extends Frame
 
     void ClearAction()
     {
-        (new ClearDialog(this, jb, "Clear the Bayesian network?", true)).
+        (new ClearDialog(this,
+                         javaBayes,
+                         "Clear the Bayesian network?",
+                         true)).
                 setVisible(true);
     }
 
     void SaveAction()
     {
-        if (jb.isApplet)
+        if (javaBayes.isApplet)
         {
             appendText(appletInvalidOperation);
             return;
         }
-        if (jb.getCurrentSaveFilename() == null)
+        if (javaBayes.getCurrentSaveFilename() == null)
         {
             SaveAsAction();
         }
         else
         {
-            jb.save();
+            javaBayes.save();
             appendText("\tFile saved.\n\n");
         }
     }
 
     void SaveAsAction()
     {
-        if (jb.isApplet)
+        if (javaBayes.isApplet)
         {
             appendText(appletInvalidOperation);
             return;
@@ -453,7 +458,7 @@ public final class JavaBayesConsoleFrame extends Frame
             return;
         }
         filename = SaveFileDialog.getDirectory() + filename;
-        if (jb.save(filename) == true)
+        if (javaBayes.save(filename) == true)
         {
             appendText("\tFile saved.\n\n");
         }
@@ -461,12 +466,12 @@ public final class JavaBayesConsoleFrame extends Frame
         {
             appendText("\tFile not saved correctly.\n\n");
         }
-        jb.setCurrentSaveFilename(filename);
+        javaBayes.setCurrentSaveFilename(filename);
     }
 
     void OpenAction()
     {
-        if (jb.isApplet)
+        if (javaBayes.isApplet)
         {
             textArea1.append(appletInvalidOperation);
             return;
@@ -478,7 +483,7 @@ public final class JavaBayesConsoleFrame extends Frame
             return;
         }
         filename = OpenFileDialog.getDirectory() + filename;
-        if (jb.open(filename) == true)
+        if (javaBayes.open(filename) == true)
         {
             appendText("\tFile loaded.\n\n");
         }
@@ -490,13 +495,16 @@ public final class JavaBayesConsoleFrame extends Frame
 
     void OpenURL_Action()
     {
-        (new OpenURLDialog(this, jb, "Insert URL of network", true)).setVisible(
-                true);
+        (new OpenURLDialog(this, javaBayes, "Insert URL of network", true)).
+                setVisible(true);
     }
 
     void QuitAction()
     {
-        (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(true);
+        (new QuitDialog(this,
+                        javaBayes,
+                        "Quit JavaBayes?",
+                        false)).setVisible(true);
     }
 
     void AboutAction()
@@ -504,11 +512,6 @@ public final class JavaBayesConsoleFrame extends Frame
         JavaBayesHelpMessages.show(JavaBayesHelpMessages.aboutMessage);
     }
 
-    /**
-     * Override setVisible() so that Console does not superimpose EditorFrame
-     *
-     * @param show directly.
-     */
     @Override
     public void setVisible(boolean show)
     {
@@ -597,10 +600,11 @@ public final class JavaBayesConsoleFrame extends Frame
     {
         if (evt.id == Event.WINDOW_DESTROY)
         {
-            if (jb != null)
+            if (javaBayes != null)
             {
-                (new QuitDialog(this, jb, "Quit JavaBayes?", false)).setVisible(
-                        true);
+                (new QuitDialog(this, javaBayes, "Quit JavaBayes?", false)).
+                        setVisible(
+                                true);
             }
         }
         return super.handleEvent(evt);
@@ -609,7 +613,7 @@ public final class JavaBayesConsoleFrame extends Frame
     /**
      * Place text in the text area.
      *
-     * @param text
+     * @param text text to append
      */
     public void appendText(String text)
     {
@@ -620,7 +624,8 @@ public final class JavaBayesConsoleFrame extends Frame
      * Create the "radiobutton" behavior for the checkbox menu items. It returns
      * the checkbox that got on.
      */
-    private CheckboxMenuItem updateCheckboxMenu(Menu m, CheckboxMenuItem cur,
+    private CheckboxMenuItem updateCheckboxMenu(Menu menu,
+                                                CheckboxMenuItem cur,
                                                 CheckboxMenuItem def)
     {
         boolean s = cur.getState();
@@ -632,10 +637,10 @@ public final class JavaBayesConsoleFrame extends Frame
         }
         else
         {           // If cur was off, then cur is on and all others are off.
-            for (int i = 0; i < m.getItemCount(); i++)
+            for (int i = 0; i < menu.getItemCount(); i++)
             {
                 // Set all menu items to off,
-                ((CheckboxMenuItem) (m.getItem(i))).setState(false);
+                ((CheckboxMenuItem) (menu.getItem(i))).setState(false);
             }
             cur.setState(true); // then set cur back to on.
             return cur;
