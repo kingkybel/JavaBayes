@@ -156,7 +156,7 @@ public class BayesBall
      * B = (N; A; F) with respect to the expression P(X_J |X_K) and constructs
      * the sets of relevant and requisite nodes.
      *
-     * <ol>
+     * <ol class="a">
      * <li>
      * Initialise all nodes as neither visited, nor marked on the top, nor
      * marked on the bottom.
@@ -166,7 +166,7 @@ public class BayesBall
      * to be visited as if from one of its children. (all nodes in J).
      * </li>
      * <li> While there are still nodes scheduled to be visited:
-     * <ol>
+     * <ol style="list-style-type:lower-alpha">
      * <li> Pick any node j scheduled to be visited and remove it from the
      * schedule. Either j was scheduled for a visit from a parent, a visit from
      * a child, or both.
@@ -174,7 +174,7 @@ public class BayesBall
      * <li> Mark j as visited.
      * </li>
      * <li> If j not in K and the visit to j is from a child:
-     * <ol>
+     * <ol style="list-style-type:lower-roman">
      * <li> if the top of j is not marked, then mark its top and schedule each
      * of its parents to be visited
      * </li>
@@ -184,7 +184,7 @@ public class BayesBall
      * </ol>
      * </li>
      * <li> If the visit to j is from a parent:
-     * <ol>
+     * <ol style="list-style-type:lower-roman">
      * <li>
      * If j in K and the top of j is not marked, then mark its top and schedule
      * each of its parents to be visited;
