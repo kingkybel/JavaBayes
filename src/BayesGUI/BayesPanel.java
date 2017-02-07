@@ -47,7 +47,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -62,7 +61,8 @@ public class BayesPanel
         implements MouseListener
 {
 
-    private static final String CLASS_NAME = BayesPanel.class.getName();
+    public static final Class CLAZZ = BayesPanel.class;
+    private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     // Constants for drawing entities.
@@ -155,8 +155,6 @@ public class BayesPanel
      */
     private void setNetworkConfiguration()
     {
-        double globalNeighbouhoodPar;
-
         // Synchronize the network if necessary.
         inferenceGraph.getBayesNet();
 
@@ -169,8 +167,8 @@ public class BayesPanel
         // Set global neighborhood
         frame.setGlobalNeighbourhood(inferenceGraph.getGlobalNeighborhoodType());
 
-        globalNeighbouhoodPar = inferenceGraph.getGlobalNeighborhoodParameter();
-        frame.setGlobalParameter(globalNeighbouhoodPar);
+        double glblNghbhoodPar = inferenceGraph.getGlobalNeighborhoodParameter();
+        frame.setGlobalParameter(glblNghbhoodPar);
     }
 
     @Override
@@ -252,6 +250,7 @@ public class BayesPanel
                 public void actionPerformed(ActionEvent e)
                 {
                     eventNode = getHitNode(clickLocation.x, clickLocation.y);
+                    boolean foundNode = eventNode != null;
                     NodeMenuActions command =
                                     ((AugmentedMenuItem) e.getSource()).
                                     getMenuAction();
@@ -261,14 +260,20 @@ public class BayesPanel
                             createNode(clickLocation.x, clickLocation.y);
                             break;
                         case DeleteNode:
-                            deleteNode(eventNode);
+                            if (foundNode)
+                            {
+                                deleteNode(eventNode);
+                            }
                             break;
                         case AddArc:
-                            newArc = true;
-                            arcBottomNode = eventNode;
-                            newArcHead = new Point(clickLocation.x,
-                                                   clickLocation.y);
-                            mode = BayesGUI.EditMode.CREATE;
+                            if (foundNode)
+                            {
+                                newArc = true;
+                                arcBottomNode = eventNode;
+                                newArcHead = new Point(clickLocation.x,
+                                                       clickLocation.y);
+                                mode = BayesGUI.EditMode.CREATE;
+                            }
                             break;
                         case DeleteArc:
                             if (isArcHit(clickLocation.x, clickLocation.y))
@@ -279,52 +284,66 @@ public class BayesPanel
                             }
                             break;
                         case EditFunction:
-                            if (eventNode != null)
+                            if (foundNode)
                             {
                                 editFunction(eventNode);
                             }
                             break;
                         case EditVariable:
-                            if (eventNode != null)
+                            if (foundNode)
                             {
                                 editVariable(eventNode);
                             }
                             break;
                         case SetObservedNode:
-                            setObserved(
-                                    eventNode,
-                                    true);
+                            if (foundNode)
+                            {
+                                setObserved(eventNode, true);
+                            }
                             break;
                         case UnsetObservedNode:
-                            setObserved(eventNode,
-                                        false);
+                            if (foundNode)
+                            {
+                                setObserved(eventNode, false);
+                            }
                             break;
                         case QueryExpectation:
-                            processQuery(
-                                    inferenceGraph,
-                                    eventNode.getName(),
-                                    ExplanationType.EXPECTATION);
+                            if (foundNode)
+                            {
+                                processQuery(inferenceGraph,
+                                             eventNode.getName(),
+                                             ExplanationType.EXPECTATION);
+                            }
                             break;
                         case QueryExplanation:
-                            processQuery(inferenceGraph,
-                                         eventNode.getName(),
-                                         ExplanationType.MARKED_VARIABLES_ONLY);
+                            if (foundNode)
+                            {
+                                processQuery(inferenceGraph,
+                                             eventNode.getName(),
+                                             ExplanationType.MARKED_VARIABLES_ONLY);
+                            }
                             break;
                         case QueryFullExplanation:
-                            processQuery(inferenceGraph,
-                                         eventNode.getName(),
-                                         ExplanationType.ALL_NOT_OBSERVED_VARIABLES);
+                            if (foundNode)
+                            {
+                                processQuery(inferenceGraph,
+                                             eventNode.getName(),
+                                             ExplanationType.ALL_NOT_OBSERVED_VARIABLES);
+                            }
                             break;
                         case GetSeparation:
-                            doSeparation(
-                                    inferenceGraph,
-                                    eventNode.getName());
+                            if (foundNode)
+                            {
+                                doSeparation(inferenceGraph, eventNode.getName());
+                            }
                             break;
                         case SensitivityAnalysis:
-                            processQuery(
-                                    inferenceGraph,
-                                    eventNode.getName(),
-                                    ExplanationType.SENSITIVITY_ANALYSIS);
+                            if (foundNode)
+                            {
+                                processQuery(inferenceGraph,
+                                             eventNode.getName(),
+                                             ExplanationType.SENSITIVITY_ANALYSIS);
+                            }
                             break;
                     }
                 }
@@ -394,9 +413,8 @@ public class BayesPanel
 
         for (InferenceGraphNode hnode : inferenceGraph.elements())
         {
-            for (Iterator it = (hnode.getParents()).iterator(); it.hasNext();)
+            for (InferenceGraphNode pnode : hnode.getParents())
             {
-                InferenceGraphNode pnode = (InferenceGraphNode) it.next();
                 sdpa = squareDistancePointArc(hnode, pnode, x, y);
                 if ((sdpa >= 0.0) && (sdpa <= DISTANCE_HIT_ARC))
                 {

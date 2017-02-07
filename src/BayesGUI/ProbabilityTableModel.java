@@ -123,8 +123,8 @@ public class ProbabilityTableModel extends AbstractTableModel
             // the last index in the row holds the probability
             valuesTable.get(row).set(getColumnCount() - 1, probs[row]);
             sorted.add(new Row(row, valuesTable.get(row)));
-            currentValueIndex =
-            incrementValueIndex(currentValueIndex, valueList);
+            currentValueIndex = incrementValueIndex(currentValueIndex,
+                                                    valueList);
         }
         for (Row r : sorted)
         {

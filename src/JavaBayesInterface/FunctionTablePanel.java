@@ -129,12 +129,11 @@ public final class FunctionTablePanel extends Panel
         {
             for (i = 0; i < allVariableValues[0].length; i++)
             {
-                for (j = 0; j < allVariableValues[1].length;
-                     j++)
+                for (j = 0; j < allVariableValues[1].length; j++)
                 {
-                    fields[i][j].setText(String.valueOf(tableValues[i *
-                                                                    allVariableValues[1].length +
-                                                                    j]));
+                    final int tableIndex = i * allVariableValues[1].length + j;
+                    final double tableValue = tableValues[tableIndex];
+                    fields[i][j].setText(String.valueOf(tableValue));
                 }
             }
         }
@@ -151,9 +150,8 @@ public final class FunctionTablePanel extends Panel
                 {
                     parentIndexes[0] = i;
                     parentIndexes[1] = j;
-                    fields[i][j].setText(String.valueOf(
-                            tableValues[getLocationFromIndexes(
-                                    parentIndexes)]));
+                    final int location = getLocationFromIndexes(parentIndexes);
+                    fields[i][j].setText(String.valueOf(tableValues[location]));
                 }
             }
             for (k = 0; k < parentsCurrentChoices.length; k++)
@@ -333,7 +331,6 @@ public final class FunctionTablePanel extends Panel
         }
         else
         {
-            double valueSet = 0.0;
             int parentIndexes[] = new int[allVariableNames.length];
             for (k = 0; k < parentChoices.length; k++)
             {
@@ -343,18 +340,10 @@ public final class FunctionTablePanel extends Panel
             {
                 for (j = 0; j < fields[i].length; j++)
                 {
-                    try
-                    {
-                        valueSet =
-                        (Double.parseDouble(fields[i][j].getText()));
-                        parentIndexes[0] = i;
-                        parentIndexes[1] = j;
-                        tableValues[getLocationFromIndexes(parentIndexes)] =
-                        valueSet;
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
+                    parentIndexes[0] = i;
+                    parentIndexes[1] = j;
+                    final int location = getLocationFromIndexes(parentIndexes);
+                    tableValues[location] = parseField(i, j);
                 }
             }
             for (k = 0; k < parentChoices.length; k++)
@@ -367,9 +356,8 @@ public final class FunctionTablePanel extends Panel
                 {
                     parentIndexes[0] = i;
                     parentIndexes[1] = j;
-                    fields[i][j].setText(String.valueOf(
-                            tableValues[getLocationFromIndexes(
-                                    parentIndexes)]));
+                    final int location = getLocationFromIndexes(parentIndexes);
+                    fields[i][j].setText(String.valueOf(tableValues[location]));
                 }
             }
             for (k = 0; k < parentsCurrentChoices.length; k++)
@@ -390,14 +378,7 @@ public final class FunctionTablePanel extends Panel
         {
             for (i = 0; i < fields.length; i++)
             {
-                try
-                {
-                    tableValues[i] =
-                    (Double.parseDouble(fields[i][0].getText()));
-                }
-                catch (NumberFormatException e)
-                {
-                }
+                tableValues[i] = parseField(i, 0);
             }
         }
         else if (allVariableNames.length == 2)
@@ -406,20 +387,13 @@ public final class FunctionTablePanel extends Panel
             {
                 for (j = 0; j < fields[i].length; j++)
                 {
-                    try
-                    {
-                        tableValues[i * allVariableValues[1].length + j] =
-                        (Double.parseDouble(fields[i][j].getText()));
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
+                    tableValues[i * allVariableValues[1].length + j] =
+                    parseField(i, j);
                 }
             }
         }
         else
         {
-            double valueSet = 0.0;
             int parentIndexes[] = new int[allVariableNames.length];
             for (k = 0; k < parentChoices.length; k++)
             {
@@ -429,18 +403,10 @@ public final class FunctionTablePanel extends Panel
             {
                 for (j = 0; j < fields[i].length; j++)
                 {
-                    try
-                    {
-                        valueSet =
-                        (Double.parseDouble(fields[i][j].getText()));
-                        parentIndexes[0] = i;
-                        parentIndexes[1] = j;
-                        tableValues[getLocationFromIndexes(parentIndexes)] =
-                        valueSet;
-                    }
-                    catch (NumberFormatException e)
-                    {
-                    }
+                    parentIndexes[0] = i;
+                    parentIndexes[1] = j;
+                    final int location = getLocationFromIndexes(parentIndexes);
+                    tableValues[location] = parseField(i, j);
                 }
             }
         }
@@ -461,5 +427,27 @@ public final class FunctionTablePanel extends Panel
             jump *= allVariableValues[i].length;
         }
         return pos;
+    }
+
+    /**
+     * Parse the string in field[i][j] into a Double. Default to 0.0 in case of
+     * parse error.
+     *
+     * @param i index i
+     * @param j index j
+     * @return the parsed/defaulted double value
+     */
+    private double parseField(int i, int j)
+    {
+        double reval = 0.0;
+        try
+        {
+            reval = Double.parseDouble(fields[i][j].getText());
+        }
+        catch (NumberFormatException ex)
+        {
+            // leave value at 0.0
+        }
+        return reval;
     }
 }

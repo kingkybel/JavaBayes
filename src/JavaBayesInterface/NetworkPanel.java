@@ -73,19 +73,23 @@ public class NetworkPanel extends Canvas
     private static final Color backgroundColor = Color.white;
 
     // Network editing modes.
-    private static final int CREATE_MODE = 1;
-    private static final int MOVE_MODE = 2;
-    private static final int DELETE_MODE = 3;
-    private static final int OBSERVE_MODE = 4;
-    private static final int QUERY_MODE = 5;
-    private static final int EDIT_VARIABLE_MODE = 6;
-    private static final int EDIT_FUNCTION_MODE = 7;
-    private static final int EDIT_NETWORK_MODE = 8;
-    private EditorFrame frame; // Used for changing mouse cursor
+    enum Mode
+    {
+
+        CREATE,
+        MOVE,
+        DELETE,
+        OBSERVE,
+        QUERY,
+        EDIT_VARIABLE,
+        EDIT_FUNCTION,
+        EDIT_NETWORK
+    }
+    private final EditorFrame frame; // Used for changing mouse cursor
     // Used for changing mouse cursor
-    private ScrollingPanel scrollPanel; // Used to control scrolling
+    private final ScrollingPanel scrollPanel; // Used to control scrolling
     // Used to control scrolling
-    private int mode; // Store the mode for events in the panel
+    private Mode mode; // Store the mode for events in the panel
     // Store the mode for events in the panel
     private InferenceGraph inferenceGraph; // The object with the Bayes net
     // The object with the Bayes net
@@ -133,7 +137,7 @@ public class NetworkPanel extends Canvas
         groupEnd = new Point(0, 0);
 
         // set initial mode to be MOVE.
-        mode = MOVE_MODE;
+        mode = Mode.MOVE;
         setCursor(getPredefinedCursor(Cursor.MOVE_CURSOR));
 
         // set color for background
@@ -150,13 +154,13 @@ public class NetworkPanel extends Canvas
 
         if (node == null)
         { // If no node was clicked on.
-            if ((mode == DELETE_MODE) && (archit(x, y)))
+            if ((mode == Mode.DELETE) && (archit(x, y)))
             { // Delete arc
                 deleteArc();
                 archeadnode = null;
                 arcbottomnode = null;
             }
-            else if (mode == CREATE_MODE)
+            else if (mode == Mode.CREATE)
             { // Create a node
                 createNode(x, y);
             }
@@ -170,34 +174,34 @@ public class NetworkPanel extends Canvas
         }
         else
         { // If a node was clicked on.
-            if (mode == OBSERVE_MODE)
+            if (mode == Mode.OBSERVE)
             { // Observe node
                 observe(node);
             }
-            else if (mode == QUERY_MODE)
+            else if (mode == Mode.QUERY)
             { // Query node
                 frame.processQuery(inferenceGraph, node.getName());
             }
-            else if (mode == MOVE_MODE)
+            else if (mode == Mode.MOVE)
             { // Move node
                 movenode = node;
                 generateMovingNodes();
             }
-            else if (mode == DELETE_MODE)
+            else if (mode == Mode.DELETE)
             { // Delete node
                 deleteNode(node);
             }
-            else if (mode == CREATE_MODE)
+            else if (mode == Mode.CREATE)
             { // Create arc
                 newArc = true;
                 arcbottomnode = node;
                 newArcHead = new Point(x, y);
             }
-            else if (mode == EDIT_VARIABLE_MODE)
+            else if (mode == Mode.EDIT_VARIABLE)
             { // Edit variable node
                 editVariable(node);
             }
-            else if (mode == EDIT_FUNCTION_MODE)
+            else if (mode == Mode.EDIT_FUNCTION)
             { // Edit function node
                 editFunction(node);
             }
@@ -606,29 +610,29 @@ public class NetworkPanel extends Canvas
         switch (modeLabel)
         {
             case EditorFrame.createLabel:
-                mode = CREATE_MODE;
+                mode = Mode.CREATE;
                 break;
             case EditorFrame.moveLabel:
-                mode = MOVE_MODE;
+                mode = Mode.MOVE;
                 break;
             case EditorFrame.deleteLabel:
-                mode = DELETE_MODE;
+                mode = Mode.DELETE;
                 break;
             case EditorFrame.queryLabel:
-                mode = QUERY_MODE;
+                mode = Mode.QUERY;
                 break;
             case EditorFrame.observeLabel:
-                mode = OBSERVE_MODE;
+                mode = Mode.OBSERVE;
                 break;
             case EditorFrame.editVariableLabel:
-                mode = EDIT_VARIABLE_MODE;
+                mode = Mode.EDIT_VARIABLE;
                 break;
             case EditorFrame.editFunctionLabel:
-                mode = EDIT_FUNCTION_MODE;
+                mode = Mode.EDIT_FUNCTION;
                 break;
             default:
                 // default mode;
-                mode = CREATE_MODE;
+                mode = Mode.CREATE;
                 break;
         }
     }

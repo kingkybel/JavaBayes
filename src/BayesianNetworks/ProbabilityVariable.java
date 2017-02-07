@@ -27,6 +27,7 @@ package BayesianNetworks;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 /**
@@ -510,6 +511,32 @@ public class ProbabilityVariable extends DiscreteVariable
     public void setBayesNet(BayesNet bayesNet)
     {
         this.bayesNet = bayesNet;
+    }
+
+    /**
+     * Retrieve the set of parents of a variable.
+     *
+     * @return the set of parents as TreeSet
+     */
+    public TreeSet<ProbabilityVariable> getParents()
+    {
+        TreeSet<ProbabilityVariable> reval;
+        throw new UnsupportedOperationException(
+                "ProbabilityVariable.getParents(): Not supported yet.");
+        //return reval;
+    }
+
+    /**
+     * Retrieve the set of children of a variable.
+     *
+     * @return the set of children as TreeSet
+     */
+    public TreeSet<ProbabilityVariable> getChildren()
+    {
+        TreeSet<ProbabilityVariable> reval;
+        throw new UnsupportedOperationException(
+                "ProbabilityVariable.getChildren(): Not supported yet.");
+        //return reval;
     }
 
     /**

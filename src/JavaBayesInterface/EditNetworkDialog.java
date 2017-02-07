@@ -197,9 +197,6 @@ class EditNetworkDialog extends Dialog
         fillDialog();
     }
 
-    /**
-     * Customized setVisible method.
-     */
     @Override
     public void setVisible(boolean show)
     {

@@ -61,7 +61,7 @@ class EditCredalSet extends EditFunctionPanel
 
     // Components used to construct the panel.
     private final FunctionTablePanel probabilityTable;
-    private Panel csp, ics, qbpp;
+    private Panel credalSetpanel, ics, qbpp;
     private Choice credalSetChoice;
     private Label localParameter;
     private TextField textLocalParameter;
@@ -103,7 +103,7 @@ class EditCredalSet extends EditFunctionPanel
         setLayout(new BorderLayout());
         add("North", probabilityName);
         add("Center", probabilityTable);
-        add("South", csp);
+        add("South", credalSetpanel);
     }
 
     /**
@@ -178,8 +178,8 @@ class EditCredalSet extends EditFunctionPanel
                         allProbabilityValues[indexExtremePoint]);
                 if (numberExtremePoints > oldNumberExtremePoints)
                 {
-                    for (k = oldNumberExtremePoints; k <
-                                                     numberExtremePoints;
+                    for (k = oldNumberExtremePoints;
+                         k < numberExtremePoints;
                          k++)
                     {
                         credalSetChoice.add(String.valueOf(k));
@@ -213,8 +213,8 @@ class EditCredalSet extends EditFunctionPanel
      */
     private void generateCredalSetPanel()
     {
-        csp = new Panel();
-        csp.setLayout(new BorderLayout());
+        credalSetpanel = new Panel();
+        credalSetpanel.setLayout(new BorderLayout());
 
         Label credalSetSpecificationLabel =
               new Label(credalSetSpecification, Label.CENTER);
@@ -240,9 +240,9 @@ class EditCredalSet extends EditFunctionPanel
         qbpp.add("West", localParameter);
         qbpp.add("Center", textLocalParameter);
 
-        csp.add("North", credalSetSpecificationLabel);
-        csp.add("Center", qbpp);
-        csp.add("South", ics);
+        credalSetpanel.add("North", credalSetSpecificationLabel);
+        credalSetpanel.add("Center", qbpp);
+        credalSetpanel.add("South", ics);
     }
 
     @Override

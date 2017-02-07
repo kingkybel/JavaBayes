@@ -59,10 +59,7 @@ public class JavaBayes extends Applet
     EditorFrame editorFrame;
     JavaBayesConsoleFrame consoleFrame;
 
-    /**
-     *
-     */
-    public boolean isApplet = false;
+    boolean isApplet = false;
 
     @Override
     public void init()

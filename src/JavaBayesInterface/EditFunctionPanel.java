@@ -30,7 +30,13 @@ import java.awt.Panel;
 abstract class EditFunctionPanel extends Panel
 {
 
+    /**
+     * Accept the choices in the function panel.
+     */
     abstract void accept();
 
+    /**
+     * Dismiss the function panel.
+     */
     abstract void dismiss();
 }

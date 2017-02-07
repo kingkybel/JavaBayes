@@ -42,7 +42,7 @@ public class ClearDialog extends Dialog
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    JavaBayes jb;
+    JavaBayes javaBayes;
 
     java.awt.Button yesButton;
     java.awt.Button noButton;
@@ -61,7 +61,7 @@ public class ClearDialog extends Dialog
                        boolean modal)
     {
         super(parent, title, true);
-        jb = javaBayes;
+        this.javaBayes = javaBayes;
 
         //{{INIT_CONTROLS
         setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -100,7 +100,7 @@ public class ClearDialog extends Dialog
         }
         if (event.target == yesButton && event.id == Event.ACTION_EVENT)
         {
-            jb.clear();
+            javaBayes.clear();
             dispose();
         }
         return super.handleEvent(event);

@@ -47,10 +47,7 @@ public class ScrollingPanel extends Panel
     Scrollbar horizontal;
     Scrollbar vertical;
 
-    /**
-     *
-     */
-    public NetworkPanel netPanel;
+    NetworkPanel netPanel;
 
     /**
      * Main constructor of the scrolling panel.
@@ -60,9 +57,15 @@ public class ScrollingPanel extends Panel
     ScrollingPanel(EditorFrame editorFrame)
     {
         // Start the scrollbars without valid parameters since network is not there.
-        horizontal = new Scrollbar(Scrollbar.HORIZONTAL, 0, VIRTUAL_WIDTH, 0,
+        horizontal = new Scrollbar(Scrollbar.HORIZONTAL,
+                                   0,
+                                   VIRTUAL_WIDTH,
+                                   0,
                                    VIRTUAL_WIDTH);
-        vertical = new Scrollbar(Scrollbar.VERTICAL, 0, VIRTUAL_HEIGHT, 0,
+        vertical = new Scrollbar(Scrollbar.VERTICAL,
+                                 0,
+                                 VIRTUAL_HEIGHT,
+                                 0,
                                  VIRTUAL_HEIGHT);
 
         netPanel = new NetworkPanel(editorFrame, this);
@@ -97,11 +100,11 @@ public class ScrollingPanel extends Panel
         {
             if (evt.target == horizontal)
             {
-                netPanel.xScroll = ((Integer) (evt.arg));
+                netPanel.xScroll = (Integer) evt.arg;
             }
             else if (evt.target == vertical)
             {
-                netPanel.yScroll = ((Integer) (evt.arg));
+                netPanel.yScroll = (Integer) evt.arg;
             }
             netPanel.repaint();
         }
