@@ -142,15 +142,15 @@ public class Inference
                     //     - this block only runs if isProducingClusters is true.
                     if (buck.bucketStatus != Bucket.Type.DISTRIBUTED)
                     {
+                        // If Bucket is the last bucket, then just reduce;
                         if (buck ==
                             bucketTree.bucketTree[bucketTree.bucketTree.length -
                                                   1])
                         {
-                            bucketTree.reduce(); // If Bucket is the last bucket, then just reduce;
+                            bucketTree.reduce();
                         }
-                        else
+                        else // if not, then distribute.
                         {
-                            // if not, then distribute.
                             bucketTree.distribute();
                         }
                     }
