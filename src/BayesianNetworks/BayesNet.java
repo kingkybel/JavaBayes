@@ -25,6 +25,7 @@
  */
 package BayesianNetworks;
 
+import BayesianInferences.BayesBall;
 import InterchangeFormat.InterchangeFormat;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -32,6 +33,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 /**
@@ -931,7 +933,7 @@ public class BayesNet
      *
      * @param varIndex   index of the variable to set
      * @param name       new name
-     * @param values     values the variable can assume as string array
+     * @param values     values the variable <b>can assume</b> as string array
      * @param properties list of properties
      * @throws java.lang.Exception if index is out of range
      */
@@ -1060,5 +1062,67 @@ public class BayesNet
             return null;
         }
         return probabilityVariables[varIndex];
+    }
+
+    /**
+     * Probability formulas.
+     *
+     * <h3> Conditional probability definition.</h3>
+     * <code>
+     * P(A|B) = P(A,B)/P(B)
+     * </code><br>
+     *
+     * <h3> Bayes formula<br></h3>
+     * <table>
+     * <tr>
+     * <td></td> <td></td> <td >P(L|W)P(W)</td>
+     * <td></td>
+     * <td>P(L|W)P(W)</td>
+     * </tr>
+     * <tr>
+     * <td>P(W|L)</td> <td >=</td>
+     * <td>------------</td><td> =
+     * </td><td>-------------------------</td></tr>
+     * <tr>
+     * <td></td><td></td><td>P(L)</td><td>
+     * </td><td> P(L|W)P(W) + P(L|M)P(M)</td>
+     * </tr>
+     * </table><br>
+     *
+     * <h3> Chain rule of probability</h3>
+     * <code>
+     * P(An,An-1,...,A1)=<br>P(An|An-1,...,A1)P(An-1,...,A1)P(A4,A3,A2,A1)=<br>
+     * P(A4|A3,A2,A1)P(A3|A2,A1)P(A2|A1)P(A1)
+     * </code><br>
+     *
+     * <h3> Total probability</h3>
+     * <code>
+     * P(A) = &sum;(P(A,B<sub>i</sub>)) =
+     * &sum;(P(A|B<sub>i</sub>)P(B<sub>i</sub>))
+     * </code><br>
+     *
+     * <h3> Symmetry</h3>
+     * <code> P(A | B,C) == P(A | B) [A independent of C]<br>
+     * <==><br>
+     * P(B | A,C) == P(B | A) [B independent of C]
+     * </code><br>
+     *
+     * @param event
+     * @param condition
+     * @return
+     */
+    public double P(ArrayList<ProbabilityVariable> event,
+                    ArrayList<ProbabilityVariable> condition)
+    {
+        double reval = 0.0;
+        TreeSet<ProbabilityVariable> eventSet = new TreeSet<>();
+        event.addAll(event);
+
+        TreeSet<ProbabilityVariable> conditionSet = new TreeSet<>();
+        conditionSet.addAll(condition);
+
+        BayesBall.ResultType result = BayesBall.run(eventSet, conditionSet);
+
+        return reval;
     }
 }
