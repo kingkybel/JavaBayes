@@ -279,8 +279,6 @@ public class NetworkPanel extends Canvas
 
     /**
      * Determine whether a node was hit by a mouse click.
-     */
-    /**
      *
      * @param x X-coordinate
      * @param y Y-coordinate

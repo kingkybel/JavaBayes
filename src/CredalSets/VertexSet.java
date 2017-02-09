@@ -44,11 +44,15 @@ public final class VertexSet
     private static final String CLASS_NAME = CLAZZ.getName();
     private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
-    // Variable that indicates which extreme point is active
+    /**
+     * Variable that indicates which extreme point is active.
+     */
     ProbabilityVariable auxiliaryVariable;
 
-    // The set of extreme points; the first coordinate indexes  a set of
-    // double[] arrays (each array contains the values for an extreme point).
+    /**
+     * The set of extreme points. The first coordinate indexes a set of double[]
+     * arrays (each array contains the values for an extreme point).
+     */
     double extremePoints[][];
 
     /**
@@ -149,9 +153,9 @@ public final class VertexSet
      * and create an auxiliary variable to indicate which vertex to consider.
      * There are three things to do:
      * <ol>
-     * <li>Create an auxiliaryVariable with correct values. </li>
-     * <li> Combine the values into a new array.</li>
-     * <li> Insert the auxiliaryVariable into the variables array.</li>
+     * <li> Create an auxiliaryVariable with correct values. </li>
+     * <li> Combine the values into a new array. </li>
+     * <li> Insert the auxiliaryVariable into the variables array. </li>
      * </ol>
      *
      * @param transformedBn transformed Bayes net
@@ -227,8 +231,7 @@ public final class VertexSet
                      new StringBuffer("<Transparent:");
         bufferAuxiliaryVariableName.append(getVariable(0).getName());
         bufferAuxiliaryVariableName.append(">");
-        String auxiliaryVariableName =
-               new String(bufferAuxiliaryVariableName);
+        String auxiliaryVariableName = new String(bufferAuxiliaryVariableName);
 
         // Compose the values of the auxiliary variable
         String auxiliaryVariableValues[] = new String[extremePoints.length];
@@ -260,8 +263,7 @@ public final class VertexSet
      * @param indexExtremePoint  index of the extreme distribution
      * @return the calculated double value
      */
-    public double evaluate(String variableValuePairs[][],
-                           int indexExtremePoint)
+    public double evaluate(String variableValuePairs[][], int indexExtremePoint)
     {
         // Initialize with zeros an array of markers.
         int valueIndexes[] = new int[bayesNet.numberVariables()];

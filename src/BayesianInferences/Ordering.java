@@ -301,7 +301,7 @@ public class Ordering
      * <li> Transparent variables are not included</li>
      * <li> Decision variables come last in the order they were input</li>
      * <li> Non-explanation variables come in the order they were input, except
-     * objective variable which is the last of all non-explanation
+     * the objective variable which is the last of all non-explanation
      * variables</li>
      * </ol>
      *

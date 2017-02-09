@@ -133,6 +133,11 @@ public class BayesNet
         InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
         interchangeFmt.CompilationUnit();
         // Transfer information from the parser
+        doTranslate(interchangeFmt);
+    }
+
+    private void doTranslate(InterchangeFormat interchangeFmt)
+    {
         translate(interchangeFmt);
     }
 
@@ -151,7 +156,7 @@ public class BayesNet
         interchangeFmt.CompilationUnit();
 
         // Now transfer information from the parser
-        translate(interchangeFmt);
+        doTranslate(interchangeFmt);
     }
 
     /**
@@ -172,7 +177,7 @@ public class BayesNet
             InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
             interchangeFmt.CompilationUnit();
             // Now transfer information from the parser
-            translate(interchangeFmt);
+            doTranslate(interchangeFmt);
         }
     }
 
@@ -192,7 +197,7 @@ public class BayesNet
             InterchangeFormat interchangeFmt = new InterchangeFormat(istream);
             interchangeFmt.CompilationUnit();
             // Now transfer information from the parser
-            translate(interchangeFmt);
+            doTranslate(interchangeFmt);
         }
     }
 
@@ -520,11 +525,11 @@ public class BayesNet
         out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
-            for (int i = 0; i < probabilityVariables.length; i++)
+            for (ProbabilityVariable probabilityVariable : probabilityVariables)
             {
-                if (probabilityVariables[i] != null)
+                if (probabilityVariable != null)
                 {
-                    probabilityVariables[i].saveXml_0_3(out);
+                    probabilityVariable.saveXml_0_3(out);
                 }
             }
         }
@@ -534,11 +539,11 @@ public class BayesNet
         out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
-            for (int i = 0; i < probabilityFunctions.length; i++)
+            for (ProbabilityFunction probabilityFunction : probabilityFunctions)
             {
-                if (probabilityFunctions[i] != null)
+                if (probabilityFunction != null)
                 {
-                    probabilityFunctions[i].saveXml_0_3(out);
+                    probabilityFunction.saveXml_0_3(out);
                 }
             }
         }
@@ -609,11 +614,11 @@ public class BayesNet
         out.println("<!-- Variables -->");
         if (probabilityVariables != null)
         {
-            for (int i = 0; i < probabilityVariables.length; i++)
+            for (ProbabilityVariable probabilityVariable : probabilityVariables)
             {
-                if (probabilityVariables[i] != null)
+                if (probabilityVariable != null)
                 {
-                    probabilityVariables[i].saveXml(out);
+                    probabilityVariable.saveXml(out);
                 }
             }
         }
@@ -623,11 +628,11 @@ public class BayesNet
         out.println("<!-- Probability distributions -->");
         if (probabilityFunctions != null)
         {
-            for (int i = 0; i < probabilityFunctions.length; i++)
+            for (ProbabilityFunction probabilityFunction : probabilityFunctions)
             {
-                if (probabilityFunctions[i] != null)
+                if (probabilityFunction != null)
                 {
-                    probabilityFunctions[i].saveXml(out);
+                    probabilityFunction.saveXml(out);
                 }
             }
         }
@@ -661,9 +666,9 @@ public class BayesNet
         ProbabilityVariable probVar;
         ArrayList<ProbabilityVariable> evs = new ArrayList<>();
 
-        for (int i = 0; i < probabilityVariables.length; i++)
+        for (ProbabilityVariable probabilityVariable : probabilityVariables)
         {
-            probVar = probabilityVariables[i];
+            probVar = probabilityVariable;
             if (probVar.getObservedIndex() != BayesNet.INVALID_INDEX)
             {
                 evs.add(probVar);
@@ -1065,11 +1070,21 @@ public class BayesNet
     }
 
     /**
-     * Probability formulas.
+     * Calculate the probability of an event. using the following probability
+     * formulas.
      *
      * <h3> Conditional probability definition.</h3>
      * <code>
      * P(A|B) = P(A,B)/P(B)
+     * </code><br>
+     *
+     * <h3> Statistically independent definition.</h3>
+     * <code>
+     * A and B statistically independend <==> P(A,B) = P(A)P(B)<br>
+     * equivalently if P(B) != 0:<br>
+     * A and B statistically independend <==> P(A|B) = P(A) <br>
+     * equivalently if P(A)!=0:<br>
+     * A and B statistically independend <==> P(B|A) = P(B) <br>
      * </code><br>
      *
      * <h3> Bayes formula<br></h3>
@@ -1085,7 +1100,7 @@ public class BayesNet
      * </td><td>-------------------------</td></tr>
      * <tr>
      * <td></td><td></td><td>P(L)</td><td>
-     * </td><td> P(L|W)P(W) + P(L|M)P(M)</td>
+     * </td><td> P(L|W)P(W) + P(L|¬W)P(¬W)</td>
      * </tr>
      * </table><br>
      *
@@ -1102,7 +1117,8 @@ public class BayesNet
      * </code><br>
      *
      * <h3> Symmetry</h3>
-     * <code> P(A | B,C) == P(A | B) [A independent of C]<br>
+     * <code>
+     * P(A | B,C) == P(A | B) [A independent of C]<br>
      * <==><br>
      * P(B | A,C) == P(B | A) [B independent of C]
      * </code><br>
@@ -1110,6 +1126,19 @@ public class BayesNet
      * @param event
      * @param condition
      * @return
+     * @see
+     * <a href="https://en.wikipedia.org/wiki/Conditional_probability">
+     * Conditional probability</a>
+     * @see
+     * <a href="https://en.wikipedia.org/wiki/Chain_rule_%28probability%29">
+     * Chain rule</a>
+     * @see
+     * <a href="https://en.wikipedia.org/wiki/Law_of_total_probability">
+     * Total probability</a>
+     * @see
+     * <a href="http://research.cs.queensu.ca/home/xiao/dm.html">
+     * Data mining</a>
+     *
      */
     public double P(ArrayList<ProbabilityVariable> event,
                     ArrayList<ProbabilityVariable> condition)

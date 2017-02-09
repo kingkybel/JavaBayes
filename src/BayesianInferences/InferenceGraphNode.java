@@ -383,15 +383,12 @@ public final class InferenceGraphNode
     {
         if (probFunc instanceof VertexSet)
         {
-            ((VertexSet) probFunc).
-                    setExtremePoint(indexExtremePoint, probValues);
+            ((VertexSet) probFunc).setExtremePoint(indexExtremePoint,
+                                                   probValues);
         }
-        else
+        else if (indexExtremePoint == 0)
         {
-            if (indexExtremePoint == 0)
-            {
-                probFunc.setValues(probValues);
-            }
+            probFunc.setValues(probValues);
         }
     }
 
